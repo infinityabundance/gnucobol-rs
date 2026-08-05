@@ -34,7 +34,9 @@
 #![forbid(unsafe_code)]
 
 use crate::arith::Round;
-use crate::attr::{FieldAttr, COB_TYPE_NUMERIC_BINARY, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED};
+use crate::attr::{
+    FieldAttr, COB_TYPE_NUMERIC_BINARY, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED,
+};
 use crate::gmp::Mpz;
 use crate::mpf::Mpf;
 use crate::value::Decimal;
@@ -59,7 +61,10 @@ impl CobDecimal {
         if dec.negative && value.sgn() != 0 {
             value.neg();
         }
-        CobDecimal { value, scale: dec.scale as i32 }
+        CobDecimal {
+            value,
+            scale: dec.scale as i32,
+        }
     }
 }
 
@@ -92,7 +97,10 @@ pub const COB_MPZ_DEF: u64 = 1024;
 /// preallocated to `initial_num_bits` and `scale = 0`. The capacity is an allocation hint only — an
 /// [`Mpz`] grows on demand — so the observable result is a zero decimal at scale 0.
 pub fn cob_decimal_init2(_initial_num_bits: u64) -> CobDecimal {
-    CobDecimal { value: Mpz::new(), scale: 0 }
+    CobDecimal {
+        value: Mpz::new(),
+        scale: 0,
+    }
 }
 
 /// `cob_decimal_init (d)` (numeric.c:358): `cob_decimal_init2(d, COB_MPZ_DEF)`.
@@ -143,11 +151,19 @@ pub fn cob_decimal_set_display(data: &[u8], attr: &FieldAttr) -> CobDecimal {
     let size = attr.data_size(data.len());
     if size > 0 && off < data.len() {
         match data[off] {
-            255 => return CobDecimal { value: Mpz::ui_pow_ui(10, size as u32), scale: attr.scale as i32 },
+            255 => {
+                return CobDecimal {
+                    value: Mpz::ui_pow_ui(10, size as u32),
+                    scale: attr.scale as i32,
+                }
+            }
             0 => {
                 let mut v = Mpz::ui_pow_ui(10, size as u32);
                 v.neg();
-                return CobDecimal { value: v, scale: attr.scale as i32 };
+                return CobDecimal {
+                    value: v,
+                    scale: attr.scale as i32,
+                };
             }
             _ => {}
         }
@@ -160,7 +176,10 @@ pub fn cob_decimal_set_display(data: &[u8], attr: &FieldAttr) -> CobDecimal {
 /// i.e. the field's two's-complement integer (endianness + sign from the flags) carried at the field
 /// scale, exactly what [`crate::binary::binary_decode`] produces (sealed `GNURUST.14`).
 pub fn cob_decimal_set_binary(data: &[u8], attr: &FieldAttr) -> CobDecimal {
-    CobDecimal { value: Mpz::from_i128(crate::binary::binary_decode(data, attr)), scale: attr.scale as i32 }
+    CobDecimal {
+        value: Mpz::from_i128(crate::binary::binary_decode(data, attr)),
+        scale: attr.scale as i32,
+    }
 }
 
 /// `cob_decimal_set_ieee64dec (d, f)` (numeric.c:667): decode an IEEE-754 decimal64 (BID) field into a
@@ -168,16 +187,28 @@ pub fn cob_decimal_set_binary(data: &[u8], attr: &FieldAttr) -> CobDecimal {
 /// `(mag, scale)` it returns represents the same value the C builds (with positive exponents folded in).
 pub fn cob_decimal_set_ieee64dec(data: &[u8]) -> CobDecimal {
     match crate::float::dec64_decode(data[..8].try_into().unwrap_or([0; 8])) {
-        Some((m, s)) => CobDecimal { value: Mpz::from_i128(m), scale: s },
-        None => CobDecimal { value: Mpz::new(), scale: 0 }, // Inf/NaN: libcob marks NaN; we carry zero
+        Some((m, s)) => CobDecimal {
+            value: Mpz::from_i128(m),
+            scale: s,
+        },
+        None => CobDecimal {
+            value: Mpz::new(),
+            scale: 0,
+        }, // Inf/NaN: libcob marks NaN; we carry zero
     }
 }
 
 /// `cob_decimal_set_ieee128dec (d, f)` (numeric.c:781): decode an IEEE-754 decimal128 (BID) field.
 pub fn cob_decimal_set_ieee128dec(data: &[u8]) -> CobDecimal {
     match crate::float::dec128_decode(data[..16].try_into().unwrap_or([0; 16])) {
-        Some((m, s)) => CobDecimal { value: Mpz::from_i128(m), scale: s },
-        None => CobDecimal { value: Mpz::new(), scale: 0 },
+        Some((m, s)) => CobDecimal {
+            value: Mpz::from_i128(m),
+            scale: s,
+        },
+        None => CobDecimal {
+            value: Mpz::new(),
+            scale: 0,
+        },
     }
 }
 
@@ -328,7 +359,11 @@ pub fn cob_display_add_int(data: &mut [u8], attr: &FieldAttr, mut n: i32, opt: i
             return if opt & (1 << 1) != 0 { 0x0501 } else { 0 };
         }
     }
-    sign = if attr.have_sign() && !data.is_empty() && (data[osize - 1] & 0x40) != 0 { -1 } else { 0 };
+    sign = if attr.have_sign() && !data.is_empty() && (data[osize - 1] & 0x40) != 0 {
+        -1
+    } else {
+        0
+    };
     if n > 0 {
         if display_add_int(data, size, n, opt) != 0 && opt & (1 << 1) != 0 {
             data.copy_from_slice(&tfield);
@@ -401,7 +436,9 @@ pub fn cob_decimal_adjust(d: &mut CobDecimal, max_value: &Mpz, min_exp: i32, max
         d.value = d.value.tdiv_q_ui(10);
         d.scale -= 1;
     }
-    d.value.cmpabs(max_value) == std::cmp::Ordering::Greater || d.scale < min_exp || d.scale > max_exp
+    d.value.cmpabs(max_value) == std::cmp::Ordering::Greater
+        || d.scale < min_exp
+        || d.scale > max_exp
 }
 
 /// `cob_binary_get_uint64 (f)` (numeric.c:294): read a BINARY field's bytes as an unsigned 64-bit
@@ -451,7 +488,11 @@ pub fn cob_binary_set_int64(out: &mut [u8], attr: &FieldAttr, n: i64) {
 pub fn cob_decimal_set_mpf_core(src: &Mpf) -> CobDecimal {
     let (neg, digits, exp10) = src.get_str(96);
     let s: String = digits.iter().map(|d| (b'0' + d) as char).collect();
-    let mut value = if s.is_empty() { Mpz::new() } else { Mpz::from_decimal_string(&s) };
+    let mut value = if s.is_empty() {
+        Mpz::new()
+    } else {
+        Mpz::from_decimal_string(&s)
+    };
     let len = digits.len() as i64;
     let new_len = len - exp10;
     let scale;
@@ -470,7 +511,10 @@ pub fn cob_decimal_set_mpf_core(src: &Mpf) -> CobDecimal {
 /// `cob_decimal_set_mpf (d, src)` (numeric.c:885): zero-short-circuit then [`cob_decimal_set_mpf_core`].
 pub fn cob_decimal_set_mpf(src: &Mpf) -> CobDecimal {
     if src.sgn() == 0 {
-        CobDecimal { value: Mpz::new(), scale: 0 }
+        CobDecimal {
+            value: Mpz::new(),
+            scale: 0,
+        }
     } else {
         cob_decimal_set_mpf_core(src)
     }
@@ -534,7 +578,10 @@ pub fn cob_decimal_set_field(data: &[u8], attr: &FieldAttr) -> CobDecimal {
             };
             cob_decimal_set_double(v)
         }
-        _ => CobDecimal { value: Mpz::new(), scale: 0 },
+        _ => CobDecimal {
+            value: Mpz::new(),
+            scale: 0,
+        },
     }
 }
 
@@ -620,7 +667,11 @@ pub fn cob_decimal_do_round(d: &mut CobDecimal, tgt: i32, round: Round) -> Resul
         Round::AwayFromZero => {
             let div = p(drop);
             if d.value.tdiv_r(&div).sgn() != 0 {
-                d.value = if sign > 0 { d.value.add(&div) } else { d.value.sub(&div) };
+                d.value = if sign > 0 {
+                    d.value.add(&div)
+                } else {
+                    d.value.sub(&div)
+                };
             }
         }
         Round::TowardGreater => {
@@ -637,14 +688,16 @@ pub fn cob_decimal_do_round(d: &mut CobDecimal, tgt: i32, round: Round) -> Resul
         }
         Round::NearTowardZero => {
             let exact = d.value.tdiv_r(&five(drop - 1)).sgn() == 0;
-            let n = tgt + 1 - d.scale; shift_decimal(d, n);
+            let n = tgt + 1 - d.scale;
+            shift_decimal(d, n);
             if !exact {
                 d.value = d.value.add(&s5);
             }
         }
         Round::NearEven => {
             let exact = d.value.tdiv_r(&five(drop - 1)).sgn() == 0;
-            let n = tgt + 1 - d.scale; shift_decimal(d, n);
+            let n = tgt + 1 - d.scale;
+            shift_decimal(d, n);
             let round_up = if exact {
                 let last_two = d.value.tdiv_r(&Mpz::from_u64(100)).get_ui();
                 !matches!(last_two, 5 | 25 | 45 | 65 | 85)
@@ -656,7 +709,8 @@ pub fn cob_decimal_do_round(d: &mut CobDecimal, tgt: i32, round: Round) -> Resul
             }
         }
         Round::NearAwayFromZero => {
-            let n = tgt + 1 - d.scale; shift_decimal(d, n);
+            let n = tgt + 1 - d.scale;
+            shift_decimal(d, n);
             d.value = d.value.add(&s5);
         }
     }
@@ -666,7 +720,13 @@ pub fn cob_decimal_do_round(d: &mut CobDecimal, tgt: i32, round: Round) -> Resul
 /// `cob_decimal_get_field (d, f, opt)` (numeric.c:2055) on `Mpz`: round (if requested), adjust to the
 /// field scale, truncate to the field digits, and store as DISPLAY/PACKED/BINARY bytes (via the sealed
 /// [`crate::cob_move`] encoders). Returns the field byte image. `Err` on a Prohibited size error.
-pub fn cob_decimal_get_field(mut d: CobDecimal, attr: &FieldAttr, size: usize, round: Round, sign_on_zero: bool) -> Result<Vec<u8>, ()> {
+pub fn cob_decimal_get_field(
+    mut d: CobDecimal,
+    attr: &FieldAttr,
+    size: usize,
+    round: Round,
+    sign_on_zero: bool,
+) -> Result<Vec<u8>, ()> {
     // sign before rounding: the packed cob_add_bcd path keeps a negative sign on a result that
     // *rounds* to zero (e.g. -0.1 into an integer -> -0); the general path does not (GNURUST.13).
     let pre_neg = d.value.sgn() < 0;
@@ -698,7 +758,12 @@ pub fn cob_decimal_get_field(mut d: CobDecimal, attr: &FieldAttr, size: usize, r
     if attr.digits as usize > 38 {
         Ok(render_numeric_big(neg, &low, attr, size))
     } else {
-        Ok(render_numeric(neg, low.to_i128().unwrap_or(0).unsigned_abs(), attr, size))
+        Ok(render_numeric(
+            neg,
+            low.to_i128().unwrap_or(0).unsigned_abs(),
+            attr,
+            size,
+        ))
     }
 }
 
@@ -726,7 +791,11 @@ fn render_numeric_big(neg: bool, low: &Mpz, attr: &FieldAttr, size: usize) -> Ve
         field_type: COB_TYPE_NUMERIC_DISPLAY,
         digits: attr.digits,
         scale: attr.scale,
-        flags: if signed { crate::attr::COB_FLAG_HAVE_SIGN } else { 0 },
+        flags: if signed {
+            crate::attr::COB_FLAG_HAVE_SIGN
+        } else {
+            0
+        },
     };
     let mut out = vec![0u8; size];
     let _ = crate::move_ops::cob_move(&temp, &dattr, &mut out, attr);
@@ -774,7 +843,11 @@ fn render_numeric(neg: bool, mag_abs: u128, attr: &FieldAttr, size: usize) -> Ve
         field_type: COB_TYPE_NUMERIC_DISPLAY,
         digits: attr.digits,
         scale: attr.scale,
-        flags: if signed { crate::attr::COB_FLAG_HAVE_SIGN } else { 0 },
+        flags: if signed {
+            crate::attr::COB_FLAG_HAVE_SIGN
+        } else {
+            0
+        },
     };
     let mut out = vec![0u8; size];
     let _ = crate::move_ops::cob_move(&temp, &dattr, &mut out, attr);
@@ -793,7 +866,13 @@ fn bcd_round_mode(round: Round) -> Round {
 /// `cob_add (f1, f2, opt)` (numeric.c): `f1 := f1 + f2`. A PACKED receiver takes the `cob_add_bcd`
 /// fast path (cob_addsub_optimized): same sum as the general cob_decimal path, but BCD-rounded
 /// (NEAREST-EVEN -> away) and keeping a negative sign on a zero result. Returns f1's new bytes.
-pub fn cob_add(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr, round: Round) -> Result<Vec<u8>, ()> {
+pub fn cob_add(
+    f1: &[u8],
+    a1: &FieldAttr,
+    f2: &[u8],
+    a2: &FieldAttr,
+    round: Round,
+) -> Result<Vec<u8>, ()> {
     let bcd = a1.field_type == COB_TYPE_NUMERIC_PACKED;
     let mut d = cob_decimal_set_field(f1, a1);
     let d2 = cob_decimal_set_field(f2, a2);
@@ -803,7 +882,13 @@ pub fn cob_add(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr, round: Roun
 }
 
 /// `cob_sub (f1, f2, opt)` (numeric.c): `f1 := f1 - f2`. PACKED receiver -> cob_add_bcd fast path.
-pub fn cob_sub(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr, round: Round) -> Result<Vec<u8>, ()> {
+pub fn cob_sub(
+    f1: &[u8],
+    a1: &FieldAttr,
+    f2: &[u8],
+    a2: &FieldAttr,
+    round: Round,
+) -> Result<Vec<u8>, ()> {
     let bcd = a1.field_type == COB_TYPE_NUMERIC_PACKED;
     let mut d = cob_decimal_set_field(f1, a1);
     let d2 = cob_decimal_set_field(f2, a2);
@@ -814,7 +899,13 @@ pub fn cob_sub(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr, round: Roun
 
 /// `cob_mul (f1, f2, opt)` (numeric.c): `f1 := f1 * f2`, via the general cob_decimal path. The
 /// receiver's byte length is `f1.len()`. Returns f1's new byte image.
-pub fn cob_mul(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr, round: Round) -> Result<Vec<u8>, ()> {
+pub fn cob_mul(
+    f1: &[u8],
+    a1: &FieldAttr,
+    f2: &[u8],
+    a2: &FieldAttr,
+    round: Round,
+) -> Result<Vec<u8>, ()> {
     let mut d = cob_decimal_set_field(f1, a1);
     let d2 = cob_decimal_set_field(f2, a2);
     cob_decimal_mul(&mut d, &d2);
@@ -822,7 +913,13 @@ pub fn cob_mul(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr, round: Roun
 }
 
 /// `cob_div (f1, f2, opt)` (numeric.c): `f1 := f1 / f2`. `Err` on divide-by-zero.
-pub fn cob_div(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr, round: Round) -> Result<Vec<u8>, ()> {
+pub fn cob_div(
+    f1: &[u8],
+    a1: &FieldAttr,
+    f2: &[u8],
+    a2: &FieldAttr,
+    round: Round,
+) -> Result<Vec<u8>, ()> {
     let mut d = cob_decimal_set_field(f1, a1);
     let d2 = cob_decimal_set_field(f2, a2);
     cob_decimal_div(&mut d, &d2)?;
@@ -864,14 +961,25 @@ pub fn cob_div_quotient(
 
 /// `cob_div_remainder (fld_remainder, opt)` (numeric.c:2468): store the `REMAINDER` working decimal
 /// produced by [`cob_div_quotient`] into the remainder receiver.
-pub fn cob_div_remainder(remainder: CobDecimal, rem_attr: &FieldAttr, rem_len: usize, round: Round) -> Result<Vec<u8>, ()> {
+pub fn cob_div_remainder(
+    remainder: CobDecimal,
+    rem_attr: &FieldAttr,
+    rem_len: usize,
+    round: Round,
+) -> Result<Vec<u8>, ()> {
     cob_decimal_get_field(remainder, rem_attr, rem_len, round, false)
 }
 
 /// `cob_decimal_setget_fld (src, dst, opt)` (numeric.c:2480): the generic numeric MOVE — decode `src`
 /// to a working decimal, then store it into `dst` (with `COB_STORE_NO_SIZE_ERROR`, so it truncates
 /// rather than raising). Returns the receiver bytes.
-pub fn cob_decimal_setget_fld(src: &[u8], a_src: &FieldAttr, dst_attr: &FieldAttr, dst_len: usize, round: Round) -> Result<Vec<u8>, ()> {
+pub fn cob_decimal_setget_fld(
+    src: &[u8],
+    a_src: &FieldAttr,
+    dst_attr: &FieldAttr,
+    dst_len: usize,
+    round: Round,
+) -> Result<Vec<u8>, ()> {
     let d = cob_decimal_set_field(src, a_src);
     cob_decimal_get_field(d, dst_attr, dst_len, round, false)
 }
@@ -920,7 +1028,10 @@ pub fn cob_numeric_cmp(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr) -> 
 /// decimal and comparing.
 pub fn cob_cmp_int(f: &[u8], a: &FieldAttr, n: i64) -> i32 {
     let d1 = cob_decimal_set_field(f, a);
-    let d2 = CobDecimal { value: Mpz::from_i64(n), scale: 0 };
+    let d2 = CobDecimal {
+        value: Mpz::from_i64(n),
+        scale: 0,
+    };
     cob_decimal_cmp(&d1, &d2)
 }
 
@@ -932,7 +1043,10 @@ pub fn cob_cmp_llint(f: &[u8], a: &FieldAttr, n: i64) -> i32 {
 /// `cob_cmp_uint (f, n)`: unsigned field-vs-int compare. Same verdict, via an unsigned decimal.
 pub fn cob_cmp_uint(f: &[u8], a: &FieldAttr, n: u64) -> i32 {
     let d1 = cob_decimal_set_field(f, a);
-    let d2 = CobDecimal { value: Mpz::from_u64(n), scale: 0 };
+    let d2 = CobDecimal {
+        value: Mpz::from_u64(n),
+        scale: 0,
+    };
     cob_decimal_cmp(&d1, &d2)
 }
 
@@ -947,7 +1061,13 @@ pub fn cob_cmp_packed(f: &[u8], a: &FieldAttr, val: i64) -> i32 {
 pub fn cob_add_int(f1: &[u8], a1: &FieldAttr, n: i32, round: Round) -> Result<Vec<u8>, ()> {
     let bcd = a1.field_type == COB_TYPE_NUMERIC_PACKED;
     let mut d = cob_decimal_set_field(f1, a1);
-    cob_decimal_add(&mut d, &CobDecimal { value: Mpz::from_i64(n as i64), scale: 0 });
+    cob_decimal_add(
+        &mut d,
+        &CobDecimal {
+            value: Mpz::from_i64(n as i64),
+            scale: 0,
+        },
+    );
     let eff = if bcd { bcd_round_mode(round) } else { round };
     cob_decimal_get_field(d, a1, f1.len(), eff, bcd)
 }
@@ -964,7 +1084,10 @@ pub fn cob_sub_int(f1: &[u8], a1: &FieldAttr, n: i32, round: Round) -> Result<Ve
 
 /// `cob_set_int (f, n)`: store a host integer into a numeric field (no rounding; truncating store).
 pub fn cob_set_int(f1: &[u8], a1: &FieldAttr, n: i32) -> Result<Vec<u8>, ()> {
-    let d = CobDecimal { value: Mpz::from_i64(n as i64), scale: 0 };
+    let d = CobDecimal {
+        value: Mpz::from_i64(n as i64),
+        scale: 0,
+    };
     cob_decimal_get_field(d, a1, f1.len(), Round::Truncate, false)
 }
 
@@ -1003,7 +1126,9 @@ pub fn cob_decimal_get_double_checked(d: &CobDecimal) -> (f64, bool) {
         return (v, false);
     }
     let mant = d.value.to_decimal_string();
-    let probe: f64 = format!("{mant}e{}", -(d.scale as i64)).parse().unwrap_or(f64::INFINITY);
+    let probe: f64 = format!("{mant}e{}", -(d.scale as i64))
+        .parse()
+        .unwrap_or(f64::INFINITY);
     let not_finite = !probe.is_finite();
     (if not_finite { 0.0 } else { v }, not_finite)
 }
@@ -1095,7 +1220,11 @@ pub fn extended80_to_f64(b: &[u8]) -> f64 {
         return 0.0 * sign;
     }
     if exp == 0x7FFF {
-        return if mantissa << 1 == 0 { sign * f64::INFINITY } else { f64::NAN };
+        return if mantissa << 1 == 0 {
+            sign * f64::INFINITY
+        } else {
+            f64::NAN
+        };
     }
     // value = mantissa * 2^(exp - 16383 - 63); the explicit integer bit makes mantissa the full 64-bit.
     sign * (mantissa as f64) * 2f64.powi(exp - 16383 - 63)
@@ -1203,7 +1332,10 @@ pub fn cob_decimal_set_double(v: f64) -> CobDecimal {
     // numeric.c:930 maps zero, the all-spaces uninitialised-COMP-2 sentinel, and non-finite to decimal 0
     // before the mpf path. The sentinel is a *bit-pattern* test (ud.l1), not a value test.
     if v == 0.0 || v.to_bits() == F64_SPACED_OUT || !v.is_finite() {
-        return CobDecimal { value: Mpz::new(), scale: 0 };
+        return CobDecimal {
+            value: Mpz::new(),
+            scale: 0,
+        };
     }
     // mpf_set_d(cob_mpft, v); cob_decimal_set_mpf_core(d, cob_mpft) -- literal, over the real Mpf.
     let mpft = Mpf::set_d(v, crate::mpf::COB_MPF_PREC);
@@ -1217,17 +1349,29 @@ pub fn cob_decimal_set_double(v: f64) -> CobDecimal {
 pub fn cob_print_ieeedec(data: &[u8], attr: &FieldAttr) -> String {
     let d = match attr.field_type {
         0x16 => {
-            let (m, s) = crate::float::dec64_decode(data[..8].try_into().unwrap_or([0; 8])).unwrap_or((0, 0));
-            CobDecimal { value: Mpz::from_i128(m), scale: s }
+            let (m, s) = crate::float::dec64_decode(data[..8].try_into().unwrap_or([0; 8]))
+                .unwrap_or((0, 0));
+            CobDecimal {
+                value: Mpz::from_i128(m),
+                scale: s,
+            }
         }
         0x17 => {
-            let (m, s) =
-                crate::float::dec128_decode(data[..16].try_into().unwrap_or([0; 16])).unwrap_or((0, 0));
-            CobDecimal { value: Mpz::from_i128(m), scale: s }
+            let (m, s) = crate::float::dec128_decode(data[..16].try_into().unwrap_or([0; 16]))
+                .unwrap_or((0, 0));
+            CobDecimal {
+                value: Mpz::from_i128(m),
+                scale: s,
+            }
         }
-        0x13 => cob_decimal_set_double(f32::from_le_bytes(data[..4].try_into().unwrap_or([0; 4])) as f64),
+        0x13 => {
+            cob_decimal_set_double(f32::from_le_bytes(data[..4].try_into().unwrap_or([0; 4])) as f64)
+        }
         0x14 => cob_decimal_set_double(f64::from_le_bytes(data[..8].try_into().unwrap_or([0; 8]))),
-        _ => CobDecimal { value: Mpz::new(), scale: 0 },
+        _ => CobDecimal {
+            value: Mpz::new(),
+            scale: 0,
+        },
     };
     cob_decimal_print(&d)
 }
@@ -1254,7 +1398,11 @@ pub fn __fuzz_numcmp(data: &[u8]) {
         return;
     }
     let mk = |b: &[u8]| FieldAttr {
-        field_type: if b[0] & 1 == 0 { COB_TYPE_NUMERIC_DISPLAY } else { COB_TYPE_NUMERIC_PACKED },
+        field_type: if b[0] & 1 == 0 {
+            COB_TYPE_NUMERIC_DISPLAY
+        } else {
+            COB_TYPE_NUMERIC_PACKED
+        },
         digits: (b[1] % 18 + 1) as u16,
         scale: (b[2] % 6) as i16,
         flags: 0,
@@ -1280,8 +1428,14 @@ mod kani_proofs {
         let s1: i32 = kani::any();
         let s2: i32 = kani::any();
         kani::assume((-4..=4).contains(&s1) && (-4..=4).contains(&s2));
-        let d1 = CobDecimal { value: Mpz::from_i64(v1), scale: s1 };
-        let d2 = CobDecimal { value: Mpz::from_i64(v2), scale: s2 };
+        let d1 = CobDecimal {
+            value: Mpz::from_i64(v1),
+            scale: s1,
+        };
+        let d2 = CobDecimal {
+            value: Mpz::from_i64(v2),
+            scale: s2,
+        };
         let r = cob_decimal_cmp(&d1, &d2);
         assert!(r == -1 || r == 0 || r == 1);
     }
@@ -1293,7 +1447,54 @@ mod tests {
     use crate::attr::COB_FLAG_HAVE_SIGN;
 
     fn disp(d: u16, s: i16, signed: bool) -> FieldAttr {
-        FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: d, scale: s, flags: if signed { COB_FLAG_HAVE_SIGN } else { 0 } }
+        FieldAttr {
+            field_type: COB_TYPE_NUMERIC_DISPLAY,
+            digits: d,
+            scale: s,
+            flags: if signed { COB_FLAG_HAVE_SIGN } else { 0 },
+        }
+    }
+
+    #[test]
+    fn add_int_on_scaling_p_receiver_matches_upstream_semantics() {
+        // Upstream c3d5860bf + 28b02be15 (numeric.c): for a PIC 9(n)P(m) receiver (negative scale),
+        // cob_add_int early-returns when scale <= -10 ('an int cannot have > 10 digit positions')
+        // and otherwise divides the added int by 10^|scale|. The candidate's cob_add_int is the
+        // generic decimal path, which is semantically equivalent for every case; this court pins
+        // the observable semantics: a receiver with |scale| >= 10 is unchanged by any int add.
+        let attr = disp(5, -12, false); // PIC 9(5)P(12)
+        let src = b"12345".to_vec();
+        let out = cob_add_int(&src, &attr, 999, Round::Truncate).unwrap();
+        assert_eq!(out, src, "scale <= -10: int add is a no-op");
+        // A receiver with |scale| < 10 divides the int: PIC 9(5)P(3) + 5000 == +5 (5000/1000).
+        let attr2 = disp(5, -3, false);
+        let out2 = cob_add_int(b"00000".as_slice(), &attr2, 5000, Round::Truncate).unwrap();
+        assert_eq!(out2, b"00005", "P(3): int is divided by 10^3");
+        // The C fast path's `!val -> return 0` (no exception) is preserved: a sub-10^3 int is a no-op.
+        let out3 = cob_add_int(b"00000".as_slice(), &attr2, 999, Round::Truncate).unwrap();
+        assert_eq!(out3, b"00000");
+    }
+
+    #[test]
+    fn packed_is_negative_sign_and_digit_semantics() {
+        // Upstream c3d5860bf optimized packed_is_negative with memcmp (behavior-identical); this
+        // court pins the semantics: 0x0D sign with a nonzero digit, or any nonzero byte before the
+        // last, means negative; negative-zero is NOT negative.
+        use crate::packed::packed_is_negative;
+        let attr = crate::attr::FieldAttr {
+            field_type: COB_TYPE_NUMERIC_PACKED,
+            digits: 5,
+            scale: 0,
+            flags: COB_FLAG_HAVE_SIGN,
+        };
+        // S9(5) COMP-3 = -1: 0x00 0x00 0x1D
+        assert_eq!(packed_is_negative(&[0x00, 0x00, 0x1D], &attr), 1);
+        // +1: 0x0C
+        assert_eq!(packed_is_negative(&[0x00, 0x00, 0x1C], &attr), 0);
+        // negative zero: 0x00 0x00 0x0D (sign byte carries no digit) -> NOT negative
+        assert_eq!(packed_is_negative(&[0x00, 0x00, 0x0D], &attr), 0);
+        // 0x0D sign but a nonzero digit byte: negative
+        assert_eq!(packed_is_negative(&[0x00, 0x12, 0x3D], &attr), 1);
     }
 
     #[test]
@@ -1301,12 +1502,21 @@ mod tests {
         // 12.3 (9(2)V9) vs 12.30 (9(2)V99) -> equal
         let a = b"123";
         let b = b"01230";
-        assert_eq!(cob_numeric_cmp(a, &disp(3, 1, false), b, &disp(5, 2, false)), 0);
+        assert_eq!(
+            cob_numeric_cmp(a, &disp(3, 1, false), b, &disp(5, 2, false)),
+            0
+        );
         // 12.3 vs 12.31 -> less
         let c = b"01231";
-        assert_eq!(cob_numeric_cmp(a, &disp(3, 1, false), c, &disp(5, 2, false)), -1);
+        assert_eq!(
+            cob_numeric_cmp(a, &disp(3, 1, false), c, &disp(5, 2, false)),
+            -1
+        );
         // 99 vs 12 -> greater
-        assert_eq!(cob_numeric_cmp(b"99", &disp(2, 0, false), b"12", &disp(2, 0, false)), 1);
+        assert_eq!(
+            cob_numeric_cmp(b"99", &disp(2, 0, false), b"12", &disp(2, 0, false)),
+            1
+        );
     }
 
     #[test]
@@ -1315,13 +1525,19 @@ mod tests {
         let f = b"0000000100";
         let a = disp(10, 0, true);
         // Normal subtraction: f - 5 == f + (-5).
-        assert_eq!(cob_sub_int(f, &a, 5, Round::Truncate), cob_add_int(f, &a, -5, Round::Truncate));
+        assert_eq!(
+            cob_sub_int(f, &a, 5, Round::Truncate),
+            cob_add_int(f, &a, -5, Round::Truncate)
+        );
         // The edge: n == i32::MIN. A bare `-n` would panic in a debug build. GnuCOBOL (gcc -fwrapv)
         // wraps `-INT_MIN` back to INT_MIN and adds it, so `f - INT_MIN` produces the SAME bytes as
         // `f + INT_MIN` (faithful, if mathematically surprising). This must not panic and must match.
         let sub = cob_sub_int(f, &a, i32::MIN, Round::Truncate).expect("no panic, no error");
         let add = cob_add_int(f, &a, i32::MIN, Round::Truncate).expect("add ok");
-        assert_eq!(sub, add, "cob_sub_int(f, INT_MIN) must equal cob_add_int(f, INT_MIN) per -fwrapv");
+        assert_eq!(
+            sub, add,
+            "cob_sub_int(f, INT_MIN) must equal cob_add_int(f, INT_MIN) per -fwrapv"
+        );
     }
 
     #[test]
@@ -1338,12 +1554,24 @@ mod tests {
         let drop = (big.to_decimal_string().len() - 34) as u32; // 6 low digits truncated to fit 34 sig
         let ten_drop = Mpz::ui_pow_ui(10, drop);
         let expect = big.tdiv_q(&ten_drop).mul(&ten_drop); // input truncated to its top 34 sig digits
-        let got = cob_decimal_get_ieee128dec(&CobDecimal { value: big, scale: 0 });
-        assert_ne!(got, [0u8; 16], "must NOT silently encode 0 for a >38-digit value");
+        let got = cob_decimal_get_ieee128dec(&CobDecimal {
+            value: big,
+            scale: 0,
+        });
+        assert_ne!(
+            got, [0u8; 16],
+            "must NOT silently encode 0 for a >38-digit value"
+        );
         let (sig, sc) = crate::float::dec128_decode(got).expect("FLOAT.1 decoder");
-        assert!(sc <= 0, "a >1e34 magnitude has a non-positive decimal scale");
+        assert!(
+            sc <= 0,
+            "a >1e34 magnitude has a non-positive decimal scale"
+        );
         let recon = Mpz::from_i128(sig).mul(&Mpz::ui_pow_ui(10, (-sc) as u32)); // sig * 10^-sc
-        assert_eq!(recon, expect, "encoded value must be the top-34-digit truncation of the input");
+        assert_eq!(
+            recon, expect,
+            "encoded value must be the top-34-digit truncation of the input"
+        );
     }
 
     #[test]
@@ -1352,14 +1580,20 @@ mod tests {
         // matching the cobc oracle: MOVE of a SPACES-redefined COMP-2 DISPLAYs 0000.0000. The C test is
         // on the bit pattern (ud.l1 == i64_spaced_out), not the f64 value.
         let spaces = f64::from_bits(0x2020_2020_2020_2020);
-        assert_ne!(spaces, 0.0, "the sentinel double is a nonzero value (~1.16e-152)");
+        assert_ne!(
+            spaces, 0.0,
+            "the sentinel double is a nonzero value (~1.16e-152)"
+        );
         assert_eq!(cob_decimal_set_double(spaces).value.to_i128(), Some(0));
         // a genuine value is unaffected by the sentinel guard (nonzero mantissa).
         assert_ne!(cob_decimal_set_double(2.5).value.to_i128(), Some(0));
     }
 
     fn dec(value: &str, scale: i32) -> CobDecimal {
-        CobDecimal { value: Mpz::from_decimal_string(value), scale }
+        CobDecimal {
+            value: Mpz::from_decimal_string(value),
+            scale,
+        }
     }
     /// Render as an exact decimal string `value * 10^-scale` (for test assertions).
     fn render(d: &CobDecimal) -> String {
@@ -1376,7 +1610,11 @@ mod tests {
             None => ("", s),
         };
         let sc = d.scale as usize;
-        let digs = if digs.len() <= sc { format!("{:0>width$}", digs, width = sc + 1) } else { digs };
+        let digs = if digs.len() <= sc {
+            format!("{:0>width$}", digs, width = sc + 1)
+        } else {
+            digs
+        };
         let dot = digs.len() - sc;
         format!("{neg}{}.{}", &digs[..dot], &digs[dot..])
     }
@@ -1409,9 +1647,16 @@ mod tests {
         fn disp_bytes(digits: usize, val: u64, neg: bool) -> Vec<u8> {
             let mut v = val;
             let mut d = vec![0u8; digits];
-            for s in d.iter_mut().rev() { *s = (v % 10) as u8; v /= 10; }
+            for s in d.iter_mut().rev() {
+                *s = (v % 10) as u8;
+                v /= 10;
+            }
             let mut o: Vec<u8> = d.iter().map(|x| b'0' + x).collect();
-            if neg { if let Some(l) = o.last_mut() { *l |= 0x40; } }
+            if neg {
+                if let Some(l) = o.last_mut() {
+                    *l |= 0x40;
+                }
+            }
             o
         }
         let mut checked = 0;
@@ -1419,7 +1664,8 @@ mod tests {
             for ascale in 0..=2i16 {
                 for bval in [1u64, 3, 7, 11, 99] {
                     for aval in [0u64, 1, 100, 12345 % 10u64.pow(adig as u32)] {
-                        for (an, bn) in [(false, false), (true, false), (false, true), (true, true)] {
+                        for (an, bn) in [(false, false), (true, false), (false, true), (true, true)]
+                        {
                             for round in [Round::Truncate, Round::NearAwayFromZero] {
                                 let a1 = disp(adig as u16, ascale, true);
                                 let a2 = disp(3, 0, true);
@@ -1427,7 +1673,10 @@ mod tests {
                                 let b = disp_bytes(3, bval, bn);
                                 let mine = cob_div(&a, &a1, &b, &a2, round).unwrap();
                                 let proven = cob_divide(&a, &a1, &b, &a2, &a1, round).unwrap();
-                                assert_eq!(mine, proven, "a={aval}(s{ascale},n{an}) b={bval}(n{bn}) {round:?}");
+                                assert_eq!(
+                                    mine, proven,
+                                    "a={aval}(s{ascale},n{an}) b={bval}(n{bn}) {round:?}"
+                                );
                                 checked += 1;
                             }
                         }
@@ -1443,11 +1692,22 @@ mod tests {
         // cob_set_int stores the integer; cob_add_int adds; cmp variants match cob_cmp_int.
         let a = disp(5, 0, true);
         assert_eq!(cob_set_int(b"00000", &a, 42).unwrap(), b"00042");
-        assert_eq!(cob_set_int(b"00000", &a, -7).unwrap().as_slice(), b"0000\x77"); // -7 overpunch
-        // 100 + 23 = 123
-        assert_eq!(cob_add_int(b"00100", &a, 23, Round::Truncate).unwrap(), b"00123");
+        assert_eq!(
+            cob_set_int(b"00000", &a, -7).unwrap().as_slice(),
+            b"0000\x77"
+        ); // -7 overpunch
+           // 100 + 23 = 123
+        assert_eq!(
+            cob_add_int(b"00100", &a, 23, Round::Truncate).unwrap(),
+            b"00123"
+        );
         // 100 - 150 = -50 -> "00050" with the last byte a negative overpunch '0' (0x70)
-        assert_eq!(cob_sub_int(b"00100", &a, 150, Round::Truncate).unwrap().as_slice(), b"0005\x70");
+        assert_eq!(
+            cob_sub_int(b"00100", &a, 150, Round::Truncate)
+                .unwrap()
+                .as_slice(),
+            b"0005\x70"
+        );
         // cmp variants == cob_cmp_int verdict
         for n in [0i64, 5, 9, 100] {
             let v = cob_cmp_int(b"00009", &disp(5, 0, false), n);
@@ -1481,7 +1741,8 @@ mod tests {
                         continue;
                     }
                     // build a DISPLAY image of +/- v
-                    let mut img: Vec<u8> = format!("{v:0width$}", width = digits as usize).into_bytes();
+                    let mut img: Vec<u8> =
+                        format!("{v:0width$}", width = digits as usize).into_bytes();
                     if neg {
                         let last = img.len() - 1;
                         img[last] = b"p qrstuvwxy"[(img[last] - b'0' + 1) as usize]; // ASCII overpunch
@@ -1517,18 +1778,40 @@ mod tests {
     fn get_display_binary_leaves_match_get_field() {
         // The named leaves must equal the sealed get_field for an already-scale-aligned decimal.
         for &(ft, digits, scale, flags) in &[
-            (COB_TYPE_NUMERIC_DISPLAY, 5u16, 2i16, crate::attr::COB_FLAG_HAVE_SIGN),
+            (
+                COB_TYPE_NUMERIC_DISPLAY,
+                5u16,
+                2i16,
+                crate::attr::COB_FLAG_HAVE_SIGN,
+            ),
             (COB_TYPE_NUMERIC_DISPLAY, 7, 0, 0),
-            (COB_TYPE_NUMERIC_BINARY, 9, 0, crate::attr::COB_FLAG_HAVE_SIGN),
+            (
+                COB_TYPE_NUMERIC_BINARY,
+                9,
+                0,
+                crate::attr::COB_FLAG_HAVE_SIGN,
+            ),
             (COB_TYPE_NUMERIC_BINARY, 4, 2, 0),
         ] {
-            let attr = FieldAttr { field_type: ft, digits, scale, flags };
-            let size = if ft == COB_TYPE_NUMERIC_DISPLAY { digits as usize } else { 4 };
+            let attr = FieldAttr {
+                field_type: ft,
+                digits,
+                scale,
+                flags,
+            };
+            let size = if ft == COB_TYPE_NUMERIC_DISPLAY {
+                digits as usize
+            } else {
+                4
+            };
             for &v in &[0i128, 1, -1, 42, -42, 1234, -1234, 99999, -99999] {
                 if flags == 0 && v < 0 {
                     continue;
                 }
-                let d = CobDecimal { value: Mpz::from_i128(v), scale: scale as i32 };
+                let d = CobDecimal {
+                    value: Mpz::from_i128(v),
+                    scale: scale as i32,
+                };
                 let leaf = if ft == COB_TYPE_NUMERIC_DISPLAY {
                     cob_decimal_get_display(&d, &attr, size)
                 } else {
@@ -1560,7 +1843,8 @@ mod tests {
         use crate::arith::{cob_divide_remainder, Round};
         fn d(digits: usize, val: i64) -> Vec<u8> {
             let neg = val < 0;
-            let mut s: Vec<u8> = format!("{:0width$}", val.unsigned_abs(), width = digits).into_bytes();
+            let mut s: Vec<u8> =
+                format!("{:0width$}", val.unsigned_abs(), width = digits).into_bytes();
             if neg {
                 let l = s.len() - 1;
                 s[l] |= 0x40;
@@ -1577,7 +1861,9 @@ mod tests {
                 let a_dvs = disp(5, 2, true);
                 let proven = cob_divide_remainder(&dvdb, &a_dvd, &dvsb, &a_dvs, &qa, &ra);
                 let mine = cob_div_quotient(&dvdb, &a_dvd, &dvsb, &a_dvs, &qa, 7, Round::Truncate)
-                    .and_then(|(q, rem)| cob_div_remainder(rem, &ra, 7, Round::Truncate).map(|r| (q, r)));
+                    .and_then(|(q, rem)| {
+                        cob_div_remainder(rem, &ra, 7, Round::Truncate).map(|r| (q, r))
+                    });
                 match (proven, mine) {
                     (Ok((pq, pr)), Ok((mq, mr))) => {
                         assert_eq!(mq, pq, "quotient dvd={dvd} dvs={dvs}");
@@ -1595,13 +1881,33 @@ mod tests {
         // equal the FLOAT.1-sealed decimal_to_f64_trunc (display->COMP-2 encode at 1476/0).
         for scale in -3i32..=12 {
             for &mag in &[
-                0i128, 1, -1, 7, 25, -25, 100, 12345, -12345, 999999, 33333333, -8675309, 1000000000,
-                123456789012345, -987654321098765,
+                0i128,
+                1,
+                -1,
+                7,
+                25,
+                -25,
+                100,
+                12345,
+                -12345,
+                999999,
+                33333333,
+                -8675309,
+                1000000000,
+                123456789012345,
+                -987654321098765,
             ] {
-                let d = CobDecimal { value: Mpz::from_i128(mag), scale };
+                let d = CobDecimal {
+                    value: Mpz::from_i128(mag),
+                    scale,
+                };
                 let viamp = cob_decimal_get_double(&d);
                 let sealed = crate::float::decimal_to_f64_trunc(mag, scale);
-                assert_eq!(viamp.to_bits(), sealed.to_bits(), "mag={mag} scale={scale}: mpf={viamp} sealed={sealed}");
+                assert_eq!(
+                    viamp.to_bits(),
+                    sealed.to_bits(),
+                    "mag={mag} scale={scale}: mpf={viamp} sealed={sealed}"
+                );
             }
         }
     }
@@ -1609,11 +1915,20 @@ mod tests {
     #[test]
     fn get_double_checked_flags_overflow() {
         // A finite-range decimal: no overflow, value preserved (== cob_decimal_get_double).
-        let small = CobDecimal { value: Mpz::from_i128(12345), scale: 2 };
+        let small = CobDecimal {
+            value: Mpz::from_i128(12345),
+            scale: 2,
+        };
         let (v, of) = cob_decimal_get_double_checked(&small);
         assert!(!of);
         assert_eq!(v.to_bits(), cob_decimal_get_double(&small).to_bits());
-        assert_eq!(cob_decimal_get_double_checked(&CobDecimal { value: Mpz::new(), scale: 0 }), (0.0, false));
+        assert_eq!(
+            cob_decimal_get_double_checked(&CobDecimal {
+                value: Mpz::new(),
+                scale: 0
+            }),
+            (0.0, false)
+        );
         // An absurdly large decimal (~1e330, well past f64::MAX ~1.8e308): cob_not_finite set, value 0.0
         // (matching the C, which sets the flag and zeroes v). Built as 10^330.
         let mut big = Mpz::from_u64(1);
@@ -1621,7 +1936,10 @@ mod tests {
         for _ in 0..330 {
             big = big.mul(&ten);
         }
-        let huge = CobDecimal { value: big, scale: 0 };
+        let huge = CobDecimal {
+            value: big,
+            scale: 0,
+        };
         let (vh, ofh) = cob_decimal_get_double_checked(&huge);
         assert!(ofh, "1e330 must flag cob_not_finite (EC-SIZE-OVERFLOW)");
         assert_eq!(vh, 0.0);
@@ -1630,13 +1948,29 @@ mod tests {
         for _ in 0..308 {
             e308 = e308.mul(&ten);
         }
-        assert!(!cob_decimal_get_double_checked(&CobDecimal { value: e308, scale: 0 }).1);
+        assert!(
+            !cob_decimal_get_double_checked(&CobDecimal {
+                value: e308,
+                scale: 0
+            })
+            .1
+        );
     }
 
     #[test]
     fn cmp_float_orders_and_tolerates() {
         // COMP-2 (0x14) field comparison with libcob's relative tolerance.
-        let f = |v: f64| (FieldAttr { field_type: 0x14, digits: 0, scale: 0, flags: 0 }, v.to_le_bytes().to_vec());
+        let f = |v: f64| {
+            (
+                FieldAttr {
+                    field_type: 0x14,
+                    digits: 0,
+                    scale: 0,
+                    flags: 0,
+                },
+                v.to_le_bytes().to_vec(),
+            )
+        };
         let (a1, b1) = f(1.5);
         let (a2, b2) = f(2.5);
         assert_eq!(cob_cmp_float(&b1, &a1, &b2, &a2), -1);
@@ -1652,7 +1986,10 @@ mod tests {
     fn print_functions_match_oracle_display() {
         use crate::attr::{COB_FLAG_HAVE_SIGN, COB_TYPE_NUMERIC_BINARY};
         // --- cob_decimal_print: ground truth captured from `cobc` DISPLAY of FLOAT-DECIMAL-16 ---
-        let cd = |mag: i128, scale: i32| CobDecimal { value: Mpz::from_i128(mag), scale };
+        let cd = |mag: i128, scale: i32| CobDecimal {
+            value: Mpz::from_i128(mag),
+            scale,
+        };
         let cases: &[(i128, i32, &str)] = &[
             (12345, 2, "123.45"),
             (0, 0, "0E0"),
@@ -1666,25 +2003,62 @@ mod tests {
             (-7000, 0, "-7E3"),
         ];
         for &(mag, scale, want) in cases {
-            assert_eq!(cob_decimal_print(&cd(mag, scale)), want, "decimal_print {mag}e-{scale}");
+            assert_eq!(
+                cob_decimal_print(&cd(mag, scale)),
+                want,
+                "decimal_print {mag}e-{scale}"
+            );
             // cob_print_ieeedec composes the FLOAT.1-sealed BID decode with cob_decimal_print; the
             // round-trip through dec64_encode must DISPLAY identically (zero-stripping normalises scale).
-            let attr = FieldAttr { field_type: 0x16, digits: 16, scale: scale as i16, flags: 0 };
+            let attr = FieldAttr {
+                field_type: 0x16,
+                digits: 16,
+                scale: scale as i16,
+                flags: 0,
+            };
             let bytes = crate::float::dec64_encode(mag, scale);
-            assert_eq!(cob_print_ieeedec(&bytes, &attr), want, "print_ieeedec {mag}e-{scale}");
+            assert_eq!(
+                cob_print_ieeedec(&bytes, &attr),
+                want,
+                "print_ieeedec {mag}e-{scale}"
+            );
         }
 
         // --- cob_print_realbin: ground truth from `cobc` DISPLAY of S9(9)/9(9) COMP-5 (size 10) ---
         let mut buf = [0u8; 4];
-        let signed = FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags: COB_FLAG_HAVE_SIGN };
-        for &(v, want) in &[(42i128, "+0000000042"), (-42, "-0000000042"), (0, "+0000000000"), (2147483647, "+2147483647"), (-1, "-0000000001")] {
+        let signed = FieldAttr {
+            field_type: COB_TYPE_NUMERIC_BINARY,
+            digits: 9,
+            scale: 0,
+            flags: COB_FLAG_HAVE_SIGN,
+        };
+        for &(v, want) in &[
+            (42i128, "+0000000042"),
+            (-42, "-0000000042"),
+            (0, "+0000000000"),
+            (2147483647, "+2147483647"),
+            (-1, "-0000000001"),
+        ] {
             crate::binary::binary_encode(v, &signed, &mut buf);
-            assert_eq!(cob_print_realbin(&buf, &signed, 10), want, "realbin signed {v}");
+            assert_eq!(
+                cob_print_realbin(&buf, &signed, 10),
+                want,
+                "realbin signed {v}"
+            );
         }
-        let unsigned = FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags: 0 };
+        let unsigned = FieldAttr {
+            field_type: COB_TYPE_NUMERIC_BINARY,
+            digits: 9,
+            scale: 0,
+            flags: 0,
+        };
         for &(v, want) in &[(123456789i128, "0123456789"), (0, "0000000000")] {
             crate::binary::binary_encode(v, &unsigned, &mut buf);
-            assert_eq!(cob_print_realbin(&buf, &unsigned, 10), want, "realbin unsigned {v}");
+            assert_eq!(
+                cob_print_realbin(&buf, &unsigned, 10),
+                want,
+                "realbin unsigned {v}"
+            );
         }
     }
 
@@ -1743,7 +2117,17 @@ mod ext80_tests {
     use super::{extended80_to_f64, f64_to_extended80};
     #[test]
     fn extended80_round_trip() {
-        for &v in &[0.0f64, 1.0, -1.0, 3.14159265358979, 1e10, -2.5, 1e-7, 12345.678, -0.001] {
+        for &v in &[
+            0.0f64,
+            1.0,
+            -1.0,
+            3.14159265358979,
+            1e10,
+            -2.5,
+            1e-7,
+            12345.678,
+            -0.001,
+        ] {
             let e = f64_to_extended80(v);
             let back = extended80_to_f64(&e);
             assert_eq!(back, v, "ext80 round-trip {v}");
