@@ -300,7 +300,7 @@ pub fn registry() -> Vec<Entry> {
           "-fno-binary-truncate", "-fno-binary-comp-1", "-fbinary-comp-1", "-fremove-unreachable",
           "-fno-remove-unreachable", "-fno-gen-c-decl-static-call", "-fgen-c-decl-static-call",
           "-fno-theader", "-ftcmd", "-fno-tmessages", "-fno-tsource", "-fno-tsymbols", "-fno-dump",
-          "-fdump", "-fcheck-perf", "-fusing-optional", "-fno-others", "-fmax-errors", "-fwarn-all",
+          "-fdump", "-fcheck-perf", "-fusing-optional", "-fno-others", "-fwarn-all",
           "-fword-continuation", "-freserved-words", "-fno-implicit-goback-check",
           "-fdiagnostics-show-caret", "-fdiagnostics-show-line-numbers", "-fno-diagnostics-show-option",
           "-fno-ttimestamp", "-ftsymbols", "-fttitle", "-ftrace", "-ftraceall", "-fsource-location",
@@ -310,6 +310,8 @@ pub fn registry() -> Vec<Entry> {
           OptionPolicy::RejectedUnsupported, OptCategory::Semantic, true,
           "dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)"),
         // ---- diagnostic-only (proven no-ops) ---------------------------------------------------
+        e("-fmax-errors", &["-fmax-errors"], OptionPolicy::AcceptedProvenNoOp, OptCategory::Diagnostic, true,
+          "max errors: upstream 470f7db12 made 0 mean unlimited and cut the default from 128 to 20; the candidate checker is fail-fast (at most one diagnostic per compile), so every N>=1 and N=0 are observably identical for the candidate — recorded proven no-op (with the architectural rationale, not a silent skip)"),
         e("-Wall", &["-Wall"], OptionPolicy::AcceptedProvenNoOp, OptCategory::Diagnostic, false,
           "enable all warnings: the candidate emits its own diagnostics; no observable effect on test outcomes"),
         e("-Wextra", &["-Wextra"], OptionPolicy::AcceptedProvenNoOp, OptCategory::Diagnostic, false,
@@ -570,5 +572,29 @@ mod tests {
         let (k, v) = split_attached("-o");
         assert_eq!(k, "-o");
         assert!(v.is_none());
+    }
+
+    #[test]
+    fn max_errors_is_a_documented_proven_noop() {
+        // Upstream 470f7db12: -fmax-errors=0 means unlimited; default cut 128 -> 20. The candidate
+        // checker is fail-fast (at most one diagnostic per compile), so every N>=1 and N=0 are
+        // observably identical for the candidate. Accepted with the rationale recorded, never
+        // silently dropped.
+        let e = lookup("-fmax-errors").expect("-fmax-errors has an explicit registry entry");
+        assert_eq!(e.policy, OptionPolicy::AcceptedProvenNoOp);
+        assert!(e.consumes_value, "-fmax-errors takes a value");
+        assert_eq!(e.category, OptCategory::Diagnostic);
+    }
+
+    #[test]
+    fn binary_source_is_rejected() {
+        // Upstream 470f7db12 (pplex ppopen_get_file): binary source files error out directly.
+        let dir = std::env::temp_dir().join(format!("cobc_rs_bin_{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let p = dir.join("prog.cob");
+        std::fs::write(&p, b"\x00\x01\x02").unwrap();
+        let err = crate::compile::read_source(p.to_str().unwrap()).unwrap_err();
+        assert!(err.contains("binary file"), "got: {err}");
+        let _ = std::fs::remove_dir_all(&dir);
     }
 }

@@ -11,17 +11,25 @@ use serde_json::{json, Value};
 use std::path::{Path, PathBuf};
 
 /// Read the main source (a path, or stdin for `-`).
+///
+/// Since upstream `470f7db12` (pplex `ppopen_get_file`), cobc detects a **binary** source file and
+/// errors out directly; the candidate mirrors that: a NUL byte in the source is rejected as a
+/// binary file before any further processing.
 pub fn read_source(path: &str) -> Result<String, String> {
-    if path == "-" {
+    let bytes = if path == "-" {
         use std::io::Read;
-        let mut buf = String::new();
+        let mut buf = Vec::new();
         std::io::stdin()
-            .read_to_string(&mut buf)
+            .read_to_end(&mut buf)
             .map_err(|e| format!("stdin: {e}"))?;
-        Ok(buf)
+        buf
     } else {
-        std::fs::read_to_string(path).map_err(|e| format!("cannot read {path}: {e}"))
+        std::fs::read(path).map_err(|e| format!("cannot read {path}: {e}"))?
+    };
+    if bytes.contains(&0) {
+        return Err(format!("cobc: {path}: binary file"));
     }
+    String::from_utf8(bytes).map_err(|e| format!("cobc: {path}: not valid UTF-8 source: {e}"))
 }
 
 /// The fully expanded program text (defines prepended, sibling CALLs appended, COPY expanded).
