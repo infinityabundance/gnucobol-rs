@@ -26,7 +26,9 @@ impl FsCopyResolver {
         }
     }
 
-    /// The ordered search roots: cwd first, then -I dirs, then COB_COPY_DIR.
+    /// The ordered search roots: cwd first, then -I dirs, then COB_COPY_DIR, then the candidate's
+    /// system copybook directory (`gnucobol-rs/copy/`, the interpreted analogue of
+    /// `$prefix/share/gnucobol/copy`). The system root is searched last so user copybooks always win.
     pub fn roots(&self) -> Vec<PathBuf> {
         let mut roots = vec![PathBuf::from(".")];
         roots.extend(self.include_dirs.iter().cloned());
@@ -35,6 +37,7 @@ impl FsCopyResolver {
                 roots.push(PathBuf::from(dir));
             }
         }
+        roots.push(gnucobol_rs::copybook::system_copy_dir());
         roots
     }
 
@@ -158,4 +161,40 @@ pub fn write_depfile(
     std::fs::write(&tmp, &line).map_err(|e| format!("write depfile: {e}"))?;
     std::fs::rename(&tmp, path).map_err(|e| format!("rename depfile: {e}"))?;
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn system_copy_dir_resolves_upstream_system_copybooks() {
+        // The candidate's system copybook root (gnucobol-rs/copy/, custody-gated to upstream
+        // a51ca02a68d5 + the pinned head) must resolve the system copybooks GnuCOBOL ships, so
+        // programs that `COPY "screenio.cpy"` / `COPY sqlca` etc. can be preprocessed.
+        let resolver = FsCopyResolver::new(vec![], vec![]);
+        let sys = gnucobol_rs::copybook::system_copy_dir();
+        assert!(sys.is_dir(), "system copy dir {sys:?} exists");
+        for name in [
+            "screenio.cpy",
+            "sqlca.cpy",
+            "sqlda.cpy",
+            "xfhfcd.cpy",
+            "xfhfcd3.cpy",
+            "gcwindow.cpy",
+        ] {
+            assert!(sys.join(name).is_file(), "system copybook {name} admitted");
+        }
+        let text = resolver
+            .resolve("screenio")
+            .expect("screenio.cpy resolves via the system root");
+        assert!(text.contains("SCREEN SECTION") || text.to_ascii_uppercase().contains("SCREEN"));
+        // user roots still win: a shadowing cwd copybook is found first
+        let tmp = std::env::temp_dir().join(format!("cobc_rs_syscopy_{}", std::process::id()));
+        std::fs::create_dir_all(&tmp).unwrap();
+        std::fs::write(tmp.join("shadow.cpy"), b"user shadow\n").unwrap();
+        let res2 = FsCopyResolver::new(vec![tmp.clone()], vec![]);
+        assert_eq!(res2.resolve("shadow").as_deref(), Some("user shadow\n"));
+        let _ = std::fs::remove_dir_all(&tmp);
+    }
 }

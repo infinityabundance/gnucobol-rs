@@ -31,6 +31,15 @@ pub trait CopyResolver {
     }
 }
 
+/// The candidate's system copybook directory: `crates/gnucobol-rs/copy/`, custody-gated to the
+/// pinned upstream `copy/*.cpy` files (`screenio.cpy`, `sqlca.cpy`, `sqlda.cpy`, `xfhfcd.cpy`,
+/// `xfhfcd3.cpy`, `gcwindow.cpy`). This is the interpreted analogue of GnuCOBOL's
+/// `$prefix/share/gnucobol/copy` (adopted from upstream `a51ca02a68d5` and the pinned head).
+/// Searched after the user roots (cwd, `-I`, `COB_COPY_DIR`) so user copybooks always win.
+pub fn system_copy_dir() -> std::path::PathBuf {
+    std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("copy")
+}
+
 /// Where an expanded line came from.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Provenance {
