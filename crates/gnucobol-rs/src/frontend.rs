@@ -14868,6 +14868,77 @@ mod tests {
     }
 
     #[test]
+    fn move_to_edited_family_matches_current_upstream() {
+        // Upstream move-to-edited family (7c7b55b93, 435454f8d, 44c96d20a, 87c1dd579,
+        // 921108ea2, ec5562cfb): the optimized numeric->edited path handles sign normalization,
+        // BLANK WHEN ZERO on signed edited fields, the insertion symbols B / 0 / /, and the
+        // 2023-standard floating-currency semantics (a floating `$`/`+`/`-` before the decimal
+        // point suppresses zero only before it; after the point the float char is a literal).
+        // The candidate's edited-encode already implements these fixed semantics; this court pins
+        // the oracle-verified expectations (cobc 3.2.0 + current upstream agree on all four
+        // shapes; the 3.2-vs-current drift is covered by the oracle-drift report).
+        let out = run("       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 E1 PIC -9.99 BLANK WHEN ZERO.\n\
+                    01 E2 PIC 9(2)B9(2).\n\
+                    01 E3 PIC 9(2)/9(2).\n\
+                    01 E4 PIC 9(2)09(2).\n\
+                    01 F1 PIC $,$$$.99.\n\
+                    01 F2 PIC $$,$$$.99.\n\
+                    PROCEDURE DIVISION.\n\
+                        MOVE 0 TO E1.\n\
+                        DISPLAY \"[\" E1 \"]\".\n\
+                        MOVE 1234 TO E2.\n\
+                        DISPLAY \"[\" E2 \"]\".\n\
+                        MOVE 1234 TO E3.\n\
+                        DISPLAY \"[\" E3 \"]\".\n\
+                        MOVE 1234 TO E4.\n\
+                        DISPLAY \"[\" E4 \"]\".\n\
+                        MOVE 0 TO F1.\n\
+                        DISPLAY \"[\" F1 \"]\".\n\
+                        MOVE 0 TO F2.\n\
+                        DISPLAY \"[\" F2 \"]\".\n\
+                        MOVE 1234.56 TO F2.\n\
+                        DISPLAY \"[\" F2 \"]\".\n\
+                        STOP RUN.\n");
+        assert_eq!(
+            out,
+            b"[     ]\n[12 34]\n[12/34]\n[12034]\n[    $.00]\n[     $.00]\n[$1,234.56]\n"
+        );
+    }
+
+    #[test]
+    fn default_rounded_and_screen_dump_boundaries() {
+        // e51b091b9 (bug 934): the default ROUNDED fast path -- the candidate's Round model
+        // handles rounding uniformly; the C opt-flag fast-path guard is inapplicable. Pin the
+        // observable: a ROUNDED arithmetic store rounds NEAREST-AWAY as the default (oracle:
+        // COMPUTE R ROUNDED = 12.46 -> 12.5; COMPUTE S = 12.44 -> 12.4).
+        let out = run("       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 R PIC 9(2)V9.\n\
+                    01 S PIC 9(2)V9.\n\
+                    PROCEDURE DIVISION.\n\
+                        COMPUTE R ROUNDED = 12.46.\n\
+                        DISPLAY R.\n\
+                        COMPUTE S = 12.44.\n\
+                        DISPLAY S.\n\
+                        STOP RUN.\n");
+        assert_eq!(out, b"12.5\n12.4\n");
+        // d33f2ec97 (CBL_GC_SCR_DUMP / CBL_GC_SCR_RESTORE): screen dump/restore is a
+        // screen-model boundary; an external CALL to them fails closed (not a contained program).
+        let src2 = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n           CALL \"CBL_GC_SCR_DUMP\".\n           STOP RUN.\n";
+        let err = run_program(src2).unwrap_err();
+        assert!(
+            format!("{err:?}").contains("external CALL"),
+            "CBL screen dump call fails closed: {err:?}"
+        );
+    }
+
+    #[test]
     fn broken_expressions_fail_closed_cleanly() {
         // Upstream a0937bf49 (bugs:#933 #938 #966) hardened the C expression evaluation against
         // broken expressions (NULL expression-stack guards; const-correctness). The candidate is
