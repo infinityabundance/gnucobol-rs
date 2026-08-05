@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 269. syn_misc.at:1202: testing CRT STATUS ...
 ./syn_misc.at:1236: $COMPILE_ONLY prog.cob
---- -	2026-08-04 15:05:43.494057834 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/269/stderr	2026-08-04 15:05:43.493612986 +0000
+--- -	2026-08-05 21:57:01.551163889 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/269/stderr	2026-08-05 21:57:01.550650619 +0000
 @@ -1,2 +1 @@
 -prog.cob:7: error: 'MY-CRT-STATUS' is not defined
  

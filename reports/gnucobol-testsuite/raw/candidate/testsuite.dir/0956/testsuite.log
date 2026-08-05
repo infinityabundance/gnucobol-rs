@@ -4,7 +4,7 @@
 ./run_reportwriter.at:234: DD_PRINTOUT="./report.txt" $COBCRUN_DIRECT ./prog
 ./run_reportwriter.at:253: diff reference report.txt
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/956/stderr	2026-08-04 15:05:44.026450767 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/956/stderr	2026-08-05 21:57:02.545976033 +0000
 @@ -0,0 +1 @@
 +diff: report.txt: No such file or directory
 ./run_reportwriter.at:253: exit code was 2, expected 0

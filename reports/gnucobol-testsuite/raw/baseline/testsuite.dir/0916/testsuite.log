@@ -4,7 +4,7 @@
 ./run_file.at:6599: $COMPILE prog2.cob
 ./run_file.at:6600: $COBCRUN_DIRECT ./prog1
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/916/stdout	2026-08-04 15:05:20.755707643 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/916/stdout	2026-08-05 21:56:27.343551183 +0000
 @@ -0,0 +1 @@
 +FAILED: 00
 916. run_file.at:6523: 916. INDEXED file with blocked lock (run_file.at:6523): expected failure (run_file.at:6600)

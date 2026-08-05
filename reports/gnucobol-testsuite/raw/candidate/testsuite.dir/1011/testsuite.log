@@ -2,8 +2,8 @@
 1011. run_functions.at:1092: testing FUNCTION EXCEPTION-STATUS ...
 ./run_functions.at:1120: $COMPILE prog.cob
 ./run_functions.at:1121: $COBCRUN_DIRECT ./prog
---- -	2026-08-04 15:05:44.085893645 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1011/stdout	2026-08-04 15:05:44.085045916 +0000
+--- -	2026-08-05 21:57:02.637359336 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1011/stdout	2026-08-05 21:57:02.636484091 +0000
 @@ -1 +1 @@
 -                               |EC-I-O-PERMANENT-ERROR         
 +                               |                               

@@ -2,7 +2,7 @@
 859. run_file.at:671: testing ASSIGN DYNAMIC and EXTERNAL ...
 ./run_file.at:699: $COMPILE -fassign-clause=external prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/859/stderr	2026-08-04 15:05:43.933196125 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/859/stderr	2026-08-05 21:57:02.413463143 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fassign-clause=external: unsupported option (rejected-unsupported; ASSIGN clause dialect: reject honestly): external
 ./run_file.at:699: exit code was 1, expected 0

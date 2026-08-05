@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 425. syn_screen.at:175: testing ACCEPT/DISPLAY extensions detection ...
 ./syn_screen.at:207: $COMPILE_ONLY -faccept-display-extensions=error prog.cob
---- -	2026-08-04 15:05:43.587622464 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/425/stderr	2026-08-04 15:05:43.586716236 +0000
+--- -	2026-08-05 21:57:01.726093933 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/425/stderr	2026-08-05 21:57:01.724887138 +0000
 @@ -1,10 +1,2 @@
 -prog.cob:15: error: AT clause used
 -prog.cob:15: error: non-standard DISPLAY used

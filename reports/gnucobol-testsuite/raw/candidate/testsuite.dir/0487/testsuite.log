@@ -2,11 +2,11 @@
 487. listings.at:1055: testing COPY multiple files ...
 ./listings.at:1146: $COMPILE_LISTING0 -t- -ftsymbols tstcpybk.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/487/stderr	2026-08-04 15:05:43.627834118 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/487/stderr	2026-08-05 21:57:01.785986869 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
---- -	2026-08-04 15:05:43.629392540 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/487/stdout	2026-08-04 15:05:43.628731789 +0000
+--- -	2026-08-05 21:57:01.786940832 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/487/stdout	2026-08-05 21:57:01.785986869 +0000
 @@ -1,118 +1 @@
 -GnuCOBOL V.R.P               tstcpybk.cob
 -

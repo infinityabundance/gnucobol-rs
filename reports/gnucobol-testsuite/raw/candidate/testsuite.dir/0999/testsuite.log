@@ -3,11 +3,11 @@
 ./run_functions.at:685: $COMPILE prog.cob
 ./run_functions.at:686: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/999/stderr	2026-08-04 15:05:44.070338187 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/999/stderr	2026-08-05 21:57:02.596304134 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: FUNCTION
---- -	2026-08-04 15:05:44.071600157 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/999/stdout	2026-08-04 15:05:44.070338187 +0000
+--- -	2026-08-05 21:57:02.599091586 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/999/stdout	2026-08-05 21:57:02.598024101 +0000
 @@ -1,2 +1 @@
 -AbcD
  

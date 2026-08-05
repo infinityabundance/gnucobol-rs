@@ -3,7 +3,7 @@
 ./run_fundamental.at:6013: $COMPILE prog.cob -Wno-constant-expression
 ./run_fundamental.at:6014: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/603/stderr	2026-08-04 15:05:43.719401497 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/603/stderr	2026-08-05 21:57:01.946898832 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number REPLACE
 ./run_fundamental.at:6014: exit code was 2, expected 0

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 80. syn_definition.at:194: testing Undefined data name in group ...
 ./syn_definition.at:210: $COMPILE_ONLY prog.cob
---- -	2026-08-04 15:05:43.392205380 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/80/stderr	2026-08-04 15:05:43.391396785 +0000
+--- -	2026-08-05 21:57:01.408822053 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/80/stderr	2026-08-05 21:57:01.407975691 +0000
 @@ -1,2 +1 @@
 -prog.cob:10: error: 'Y IN G' is not defined
  

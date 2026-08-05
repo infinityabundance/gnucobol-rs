@@ -3,7 +3,7 @@
 ./run_extensions.at:2471: $COMPILE prog.cob
 ./run_extensions.at:2472: $COBCRUN_DIRECT ./prog X ABCD
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1148/stderr	2026-08-04 15:05:44.291465699 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1148/stderr	2026-08-05 21:57:02.846005375 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: verb CHAINING
 ./run_extensions.at:2472: exit code was 2, expected 0

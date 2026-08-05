@@ -3,11 +3,11 @@
 ./run_file.at:4390: $COMPILE prog.cob
 ./run_file.at:4391: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/894/stderr	2026-08-04 15:05:43.964820086 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/894/stderr	2026-08-05 21:57:02.447559209 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: condition: missing left operand
---- -	2026-08-04 15:05:43.965870072 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/894/stdout	2026-08-04 15:05:43.965144561 +0000
+--- -	2026-08-05 21:57:02.448486291 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/894/stdout	2026-08-05 21:57:02.447874858 +0000
 @@ -1,9 +1 @@
 -(a   )
 -(ab  )

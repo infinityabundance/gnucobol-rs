@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 803. run_misc.at:7400: testing MF FIGURATIVE to NUMERIC ...
 ./run_misc.at:7487: $COMPILE -std=mf -fno-move-non-numeric-lit-to-numeric-is-zero prog.cob cmod.c
---- -	2026-08-04 15:05:43.889696609 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/803/stderr	2026-08-04 15:05:43.888541988 +0000
+--- -	2026-08-05 21:57:02.247503299 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/803/stderr	2026-08-05 21:57:02.246821335 +0000
 @@ -1,8 +1,2 @@
 -prog.cob: in paragraph 'MAIN-1':
 -prog.cob:28: warning: numeric value is expected

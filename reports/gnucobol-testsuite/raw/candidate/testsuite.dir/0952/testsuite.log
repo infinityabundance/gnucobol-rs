@@ -3,11 +3,11 @@
 ./run_file.at:13686: $COMPILE prog.cob
 ./run_file.at:13687: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/952/stderr	2026-08-04 15:05:44.019266399 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/952/stderr	2026-08-05 21:57:02.539661224 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: OPEN: `FILE-EXT` is not a declared file
---- -	2026-08-04 15:05:44.020546843 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/952/stdout	2026-08-04 15:05:44.019266399 +0000
+--- -	2026-08-05 21:57:02.540799161 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/952/stdout	2026-08-05 21:57:02.539960023 +0000
 @@ -1,3 +1 @@
 -1-1 TRIED TO WRITE
 -1-2 TRIED TO WRITE

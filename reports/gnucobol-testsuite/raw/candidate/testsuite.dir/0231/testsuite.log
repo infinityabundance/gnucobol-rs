@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 231. syn_reportwriter.at:23: testing REPORT error/warning ...
 ./syn_reportwriter.at:115: $COMPILE_ONLY prog.cob
---- -	2026-08-04 15:05:43.471915570 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/231/stderr	2026-08-04 15:05:43.471091195 +0000
+--- -	2026-08-05 21:57:01.519548828 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/231/stderr	2026-08-05 21:57:01.519062089 +0000
 @@ -1,4 +1,2 @@
 -prog.cob:67: error: 'CUSTOMER-REPORT' is not defined
 -prog.cob:67: error: 'CUSTOMER-REPORT' is not a valid report name

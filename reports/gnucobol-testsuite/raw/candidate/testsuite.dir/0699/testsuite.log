@@ -3,8 +3,8 @@
 ./run_misc.at:1149: $COMPILE prog.cob
 ./run_misc.at:1150: $COBC -x -o unchecked_prog prog.cob
 ./run_misc.at:1151: $COBCRUN_DIRECT ./unchecked_prog
---- -	2026-08-04 15:05:43.800517055 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/699/stdout	2026-08-04 15:05:43.799567697 +0000
+--- -	2026-08-05 21:57:02.029962641 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/699/stdout	2026-08-05 21:57:02.029412503 +0000
 @@ -1,2 +1,4 @@
 +low-value is numeric
 +SOH is numeric

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 802. run_misc.at:7338: testing Figurative constants to numeric field ...
 ./run_misc.at:7375: $COMPILE -std=mf prog.cob
---- -	2026-08-04 15:05:43.888687048 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/802/stderr	2026-08-04 15:05:43.887640509 +0000
+--- -	2026-08-05 21:57:02.247621801 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/802/stderr	2026-08-05 21:57:02.246821335 +0000
 @@ -1,4 +1 @@
 -prog.cob:8: warning: source is non-numeric - substituting zero
 -prog.cob:10: warning: source is non-numeric - substituting zero

@@ -10,4 +10,6 @@ pub mod determinism;
 pub mod gate;
 pub mod math;
 pub mod model;
+pub mod option_census;
 pub mod receipts;
+pub mod reject_census;

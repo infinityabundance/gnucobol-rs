@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 473. syn_literals.at:1504: testing literal missing terminating character ...
 ./syn_literals.at:1517: $COMPILE_ONLY -w prog.cob
---- -	2026-08-04 15:05:43.616643157 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/473/stderr	2026-08-04 15:05:43.616010149 +0000
+--- -	2026-08-05 21:57:01.765027187 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/473/stderr	2026-08-05 21:57:01.763654372 +0000
 @@ -1,3 +1 @@
 -prog.cob:5: error: invalid literal: ' 1 c d e f g h i j k l m n 0 q. 2  ...'
 -prog.cob:5: note: missing terminating ' character

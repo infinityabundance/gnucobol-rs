@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 255. syn_misc.at:716: testing missing headers ...
 ./syn_misc.at:743: $COMPILE_ONLY prog.cob
---- -	2026-08-04 15:05:43.484786208 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/255/stderr	2026-08-04 15:05:43.483735091 +0000
+--- -	2026-08-05 21:57:01.539433912 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/255/stderr	2026-08-05 21:57:01.538444914 +0000
 @@ -1,8 +1,2 @@
 -prog.cob:2: error: PROGRAM-ID header missing
 -prog.cob:2: error: ENVIRONMENT DIVISION header missing

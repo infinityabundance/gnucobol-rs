@@ -1,0 +1,74 @@
+{
+ "schema": "gnurust-upstream-sync-preflight-v1",
+ "generated_at_utc": "2026-08-05T22:30:00Z",
+ "repository": {
+  "local_head": "c35d6c2b93577013e5257c4bf60e23975d34640e",
+  "origin_main": "c35d6c2b93577013e5257c4bf60e23975d34640e",
+  "current_tag": "v0.8.55",
+  "tag_commit": "b72b3b6c7f9da66c6faa8126b002b51b545ef0f8",
+  "unpushed_commits": 0,
+  "dirty": true,
+  "dirty_note": "Phase-0 census regeneration + fresh stable-court evidence pending the Phase-0 freeze commit"
+ },
+ "crate_versions": {
+  "gnucobol-rs": "0.8.55",
+  "cobc-rs": "0.1.0",
+  "cobc-oracle-rs": "0.0.2",
+  "gnucobol-rs-ccvs85": "0.1.0",
+  "gnucobol-rs-port-index": "0.1.0",
+  "gnucobol-rs-testsuite": "0.1.0",
+  "gnucobol-rs-ffi": "0.1.0"
+ },
+ "release_checksums": {
+  "gnucobol-rs-0.8.55": "d1a204944b48e8651bd526d585f1616453f250de325311b8fcd3fbc973fee377",
+  "gnucobol-rs-ccvs85-0.1.0": "53a69f825d88a4f2a159e5a9ebdbe45de6cd98f3da599b4086f860ab887acc21",
+  "gnucobol-rs-port-index-0.1.0": "6b28be254fa3cfd0c48b6bf54178385ab7271686ba4c01774b2c60c15028d3d6",
+  "gnucobol-rs-testsuite-0.1.0": "0be3d3e601f066bb1244bc9f7e636f3530e0520449b278ecc22658d149d01592"
+ },
+ "evidence_counts": {
+  "receipts": 115,
+  "claim_ladder_courts": 160,
+  "casefiles": 160,
+  "support_packet_sha256": "aa98ff0c455a0ac7247d0291f566aa88930094b98dfcda64840c71a6e70d99f3"
+ },
+ "mirrors": {
+  "codeberg": "not-configured (no remote present)"
+ },
+ "stable_court_reproduction": {
+  "gnucobol_testsuite": {
+   "run_id": "20260805T215552Z-c35d6c2b",
+   "containers": 2,
+   "candidate_build_trees": 2,
+   "total_tests": 1282,
+   "first_failure": {
+    "CANDIDATE_CHECK_REJECT": 652,
+    "CANDIDATE_PARSE_REJECT": 31,
+    "CANDIDATE_MODULE_MODEL_UNSUPPORTED": 4,
+    "CANDIDATE_RUNTIME_FAIL": 136,
+    "CANDIDATE_UNSUPPORTED": 21,
+    "OBSERVABLE_MATCH": 193,
+    "ORACLE_SKIP": 9,
+    "ORACLE_XFAIL": 31,
+    "WRAPPER_INVOCATION_MALFORMED": 25,
+    "WRAPPER_OPTION_UNSUPPORTED": 180
+   },
+   "math_323_invariant": "PASS",
+   "no_delegation": "PASS",
+   "privacy_gate": "PASS",
+   "determinism": {
+    "stable_summary_identical": true,
+    "per_test_classifications_identical": true
+   }
+  },
+  "ccvs85": {
+   "run_id": "20260805T220903Z-c35d6c2b",
+   "units_total": 512,
+   "raw_output_match": 27,
+   "output_mismatch": 42,
+   "generated_file_mismatch": 8,
+   "harness_blocked": 1,
+   "oracle_compile_pass": 370,
+   "oracle_run_pass": 304
+  }
+ }
+}

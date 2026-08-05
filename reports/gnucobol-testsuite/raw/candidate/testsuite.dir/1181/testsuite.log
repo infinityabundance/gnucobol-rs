@@ -3,11 +3,11 @@
 ./run_extensions.at:4192: $COMPILE prog.cob
 ./run_extensions.at:4194: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1181/stderr	2026-08-04 15:05:44.318475097 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1181/stderr	2026-08-05 21:57:02.876548172 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: CALL "C$GETPID": not a contained program (external CALL is a boundary)
---- -	2026-08-04 15:05:44.320123617 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1181/stdout	2026-08-04 15:05:44.319218712 +0000
+--- -	2026-08-05 21:57:02.877617530 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1181/stdout	2026-08-05 21:57:02.876867529 +0000
 @@ -1,4 +1 @@
 -Hello, I am the parent
 -Hello, I am the child

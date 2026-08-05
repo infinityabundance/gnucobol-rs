@@ -4,7 +4,7 @@
 ./data_binary.at:1139: $COMPILE -fbinary-size=1--8 \
                    -fno-pretty-display prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1238/stderr	2026-08-04 15:05:44.373467086 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1238/stderr	2026-08-05 21:57:02.941359698 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fbinary-size=1--8: unsupported option (rejected-unsupported; binary size model: the dialect's binary-size knob is set by -std/-conf; a bare override is rejected): 1--8
 ./data_binary.at:1139: exit code was 1, expected 0

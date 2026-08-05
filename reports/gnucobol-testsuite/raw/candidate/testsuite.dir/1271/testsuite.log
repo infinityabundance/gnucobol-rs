@@ -4,7 +4,7 @@
 ./data_packed.at:1463: $COBCRUN_DIRECT ./prog
 ./data_packed.at:1467: $COMPILE -fno-fast-compare -C -o progalt.c prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1271/stderr	2026-08-04 15:05:44.413939094 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1271/stderr	2026-08-05 21:57:02.980453321 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fno-fast-compare: unsupported option (rejected-unsupported; fast-compare control: reject honestly): 
 ./data_packed.at:1467: exit code was 1, expected 0

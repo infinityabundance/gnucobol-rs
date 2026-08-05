@@ -3,7 +3,7 @@
 ./run_reportwriter.at:3704: $COMPILE prog.cob
 ./run_reportwriter.at:3706: DD_STUDREC="./inp_data" DD_REPORT3="./report.txt" $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/969/stderr	2026-08-04 15:05:44.037496157 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/969/stderr	2026-08-05 21:57:02.556407113 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: OPEN: `OUTPUT` is not a declared file
 ./run_reportwriter.at:3706: exit code was 2, expected 0

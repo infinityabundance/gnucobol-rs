@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 1145. run_extensions.at:2253: testing TALLY register ...
 ./run_extensions.at:2274: $COMPILE_ONLY -fnot-register=TALLY prog.cob
---- -	2026-08-04 15:05:44.282752553 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1145/stderr	2026-08-04 15:05:44.281450709 +0000
+--- -	2026-08-05 21:57:02.841862144 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1145/stderr	2026-08-05 21:57:02.841381186 +0000
 @@ -1,3 +1,2 @@
 -prog.cob:5: error: 'TALLY' is not defined
 -prog.cob:12: error: 'tally' is not defined

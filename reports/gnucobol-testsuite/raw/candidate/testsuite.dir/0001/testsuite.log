@@ -177,7 +177,7 @@ XML library              : libxml2
 JSON library             : json-c
 ./used_binaries.at:38: $COBC --list-reserved
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1/stderr	2026-08-04 15:05:43.354530821 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1/stderr	2026-08-05 21:57:01.362288778 +0000
 @@ -0,0 +1 @@
 +cobc-rs: --list-reserved: unsupported option (rejected-unsupported; keyword/intrinsic listing: the candidate has no upstream-identical lists; reject honestly): 
 stdout:

@@ -1,0 +1,66 @@
+{
+  "answer": "the census Markdown (and the feature-frequency CSV and dependency graph) were generated from the v1 census (commit 8d8c499e8, an intermediate pipeline pass, 700 rows) and never regenerated after the final two-pass ledger (commit 2748a02d0, 683 rows). The machine JSONs (summary.json, test-inventory.json, parser-reject-census.json) always agreed on 683; only the regenerated-document family was stale. 700 - 683 = 17 groups left the check/parse first-failure set (12 -> OBSERVABLE_MATCH, 5 -> CANDIDATE_RUNTIME_FAIL); none entered.",
+  "current": {
+    "first_failure_groups": 683,
+    "phase_observations": 683,
+    "unique_test_groups": 1282
+  },
+  "historical_delta": {
+    "delta_v1_minus_v2": 17,
+    "v1_only_ids": [
+      "0562",
+      "0563",
+      "0564",
+      "0565",
+      "0566",
+      "0567",
+      "0568",
+      "0577",
+      "0606",
+      "0728",
+      "0832",
+      "1075",
+      "1097",
+      "1154",
+      "1155",
+      "1156",
+      "1157"
+    ],
+    "v1_rows": 700,
+    "v2_only_ids": []
+  },
+  "historical_v1": {
+    "commit": "8d8c499e8",
+    "exhibit": "reports/gnucobol-testsuite/parser-reject-census.v1.json",
+    "phases": {
+      "checker": 399,
+      "data-layout": 137,
+      "grammar": 102,
+      "name-resolution": 29,
+      "semantic-check": 33
+    },
+    "rows": 700
+  },
+  "invariants": {
+    "check": {
+      "first_failure_groups_eq_inventory": true,
+      "first_failure_groups_eq_phase_observations": true,
+      "first_failure_groups_eq_summary": true
+    },
+    "first_failure_groups": 683,
+    "inventory_check_plus_parse": 683,
+    "phase_observations": 683,
+    "summary_check_plus_parse": 683,
+    "unique_test_groups": 1282,
+    "unique_test_steps": "not-decomposed-at-group-level (step decomposition is a separate phase)"
+  },
+  "question": "the parser-reject census headline said ~700 while the suite summary reports 652 check + 31 parse = 683 first-failure groups; resolve exactly",
+  "schema": "gnurust-gnucobol-testsuite-parser-census-reconciliation-v1",
+  "terminology": {
+    "first_failure_groups": "groups whose primary classification is a candidate check/parse reject",
+    "phase_observations": "one census row per first-failure group, each with exactly one phase",
+    "unique_test_groups": "distinct Autotest group IDs in the suite inventory",
+    "unique_test_steps": "step-level (AT_CHECK) identities; not counted in the group-level ledger and never labelled tests"
+  },
+  "verdict": "RECONCILED"
+}

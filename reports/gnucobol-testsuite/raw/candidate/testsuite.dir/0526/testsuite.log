@@ -2,7 +2,7 @@
 526. run_fundamental.at:958: testing Overlapping MOVE (IBM) ...
 ./run_fundamental.at:988: $COMPILE -fmove-ibm prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/526/stderr	2026-08-04 15:05:43.654689559 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/526/stderr	2026-08-05 21:57:01.810371009 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fmove-ibm: unsupported option (rejected-unsupported; IBM MOVE semantics: reject honestly): 
 ./run_fundamental.at:988: exit code was 1, expected 0

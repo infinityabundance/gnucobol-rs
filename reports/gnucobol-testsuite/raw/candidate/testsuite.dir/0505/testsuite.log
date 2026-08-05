@@ -2,11 +2,11 @@
 505. listings.at:3980: testing Listing-directive statements ...
 ./listings.at:4001: $COMPILE_LISTING -t- -std=ibm prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/505/stderr	2026-08-04 15:05:43.638417877 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/505/stderr	2026-08-05 21:57:01.798163531 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
---- -	2026-08-04 15:05:43.639796605 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/505/stdout	2026-08-04 15:05:43.639373777 +0000
+--- -	2026-08-05 21:57:01.799809055 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/505/stdout	2026-08-05 21:57:01.799118374 +0000
 @@ -1,36 +1 @@
 -GnuCOBOL lists IBM      prog.cob                                        Page 0001
 -

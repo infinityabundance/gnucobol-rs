@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 287. syn_misc.at:2101: testing word length ...
 ./syn_misc.at:2196: $COMPILE_ONLY -free -fword-length=31 prog.cob
---- -	2026-08-04 15:05:43.505416417 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/287/stderr	2026-08-04 15:05:43.504804317 +0000
+--- -	2026-08-05 21:57:01.565792431 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/287/stderr	2026-08-05 21:57:01.565398755 +0000
 @@ -1,14 +1,2 @@
 -prog.cob:11: error: word length exceeds 31 characters: 'SOME-SPECIAL-VAL-WITH-LENGTH-32C'
 -prog.cob:12: error: word length exceeds 31 characters: 'SOME-SPECIAL-VAL-WITH-LENGTH-58C-WHO-NEEDS-THAT-LONG-NAMES'

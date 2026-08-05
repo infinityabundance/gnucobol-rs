@@ -3,7 +3,7 @@
 ./run_file.at:12161: $COMPILE prog.cob
 ./run_file.at:12165: $COBCRUN_DIRECT ./prog 1>prog.out
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/937/stderr	2026-08-04 15:05:44.007971324 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/937/stderr	2026-08-05 21:57:02.527525079 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: OCCURS count MAX-SUB is not an integer
 ./run_file.at:12165: exit code was 2, expected 0

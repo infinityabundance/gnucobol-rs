@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 82. syn_definition.at:239: testing Incomplete 01 definition ...
 ./syn_definition.at:250: $COMPILE_ONLY prog.cob
---- -	2026-08-04 15:05:43.393583507 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/82/stderr	2026-08-04 15:05:43.392825896 +0000
+--- -	2026-08-05 21:57:01.408951284 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/82/stderr	2026-08-05 21:57:01.407975691 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:6: error: PICTURE clause required for 'X'
 +cobc-rs: unsupported: no PROCEDURE DIVISION

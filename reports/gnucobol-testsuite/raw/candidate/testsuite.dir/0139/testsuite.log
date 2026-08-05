@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 139. syn_subscripts.at:98: testing Subscript bounds with OCCURS DEPENDING ON ...
 ./syn_subscripts.at:115: $COMPILE_ONLY prog.cob
---- -	2026-08-04 15:05:43.423205771 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/139/stderr	2026-08-04 15:05:43.422731808 +0000
+--- -	2026-08-05 21:57:01.441428796 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/139/stderr	2026-08-05 21:57:01.439919847 +0000
 @@ -1,3 +1 @@
 -prog.cob:10: error: subscript of 'X' out of bounds: 0
 -prog.cob:11: error: subscript of 'X' out of bounds: 7

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 217. syn_file.at:1694: testing FILE ... FROM literal ...
 ./syn_file.at:1728: $COMPILE_ONLY prog.cob
---- -	2026-08-04 15:05:43.464740498 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/217/stderr	2026-08-04 15:05:43.463915392 +0000
+--- -	2026-08-05 21:57:01.503480906 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/217/stderr	2026-08-05 21:57:01.502610750 +0000
 @@ -1,9 +1 @@
 -prog.cob:21: error: figurative constants not allowed in FROM clause
 -prog.cob:21: error: literal in FROM clause must be alphanumeric, utf-8, national or boolean

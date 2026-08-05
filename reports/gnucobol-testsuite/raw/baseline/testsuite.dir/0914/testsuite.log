@@ -4,7 +4,7 @@
 ./run_file.at:6431: $COMPILE prog2.cob
 ./run_file.at:6432: $COBCRUN_DIRECT ./prog1
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/914/stdout	2026-08-04 15:05:20.741236471 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/914/stdout	2026-08-05 21:56:27.325122954 +0000
 @@ -0,0 +1 @@
 +FAILED: 00
 914. run_file.at:6358: 914. INDEXED file with SHARING NO (run_file.at:6358): expected failure (run_file.at:6432)

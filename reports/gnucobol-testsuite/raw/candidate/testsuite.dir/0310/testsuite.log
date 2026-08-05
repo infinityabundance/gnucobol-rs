@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 310. syn_misc.at:3275: testing missing periods with COPYs ...
 ./syn_misc.at:3314: $COMPILE_ONLY prog.cob
---- -	2026-08-04 15:05:43.520665845 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/310/stderr	2026-08-04 15:05:43.519944892 +0000
+--- -	2026-08-05 21:57:01.603699297 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/310/stderr	2026-08-05 21:57:01.603177442 +0000
 @@ -1,6 +1,2 @@
 -sec-1.inc: in section 'MAIN':
 -sec-1.inc:2: error: 'SEC-1' is not defined

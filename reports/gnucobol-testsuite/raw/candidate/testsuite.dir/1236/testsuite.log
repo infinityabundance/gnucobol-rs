@@ -5,7 +5,7 @@
 ./data_binary.at:784: $COMPILE -fbinary-size=1--8 \
                    -fbinary-byteorder=big-endian prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1236/stderr	2026-08-04 15:05:44.374132184 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1236/stderr	2026-08-05 21:57:02.944087995 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fbinary-size=1--8: unsupported option (rejected-unsupported; binary size model: the dialect's binary-size knob is set by -std/-conf; a bare override is rejected): 1--8
 ./data_binary.at:784: exit code was 1, expected 0

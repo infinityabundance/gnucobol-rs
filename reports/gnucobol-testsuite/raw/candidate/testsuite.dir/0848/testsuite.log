@@ -3,7 +3,7 @@
 ./run_file.at:83: $COMPILE prog.cob
 ./run_file.at:84: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/848/stderr	2026-08-04 15:05:43.925099036 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/848/stderr	2026-08-05 21:57:02.408687299 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: OPEN: `FILE-OPT` is not a declared file
 ./run_file.at:84: exit code was 2, expected 0

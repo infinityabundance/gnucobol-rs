@@ -3,7 +3,7 @@
 ./run_extensions.at:3694: $COMPILE prog.cob
 ./run_extensions.at:3695: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1179/stderr	2026-08-04 15:05:44.317083826 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1179/stderr	2026-08-05 21:57:02.874818671 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: CALL "CBL_EQ": not a contained program (external CALL is a boundary)
 ./run_extensions.at:3695: exit code was 2, expected 0

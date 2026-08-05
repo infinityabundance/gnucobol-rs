@@ -3,7 +3,7 @@
 ./run_extensions.at:2998: $COMPILE -fsystem-name="sw1, SwItCh\ b, SWITCH\ 25" \
 -fsystem-name=SWITCH-32 -fsystem-name="SWITCH\ Z" -fsystem-name=USW-31 prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1158/stderr	2026-08-04 15:05:44.296810282 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1158/stderr	2026-08-05 21:57:02.853532169 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fsystem-name=sw1, SwItCh\ b, SWITCH\ 25: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): sw1, SwItCh\ b, SWITCH\ 25
 ./run_extensions.at:2998: exit code was 1, expected 0

@@ -2,8 +2,8 @@
 84. syn_definition.at:333: testing Same paragraphs in different sections ...
 ./syn_definition.at:366: $COMPILE_ONLY prog.cob
 ./syn_definition.at:367: $COMPILE_ONLY prog2.cob
---- -	2026-08-04 15:05:43.395878751 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/84/stderr	2026-08-04 15:05:43.395083270 +0000
+--- -	2026-08-05 21:57:01.411206899 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/84/stderr	2026-08-05 21:57:01.410797744 +0000
 @@ -1,5 +1 @@
 -prog2.cob: in section 'S-3':
 -prog2.cob:12: error: 'L' is ambiguous; needs qualification

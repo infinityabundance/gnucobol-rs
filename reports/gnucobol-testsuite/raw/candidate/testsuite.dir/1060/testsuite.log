@@ -3,7 +3,7 @@
 ./run_functions.at:2741: $COMPILE prog.cob
 ./run_functions.at:2742: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1060/stdout	2026-08-04 15:05:44.168773246 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1060/stdout	2026-08-05 21:57:02.730726155 +0000
 @@ -0,0 +1 @@
 +X1 ' % 19.876,1234 DB   ' : -00019,87612
 1060. run_functions.at:2719: 1060. FUNCTION NUMVAL-C DP.COMMA (run_functions.at:2719): FAILED (run_functions.at:2742)

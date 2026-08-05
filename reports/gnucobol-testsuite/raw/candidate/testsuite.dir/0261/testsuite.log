@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 261. syn_misc.at:943: testing INSPECT invalid target ...
 ./syn_misc.at:958: $COMPILE_ONLY prog.cob
---- -	2026-08-04 15:05:43.491182159 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/261/stderr	2026-08-04 15:05:43.490728414 +0000
+--- -	2026-08-05 21:57:01.543853419 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/261/stderr	2026-08-05 21:57:01.542931427 +0000
 @@ -1,3 +1 @@
 -prog.cob:8: error: invalid target for REPLACING
 -prog.cob:9: error: invalid target for CONVERTING

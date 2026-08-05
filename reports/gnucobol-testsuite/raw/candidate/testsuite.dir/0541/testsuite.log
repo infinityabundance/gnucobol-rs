@@ -2,8 +2,8 @@
 541. run_fundamental.at:1729: testing Contained program visibility (4) ...
 ./run_fundamental.at:1777: $COMPILE prog.cob
 ./run_fundamental.at:1778: $COBCRUN_DIRECT ./prog
---- -	2026-08-04 15:05:43.667172495 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/541/stdout	2026-08-04 15:05:43.665933358 +0000
+--- -	2026-08-05 21:57:01.832627274 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/541/stdout	2026-08-05 21:57:01.830309587 +0000
 @@ -1 +1 @@
 -P1P2P3P4
 +P1P4P3P4

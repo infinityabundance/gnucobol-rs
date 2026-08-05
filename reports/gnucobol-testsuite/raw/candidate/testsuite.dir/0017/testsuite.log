@@ -2,7 +2,7 @@
 17. used_binaries.at:716: testing cobcrun -M DSO entry multiple arguments ...
 ./used_binaries.at:743: $COBC -b ${FLAGS} mainer.cob called.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/17/stderr	2026-08-04 15:05:43.353197508 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/17/stderr	2026-08-05 21:57:01.362288778 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -b: unsupported option (rejected-unsupported; embedded build (combine compile+link into one step in a specific way): not supported): 
 ./used_binaries.at:743: exit code was 1, expected 0

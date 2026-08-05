@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 48. configuration.at:827: testing cobc configuration: source format ...
 ./configuration.at:846: $COMPILE_ONLY -fformat=unknown fixed.cob
---- -	2026-08-04 15:05:43.375055403 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/48/stderr	2026-08-04 15:05:43.374020335 +0000
+--- -	2026-08-05 21:57:01.387321120 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/48/stderr	2026-08-05 21:57:01.386737078 +0000
 @@ -1,4 +1,2 @@
 -configuration error:
 --fformat=unknown: invalid value 'unknown' for configuration tag 'format';

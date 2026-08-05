@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 187. syn_file.at:50: testing Duplicated SELECT ...
 ./syn_file.at:72: $COMPILE_ONLY prog.cob
---- -	2026-08-04 15:05:43.447789872 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/187/stderr	2026-08-04 15:05:43.447135584 +0000
+--- -	2026-08-05 21:57:01.471650874 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/187/stderr	2026-08-05 21:57:01.470864425 +0000
 @@ -1,4 +1 @@
 -prog.cob:9: error: redefinition of 'file1'
 -prog.cob:7: note: 'file1' previously defined here

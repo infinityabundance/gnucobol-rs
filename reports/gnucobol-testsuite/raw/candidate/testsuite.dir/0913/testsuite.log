@@ -4,7 +4,7 @@
 ./run_file.at:6352: $COMPILE prog2.cob
 ./run_file.at:6353: $COBCRUN_DIRECT ./prog1
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/913/stderr	2026-08-04 15:05:43.983543865 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/913/stderr	2026-08-05 21:57:02.476304989 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: OPEN: `WITH` is not a declared file
 ./run_file.at:6353: exit code was 2, expected 0

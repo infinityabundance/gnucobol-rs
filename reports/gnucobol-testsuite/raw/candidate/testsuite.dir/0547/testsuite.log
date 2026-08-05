@@ -3,7 +3,7 @@
 ./run_fundamental.at:2219: $COMPILE prog.cob
 ./run_fundamental.at:2220: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/547/stdout	2026-08-04 15:05:43.670192209 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/547/stdout	2026-08-05 21:57:01.851309438 +0000
 @@ -0,0 +1 @@
 +Not OK
 547. run_fundamental.at:2175: 547. GLOBAL FD (3) (run_fundamental.at:2175): FAILED (run_fundamental.at:2220)

@@ -3,7 +3,7 @@
 ./run_misc.at:3538: $COMPILE prog.cob
 ./run_misc.at:3539: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/752/stderr	2026-08-04 15:05:43.842238350 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/752/stderr	2026-08-05 21:57:02.170845871 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: SORT: `TBL` is not a declared file
 ./run_misc.at:3539: exit code was 2, expected 0

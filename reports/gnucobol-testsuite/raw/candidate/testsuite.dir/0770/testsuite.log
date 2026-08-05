@@ -3,14 +3,14 @@
 ./run_misc.at:4494: $COMPILE caller.c
 ./run_misc.at:4495: $COMPILE_MODULE callee.cob callee2.cob
 ./run_misc.at:4496: $COBCRUN_DIRECT ./caller callee A
---- -	2026-08-04 15:05:43.859495276 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/770/stderr	2026-08-04 15:05:43.858680379 +0000
+--- -	2026-08-05 21:57:02.229651284 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/770/stderr	2026-08-05 21:57:02.227306762 +0000
 @@ -1,2 +1,2 @@
 -note: program exited normally, without STOP RUN with status 0
 +cobrun: unsupported: no PROCEDURE DIVISION
  
---- -	2026-08-04 15:05:43.860584525 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/770/stdout	2026-08-04 15:05:43.859866698 +0000
+--- -	2026-08-05 21:57:02.230258980 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/770/stdout	2026-08-05 21:57:02.228306754 +0000
 @@ -1 +1 @@
 -P1: A
 +

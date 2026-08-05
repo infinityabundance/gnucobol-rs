@@ -32,6 +32,14 @@ pub fn gate_check(root: &Path) -> Gate {
         "no-delegation.json",
         "determinism.json",
         "upstream-observations.md",
+        "parser-reject-census.json",
+        "parser-reject-census.md",
+        "parser-feature-frequency.csv",
+        "parser-feature-dependency-graph.json",
+        "parser-census-reconciliation.json",
+        "parser-census-reconciliation.md",
+        "unsupported-option-census.json",
+        "unsupported-option-census.md",
     ];
     for f in required {
         let p = rep.join(f);
@@ -122,6 +130,42 @@ pub fn gate_check(root: &Path) -> Gate {
                 .problems
                 .push("determinism.json lacks stable_summary_identical".into()),
         }
+    }
+
+    // 3b. parser-census reconciliation: the census must be regenerated from the machine ledger,
+    //     carry declared counting units, and match the summary first-failure counts (683-vs-700
+    //     doctrine: the stale Markdown family is rejected here).
+    match crate::reject_census::check(root) {
+        Ok(notes) => {
+            let mut bad = 0;
+            for n in notes {
+                g.problems.push(format!("parser census STALE: {n}"));
+                bad += 1;
+            }
+            if bad == 0 {
+                g.notes
+                    .push("parser census: fresh, reconciled (683 first-failure groups; counting units declared)".into());
+            }
+        }
+        Err(e) => g
+            .problems
+            .push(format!("parser census reconciliation failed: {e}")),
+    }
+    match crate::option_census::verify_committed(root) {
+        Ok((notes, problems)) => {
+            for n in &notes {
+                g.problems.push(format!("option census STALE: {n}"));
+            }
+            for p in &problems {
+                g.problems
+                    .push(format!("option census reconciliation: {p}"));
+            }
+            if notes.is_empty() && problems.is_empty() {
+                g.notes
+                    .push("option census: reconciles and is fresh".into());
+            }
+        }
+        Err(e) => g.problems.push(format!("option census: {e}")),
     }
 
     // 4. receipts present + fresh (receipt.json exists per gate; freshness = hash of current files

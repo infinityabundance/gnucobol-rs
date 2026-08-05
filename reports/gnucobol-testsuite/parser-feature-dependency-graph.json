@@ -1,1710 +1,2053 @@
 {
- "nodes": [
-  "",
-  "cannot read prog.cob: No such file or directory (os error 2)",
-  "cannot read sub/prog.c: stream did not contain valid UTF-8",
-  "cobc-rs: -fformat=unknown: only fixed/free/auto are supporte",
-  "cobc-rs: COPY expansion failed (fail closed): copybook 'A' n",
-  "cobc-rs: COPY expansion failed (fail closed): copybook 'COPY",
-  "cobc-rs: unsupported: 66 level without RENAMES",
-  "cobc-rs: unsupported: OCCURS count UNBOUNDED is not an integ",
-  "cobc-rs: unsupported: PERFORM VARYING: expected BY",
-  "cobc-rs: unsupported: PIC 0N: UnsupportedSymbol('N')",
-  "cobc-rs: unsupported: PIC 9(FOO-BAR)9(FOO-BAR): BadRepeat",
-  "cobc-rs: unsupported: PIC BX: UnsupportedSymbol('X')",
-  "cobc-rs: unsupported: PIC BXX: UnsupportedSymbol('X')",
-  "cobc-rs: unsupported: PIC N(4): UnsupportedSymbol('N')",
-  "cobc-rs: unsupported: PIC N: UnsupportedSymbol('N')",
-  "cobc-rs: unsupported: PIC NNN: UnsupportedSymbol('N')",
-  "cobc-rs: unsupported: PIC VPP99: ScalingPDeferred",
-  "cobc-rs: unsupported: PIC X(9999999999): BadRepeat",
-  "cobc-rs: unsupported: PROG-3: no PROCEDURE DIVISION",
-  "cobc-rs: unsupported: PROG: no PROCEDURE DIVISION",
-  "cobc-rs: unsupported: expected data name after a level numbe",
-  "cobc-rs: unsupported: no PROCEDURE DIVISION",
-  "cobc-rs: unsupported: no PROGRAM-ID",
-  "cobc-rs: unsupported: not a numeric literal: ARE",
-  "cobc-rs: unsupported: unrecognized USAGE BIT",
-  "cobc-rs: unsupported: unrecognized USAGE FLOAT",
-  "cobc-rs: unsupported: unrecognized USAGE FLOAT-LONG",
-  "cobc-rs: unsupported: unrecognized USAGE HANDLE",
-  "cobc-rs: unsupported: unrecognized USAGE SOME-VERY-LONG-TYPE",
-  "cobc-rs: unsupported: unsupported level number $SET",
-  "cobc-rs: unsupported: unsupported level number 78",
-  "cobc-rs: unsupported: unsupported level number HEAD",
-  "cobc-rs: unsupported: unsupported level number SCREEN",
-  "cobc-rs: unsupported: unsupported level number SCREEN-STORAG",
-  "cobc-rs: unsupported: verb $SET",
-  "cobc-rs: unsupported: verb A001-LOOP",
-  "cobc-rs: unsupported: verb AFTER",
-  "cobc-rs: unsupported: verb COMMENT",
-  "cobc-rs: unsupported: verb DEC-1",
-  "cobc-rs: unsupported: verb E1,",
-  "cobc-rs: unsupported: verb END-OF-FILE-SWITCH",
-  "cobc-rs: unsupported: verb END-OF-PAGE",
-  "cobc-rs: unsupported: verb IDENTIFICATION",
-  "cobc-rs: unsupported: verb INITIALISATION",
-  "cobc-rs: unsupported: verb KEY",
-  "cobc-rs: unsupported: verb NOT",
-  "cobc-rs: unsupported: verb NOT-DEFINED",
-  "cobc-rs: unsupported: verb P",
-  "cobc-rs: unsupported: verb SEC-1",
-  "cobc-rs: unsupported: verb SUB1",
-  "cobc-rs: unsupported: verb USE",
-  "cobc-rs: unsupported: verb |",
-  "cobc-rs: warning: cannot read dialect config \"cobol2014.conf",
-  "cobrun: undefined data name: 4",
-  "cobrun: undefined data name: ADDRESS",
-  "cobrun: undefined data name: CMP1,",
-  "cobrun: undefined data name: DEFAULT",
-  "cobrun: undefined data name: ENVIRONMENT",
-  "cobrun: undefined data name: FILLER",
-  "cobrun: undefined data name: FUNCTION",
-  "cobrun: undefined data name: L1-3-2(1,",
-  "cobrun: undefined data name: LCL-X",
-  "cobrun: undefined data name: MY-ASCII",
-  "cobrun: undefined data name: MY-FILLER(2:3)",
-  "cobrun: undefined data name: MY-FLD(1:2)",
-  "cobrun: undefined data name: MYFLD",
-  "cobrun: undefined data name: NOT",
-  "cobrun: undefined data name: NULL",
-  "cobrun: undefined data name: NUMS",
-  "cobrun: undefined data name: OMITTED",
-  "cobrun: undefined data name: PRM(1),",
-  "cobrun: undefined data name: RES-TAB(1)",
-  "cobrun: undefined data name: RSLTV2,",
-  "cobrun: undefined data name: SORT-RETURN",
-  "cobrun: undefined data name: TAB1-NR(K),",
-  "cobrun: undefined data name: WS-TRANSPORT-PAY,",
-  "cobrun: undefined data name: X(1),",
-  "cobrun: undefined data name: X-LEFT,",
-  "cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned",
-  "cobrun: unsupported: ACCEPT FROM terminal/console: interacti",
-  "cobrun: unsupported: CALL \"C$CALLEDBY\": not a contained prog",
-  "cobrun: unsupported: CALL \"C$GETPID\": not a contained progra",
-  "cobrun: unsupported: CALL \"C$JUSTIFY\": not a contained progr",
-  "cobrun: unsupported: CALL \"C$MAKEDIR\": not a contained progr",
-  "cobrun: unsupported: CALL \"C$NARG\": not a contained program ",
-  "cobrun: unsupported: CALL \"C$PARAMSIZE\": not a contained pro",
-  "cobrun: unsupported: CALL \"C$PRINTABLE\": not a contained pro",
-  "cobrun: unsupported: CALL \"C$TOLOWER\": not a contained progr",
-  "cobrun: unsupported: CALL \"C$TOUPPER\": not a contained progr",
-  "cobrun: unsupported: CALL \"CBL_AND\": not a contained program",
-  "cobrun: unsupported: CALL \"CBL_COPY_FILE\": not a contained p",
-  "cobrun: unsupported: CALL \"CBL_CREATE_DIR\": not a contained ",
-  "cobrun: unsupported: CALL \"CBL_CREATE_FILE\": not a contained",
-  "cobrun: unsupported: CALL \"CBL_EQ\": not a contained program ",
-  "cobrun: unsupported: CALL \"CBL_IMP\": not a contained program",
-  "cobrun: unsupported: CALL \"CBL_NIMP\": not a contained progra",
-  "cobrun: unsupported: CALL \"CBL_NOT\": not a contained program",
-  "cobrun: unsupported: CALL \"D\": not a contained program (exte",
-  "cobrun: unsupported: CALL \"PROG-PTR\": not a contained progra",
-  "cobrun: unsupported: CALL \"STATIC\": not a contained program ",
-  "cobrun: unsupported: CALL \"_SUB-PROG_NOW\": not a contained p",
-  "cobrun: unsupported: CALL \"callee\": fewer USING args than th",
-  "cobrun: unsupported: CALL \"callee1\": not a contained program",
-  "cobrun: unsupported: CALL \"callee2\": not a contained program",
-  "cobrun: unsupported: CALL \"dump\": not a contained program (e",
-  "cobrun: unsupported: CALL \"ent1\": not a contained program (e",
-  "cobrun: unsupported: CALL \"module\": not a contained program ",
-  "cobrun: unsupported: CALL \"modulepart\": not a contained prog",
-  "cobrun: unsupported: CALL \"prog\": not a contained program (e",
-  "cobrun: unsupported: CALL \"setfilename\": not a contained pro",
-  "cobrun: unsupported: COMPUTE without '='",
-  "cobrun: unsupported: DELETE: `FILE` is not a declared file",
-  "cobrun: unsupported: FUNCTION DATE-TO-YYYYMMDD requires a pi",
-  "cobrun: unsupported: FUNCTION DAY-TO-YYYYDDD requires a pinn",
-  "cobrun: unsupported: FUNCTION FUNC: cobc 3.2 does not implem",
-  "cobrun: unsupported: FUNCTION LOCALE-TIME-FROM-SECONDS: cobc",
-  "cobrun: unsupported: FUNCTION MODULE-PATH: cobc 3.2 does not",
-  "cobrun: unsupported: FUNCTION MONETARY-DECIMAL-POINT: cobc 3",
-  "cobrun: unsupported: FUNCTION MONETARY-THOUSANDS-SEPARATOR: ",
-  "cobrun: unsupported: FUNCTION NUMERIC-DECIMAL-POINT: cobc 3.",
-  "cobrun: unsupported: FUNCTION NUMERIC-THOUSANDS-SEPARATOR: c",
-  "cobrun: unsupported: FUNCTION RANDOM: cobc 3.2 does not impl",
-  "cobrun: unsupported: FUNCTION YEAR-TO-YYYY requires a pinned",
-  "cobrun: unsupported: INDEXED RECORD KEY `TEST-KEY-2` is not ",
-  "cobrun: unsupported: INSPECT REPLACING: unrecognized mode `T",
-  "cobrun: unsupported: INSPECT TALLYING FOR: unrecognized mode",
-  "cobrun: unsupported: INSPECT region clause near Str([66])",
-  "cobrun: unsupported: MOVE ALL: expected a non-empty literal ",
-  "cobrun: unsupported: N literal: national/bit literals are a ",
-  "cobrun: unsupported: OCCURS max UNBOUNDED is not an integer",
-  "cobrun: unsupported: OPEN: `FILE-EXT` is not a declared file",
-  "cobrun: unsupported: OPEN: `FILE-OPT` is not a declared file",
-  "cobrun: unsupported: OPEN: `INFILE` is not a declared file",
-  "cobrun: unsupported: OPEN: `OUTPUT` is not a declared file",
-  "cobrun: unsupported: OPEN: `PAYROLL-REGISTER-DATA,` is not a",
-  "cobrun: unsupported: OPEN: `SALES-DATA,` is not a declared f",
-  "cobrun: unsupported: OPEN: `TEST-FILE` is not a declared fil",
-  "cobrun: unsupported: OPEN: `TRANSACTION-DATA,` is not a decl",
-  "cobrun: unsupported: PIC $$$$,$$9V99-: UnsupportedSymbol('V'",
-  "cobrun: unsupported: PIC 0XXXXXX: UnsupportedSymbol('X')",
-  "cobrun: unsupported: PIC 9.9999,99Y: UnsupportedSymbol('Y')",
-  "cobrun: unsupported: PIC : Empty",
-  "cobrun: unsupported: PIC LX(10): UnsupportedSymbol('L')",
-  "cobrun: unsupported: PIC LX(3): UnsupportedSymbol('L')",
-  "cobrun: unsupported: PIC LX(5): UnsupportedSymbol('L')",
-  "cobrun: unsupported: PIC LX(9): UnsupportedSymbol('L')",
-  "cobrun: unsupported: PIC N(9): UnsupportedSymbol('N')",
-  "cobrun: unsupported: PIC VP9: ScalingPDeferred",
-  "cobrun: unsupported: PIC VPP99: ScalingPDeferred",
-  "cobrun: unsupported: PIC VPPP999: ScalingPDeferred",
-  "cobrun: unsupported: RELATIVE file `F` has no RELATIVE KEY",
-  "cobrun: unsupported: SET ADDRESS UP/DOWN BY: not a numeric i",
-  "cobrun: unsupported: SET CB TO <value>: target is not a nume",
-  "cobrun: unsupported: SET EOF TO FALSE: the 88 has no `WHEN S",
-  "cobrun: unsupported: SET ERR-PROC-ADDRESS TO <value>: target",
-  "cobrun: unsupported: SET MYFLD88 TO FALSE: the 88 has no `WH",
-  "cobrun: unsupported: SET PROGRAM-LINK TO <value>: target is ",
-  "cobrun: unsupported: SET: expected `TO` or `UP|DOWN BY` (cob",
-  "cobrun: unsupported: SORT: `ROW1` is not a declared file",
-  "cobrun: unsupported: SORT: `TBL` is not a declared file",
-  "cobrun: unsupported: USAGE NATIONAL: cobc 3.2 leaves NATIONA",
-  "cobrun: unsupported: WRITE `TWO-RECORD`: not an FD record",
-  "cobrun: unsupported: a group MOVE is distributed across its ",
-  "cobrun: unsupported: condition: missing left operand",
-  "cobrun: unsupported: condition: unrecognized relational oper",
-  "cobrun: unsupported: expected data name after a level number",
-  "cobrun: unsupported: expected program name after PROGRAM-ID",
-  "cobrun: unsupported: invalid hex digit in X literal",
-  "cobrun: unsupported: no PROCEDURE DIVISION",
-  "cobrun: unsupported: not a numeric literal: (2",
-  "cobrun: unsupported: not a numeric literal: -",
-  "cobrun: unsupported: not a numeric literal: /",
-  "cobrun: unsupported: not a numeric literal: 1,1,1",
-  "cobrun: unsupported: not a numeric literal: 1,23E0",
-  "cobrun: unsupported: not a numeric literal: 17:5",
-  "cobrun: unsupported: not a numeric literal: ALL",
-  "cobrun: unsupported: not a numeric literal: AT",
-  "cobrun: unsupported: not a numeric literal: B",
-  "cobrun: unsupported: not a numeric literal: FAILED",
-  "cobrun: unsupported: not a numeric literal: FOO,",
-  "cobrun: unsupported: not a numeric literal: FUNCTION",
-  "cobrun: unsupported: not a numeric literal: H",
-  "cobrun: unsupported: not a numeric literal: INVALID-LINE",
-  "cobrun: unsupported: not a numeric literal: JSON-CODE",
-  "cobrun: unsupported: not a numeric literal: NULL",
-  "cobrun: unsupported: not a numeric literal: ORT",
-  "cobrun: unsupported: not a numeric literal: PARM-STR",
-  "cobrun: unsupported: not a numeric literal: SIZE",
-  "cobrun: unsupported: not a numeric literal: SPACE",
-  "cobrun: unsupported: not a numeric literal: SYSTEM-OFFSET",
-  "cobrun: unsupported: not a numeric literal: WHEN-COMPILED",
-  "cobrun: unsupported: not a numeric literal: WITHPAR(1)",
-  "cobrun: unsupported: not a numeric literal: X",
-  "cobrun: unsupported: not a numeric literal: X-ALL",
-  "cobrun: unsupported: not a numeric literal: Z",
-  "cobrun: unsupported: not a numeric literal: Z-ASC",
-  "cobrun: unsupported: reference-modification length 'REC-SIZE",
-  "cobrun: unsupported: subscript '(3 + 1) / 2' is not an integ",
-  "cobrun: unsupported: trailing tokens in condition at )",
-  "cobrun: unsupported: trailing tokens in condition at +",
-  "cobrun: unsupported: unrecognized USAGE BINARY-C-LONG",
-  "cobrun: unsupported: unrecognized USAGE BINARY-INT",
-  "cobrun: unsupported: unrecognized USAGE COMPUTATIONAL-9",
-  "cobrun: unsupported: unrecognized USAGE FLOAT-DECIMAL-16",
-  "cobrun: unsupported: unrecognized USAGE FLOAT-LONG",
-  "cobrun: unsupported: unrecognized USAGE FLOAT-SHORT",
-  "cobrun: unsupported: unrecognized USAGE INT",
-  "cobrun: unsupported: unrecognized USAGE PROCEDURE-POINTER",
-  "cobrun: unsupported: unrecognized USAGE SIGNED-INT",
-  "cobrun: unsupported: unsupported level number $SET",
-  "cobrun: unsupported: unsupported level number --",
-  "cobrun: unsupported: unsupported level number 78",
-  "cobrun: unsupported: unsupported level number LOCAL-STORAGE",
-  "cobrun: unsupported: unsupported level number TAT-FILE1",
-  "cobrun: unsupported: verb CHAINING",
-  "cobrun: unsupported: verb END",
-  "cobrun: unsupported: verb IDENTIFICATION",
-  "cobrun: unsupported: verb RETURNING",
-  "cobrun: unsupported: verb T"
- ],
- "edges": [
-  {
-   "diagnostic": "",
-   "at_source": "syn_misc.at",
-   "count": 62
-  },
-  {
-   "diagnostic": "",
-   "at_source": "syn_file.at",
-   "count": 22
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: no PROCEDURE DIVISION",
-   "at_source": "syn_definition.at",
-   "count": 21
-  },
-  {
-   "diagnostic": "",
-   "at_source": "syn_definition.at",
-   "count": 21
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: no PROCEDURE DIVISION",
-   "at_source": "syn_misc.at",
-   "count": 18
-  },
-  {
-   "diagnostic": "",
-   "at_source": "syn_redefines.at",
-   "count": 14
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: unsupported level number 78",
-   "at_source": "syn_misc.at",
-   "count": 12
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: no PROCEDURE DIVISION",
-   "at_source": "syn_occurs.at",
-   "count": 11
-  },
-  {
-   "diagnostic": "",
-   "at_source": "run_misc.at",
-   "count": 11
-  },
-  {
-   "diagnostic": "",
-   "at_source": "syn_literals.at",
-   "count": 10
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unsupported level number 78",
-   "at_source": "run_file.at",
-   "count": 10
-  },
-  {
-   "diagnostic": "",
-   "at_source": "syn_value.at",
-   "count": 9
-  },
-  {
-   "diagnostic": "",
-   "at_source": "run_extensions.at",
-   "count": 9
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unsupported level number 78",
-   "at_source": "data_packed.at",
-   "count": 9
-  },
-  {
-   "diagnostic": "",
-   "at_source": "syn_functions.at",
-   "count": 8
-  },
-  {
-   "diagnostic": "",
-   "at_source": "run_fundamental.at",
-   "count": 8
-  },
-  {
-   "diagnostic": "cobrun: unsupported: DELETE: `FILE` is not a declared file",
-   "at_source": "run_file.at",
-   "count": 8
-  },
-  {
-   "diagnostic": "",
-   "at_source": "syn_move.at",
-   "count": 7
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: unsupported level number SCREEN",
-   "at_source": "syn_screen.at",
-   "count": 7
-  },
-  {
-   "diagnostic": "cobrun: unsupported: N literal: national/bit literals are a ",
-   "at_source": "run_fundamental.at",
-   "count": 7
-  },
-  {
-   "diagnostic": "cobrun: unsupported: no PROCEDURE DIVISION",
-   "at_source": "run_misc.at",
-   "count": 7
-  },
-  {
-   "diagnostic": "",
-   "at_source": "configuration.at",
-   "count": 6
-  },
-  {
-   "diagnostic": "",
-   "at_source": "syn_subscripts.at",
-   "count": 6
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: no PROCEDURE DIVISION",
-   "at_source": "syn_file.at",
-   "count": 6
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: PIC BX: UnsupportedSymbol('X')",
-   "at_source": "syn_move.at",
-   "count": 6
-  },
-  {
-   "diagnostic": "",
-   "at_source": "syn_screen.at",
-   "count": 6
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: X",
-   "at_source": "run_fundamental.at",
-   "count": 6
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unrecognized USAGE BINARY-INT",
-   "at_source": "run_fundamental.at",
-   "count": 6
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unrecognized USAGE BINARY-INT",
-   "at_source": "data_packed.at",
-   "count": 6
-  },
-  {
-   "diagnostic": "",
-   "at_source": "syn_reportwriter.at",
-   "count": 5
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb USE",
-   "at_source": "syn_misc.at",
-   "count": 5
-  },
-  {
-   "diagnostic": "",
-   "at_source": "used_binaries.at",
-   "count": 4
-  },
-  {
-   "diagnostic": "cobrun: unsupported: OPEN: `FILE-OPT` is not a declared file",
-   "at_source": "run_file.at",
-   "count": 4
-  },
-  {
-   "diagnostic": "cobrun: unsupported: OPEN: `TRANSACTION-DATA,` is not a decl",
-   "at_source": "run_reportwriter.at",
-   "count": 4
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: FUNCTION",
-   "at_source": "run_functions.at",
-   "count": 4
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unsupported level number 78",
-   "at_source": "run_extensions.at",
-   "count": 4
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unrecognized USAGE BINARY-INT",
-   "at_source": "data_binary.at",
-   "count": 4
-  },
-  {
-   "diagnostic": "",
-   "at_source": "syn_refmod.at",
-   "count": 3
-  },
-  {
-   "diagnostic": "",
-   "at_source": "syn_multiply.at",
-   "count": 3
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: no PROCEDURE DIVISION",
-   "at_source": "syn_screen.at",
-   "count": 3
-  },
-  {
-   "diagnostic": "cobrun: unsupported: SORT: `TBL` is not a declared file",
-   "at_source": "run_misc.at",
-   "count": 3
-  },
-  {
-   "diagnostic": "cobrun: unsupported: expected program name after PROGRAM-ID",
-   "at_source": "run_misc.at",
-   "count": 3
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: FUNCTION",
-   "at_source": "run_misc.at",
-   "count": 3
-  },
-  {
-   "diagnostic": "cobrun: unsupported: verb CHAINING",
-   "at_source": "run_file.at",
-   "count": 3
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: FOO,",
-   "at_source": "run_reportwriter.at",
-   "count": 3
-  },
-  {
-   "diagnostic": "cobrun: unsupported: OPEN: `OUTPUT` is not a declared file",
-   "at_source": "run_reportwriter.at",
-   "count": 3
-  },
-  {
-   "diagnostic": "cobrun: unsupported: OCCURS max UNBOUNDED is not an integer",
-   "at_source": "run_extensions.at",
-   "count": 3
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: X",
-   "at_source": "run_extensions.at",
-   "count": 3
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: X",
-   "at_source": "data_packed.at",
-   "count": 3
-  },
-  {
-   "diagnostic": "cannot read prog.cob: No such file or directory (os error 2)",
-   "at_source": "configuration.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: no PROGRAM-ID",
-   "at_source": "syn_definition.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb USE",
-   "at_source": "syn_file.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb END-OF-FILE-SWITCH",
-   "at_source": "syn_reportwriter.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: no PROCEDURE DIVISION",
-   "at_source": "syn_reportwriter.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: unrecognized USAGE HANDLE",
-   "at_source": "syn_misc.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: PIC VPP99: ScalingPDeferred",
-   "at_source": "syn_misc.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: unrecognized USAGE BIT",
-   "at_source": "syn_misc.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: unsupported level number $SET",
-   "at_source": "syn_misc.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "",
-   "at_source": "syn_set.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: no PROGRAM-ID",
-   "at_source": "syn_functions.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: no PROCEDURE DIVISION",
-   "at_source": "syn_functions.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"dump\": not a contained program (e",
-   "at_source": "run_fundamental.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned",
-   "at_source": "run_fundamental.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unrecognized USAGE FLOAT-SHORT",
-   "at_source": "run_fundamental.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: ACCEPT FROM terminal/console: interacti",
-   "at_source": "run_accept.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned",
-   "at_source": "run_accept.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unsupported level number LOCAL-STORAGE",
-   "at_source": "run_misc.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"dump\": not a contained program (e",
-   "at_source": "run_misc.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: NULL",
-   "at_source": "run_misc.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unrecognized USAGE BINARY-INT",
-   "at_source": "run_misc.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"callee\": fewer USING args than th",
-   "at_source": "run_misc.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: SET CB TO <value>: target is not a nume",
-   "at_source": "run_misc.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: ALL",
-   "at_source": "run_misc.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: verb RETURNING",
-   "at_source": "run_misc.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unsupported level number 78",
-   "at_source": "run_misc.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unsupported level number LOCAL-STORAGE",
-   "at_source": "run_file.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"CBL_CREATE_DIR\": not a contained ",
-   "at_source": "run_file.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: PIC : Empty",
-   "at_source": "run_reportwriter.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "",
-   "at_source": "run_reportwriter.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "",
-   "at_source": "run_functions.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: Z",
-   "at_source": "run_functions.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: ALL",
-   "at_source": "run_functions.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: FUNCTION",
-   "at_source": "run_functions.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: SPACE",
-   "at_source": "run_functions.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: NULL",
-   "at_source": "run_extensions.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: expected program name after PROGRAM-ID",
-   "at_source": "run_extensions.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: no PROCEDURE DIVISION",
-   "at_source": "run_extensions.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: verb CHAINING",
-   "at_source": "run_extensions.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"C$GETPID\": not a contained progra",
-   "at_source": "run_extensions.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: PIC LX(5): UnsupportedSymbol('L')",
-   "at_source": "run_extensions.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: PIC VPP99: ScalingPDeferred",
-   "at_source": "run_ml.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unsupported level number 78",
-   "at_source": "data_display.at",
-   "count": 2
-  },
-  {
-   "diagnostic": "cannot read sub/prog.c: stream did not contain valid UTF-8",
-   "at_source": "used_binaries.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cannot read prog.cob: No such file or directory (os error 2)",
-   "at_source": "used_binaries.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: warning: cannot read dialect config \"cobol2014.conf",
-   "at_source": "configuration.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: -fformat=unknown: only fixed/free/auto are supporte",
-   "at_source": "configuration.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: COPY expansion failed (fail closed): copybook 'COPY",
-   "at_source": "syn_copy.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb IDENTIFICATION",
-   "at_source": "syn_definition.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb NOT-DEFINED",
-   "at_source": "syn_definition.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: PROG: no PROCEDURE DIVISION",
-   "at_source": "syn_definition.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: PIC N(4): UnsupportedSymbol('N')",
-   "at_source": "syn_definition.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: PROG-3: no PROCEDURE DIVISION",
-   "at_source": "syn_definition.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: unsupported level number 78",
-   "at_source": "syn_definition.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: unrecognized USAGE SOME-VERY-LONG-TYPE",
-   "at_source": "syn_definition.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb INITIALISATION",
-   "at_source": "syn_definition.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb KEY",
-   "at_source": "syn_definition.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb USE",
-   "at_source": "syn_definition.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: OCCURS count UNBOUNDED is not an integ",
-   "at_source": "syn_occurs.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "",
-   "at_source": "syn_occurs.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: 66 level without RENAMES",
-   "at_source": "syn_redefines.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: not a numeric literal: ARE",
-   "at_source": "syn_value.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: PIC NNN: UnsupportedSymbol('N')",
-   "at_source": "syn_value.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: PIC BXX: UnsupportedSymbol('X')",
-   "at_source": "syn_value.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: unsupported level number 78",
-   "at_source": "syn_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb A001-LOOP",
-   "at_source": "syn_reportwriter.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: unsupported level number 78",
-   "at_source": "syn_refmod.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: expected data name after a level numbe",
-   "at_source": "syn_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: PIC X(9999999999): BadRepeat",
-   "at_source": "syn_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb COMMENT",
-   "at_source": "syn_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb |",
-   "at_source": "syn_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb DEC-1",
-   "at_source": "syn_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: unrecognized USAGE FLOAT",
-   "at_source": "syn_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb END-OF-PAGE",
-   "at_source": "syn_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: COPY expansion failed (fail closed): copybook 'A' n",
-   "at_source": "syn_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb SEC-1",
-   "at_source": "syn_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: unsupported level number SCREEN-STORAG",
-   "at_source": "syn_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb AFTER",
-   "at_source": "syn_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: unsupported level number HEAD",
-   "at_source": "syn_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb SUB1",
-   "at_source": "syn_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb $SET",
-   "at_source": "syn_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb P",
-   "at_source": "syn_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: PIC N: UnsupportedSymbol('N')",
-   "at_source": "syn_move.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: PIC 0N: UnsupportedSymbol('N')",
-   "at_source": "syn_move.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: unsupported level number 78",
-   "at_source": "syn_move.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: unrecognized USAGE FLOAT-LONG",
-   "at_source": "syn_move.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb NOT",
-   "at_source": "syn_screen.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb IDENTIFICATION",
-   "at_source": "syn_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: verb E1,",
-   "at_source": "syn_literals.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: PIC N: UnsupportedSymbol('N')",
-   "at_source": "syn_literals.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: 1,23E0",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: PIC 0XXXXXX: UnsupportedSymbol('X')",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unsupported level number --",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: FAILED",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: ORT",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unsupported level number 78",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: PIC 9.9999,99Y: UnsupportedSymbol('Y')",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"modulepart\": not a contained prog",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"module\": not a contained program ",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"PROG-PTR\": not a contained progra",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: FUNCTION",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: FILLER",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: SET MYFLD88 TO FALSE: the 88 has no `WH",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: RES-TAB(1)",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: ENVIRONMENT",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unrecognized USAGE INT",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: PIC VP9: ScalingPDeferred",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: PIC $$$$,$$9V99-: UnsupportedSymbol('V'",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: condition: unrecognized relational oper",
-   "at_source": "run_fundamental.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: subscript '(3 + 1) / 2' is not an integ",
-   "at_source": "run_subscripts.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: FUNCTION",
-   "at_source": "run_subscripts.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: NOT",
-   "at_source": "run_subscripts.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: SET: expected `TO` or `UP|DOWN BY` (cob",
-   "at_source": "run_subscripts.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: PARM-STR",
-   "at_source": "run_subscripts.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: expected data name after a level number",
-   "at_source": "run_refmod.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: X(1),",
-   "at_source": "run_initialize.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: MY-FILLER(2:3)",
-   "at_source": "run_initialize.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: MY-FLD(1:2)",
-   "at_source": "run_initialize.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unrecognized USAGE BINARY-INT",
-   "at_source": "run_initialize.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: 1,1,1",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: COMPUTE without '='",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: LCL-X",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: Z",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: -",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: verb T",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: X-ALL",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: trailing tokens in condition at +",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"callee1\": not a contained program",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: verb IDENTIFICATION",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"C$PARAMSIZE\": not a contained pro",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: MY-ASCII",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: X",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unrecognized USAGE FLOAT-LONG",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: PERFORM VARYING: expected BY",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: condition: missing left operand",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: PRM(1),",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: TAB1-NR(K),",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: SORT: `ROW1` is not a declared file",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"callee2\": not a contained program",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"ent1\": not a contained program (e",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: SET PROGRAM-LINK TO <value>: target is ",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: MYFLD",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: condition: unrecognized relational oper",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: ADDRESS",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"STATIC\": not a contained program ",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: Z-ASC",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: SET ADDRESS UP/DOWN BY: not a numeric i",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: AT",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: INVALID-LINE",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"D\": not a contained program (exte",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobc-rs: unsupported: PIC 9(FOO-BAR)9(FOO-BAR): BadRepeat",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: X-LEFT,",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"_SUB-PROG_NOW\": not a contained p",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: RSLTV2,",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unsupported level number $SET",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unrecognized USAGE FLOAT-DECIMAL-16",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: CMP1,",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unrecognized USAGE SIGNED-INT",
-   "at_source": "run_misc.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: OMITTED",
-   "at_source": "run_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: expected program name after PROGRAM-ID",
-   "at_source": "run_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: INDEXED RECORD KEY `TEST-KEY-2` is not ",
-   "at_source": "run_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: OPEN: `TEST-FILE` is not a declared fil",
-   "at_source": "run_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: OPEN: `INFILE` is not a declared file",
-   "at_source": "run_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: WRITE `TWO-RECORD`: not an FD record",
-   "at_source": "run_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: verb END",
-   "at_source": "run_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"CBL_CREATE_FILE\": not a contained",
-   "at_source": "run_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"CBL_COPY_FILE\": not a contained p",
-   "at_source": "run_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned",
-   "at_source": "run_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: condition: missing left operand",
-   "at_source": "run_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: ALL",
-   "at_source": "run_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: SET EOF TO FALSE: the 88 has no `WHEN S",
-   "at_source": "run_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: RELATIVE file `F` has no RELATIVE KEY",
-   "at_source": "run_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: trailing tokens in condition at )",
-   "at_source": "run_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: reference-modification length 'REC-SIZE",
-   "at_source": "run_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: OPEN: `FILE-EXT` is not a declared file",
-   "at_source": "run_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unsupported level number TAT-FILE1",
-   "at_source": "run_file.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: OPEN: `SALES-DATA,` is not a declared f",
-   "at_source": "run_reportwriter.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: OPEN: `PAYROLL-REGISTER-DATA,` is not a",
-   "at_source": "run_reportwriter.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: NUMS",
-   "at_source": "run_reportwriter.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: condition: unrecognized relational oper",
-   "at_source": "run_reportwriter.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: WS-TRANSPORT-PAY,",
-   "at_source": "run_reportwriter.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: MOVE ALL: expected a non-empty literal ",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: USAGE NATIONAL: cobc 3.2 leaves NATIONA",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: FUNCTION DATE-TO-YYYYMMDD requires a pi",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: FUNCTION DAY-TO-YYYYDDD requires a pinn",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: /",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: PIC N(9): UnsupportedSymbol('N')",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: FUNCTION LOCALE-TIME-FROM-SECONDS: cobc",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: FUNCTION MODULE-PATH: cobc 3.2 does not",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: FUNCTION MONETARY-DECIMAL-POINT: cobc 3",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: FUNCTION MONETARY-THOUSANDS-SEPARATOR: ",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: FUNCTION NUMERIC-DECIMAL-POINT: cobc 3.",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: FUNCTION NUMERIC-THOUSANDS-SEPARATOR: c",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: FUNCTION RANDOM: cobc 3.2 does not impl",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unrecognized USAGE FLOAT-LONG",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: (2",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: invalid hex digit in X literal",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: 17:5",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: FUNCTION YEAR-TO-YYYY requires a pinned",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: SYSTEM-OFFSET",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: WITHPAR(1)",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: FUNCTION FUNC: cobc 3.2 does not implem",
-   "at_source": "run_functions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"dump\": not a contained program (e",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: B",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: H",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: SIZE",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: WHEN-COMPILED",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: L1-3-2(1,",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: DEFAULT",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"setfilename\": not a contained pro",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: 4",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: expected data name after a level number",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"prog\": not a contained program (e",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: invalid hex digit in X literal",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"C$NARG\": not a contained program ",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"C$PARAMSIZE\": not a contained pro",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"C$CALLEDBY\": not a contained prog",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"C$JUSTIFY\": not a contained progr",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"C$PRINTABLE\": not a contained pro",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"C$MAKEDIR\": not a contained progr",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"C$TOUPPER\": not a contained progr",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"C$TOLOWER\": not a contained progr",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"CBL_AND\": not a contained program",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"CBL_IMP\": not a contained program",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"CBL_NIMP\": not a contained progra",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"CBL_NOT\": not a contained program",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"CBL_EQ\": not a contained program ",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unrecognized USAGE BINARY-C-LONG",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unrecognized USAGE PROCEDURE-POINTER",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: SET ERR-PROC-ADDRESS TO <value>: target",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unsupported level number LOCAL-STORAGE",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: undefined data name: SORT-RETURN",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unrecognized USAGE COMPUTATIONAL-9",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: PIC LX(10): UnsupportedSymbol('L')",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: PIC LX(9): UnsupportedSymbol('L')",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: PIC LX(3): UnsupportedSymbol('L')",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: INSPECT TALLYING FOR: unrecognized mode",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: INSPECT REPLACING: unrecognized mode `T",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: INSPECT region clause near Str([66])",
-   "at_source": "run_extensions.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: X",
-   "at_source": "run_ml.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: ALL",
-   "at_source": "run_ml.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: JSON-CODE",
-   "at_source": "run_ml.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: PIC VPPP999: ScalingPDeferred",
-   "at_source": "data_binary.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: a group MOVE is distributed across its ",
-   "at_source": "data_display.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: unrecognized USAGE BINARY-INT",
-   "at_source": "data_display.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: PIC VPPP999: ScalingPDeferred",
-   "at_source": "data_display.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: CALL \"dump\": not a contained program (e",
-   "at_source": "data_packed.at",
-   "count": 1
-  },
-  {
-   "diagnostic": "cobrun: unsupported: not a numeric literal: NULL",
-   "at_source": "data_pointer.at",
-   "count": 1
-  }
- ]
+  "counting_unit": "first_failure_group",
+  "edges": [
+    {
+      "source": "feature::",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cannot read prog.cob: No such file or directory (os error 2)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cannot read sub/prog.c: stream did not contain valid UTF-8",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobc-rs: -fformat=unknown: only fixed/free/auto are supported by the candidate (fail closed)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobc-rs: COPY expansion failed (fail closed): copybook 'A' not found",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobc-rs: COPY expansion failed (fail closed): copybook 'COPY1' not found",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: 66 level without RENAMES",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: OCCURS count UNBOUNDED is not an integer",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: PERFORM VARYING: expected BY",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: PIC 0N: UnsupportedSymbol('N')",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: PIC 9(FOO-BAR)9(FOO-BAR): BadRepeat",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: PIC BX: UnsupportedSymbol('X')",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: PIC BXX: UnsupportedSymbol('X')",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: PIC N(4): UnsupportedSymbol('N')",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: PIC N: UnsupportedSymbol('N')",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: PIC NNN: UnsupportedSymbol('N')",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: PIC VPP99: ScalingPDeferred",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: PIC X(9999999999): BadRepeat",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: PIC X(CONST1): BadRepeat",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: PIC X(VAR-LEN): BadRepeat",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: PROG-3: no PROCEDURE DIVISION",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: PROG: no PROCEDURE DIVISION",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: expected data name after a level number",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: no PROCEDURE DIVISION",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: no PROGRAM-ID",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: not a numeric literal: ARE",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: unrecognized USAGE BIT",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: unrecognized USAGE FLOAT",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: unrecognized USAGE SOME-VERY-LONG-TYPEDEF-NAME",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: unsupported level number $SET",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: unsupported level number HEAD",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: unsupported level number SCREEN",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: unsupported level number SCREEN-STORAGE",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb $SET",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb A001-LOOP",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb AFTER",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb COMMENT",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb DEC-1",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb E1,",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb END-OF-FILE-SWITCH",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb END-OF-PAGE",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb IDENTIFICATION",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb INITIALISATION",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb KEY",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb NOT",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb NOT-DEFINED",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb NOTDEFINED",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb P",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb SEC-1",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb SUB1",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb THREAD",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb USE",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: verb |",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobc-rs: warning: cannot read dialect config \"cobol2014.conf\"; using -std/default",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: undefined data name:",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: 4",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: ADDRESS",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: CMP1,",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: DEFAULT",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: ENVIRONMENT",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: FILLER",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: FUNCTION",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: L1-3-2(1,",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: LCL-X",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: MY-ASCII",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: MY-FILLER(2:3)",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: MY-FLD(1:2)",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: MYFLD",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: NOT",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: NULL",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: NUMS",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: OMITTED",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: PRM(1),",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: RES-TAB(1)",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: RSLTV2,",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: SORT-RETURN",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: TAB1-NR(K),",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: WS-TRANSPORT-PAY,",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: X(1),",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: undefined data name: X-LEFT,",
+      "target": "name-resolution"
+    },
+    {
+      "source": "feature::cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: ACCEPT FROM terminal/console: interactive input is a runtime non-claim (no deterministic oracle); the wired sources are DATE/DAY/TIME/DAY-OF-WEEK/ENVIRONMENT",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"C$CALLEDBY\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"C$GETPID\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"C$JUSTIFY\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"C$MAKEDIR\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"C$NARG\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"C$PARAMSIZE\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"C$PRINTABLE\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"C$TOLOWER\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"C$TOUPPER\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"CBL_AND\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"CBL_COPY_FILE\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"CBL_CREATE_DIR\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"CBL_CREATE_FILE\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"CBL_EQ\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"CBL_IMP\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"CBL_NIMP\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"CBL_NOT\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"D\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"PROG-PTR\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"STATIC\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"SYSTEM\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"_SUB-PROG_NOW\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"callee\": fewer USING args than the 2 parameters",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"callee\": fewer USING args than the 3 parameters",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"callee1\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"callee2\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"dump\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"ent1\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"module\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"modulepart\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"prog\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: CALL \"setfilename\": not a contained program (external CALL is a boundary)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: COMPUTE without '='",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: DELETE: `FILE` is not a declared file",
+      "target": "semantic-check"
+    },
+    {
+      "source": "feature::cobrun: unsupported: FUNCTION DATE-TO-YYYYMMDD requires a pinned COB_CURRENT_DATE",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: FUNCTION DAY-TO-YYYYDDD requires a pinned COB_CURRENT_DATE",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: FUNCTION FUNC: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: FUNCTION LOCALE-TIME-FROM-SECONDS: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: FUNCTION MODULE-PATH: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: FUNCTION MONETARY-DECIMAL-POINT: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: FUNCTION MONETARY-THOUSANDS-SEPARATOR: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: FUNCTION NUMERIC-DECIMAL-POINT: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: FUNCTION NUMERIC-THOUSANDS-SEPARATOR: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: FUNCTION RANDOM: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: FUNCTION YEAR-TO-YYYY requires a pinned COB_CURRENT_DATE",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: INDEXED RECORD KEY `TEST-KEY-2` is not a field of the record",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: INSPECT REPLACING: unrecognized mode `TRAILING` (expected CHARACTERS/ALL/LEADING/FIRST)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: INSPECT TALLYING FOR: unrecognized mode `TRAILING` (expected ALL/LEADING/CHARACTERS)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: INSPECT region clause near Str([50])",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: INSPECT region clause near Str([66])",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: MOVE ALL: expected a non-empty literal or figurative",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: OCCURS count MAX-SUB is not an integer",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: OCCURS max UNBOUNDED is not an integer",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: OPEN: `FILE-EXT` is not a declared file",
+      "target": "semantic-check"
+    },
+    {
+      "source": "feature::cobrun: unsupported: OPEN: `FILE-OPT` is not a declared file",
+      "target": "semantic-check"
+    },
+    {
+      "source": "feature::cobrun: unsupported: OPEN: `INFILE` is not a declared file",
+      "target": "semantic-check"
+    },
+    {
+      "source": "feature::cobrun: unsupported: OPEN: `OUTPUT` is not a declared file",
+      "target": "semantic-check"
+    },
+    {
+      "source": "feature::cobrun: unsupported: OPEN: `PAYROLL-REGISTER-DATA,` is not a declared file",
+      "target": "semantic-check"
+    },
+    {
+      "source": "feature::cobrun: unsupported: OPEN: `SALES-DATA,` is not a declared file",
+      "target": "semantic-check"
+    },
+    {
+      "source": "feature::cobrun: unsupported: OPEN: `TEST-FILE` is not a declared file",
+      "target": "semantic-check"
+    },
+    {
+      "source": "feature::cobrun: unsupported: OPEN: `TRANSACTION-DATA,` is not a declared file",
+      "target": "semantic-check"
+    },
+    {
+      "source": "feature::cobrun: unsupported: PIC $$$$,$$9V99-: UnsupportedSymbol('V')",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: PIC 0XXXXXX: UnsupportedSymbol('X')",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: PIC 9.9999,99Y: UnsupportedSymbol('Y')",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: PIC 99X99: UnsupportedSymbol('X')",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: PIC : Empty",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: PIC LX(10): UnsupportedSymbol('L')",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: PIC LX(3): UnsupportedSymbol('L')",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: PIC LX(5): UnsupportedSymbol('L')",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: PIC LX(9): UnsupportedSymbol('L')",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: PIC N(9): UnsupportedSymbol('N')",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: PIC VP9: ScalingPDeferred",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: PIC VPP99: ScalingPDeferred",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: PIC VPPP999: ScalingPDeferred",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: RELATIVE file `F` has no RELATIVE KEY",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: SET ADDRESS UP/DOWN BY: not a numeric index",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: SET CB TO <value>: target is not a numeric/index item",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: SET EOF TO FALSE: the 88 has no `WHEN SET TO FALSE` value",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: SET ERR-PROC-ADDRESS TO <value>: target is not a numeric/index item",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: SET MYFLD88 TO FALSE: the 88 has no `WHEN SET TO FALSE` value",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: SET PROGRAM-LINK TO <value>: target is not a numeric/index item",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: SET: expected `TO` or `UP|DOWN BY` (cobc rejects a SET with neither)",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: SORT: `ROW1` is not a declared file",
+      "target": "semantic-check"
+    },
+    {
+      "source": "feature::cobrun: unsupported: SORT: `TBL` is not a declared file",
+      "target": "semantic-check"
+    },
+    {
+      "source": "feature::cobrun: unsupported: USAGE NATIONAL: cobc 3.2 leaves NATIONAL unfinished (-Wunfinished) -- a non-claim, not a buildable front-end gap",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: WRITE `TWO-RECORD`: not an FD record",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: a group MOVE is distributed across its leaves by write_field",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: condition: missing left operand",
+      "target": "semantic-check"
+    },
+    {
+      "source": "feature::cobrun: unsupported: condition: unrecognized relational operator (expected = > < >= <= <> GREATER LESS EQUAL)",
+      "target": "semantic-check"
+    },
+    {
+      "source": "feature::cobrun: unsupported: expected data name after a level number",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: expected program name after PROGRAM-ID",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: no PROCEDURE DIVISION",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: (2",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: -",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: /",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: 1,1,1",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: 1,23E0",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: 17:5",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: ALL",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: AT",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: B",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: DOGGY",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: FAILED",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: FENCE",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: FOO,",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: FUNCTION",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: GLOB-PATH2",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: H",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: INVALID-LINE",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: JSON-CODE",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: LENGTH",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: NULL",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: ORT",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: PARM-STR",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: SIZE",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: SPACE",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: SYSTEM-OFFSET",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: WHEN-COMPILED",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: WITHPAR(1)",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: X",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: X-ALL",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: Z",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: not a numeric literal: Z-ASC",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: reference-modification length 'REC-SIZE - 2' is not an integer",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: subscript '(3 + 1) / 2' is not an integer",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: trailing tokens in condition at )",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: trailing tokens in condition at +",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobrun: unsupported: unrecognized USAGE BINARY-C-LONG",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: unrecognized USAGE COMPUTATIONAL-9",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: unrecognized USAGE FLOAT-DECIMAL-16",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: unrecognized USAGE INT",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: unrecognized USAGE PROCEDURE-POINTER",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: unrecognized USAGE SIGNED-INT",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: unsupported level number $SET",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: unsupported level number --",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: unsupported level number LOCAL-STORAGE",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: unsupported level number REPLACE",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: unsupported level number TAT-FILE1",
+      "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: verb CHAINING",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: verb END",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: verb IDENTIFICATION",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: verb RETURNING",
+      "target": "grammar"
+    },
+    {
+      "source": "feature::cobrun: unsupported: verb T",
+      "target": "grammar"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "checker",
+      "kind": "phase"
+    },
+    {
+      "id": "data-layout",
+      "kind": "phase"
+    },
+    {
+      "id": "feature::",
+      "kind": "feature",
+      "label": ""
+    },
+    {
+      "id": "feature::cannot read prog.cob: No such file or directory (os error 2)",
+      "kind": "feature",
+      "label": "cannot read prog.cob: No such file or directory (os error 2)"
+    },
+    {
+      "id": "feature::cannot read sub/prog.c: stream did not contain valid UTF-8",
+      "kind": "feature",
+      "label": "cannot read sub/prog.c: stream did not contain valid UTF-8"
+    },
+    {
+      "id": "feature::cobc-rs: -fformat=unknown: only fixed/free/auto are supported by the candidate (fail closed)",
+      "kind": "feature",
+      "label": "cobc-rs: -fformat=unknown: only fixed/free/auto are supported by the candidate (fail closed)"
+    },
+    {
+      "id": "feature::cobc-rs: COPY expansion failed (fail closed): copybook 'A' not found",
+      "kind": "feature",
+      "label": "cobc-rs: COPY expansion failed (fail closed): copybook 'A' not found"
+    },
+    {
+      "id": "feature::cobc-rs: COPY expansion failed (fail closed): copybook 'COPY1' not found",
+      "kind": "feature",
+      "label": "cobc-rs: COPY expansion failed (fail closed): copybook 'COPY1' not found"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: 66 level without RENAMES",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: 66 level without RENAMES"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: OCCURS count UNBOUNDED is not an integer",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: OCCURS count UNBOUNDED is not an integer"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: PERFORM VARYING: expected BY",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: PERFORM VARYING: expected BY"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: PIC 0N: UnsupportedSymbol('N')",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: PIC 0N: UnsupportedSymbol('N')"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: PIC 9(FOO-BAR)9(FOO-BAR): BadRepeat",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: PIC 9(FOO-BAR)9(FOO-BAR): BadRepeat"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: PIC BX: UnsupportedSymbol('X')",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: PIC BX: UnsupportedSymbol('X')"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: PIC BXX: UnsupportedSymbol('X')",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: PIC BXX: UnsupportedSymbol('X')"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: PIC N(4): UnsupportedSymbol('N')",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: PIC N(4): UnsupportedSymbol('N')"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: PIC N: UnsupportedSymbol('N')",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: PIC N: UnsupportedSymbol('N')"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: PIC NNN: UnsupportedSymbol('N')",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: PIC NNN: UnsupportedSymbol('N')"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: PIC VPP99: ScalingPDeferred",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: PIC VPP99: ScalingPDeferred"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: PIC X(9999999999): BadRepeat",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: PIC X(9999999999): BadRepeat"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: PIC X(CONST1): BadRepeat",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: PIC X(CONST1): BadRepeat"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: PIC X(VAR-LEN): BadRepeat",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: PIC X(VAR-LEN): BadRepeat"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: PROG-3: no PROCEDURE DIVISION",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: PROG-3: no PROCEDURE DIVISION"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: PROG: no PROCEDURE DIVISION",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: PROG: no PROCEDURE DIVISION"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: expected data name after a level number",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: expected data name after a level number"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: no PROCEDURE DIVISION",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: no PROCEDURE DIVISION"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: no PROGRAM-ID",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: no PROGRAM-ID"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: not a numeric literal: ARE",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: not a numeric literal: ARE"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: unrecognized USAGE BIT",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: unrecognized USAGE BIT"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: unrecognized USAGE FLOAT",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: unrecognized USAGE FLOAT"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: unrecognized USAGE SOME-VERY-LONG-TYPEDEF-NAME",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: unrecognized USAGE SOME-VERY-LONG-TYPEDEF-NAME"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: unsupported level number $SET",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: unsupported level number $SET"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: unsupported level number HEAD",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: unsupported level number HEAD"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: unsupported level number SCREEN",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: unsupported level number SCREEN"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: unsupported level number SCREEN-STORAGE",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: unsupported level number SCREEN-STORAGE"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb $SET",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb $SET"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb A001-LOOP",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb A001-LOOP"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb AFTER",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb AFTER"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb COMMENT",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb COMMENT"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb DEC-1",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb DEC-1"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb E1,",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb E1,"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb END-OF-FILE-SWITCH",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb END-OF-FILE-SWITCH"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb END-OF-PAGE",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb END-OF-PAGE"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb IDENTIFICATION",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb IDENTIFICATION"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb INITIALISATION",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb INITIALISATION"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb KEY",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb KEY"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb NOT",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb NOT"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb NOT-DEFINED",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb NOT-DEFINED"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb NOTDEFINED",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb NOTDEFINED"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb P",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb P"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb SEC-1",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb SEC-1"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb SUB1",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb SUB1"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb THREAD",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb THREAD"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb USE",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb USE"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: verb |",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: verb |"
+    },
+    {
+      "id": "feature::cobc-rs: warning: cannot read dialect config \"cobol2014.conf\"; using -std/default",
+      "kind": "feature",
+      "label": "cobc-rs: warning: cannot read dialect config \"cobol2014.conf\"; using -std/default"
+    },
+    {
+      "id": "feature::cobrun: undefined data name:",
+      "kind": "feature",
+      "label": "cobrun: undefined data name:"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: 4",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: 4"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: ADDRESS",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: ADDRESS"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: CMP1,",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: CMP1,"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: DEFAULT",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: DEFAULT"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: ENVIRONMENT",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: ENVIRONMENT"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: FILLER",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: FILLER"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: FUNCTION",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: FUNCTION"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: L1-3-2(1,",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: L1-3-2(1,"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: LCL-X",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: LCL-X"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: MY-ASCII",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: MY-ASCII"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: MY-FILLER(2:3)",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: MY-FILLER(2:3)"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: MY-FLD(1:2)",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: MY-FLD(1:2)"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: MYFLD",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: MYFLD"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: NOT",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: NOT"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: NULL",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: NULL"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: NUMS",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: NUMS"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: OMITTED",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: OMITTED"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: PRM(1),",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: PRM(1),"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: RES-TAB(1)",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: RES-TAB(1)"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: RSLTV2,",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: RSLTV2,"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: SORT-RETURN",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: SORT-RETURN"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: TAB1-NR(K),",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: TAB1-NR(K),"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: WS-TRANSPORT-PAY,",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: WS-TRANSPORT-PAY,"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: X(1),",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: X(1),"
+    },
+    {
+      "id": "feature::cobrun: undefined data name: X-LEFT,",
+      "kind": "feature",
+      "label": "cobrun: undefined data name: X-LEFT,"
+    },
+    {
+      "id": "feature::cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: ACCEPT FROM terminal/console: interactive input is a runtime non-claim (no deterministic oracle); the wired sources are DATE/DAY/TIME/DAY-OF-WEEK/ENVIRONMENT",
+      "kind": "feature",
+      "label": "cobrun: unsupported: ACCEPT FROM terminal/console: interactive input is a runtime non-claim (no deterministic oracle); the wired sources are DATE/DAY/TIME/DAY-OF-WEEK/ENVIRONMENT"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"C$CALLEDBY\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"C$CALLEDBY\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"C$GETPID\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"C$GETPID\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"C$JUSTIFY\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"C$JUSTIFY\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"C$MAKEDIR\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"C$MAKEDIR\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"C$NARG\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"C$NARG\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"C$PARAMSIZE\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"C$PARAMSIZE\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"C$PRINTABLE\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"C$PRINTABLE\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"C$TOLOWER\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"C$TOLOWER\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"C$TOUPPER\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"C$TOUPPER\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"CBL_AND\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"CBL_AND\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"CBL_COPY_FILE\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"CBL_COPY_FILE\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"CBL_CREATE_DIR\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"CBL_CREATE_DIR\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"CBL_CREATE_FILE\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"CBL_CREATE_FILE\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"CBL_EQ\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"CBL_EQ\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"CBL_IMP\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"CBL_IMP\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"CBL_NIMP\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"CBL_NIMP\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"CBL_NOT\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"CBL_NOT\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"D\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"D\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"PROG-PTR\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"PROG-PTR\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"STATIC\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"STATIC\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"SYSTEM\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"SYSTEM\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"_SUB-PROG_NOW\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"_SUB-PROG_NOW\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"callee\": fewer USING args than the 2 parameters",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"callee\": fewer USING args than the 2 parameters"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"callee\": fewer USING args than the 3 parameters",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"callee\": fewer USING args than the 3 parameters"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"callee1\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"callee1\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"callee2\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"callee2\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"dump\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"dump\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"ent1\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"ent1\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"module\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"module\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"modulepart\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"modulepart\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"prog\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"prog\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: CALL \"setfilename\": not a contained program (external CALL is a boundary)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: CALL \"setfilename\": not a contained program (external CALL is a boundary)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: COMPUTE without '='",
+      "kind": "feature",
+      "label": "cobrun: unsupported: COMPUTE without '='"
+    },
+    {
+      "id": "feature::cobrun: unsupported: DELETE: `FILE` is not a declared file",
+      "kind": "feature",
+      "label": "cobrun: unsupported: DELETE: `FILE` is not a declared file"
+    },
+    {
+      "id": "feature::cobrun: unsupported: FUNCTION DATE-TO-YYYYMMDD requires a pinned COB_CURRENT_DATE",
+      "kind": "feature",
+      "label": "cobrun: unsupported: FUNCTION DATE-TO-YYYYMMDD requires a pinned COB_CURRENT_DATE"
+    },
+    {
+      "id": "feature::cobrun: unsupported: FUNCTION DAY-TO-YYYYDDD requires a pinned COB_CURRENT_DATE",
+      "kind": "feature",
+      "label": "cobrun: unsupported: FUNCTION DAY-TO-YYYYDDD requires a pinned COB_CURRENT_DATE"
+    },
+    {
+      "id": "feature::cobrun: unsupported: FUNCTION FUNC: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim",
+      "kind": "feature",
+      "label": "cobrun: unsupported: FUNCTION FUNC: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim"
+    },
+    {
+      "id": "feature::cobrun: unsupported: FUNCTION LOCALE-TIME-FROM-SECONDS: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim",
+      "kind": "feature",
+      "label": "cobrun: unsupported: FUNCTION LOCALE-TIME-FROM-SECONDS: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim"
+    },
+    {
+      "id": "feature::cobrun: unsupported: FUNCTION MODULE-PATH: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim",
+      "kind": "feature",
+      "label": "cobrun: unsupported: FUNCTION MODULE-PATH: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim"
+    },
+    {
+      "id": "feature::cobrun: unsupported: FUNCTION MONETARY-DECIMAL-POINT: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim",
+      "kind": "feature",
+      "label": "cobrun: unsupported: FUNCTION MONETARY-DECIMAL-POINT: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim"
+    },
+    {
+      "id": "feature::cobrun: unsupported: FUNCTION MONETARY-THOUSANDS-SEPARATOR: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim",
+      "kind": "feature",
+      "label": "cobrun: unsupported: FUNCTION MONETARY-THOUSANDS-SEPARATOR: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim"
+    },
+    {
+      "id": "feature::cobrun: unsupported: FUNCTION NUMERIC-DECIMAL-POINT: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim",
+      "kind": "feature",
+      "label": "cobrun: unsupported: FUNCTION NUMERIC-DECIMAL-POINT: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim"
+    },
+    {
+      "id": "feature::cobrun: unsupported: FUNCTION NUMERIC-THOUSANDS-SEPARATOR: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim",
+      "kind": "feature",
+      "label": "cobrun: unsupported: FUNCTION NUMERIC-THOUSANDS-SEPARATOR: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim"
+    },
+    {
+      "id": "feature::cobrun: unsupported: FUNCTION RANDOM: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim",
+      "kind": "feature",
+      "label": "cobrun: unsupported: FUNCTION RANDOM: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim"
+    },
+    {
+      "id": "feature::cobrun: unsupported: FUNCTION YEAR-TO-YYYY requires a pinned COB_CURRENT_DATE",
+      "kind": "feature",
+      "label": "cobrun: unsupported: FUNCTION YEAR-TO-YYYY requires a pinned COB_CURRENT_DATE"
+    },
+    {
+      "id": "feature::cobrun: unsupported: INDEXED RECORD KEY `TEST-KEY-2` is not a field of the record",
+      "kind": "feature",
+      "label": "cobrun: unsupported: INDEXED RECORD KEY `TEST-KEY-2` is not a field of the record"
+    },
+    {
+      "id": "feature::cobrun: unsupported: INSPECT REPLACING: unrecognized mode `TRAILING` (expected CHARACTERS/ALL/LEADING/FIRST)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: INSPECT REPLACING: unrecognized mode `TRAILING` (expected CHARACTERS/ALL/LEADING/FIRST)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: INSPECT TALLYING FOR: unrecognized mode `TRAILING` (expected ALL/LEADING/CHARACTERS)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: INSPECT TALLYING FOR: unrecognized mode `TRAILING` (expected ALL/LEADING/CHARACTERS)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: INSPECT region clause near Str([50])",
+      "kind": "feature",
+      "label": "cobrun: unsupported: INSPECT region clause near Str([50])"
+    },
+    {
+      "id": "feature::cobrun: unsupported: INSPECT region clause near Str([66])",
+      "kind": "feature",
+      "label": "cobrun: unsupported: INSPECT region clause near Str([66])"
+    },
+    {
+      "id": "feature::cobrun: unsupported: MOVE ALL: expected a non-empty literal or figurative",
+      "kind": "feature",
+      "label": "cobrun: unsupported: MOVE ALL: expected a non-empty literal or figurative"
+    },
+    {
+      "id": "feature::cobrun: unsupported: OCCURS count MAX-SUB is not an integer",
+      "kind": "feature",
+      "label": "cobrun: unsupported: OCCURS count MAX-SUB is not an integer"
+    },
+    {
+      "id": "feature::cobrun: unsupported: OCCURS max UNBOUNDED is not an integer",
+      "kind": "feature",
+      "label": "cobrun: unsupported: OCCURS max UNBOUNDED is not an integer"
+    },
+    {
+      "id": "feature::cobrun: unsupported: OPEN: `FILE-EXT` is not a declared file",
+      "kind": "feature",
+      "label": "cobrun: unsupported: OPEN: `FILE-EXT` is not a declared file"
+    },
+    {
+      "id": "feature::cobrun: unsupported: OPEN: `FILE-OPT` is not a declared file",
+      "kind": "feature",
+      "label": "cobrun: unsupported: OPEN: `FILE-OPT` is not a declared file"
+    },
+    {
+      "id": "feature::cobrun: unsupported: OPEN: `INFILE` is not a declared file",
+      "kind": "feature",
+      "label": "cobrun: unsupported: OPEN: `INFILE` is not a declared file"
+    },
+    {
+      "id": "feature::cobrun: unsupported: OPEN: `OUTPUT` is not a declared file",
+      "kind": "feature",
+      "label": "cobrun: unsupported: OPEN: `OUTPUT` is not a declared file"
+    },
+    {
+      "id": "feature::cobrun: unsupported: OPEN: `PAYROLL-REGISTER-DATA,` is not a declared file",
+      "kind": "feature",
+      "label": "cobrun: unsupported: OPEN: `PAYROLL-REGISTER-DATA,` is not a declared file"
+    },
+    {
+      "id": "feature::cobrun: unsupported: OPEN: `SALES-DATA,` is not a declared file",
+      "kind": "feature",
+      "label": "cobrun: unsupported: OPEN: `SALES-DATA,` is not a declared file"
+    },
+    {
+      "id": "feature::cobrun: unsupported: OPEN: `TEST-FILE` is not a declared file",
+      "kind": "feature",
+      "label": "cobrun: unsupported: OPEN: `TEST-FILE` is not a declared file"
+    },
+    {
+      "id": "feature::cobrun: unsupported: OPEN: `TRANSACTION-DATA,` is not a declared file",
+      "kind": "feature",
+      "label": "cobrun: unsupported: OPEN: `TRANSACTION-DATA,` is not a declared file"
+    },
+    {
+      "id": "feature::cobrun: unsupported: PIC $$$$,$$9V99-: UnsupportedSymbol('V')",
+      "kind": "feature",
+      "label": "cobrun: unsupported: PIC $$$$,$$9V99-: UnsupportedSymbol('V')"
+    },
+    {
+      "id": "feature::cobrun: unsupported: PIC 0XXXXXX: UnsupportedSymbol('X')",
+      "kind": "feature",
+      "label": "cobrun: unsupported: PIC 0XXXXXX: UnsupportedSymbol('X')"
+    },
+    {
+      "id": "feature::cobrun: unsupported: PIC 9.9999,99Y: UnsupportedSymbol('Y')",
+      "kind": "feature",
+      "label": "cobrun: unsupported: PIC 9.9999,99Y: UnsupportedSymbol('Y')"
+    },
+    {
+      "id": "feature::cobrun: unsupported: PIC 99X99: UnsupportedSymbol('X')",
+      "kind": "feature",
+      "label": "cobrun: unsupported: PIC 99X99: UnsupportedSymbol('X')"
+    },
+    {
+      "id": "feature::cobrun: unsupported: PIC : Empty",
+      "kind": "feature",
+      "label": "cobrun: unsupported: PIC : Empty"
+    },
+    {
+      "id": "feature::cobrun: unsupported: PIC LX(10): UnsupportedSymbol('L')",
+      "kind": "feature",
+      "label": "cobrun: unsupported: PIC LX(10): UnsupportedSymbol('L')"
+    },
+    {
+      "id": "feature::cobrun: unsupported: PIC LX(3): UnsupportedSymbol('L')",
+      "kind": "feature",
+      "label": "cobrun: unsupported: PIC LX(3): UnsupportedSymbol('L')"
+    },
+    {
+      "id": "feature::cobrun: unsupported: PIC LX(5): UnsupportedSymbol('L')",
+      "kind": "feature",
+      "label": "cobrun: unsupported: PIC LX(5): UnsupportedSymbol('L')"
+    },
+    {
+      "id": "feature::cobrun: unsupported: PIC LX(9): UnsupportedSymbol('L')",
+      "kind": "feature",
+      "label": "cobrun: unsupported: PIC LX(9): UnsupportedSymbol('L')"
+    },
+    {
+      "id": "feature::cobrun: unsupported: PIC N(9): UnsupportedSymbol('N')",
+      "kind": "feature",
+      "label": "cobrun: unsupported: PIC N(9): UnsupportedSymbol('N')"
+    },
+    {
+      "id": "feature::cobrun: unsupported: PIC VP9: ScalingPDeferred",
+      "kind": "feature",
+      "label": "cobrun: unsupported: PIC VP9: ScalingPDeferred"
+    },
+    {
+      "id": "feature::cobrun: unsupported: PIC VPP99: ScalingPDeferred",
+      "kind": "feature",
+      "label": "cobrun: unsupported: PIC VPP99: ScalingPDeferred"
+    },
+    {
+      "id": "feature::cobrun: unsupported: PIC VPPP999: ScalingPDeferred",
+      "kind": "feature",
+      "label": "cobrun: unsupported: PIC VPPP999: ScalingPDeferred"
+    },
+    {
+      "id": "feature::cobrun: unsupported: RELATIVE file `F` has no RELATIVE KEY",
+      "kind": "feature",
+      "label": "cobrun: unsupported: RELATIVE file `F` has no RELATIVE KEY"
+    },
+    {
+      "id": "feature::cobrun: unsupported: SET ADDRESS UP/DOWN BY: not a numeric index",
+      "kind": "feature",
+      "label": "cobrun: unsupported: SET ADDRESS UP/DOWN BY: not a numeric index"
+    },
+    {
+      "id": "feature::cobrun: unsupported: SET CB TO <value>: target is not a numeric/index item",
+      "kind": "feature",
+      "label": "cobrun: unsupported: SET CB TO <value>: target is not a numeric/index item"
+    },
+    {
+      "id": "feature::cobrun: unsupported: SET EOF TO FALSE: the 88 has no `WHEN SET TO FALSE` value",
+      "kind": "feature",
+      "label": "cobrun: unsupported: SET EOF TO FALSE: the 88 has no `WHEN SET TO FALSE` value"
+    },
+    {
+      "id": "feature::cobrun: unsupported: SET ERR-PROC-ADDRESS TO <value>: target is not a numeric/index item",
+      "kind": "feature",
+      "label": "cobrun: unsupported: SET ERR-PROC-ADDRESS TO <value>: target is not a numeric/index item"
+    },
+    {
+      "id": "feature::cobrun: unsupported: SET MYFLD88 TO FALSE: the 88 has no `WHEN SET TO FALSE` value",
+      "kind": "feature",
+      "label": "cobrun: unsupported: SET MYFLD88 TO FALSE: the 88 has no `WHEN SET TO FALSE` value"
+    },
+    {
+      "id": "feature::cobrun: unsupported: SET PROGRAM-LINK TO <value>: target is not a numeric/index item",
+      "kind": "feature",
+      "label": "cobrun: unsupported: SET PROGRAM-LINK TO <value>: target is not a numeric/index item"
+    },
+    {
+      "id": "feature::cobrun: unsupported: SET: expected `TO` or `UP|DOWN BY` (cobc rejects a SET with neither)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: SET: expected `TO` or `UP|DOWN BY` (cobc rejects a SET with neither)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: SORT: `ROW1` is not a declared file",
+      "kind": "feature",
+      "label": "cobrun: unsupported: SORT: `ROW1` is not a declared file"
+    },
+    {
+      "id": "feature::cobrun: unsupported: SORT: `TBL` is not a declared file",
+      "kind": "feature",
+      "label": "cobrun: unsupported: SORT: `TBL` is not a declared file"
+    },
+    {
+      "id": "feature::cobrun: unsupported: USAGE NATIONAL: cobc 3.2 leaves NATIONAL unfinished (-Wunfinished) -- a non-claim, not a buildable front-end gap",
+      "kind": "feature",
+      "label": "cobrun: unsupported: USAGE NATIONAL: cobc 3.2 leaves NATIONAL unfinished (-Wunfinished) -- a non-claim, not a buildable front-end gap"
+    },
+    {
+      "id": "feature::cobrun: unsupported: WRITE `TWO-RECORD`: not an FD record",
+      "kind": "feature",
+      "label": "cobrun: unsupported: WRITE `TWO-RECORD`: not an FD record"
+    },
+    {
+      "id": "feature::cobrun: unsupported: a group MOVE is distributed across its leaves by write_field",
+      "kind": "feature",
+      "label": "cobrun: unsupported: a group MOVE is distributed across its leaves by write_field"
+    },
+    {
+      "id": "feature::cobrun: unsupported: condition: missing left operand",
+      "kind": "feature",
+      "label": "cobrun: unsupported: condition: missing left operand"
+    },
+    {
+      "id": "feature::cobrun: unsupported: condition: unrecognized relational operator (expected = > < >= <= <> GREATER LESS EQUAL)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: condition: unrecognized relational operator (expected = > < >= <= <> GREATER LESS EQUAL)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: expected data name after a level number",
+      "kind": "feature",
+      "label": "cobrun: unsupported: expected data name after a level number"
+    },
+    {
+      "id": "feature::cobrun: unsupported: expected program name after PROGRAM-ID",
+      "kind": "feature",
+      "label": "cobrun: unsupported: expected program name after PROGRAM-ID"
+    },
+    {
+      "id": "feature::cobrun: unsupported: no PROCEDURE DIVISION",
+      "kind": "feature",
+      "label": "cobrun: unsupported: no PROCEDURE DIVISION"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: (2",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: (2"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: -",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: -"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: /",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: /"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: 1,1,1",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: 1,1,1"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: 1,23E0",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: 1,23E0"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: 17:5",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: 17:5"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: ALL",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: ALL"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: AT",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: AT"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: B",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: B"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: DOGGY",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: DOGGY"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: FAILED",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: FAILED"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: FENCE",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: FENCE"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: FOO,",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: FOO,"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: FUNCTION",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: FUNCTION"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: GLOB-PATH2",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: GLOB-PATH2"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: H",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: H"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: INVALID-LINE",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: INVALID-LINE"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: JSON-CODE",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: JSON-CODE"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: LENGTH",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: LENGTH"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: NULL",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: NULL"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: ORT",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: ORT"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: PARM-STR",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: PARM-STR"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: SIZE",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: SIZE"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: SPACE",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: SPACE"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: SYSTEM-OFFSET",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: SYSTEM-OFFSET"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: WHEN-COMPILED",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: WHEN-COMPILED"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: WITHPAR(1)",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: WITHPAR(1)"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: X",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: X"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: X-ALL",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: X-ALL"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: Z",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: Z"
+    },
+    {
+      "id": "feature::cobrun: unsupported: not a numeric literal: Z-ASC",
+      "kind": "feature",
+      "label": "cobrun: unsupported: not a numeric literal: Z-ASC"
+    },
+    {
+      "id": "feature::cobrun: unsupported: reference-modification length 'REC-SIZE - 2' is not an integer",
+      "kind": "feature",
+      "label": "cobrun: unsupported: reference-modification length 'REC-SIZE - 2' is not an integer"
+    },
+    {
+      "id": "feature::cobrun: unsupported: subscript '(3 + 1) / 2' is not an integer",
+      "kind": "feature",
+      "label": "cobrun: unsupported: subscript '(3 + 1) / 2' is not an integer"
+    },
+    {
+      "id": "feature::cobrun: unsupported: trailing tokens in condition at )",
+      "kind": "feature",
+      "label": "cobrun: unsupported: trailing tokens in condition at )"
+    },
+    {
+      "id": "feature::cobrun: unsupported: trailing tokens in condition at +",
+      "kind": "feature",
+      "label": "cobrun: unsupported: trailing tokens in condition at +"
+    },
+    {
+      "id": "feature::cobrun: unsupported: unrecognized USAGE BINARY-C-LONG",
+      "kind": "feature",
+      "label": "cobrun: unsupported: unrecognized USAGE BINARY-C-LONG"
+    },
+    {
+      "id": "feature::cobrun: unsupported: unrecognized USAGE COMPUTATIONAL-9",
+      "kind": "feature",
+      "label": "cobrun: unsupported: unrecognized USAGE COMPUTATIONAL-9"
+    },
+    {
+      "id": "feature::cobrun: unsupported: unrecognized USAGE FLOAT-DECIMAL-16",
+      "kind": "feature",
+      "label": "cobrun: unsupported: unrecognized USAGE FLOAT-DECIMAL-16"
+    },
+    {
+      "id": "feature::cobrun: unsupported: unrecognized USAGE INT",
+      "kind": "feature",
+      "label": "cobrun: unsupported: unrecognized USAGE INT"
+    },
+    {
+      "id": "feature::cobrun: unsupported: unrecognized USAGE PROCEDURE-POINTER",
+      "kind": "feature",
+      "label": "cobrun: unsupported: unrecognized USAGE PROCEDURE-POINTER"
+    },
+    {
+      "id": "feature::cobrun: unsupported: unrecognized USAGE SIGNED-INT",
+      "kind": "feature",
+      "label": "cobrun: unsupported: unrecognized USAGE SIGNED-INT"
+    },
+    {
+      "id": "feature::cobrun: unsupported: unsupported level number $SET",
+      "kind": "feature",
+      "label": "cobrun: unsupported: unsupported level number $SET"
+    },
+    {
+      "id": "feature::cobrun: unsupported: unsupported level number --",
+      "kind": "feature",
+      "label": "cobrun: unsupported: unsupported level number --"
+    },
+    {
+      "id": "feature::cobrun: unsupported: unsupported level number LOCAL-STORAGE",
+      "kind": "feature",
+      "label": "cobrun: unsupported: unsupported level number LOCAL-STORAGE"
+    },
+    {
+      "id": "feature::cobrun: unsupported: unsupported level number REPLACE",
+      "kind": "feature",
+      "label": "cobrun: unsupported: unsupported level number REPLACE"
+    },
+    {
+      "id": "feature::cobrun: unsupported: unsupported level number TAT-FILE1",
+      "kind": "feature",
+      "label": "cobrun: unsupported: unsupported level number TAT-FILE1"
+    },
+    {
+      "id": "feature::cobrun: unsupported: verb CHAINING",
+      "kind": "feature",
+      "label": "cobrun: unsupported: verb CHAINING"
+    },
+    {
+      "id": "feature::cobrun: unsupported: verb END",
+      "kind": "feature",
+      "label": "cobrun: unsupported: verb END"
+    },
+    {
+      "id": "feature::cobrun: unsupported: verb IDENTIFICATION",
+      "kind": "feature",
+      "label": "cobrun: unsupported: verb IDENTIFICATION"
+    },
+    {
+      "id": "feature::cobrun: unsupported: verb RETURNING",
+      "kind": "feature",
+      "label": "cobrun: unsupported: verb RETURNING"
+    },
+    {
+      "id": "feature::cobrun: unsupported: verb T",
+      "kind": "feature",
+      "label": "cobrun: unsupported: verb T"
+    },
+    {
+      "id": "grammar",
+      "kind": "phase"
+    },
+    {
+      "id": "name-resolution",
+      "kind": "phase"
+    },
+    {
+      "id": "semantic-check",
+      "kind": "phase"
+    }
+  ],
+  "schema": "gnurust-gnucobol-testsuite-parser-feature-dependency-graph-v2"
 }

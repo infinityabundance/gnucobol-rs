@@ -6,15 +6,15 @@
   },
   "conformance_claim": "NONE — differential observation over the admitted GnuCOBOL 3.2 native Autotest suite in this environment; no GnuCOBOL test-suite parity claim, no COBOL conformance certification, no compiler-replacement claim.",
   "court": "GnuCOBOL 3.2 native Autotest suite custody + real-compiler baseline + invocation census",
-  "crate_version": "0.8.54",
+  "crate_version": "0.8.55",
   "current_authority": "STATUS.md",
   "docker": {
     "base_image": "gnucobol-rs-gnucobol-testsuite/ubuntu-base:18a42173dc0c9a02c8230212c978b14cc3bbcff173f95dfa954cdaaa04f4a172",
     "containers": {
-      "pass_a": "gnucobol-testsuite-20260804T150501Z-d95e3235-a",
-      "pass_b": "gnucobol-testsuite-20260804T150501Z-d95e3235-b"
+      "pass_a": "gnucobol-testsuite-20260805T215552Z-c35d6c2b-a",
+      "pass_b": "gnucobol-testsuite-20260805T215552Z-c35d6c2b-b"
     },
-    "court_image": "gnucobol-rs-gnucobol-testsuite/court:d95e32354538de5feef0e5f93b1a488fec145516",
+    "court_image": "gnucobol-rs-gnucobol-testsuite/court:c35d6c2b93577013e5257c4bf60e23975d34640e",
     "daemon_root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/daemon-data",
     "docker_storage": {
       "configured_root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT",
@@ -27,11 +27,11 @@
     "host_storage_root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT",
     "isolated_daemon": true,
     "production_daemon_untouched": true,
-    "run_id": "20260804T150501Z-d95e3235",
+    "run_id": "20260805T215552Z-c35d6c2b",
     "socket": "unix://$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/run/docker.sock",
     "storage_driver": "overlay2",
     "storage_filesystem": {
-      "available_bytes_at_start": 477470347264,
+      "available_bytes_at_start": 427277844480,
       "device_identity_sha256": "e42aacca4fb09e08e32a44a0b0ccc9d4867b5015261f4c25c4c8bd7ac12082f7",
       "different_from_root": true,
       "filesystem_type": "ext4"
@@ -52,8 +52,8 @@
     "os": "?",
     "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)"
   },
-  "generated_at": "2026-08-04T15:07:09Z",
-  "git_commit": "d95e32354538de5feef0e5f93b1a488fec145516",
+  "generated_at": "2026-08-05T21:58:29Z",
+  "git_commit": "c35d6c2b93577013e5257c4bf60e23975d34640e",
   "non_claims": [
     "no claim about gnucobol-rs is made by this gate",
     "oracle results are specific to this admitted build + environment (stock configuration, no -fpermissive)",
@@ -85,7 +85,7 @@
       "2_images_dir_readonly_source": true,
       "3_base_artifact_verified": true,
       "4_project_layout_present": true,
-      "5_free_space_ok_gb": 444,
+      "5_free_space_ok_gb": 398,
       "6_isolated_socket_used": true,
       "7_docker_root_beneath_project": true,
       "8_no_primary_drive_state": true,
@@ -106,11 +106,11 @@
     },
     "schema": "gnurust-gnucobol-testsuite-preflight-v1",
     "storage": {
-      "free_gb": 444,
+      "free_gb": 398,
       "root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT"
     },
     "storage_filesystem": {
-      "available_bytes_at_start": 477470347264,
+      "available_bytes_at_start": 427277844480,
       "device_identity_sha256": "e42aacca4fb09e08e32a44a0b0ccc9d4867b5015261f4c25c4c8bd7ac12082f7",
       "different_from_root": true,
       "filesystem_type": "ext4"
@@ -118,7 +118,7 @@
   },
   "receipt_status": "current",
   "results": {
-    "invocation_census_sha256": "7d7f6fd48a98f8cc702fe6a44e5a4b144a99f06d451c678a1b7d3bdedd99a629",
+    "invocation_census_sha256": "7ec5afabb36ff2cb18f50f6d9ff1be6040ace3cdaa9b7c7ff1abb70cafb15bd2",
     "invocation_census_total": 2111,
     "oracle_fail": 0,
     "oracle_not_reached": 0,

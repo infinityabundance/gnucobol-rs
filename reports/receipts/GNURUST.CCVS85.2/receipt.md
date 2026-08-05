@@ -11,8 +11,8 @@
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | CCVS85 corpus units materialized to stable files (hashes recorded) + per-unit cobc compile/run outcomes (real GnuCOBOL 3.2, pinned source) |
 | replay command | `bash lab/ccvs85/run-docker.sh` |
-| generated_at | 2026-08-04T16:44:33Z |
-| git_commit | `6c961627d8bfff765172661f8d232a56f36305a8` |
+| generated_at | 2026-08-05T22:11:34Z |
+| git_commit | `c35d6c2b93577013e5257c4bf60e23975d34640e` |
 | receipt_status | current |
 
 **Conformance claim:** NONE — differential observation over the admitted NIST CCVS85 corpus; no NIST certification, no full COBOL-85 conformance, no compiler-replacement claim.
@@ -28,7 +28,7 @@
   "oracle_compile_error": 3,
   "oracle_compile_pass": 370,
   "oracle_compile_reject": 18,
-  "oracle_results_sha256": "b09bf7c05f5a548e336611bf31e53e7dd95ff0dedce744a8e98eb8d772809e16",
+  "oracle_results_sha256": "120fbd91476ec0ea2e698716de7bd1008c9a34cf56dbe945a173d401c8f07008",
   "oracle_run_fail": 64,
   "oracle_run_pass": 304,
   "oracle_timeout": 1,

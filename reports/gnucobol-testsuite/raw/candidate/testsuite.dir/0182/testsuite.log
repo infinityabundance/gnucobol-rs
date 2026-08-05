@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 182. syn_value.at:352: testing National item ...
 ./syn_value.at:369: $COMPILE_ONLY -Wno-unfinished prog.cob
---- -	2026-08-04 15:05:43.445360198 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/182/stderr	2026-08-04 15:05:43.444814151 +0000
+--- -	2026-08-05 21:57:01.472203857 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/182/stderr	2026-08-05 21:57:01.470864425 +0000
 @@ -1,6 +1,2 @@
 -prog.cob:7: warning: value size exceeds data size
 -prog.cob:7: note: value size is 4

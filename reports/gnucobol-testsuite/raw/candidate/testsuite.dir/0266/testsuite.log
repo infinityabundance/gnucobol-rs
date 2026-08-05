@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 266. syn_misc.at:1068: testing EXAMINE invalid literals ...
 ./syn_misc.at:1091: $COMPILE_ONLY -freserved=EXAMINE prog.cob
---- -	2026-08-04 15:05:43.490920862 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/266/stderr	2026-08-04 15:05:43.490272916 +0000
+--- -	2026-08-05 21:57:01.550347954 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/266/stderr	2026-08-05 21:57:01.549775054 +0000
 @@ -1,9 +1,2 @@
 -prog.cob:12: error: single-character literal or data item expected
 -prog.cob:12: error: single-character literal or data item expected

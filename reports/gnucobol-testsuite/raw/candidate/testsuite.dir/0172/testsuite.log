@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 172. syn_redefines.at:500: testing REDEFINES: non-referenced ambiguous item ...
 ./syn_redefines.at:519: $COMPILE_ONLY prog.cob
---- -	2026-08-04 15:05:43.439949712 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/172/stderr	2026-08-04 15:05:43.439508480 +0000
+--- -	2026-08-05 21:57:01.461312297 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/172/stderr	2026-08-05 21:57:01.460533231 +0000
 @@ -1,3 +1 @@
 -prog.cob:7: warning: redefinition of 'X'
 -prog.cob:6: note: 'X' previously defined here

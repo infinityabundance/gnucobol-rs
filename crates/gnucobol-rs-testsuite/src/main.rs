@@ -17,7 +17,8 @@
 #![forbid(unsafe_code)]
 
 use gnucobol_rs_testsuite::{
-    autotest, census, classify, compat, determinism, gate, math, model, receipts,
+    autotest, census, classify, compat, determinism, gate, math, model, option_census, receipts,
+    reject_census,
 };
 
 use std::path::{Path, PathBuf};
@@ -34,6 +35,106 @@ fn main() {
     let cmd = args.get(1).map(String::as_str).unwrap_or("");
     let code = match cmd {
         "census" => cmd_census(&args),
+        "reject-census" => {
+            let sub = args.get(2).map(String::as_str).unwrap_or("check");
+            let root = arg_val(&args, "--root").unwrap_or_else(|| ".".to_string());
+            match sub {
+                "generate" => {
+                    let out = arg_val(&args, "--out")
+                        .unwrap_or_else(|| "reports/gnucobol-testsuite".into());
+                    let v1 = Path::new(&root)
+                        .join("reports/gnucobol-testsuite/parser-reject-census.v1.json");
+                    match reject_census::generate(
+                        &Path::new(&root).join("reports/gnucobol-testsuite/test-inventory.json"),
+                        &Path::new(&root).join("reports/gnucobol-testsuite/raw/candidate"),
+                        Some(&Path::new(&root).join("reports/gnucobol-testsuite/summary.json")),
+                        v1.exists().then_some(v1.as_path()),
+                        Path::new(&out),
+                    ) {
+                        Ok(_) => {
+                            println!("reject-census: parser census family regenerated in {out}");
+                            0
+                        }
+                        Err(e) => {
+                            eprintln!("reject-census: {e}");
+                            1
+                        }
+                    }
+                }
+                "check" => {
+                    match reject_census::check(Path::new(&root)) {
+                        Ok(notes) => {
+                            let mut bad = 0;
+                            for n in &notes {
+                                eprintln!("REJECT-CENSUS.STALE: {n}");
+                                bad += 1;
+                            }
+                            if bad == 0 {
+                                println!("reject-census: committed census family is fresh and reconciled");
+                                0
+                            } else {
+                                eprintln!("reject-census: {bad} staleness finding(s); run `reject-census generate`");
+                                1
+                            }
+                        }
+                        Err(e) => {
+                            eprintln!("reject-census: {e}");
+                            1
+                        }
+                    }
+                }
+                _ => {
+                    eprintln!("reject-census: use `reject-census generate|check [--root <repo>]`");
+                    2
+                }
+            }
+        }
+        "option-census" => {
+            let sub = args.get(2).map(String::as_str).unwrap_or("check");
+            let root = arg_val(&args, "--root").unwrap_or_else(|| ".".to_string());
+            match sub {
+                "generate" => match option_census::generate(Path::new(&root)) {
+                    Ok(()) => {
+                        println!("option-census: unsupported-option-census.md regenerated");
+                        0
+                    }
+                    Err(e) => {
+                        eprintln!("option-census: {e}");
+                        1
+                    }
+                },
+                "check" => {
+                    match option_census::verify_committed(Path::new(&root)) {
+                        Ok((notes, problems)) => {
+                            for n in &notes {
+                                eprintln!("OPTION-CENSUS.STALE: {n}");
+                            }
+                            for p in &problems {
+                                eprintln!("OPTION-CENSUS.FAIL: {p}");
+                            }
+                            if problems.is_empty() && notes.is_empty() {
+                                println!("option-census: committed option census reconciles and is fresh");
+                                0
+                            } else if problems.is_empty() {
+                                eprintln!("option-census: reconcile OK, but the Markdown is stale; run `option-census generate`");
+                                1
+                            } else {
+                                eprintln!("option-census: reconciliation failed");
+                                1
+                            }
+                        }
+                        Err(e) => {
+                            eprintln!("option-census: {e}");
+                            1
+                        }
+                    }
+                }
+                _ => {
+                    eprintln!("option-census: use `option-census generate|check [--root <repo>]`");
+                    2
+                }
+            }
+        }
         "classify" => cmd_classify(&args),
         "determinism" => cmd_determinism(&args),
         "receipts-finalize" => cmd_receipts_finalize(&args),

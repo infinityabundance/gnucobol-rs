@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 272. syn_misc.at:1457: testing SWITCHES ...
 ./syn_misc.at:1541: $COMPILE_ONLY prog.cob
---- -	2026-08-04 15:05:43.496669538 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/272/stderr	2026-08-04 15:05:43.496045997 +0000
+--- -	2026-08-05 21:57:01.551729145 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/272/stderr	2026-08-05 21:57:01.551027975 +0000
 @@ -1,22 +1 @@
 -prog.cob:7: error: invalid system-name 'SW1'
 -prog.cob:8: error: ON/OFF usage requires a SWITCH name

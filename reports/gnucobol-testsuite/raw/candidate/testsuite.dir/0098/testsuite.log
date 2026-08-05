@@ -2,7 +2,7 @@
 98. syn_definition.at:825: testing Data item with same name as program-name ...
 ./syn_definition.at:847: $COMPILE_ONLY prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/98/stderr	2026-08-04 15:05:43.401574017 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/98/stderr	2026-08-05 21:57:01.418300502 +0000
 @@ -0,0 +1 @@
 +cobc-rs: unsupported: PROG: no PROCEDURE DIVISION
 ./syn_definition.at:847: exit code was 1, expected 0

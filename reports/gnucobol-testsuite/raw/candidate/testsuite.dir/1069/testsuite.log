@@ -3,7 +3,7 @@
 ./run_functions.at:2948: $COMPILE prog.cob
 ./run_functions.at:2949: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1069/stdout	2026-08-04 15:05:44.180358852 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1069/stdout	2026-08-05 21:57:02.743303087 +0000
 @@ -0,0 +1 @@
 +-0000000001
 1069. run_functions.at:2932: 1069. FUNCTION REM (valid) (run_functions.at:2932): FAILED (run_functions.at:2949)

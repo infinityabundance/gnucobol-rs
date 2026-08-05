@@ -3,11 +3,11 @@
 ./data_display.at:205: $COMPILE prog.cob
 ./data_display.at:206: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1253/stderr	2026-08-04 15:05:44.389767291 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1253/stderr	2026-08-05 21:57:02.956747278 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: a group MOVE is distributed across its leaves by write_field
---- -	2026-08-04 15:05:44.391325903 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1253/stdout	2026-08-04 15:05:44.390827505 +0000
+--- -	2026-08-05 21:57:02.957853786 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1253/stdout	2026-08-05 21:57:02.957101270 +0000
 @@ -1,15 +1 @@
 -127
 -128

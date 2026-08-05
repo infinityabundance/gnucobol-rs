@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 327. syn_misc.at:4261: testing conflicting call conventions ...
 ./syn_misc.at:4277: $COMPILE_ONLY prog.cob
---- -	2026-08-04 15:05:43.528618344 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/327/stderr	2026-08-04 15:05:43.527730110 +0000
+--- -	2026-08-05 21:57:01.614512782 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/327/stderr	2026-08-05 21:57:01.613573386 +0000
 @@ -1,2 +1 @@
 -prog.cob:10: error: CALL-CONVENTION and WITH LINKAGE are mutually exclusive
  

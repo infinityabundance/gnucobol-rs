@@ -3,11 +3,11 @@
 ./run_extensions.at:4247: $COMPILE prog.cob
 ./run_extensions.at:4249: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1182/stderr	2026-08-04 15:05:44.322750740 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1182/stderr	2026-08-05 21:57:02.876867529 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: CALL "CBL_GC_FORK": not a contained program (external CALL is a boundary)
---- -	2026-08-04 15:05:44.324182095 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1182/stdout	2026-08-04 15:05:44.323437589 +0000
+--- -	2026-08-05 21:57:02.878073132 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1182/stdout	2026-08-05 21:57:02.877463873 +0000
 @@ -1,4 +1 @@
 -Hello, I am the parent
 -Hello, I am the child

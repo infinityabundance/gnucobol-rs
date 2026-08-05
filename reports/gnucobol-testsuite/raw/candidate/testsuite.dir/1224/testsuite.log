@@ -2,7 +2,7 @@
 1224. run_ml.at:488: testing XML dpc-in-data config option ...
 ./run_ml.at:513: $COMPILE -fdpc-in-data=none prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1224/stderr	2026-08-04 15:05:44.361320005 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1224/stderr	2026-08-05 21:57:02.921107809 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fdpc-in-data=none: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): none
 ./run_ml.at:513: exit code was 1, expected 0

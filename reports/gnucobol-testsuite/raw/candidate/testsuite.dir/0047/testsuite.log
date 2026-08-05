@@ -1,16 +1,16 @@
 #                             -*- compilation -*-
 47. configuration.at:787: testing validation of COB_CONFIG_DIR ...
 ./configuration.at:797: echo "$PATHSEP"
---- -	2026-08-04 15:05:43.373836122 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/47/stdout	2026-08-04 15:05:43.373344858 +0000
+--- -	2026-08-05 21:57:01.384488417 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/47/stdout	2026-08-05 21:57:01.383477418 +0000
 @@ -1,2 +1,2 @@
 -;
 +:
  
 ./configuration.at:802: COB_CONFIG_DIR=".:/temp:/tmp" \
 $COMPILE prog.cob
---- -	2026-08-04 15:05:43.375123911 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/47/stderr	2026-08-04 15:05:43.374646712 +0000
+--- -	2026-08-05 21:57:01.386012835 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/47/stderr	2026-08-05 21:57:01.384917859 +0000
 @@ -1,5 +1 @@
 -cobc: environment variable 'COB_CONFIG_DIR' is '.:/temp:/tmp'; should not contain ':'
 -configuration error:

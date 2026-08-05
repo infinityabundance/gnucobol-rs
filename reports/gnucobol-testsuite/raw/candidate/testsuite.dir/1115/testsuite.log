@@ -3,11 +3,11 @@
 ./run_extensions.at:206: $COMPILE prog.cob
 ./run_extensions.at:207: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1115/stderr	2026-08-04 15:05:44.247467715 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1115/stderr	2026-08-05 21:57:02.805575716 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: H
---- -	2026-08-04 15:05:44.250044744 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1115/stdout	2026-08-04 15:05:44.248375615 +0000
+--- -	2026-08-05 21:57:02.807490714 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1115/stdout	2026-08-05 21:57:02.806484864 +0000
 @@ -1,3 +1 @@
 -00074565
 -16777215

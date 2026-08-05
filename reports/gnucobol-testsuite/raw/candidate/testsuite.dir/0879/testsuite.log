@@ -3,7 +3,7 @@
 ./run_file.at:3305: $COMPILE prog.cob
 ./run_file.at:3306: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/879/stderr	2026-08-04 15:05:43.952838975 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/879/stderr	2026-08-05 21:57:02.432563440 +0000
 @@ -0,0 +1 @@
 +cobrun: runtime error: RELATIVE KEY `FILE1-KEY` = 0 (< 1)
 ./run_file.at:3306: exit code was 2, expected 0

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 326. syn_misc.at:4192: testing conflicting entry conventions ...
 ./syn_misc.at:4209: $COMPILE_ONLY prog.cob
---- -	2026-08-04 15:05:43.528877176 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/326/stderr	2026-08-04 15:05:43.528415005 +0000
+--- -	2026-08-05 21:57:01.614694221 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/326/stderr	2026-08-05 21:57:01.614105951 +0000
 @@ -1,2 +1 @@
 -prog.cob:11: warning: overriding convention specified in ENTRY-CONVENTION
  

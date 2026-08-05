@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 833. run_misc.at:13146: testing DISPLAY UPON ...
 ./run_misc.at:13174: $COMPILE -std=ibm prog.cob
---- -	2026-08-04 15:05:43.913527998 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/833/stderr	2026-08-04 15:05:43.912256210 +0000
+--- -	2026-08-05 21:57:02.308907027 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/833/stderr	2026-08-05 21:57:02.307942535 +0000
 @@ -1,10 +1 @@
 -prog.cob:12: warning: start of statement in Area A
 -prog.cob:13: warning: start of statement in Area A

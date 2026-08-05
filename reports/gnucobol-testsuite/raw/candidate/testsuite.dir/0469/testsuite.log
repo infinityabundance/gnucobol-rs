@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 469. syn_literals.at:1317: testing ACUCOBOL literals ...
 ./syn_literals.at:1338: $COMPILE_ONLY -std=acu prog.cob
---- -	2026-08-04 15:05:43.615911285 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/469/stderr	2026-08-04 15:05:43.614689219 +0000
+--- -	2026-08-05 21:57:01.761458329 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/469/stderr	2026-08-05 21:57:01.760620494 +0000
 @@ -1,21 +1 @@
 -prog.cob:11: error: invalid B# literal: '1111111111111111111111111111111111 ...'
 -prog.cob:11: note: literal length 65 exceeds 64 characters

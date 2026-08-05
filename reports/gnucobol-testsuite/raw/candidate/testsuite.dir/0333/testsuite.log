@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 333. syn_misc.at:4481: testing USE FOR DEBUGGING duplicate targets ...
 ./syn_misc.at:4522: $COMPILE_ONLY prog.cob
---- -	2026-08-04 15:05:43.533811996 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/333/stderr	2026-08-04 15:05:43.533044877 +0000
+--- -	2026-08-05 21:57:01.616531343 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/333/stderr	2026-08-05 21:57:01.615481872 +0000
 @@ -1,8 +1,2 @@
 -prog.cob: in section 'test-DEBUG3':
 -prog.cob:26: error: duplicate USE DEBUGGING ON ALL PROCEDURES

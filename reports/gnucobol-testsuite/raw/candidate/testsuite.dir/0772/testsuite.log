@@ -3,11 +3,11 @@
 ./run_misc.at:4694: $COMPILE -o caller caller.c callee.cob
 ./run_misc.at:4695: $COBCRUN_DIRECT ./caller
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/772/stderr	2026-08-04 15:05:43.858680379 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/772/stderr	2026-08-05 21:57:02.184490835 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: no PROCEDURE DIVISION
---- -	2026-08-04 15:05:43.860640018 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/772/stdout	2026-08-04 15:05:43.859866698 +0000
+--- -	2026-08-05 21:57:02.186005355 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/772/stdout	2026-08-05 21:57:02.184490835 +0000
 @@ -1 +1 @@
 -P1: A
 +

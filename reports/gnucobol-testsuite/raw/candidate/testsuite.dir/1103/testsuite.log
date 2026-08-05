@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 1103. run_functions.at:4294: testing Formatted funcs w/ invalid variable format ...
 ./run_functions.at:4358: $COMPILE prog.cob
---- -	2026-08-04 15:05:44.236274430 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1103/stderr	2026-08-04 15:05:44.235165004 +0000
+--- -	2026-08-05 21:57:02.795981660 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1103/stderr	2026-08-05 21:57:02.795372261 +0000
 @@ -1,8 +1 @@
 -prog.cob:11: warning: FUNCTION 'FORMATTED-CURRENT-DATE' has format in variable
 -prog.cob:18: warning: FUNCTION 'FORMATTED-DATE' has format in variable

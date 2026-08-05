@@ -2,7 +2,7 @@
 58. syn_copy.at:438: testing COPY: partial replacement ...
 ./syn_copy.at:462: $COMPILE prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/58/stderr	2026-08-04 15:05:43.379649058 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/58/stderr	2026-08-05 21:57:01.393902997 +0000
 @@ -0,0 +1 @@
 +cobc-rs: COPY expansion failed (fail closed): malformed COPY statement
 ./syn_copy.at:462: exit code was 1, expected 0

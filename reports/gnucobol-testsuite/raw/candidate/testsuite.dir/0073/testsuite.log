@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 73. syn_definition.at:25: testing Invalid source name ...
 ./syn_definition.at:30: $COMPILE_ONLY short.cob
---- -	2026-08-04 15:05:43.388456930 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/73/stderr	2026-08-04 15:05:43.387962589 +0000
+--- -	2026-08-05 21:57:01.403560051 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/73/stderr	2026-08-05 21:57:01.402409291 +0000
 @@ -1,2 +1,2 @@
 -short.cob: error: invalid file base name 'short' - name duplicates a 'C' keyword
 +cobc-rs: unsupported: no PROCEDURE DIVISION

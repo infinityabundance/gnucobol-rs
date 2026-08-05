@@ -3,7 +3,7 @@
 ./run_initialize.at:647: $COMPILE prog.cob
 ./run_initialize.at:648: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/667/stderr	2026-08-04 15:05:43.769379529 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/667/stderr	2026-08-05 21:57:01.994339792 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: ALL
 ./run_initialize.at:648: exit code was 2, expected 0

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 104. syn_definition.at:998: testing Undefined procedure name ...
 ./syn_definition.at:1009: $COMPILE_ONLY prog.cob
---- -	2026-08-04 15:05:43.403872437 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/104/stderr	2026-08-04 15:05:43.403382104 +0000
+--- -	2026-08-05 21:57:01.419880745 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/104/stderr	2026-08-05 21:57:01.418555990 +0000
 @@ -1,2 +1 @@
 -prog.cob:5: error: 'END-OF-PROGRAM' is not defined
  

@@ -3,7 +3,7 @@
 ./run_functions.at:904: $COMPILE prog.cob
 ./run_functions.at:905: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1006/stderr	2026-08-04 15:05:44.079118347 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1006/stderr	2026-08-05 21:57:02.617303985 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: FUNCTION DAY-TO-YYYYDDD requires a pinned COB_CURRENT_DATE
 ./run_functions.at:905: exit code was 2, expected 0
