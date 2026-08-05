@@ -1237,10 +1237,10 @@
    "status": "RUNTIME_PORTED",
    "action": "Fix CLOSE LOCK abend on OPEN (file state handling)",
    "behavior": "Fixing bugs:#914 CLOSE LOCK abends program on OPEN",
-   "residual": "",
+   "residual": "LOCKED state + 38/41/42/30 guards ported; indexed_close safeguards are an indexed-backend boundary",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "superseded_by": null,
-   "evidence": null,
+   "evidence": "ad8e5fbdef8de38da9e0f390271a7e61008ec194",
    "lane_adoption": false
   },
   "04614ac7afd2b26cdd4431987996726ffaa8004b": {

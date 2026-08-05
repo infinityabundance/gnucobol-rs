@@ -582,7 +582,9 @@ E("0b22d441757efc5fa1d18e0767bb54fb31203eb1", "RUNTIME_PORTED",
 
 E("62b39805ca22be04c822267d2c90aaa6ef1e1610", "RUNTIME_PORTED",
   "Fix CLOSE LOCK abend on OPEN (file state handling)",
-  "Fixing bugs:#914 CLOSE LOCK abends program on OPEN", "")
+  "Fixing bugs:#914 CLOSE LOCK abends program on OPEN",
+  "LOCKED state + 38/41/42/30 guards ported; indexed_close safeguards are an indexed-backend boundary",
+  evidence="ad8e5fbdef8de38da9e0f390271a7e61008ec194")
 
 E("04614ac7afd2b26cdd4431987996726ffaa8004b", "RUNTIME_PORTED",
   "INSPECT optimizations and syntax checks: frontend syntax validation + runtime INSPECT behavior alignment",

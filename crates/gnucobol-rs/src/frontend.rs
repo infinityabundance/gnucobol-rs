@@ -10164,14 +10164,20 @@ fn exec_unlock(
         let def = ctx.file_defs.get(&name).ok_or_else(|| {
             RunError::Unsupported(format!("UNLOCK: `{name}` is not a declared file"))
         })?;
-        // Upstream 62b39805c (cob_unlock): UNLOCK on a CLOSED or LOCKED file reports 42.
-        let is_not_open = ctx
+        // Upstream cob_unlock (current head): a CLOSED file reports 42; a LOCKED file falls through
+        // to cob_file_unlock (which skips the work on LOCKED) and reports 00.
+        let mode = ctx
             .files
             .borrow()
             .get(&fkey(ctx, &name))
-            .map(|st| st.mode == 0 || st.mode == 5)
-            .unwrap_or(true);
-        set_file_status(fields, def, if is_not_open { "42" } else { "00" });
+            .map(|st| st.mode)
+            .unwrap_or(0);
+        let status = match mode {
+            1 | 2 | 3 | 4 => "00",
+            5 => "00", // locked: unlock is accepted (work skipped), status 00
+            _ => "42",
+        };
+        set_file_status(fields, def, status);
     }
     Ok(())
 }
@@ -11810,11 +11816,12 @@ fn exec_read(
         .get(&file)
         .ok_or_else(|| RunError::Unsupported(format!("READ: `{file}` is not a declared file")))?
         .clone();
-    // Upstream 62b39805c: READ on a CLOSED or LOCKED file reports status 30 (permanent error) and
-    // never touches the backend; no AT END handler runs (30 is not an end-of-file condition).
+    // Upstream cob_read_next (current head): a READ requires the file open INPUT or I-O; any other
+    // state (closed, locked, output) reports status 47 (INPUT DENIED) and runs no AT END handler.
+    // (62b39805c's 30-status guards are indexed_close-internal; the sequential READ path is 47.)
     if let Some(st) = ctx.files.borrow().get(&fkey(ctx, &file)) {
-        if st.mode == 0 || st.mode == 5 {
-            set_file_status(fields, &def, "30");
+        if st.mode != 1 && st.mode != 4 {
+            set_file_status(fields, &def, "47");
             return Ok(false);
         }
     }
@@ -14657,11 +14664,12 @@ mod tests {
 
     #[test]
     fn close_with_lock_state_machine_matches_current_upstream() {
-        // Upstream 62b39805c (bugs:#914): CLOSE WITH LOCK puts the file in the LOCKED state;
-        // re-OPEN reports 38 (CLOSED WITH LOCK), READ reports 30 (permanent error), a second CLOSE
-        // reports 42 (NOT OPEN). Differential evidence: the STABLE 3.2 oracle reports 00/38/47/00
-        // (pre-fix: the backend close on a locked file ran, the READ slipped through as 47); the
-        // candidate follows current-upstream semantics 00/38/30/42.
+        // Upstream 62b39805c (bugs:#914) + 0b22d4417: CLOSE WITH LOCK puts the file in the LOCKED
+        // state; re-OPEN reports 38 (CLOSED WITH LOCK); READ on a non-INPUT/I-O file reports 47
+        // (INPUT DENIED, cob_read_next); a second CLOSE of a locked file reports 42 (NOT OPEN).
+        // Differential evidence: the STABLE 3.2 oracle reports 00/38/47/00 (pre-fix: the backend
+        // close on a locked file ran, reporting 00); the candidate follows current-upstream
+        // semantics 00/38/47/42.
         let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     ENVIRONMENT DIVISION.\n\
@@ -14687,7 +14695,7 @@ mod tests {
                         CLOSE F.\n\
                         DISPLAY 'S4=' WS.\n\
                         STOP RUN.\n");
-        assert_eq!(out, b"S1=00\nS2=38\nS3=30\nS4=42\n");
+        assert_eq!(out, b"S1=00\nS2=38\nS3=47\nS4=42\n");
     }
 
     #[test]

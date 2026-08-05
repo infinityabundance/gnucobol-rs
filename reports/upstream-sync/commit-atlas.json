@@ -21204,10 +21204,10 @@
    "action": "Fix CLOSE LOCK abend on OPEN (file state handling)",
    "behavior": "Fixing bugs:#914 CLOSE LOCK abends program on OPEN",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
-   "residual": "",
+   "residual": "LOCKED state + 38/41/42/30 guards ported; indexed_close safeguards are an indexed-backend boundary",
    "superseded_by": null,
-   "evidence": null,
-   "integrated": false,
+   "evidence": "ad8e5fbdef8de38da9e0f390271a7e61008ec194",
+   "integrated": true,
    "lane_adoption": false
   },
   {
