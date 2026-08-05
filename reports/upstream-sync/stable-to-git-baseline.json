@@ -1,0 +1,44 @@
+{
+ "schema": "gnurust-stable-to-git-baseline-v1",
+ "stable_source": {
+  "artifact": "research/gnucobol-3.2.tar.lz",
+  "sha256": "8ecc77d0a4c9401618b8b99adf2050adef14767916767c54bb42341f0ab504fb"
+ },
+ "attempts": [
+  {
+   "step": 1,
+   "method": "match an official release tag",
+   "result": "no annotated tags in the OCamlPro repo; the branch commit 645b417 'GnuCOBOL 3.2 - 20230728' is the 3.2 GA release point"
+  },
+  {
+   "step": 2,
+   "method": "match a git tree after excluding release-generated files",
+   "result": "273/274 common files byte-identical to 645b417; only configure.ac differs (CVS $Revision$ keyword)"
+  },
+  {
+   "step": 3,
+   "method": "match file-by-file content hashes",
+   "result": "identical for all source files (cobc/, libcob/, bin/, tests/, config/)"
+  },
+  {
+   "step": 4,
+   "method": "nearest historical commit + release packaging delta",
+   "result": "645b417 + 55 release-generated files (Bison/Flex, autotools, man pages) - 120 repo-only files (build_windows/ etc.)"
+  },
+  {
+   "step": 5,
+   "method": "synthetic source-tree baseline manifest",
+   "result": "not needed (steps 2-4 exact)"
+  }
+ ],
+ "baseline_commit": "645b417",
+ "baseline_subject": "GnuCOBOL 3.2 - 20230728",
+ "delta": {
+  "tarball_only_files": 55,
+  "git_only_files": 120,
+  "differing_common_files": [
+   "configure.ac (CVS $Revision$ keyword only)"
+  ]
+ },
+ "uncertainty": "none material"
+}
