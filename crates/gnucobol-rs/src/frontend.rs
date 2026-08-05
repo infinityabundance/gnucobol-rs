@@ -14868,6 +14868,31 @@ mod tests {
     }
 
     #[test]
+    fn broken_expressions_fail_closed_cleanly() {
+        // Upstream a0937bf49 (bugs:#933 #938 #966) hardened the C expression evaluation against
+        // broken expressions (NULL expression-stack guards; const-correctness). The candidate is
+        // Rust (no null-deref class) and must reject the same broken inputs fail-closed with a
+        // typed diagnostic, terminating promptly (no hang, no panic).
+        let cases: &[&str] = &[
+            // COMPUTE with a dangling operator: the `)` reaches the numeric-literal parse.
+            "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 X PIC 9.\n       PROCEDURE DIVISION.\n           COMPUTE X = (1 + ).\n           STOP RUN.\n",
+            // IF with an unterminated condition.
+            "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n           IF ( THEN DISPLAY \"A\".\n           STOP RUN.\n",
+            // COMPUTE with a trailing operator.
+            "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 X PIC 9.\n       PROCEDURE DIVISION.\n           COMPUTE X = 1 + .\n           STOP RUN.\n",
+        ];
+        for src in cases {
+            let t0 = std::time::Instant::now();
+            let err = run_program(src).unwrap_err();
+            assert!(
+                t0.elapsed().as_millis() < 1000,
+                "broken expression must terminate promptly: {err:?}"
+            );
+            let _ = err;
+        }
+    }
+
+    #[test]
     fn close_with_lock_state_machine_matches_current_upstream() {
         // Upstream 62b39805c (bugs:#914) + 0b22d4417: CLOSE WITH LOCK puts the file in the LOCKED
         // state; re-OPEN reports 38 (CLOSED WITH LOCK); READ on a non-INPUT/I-O file reports 47
