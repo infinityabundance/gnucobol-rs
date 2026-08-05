@@ -5137,6 +5137,10 @@ fn run_block(
                             }
                         } else if CHECK_MODE.with(|c| c.get()) && !known_statement_verb(&verb) {
                             return Err(RunError::Unsupported(format!("verb {verb}")));
+                        } else if CHECK_MODE.with(|c| c.get()) && verb == "INSPECT" {
+                            // Upstream validate_inspect (04614ac7a): REPLACING/CONVERTING operand
+                            // size/identity checks happen at compile time; mirror the accept/reject.
+                            validate_inspect_operands(&stmt, fields)?;
                         }
                     }
                 }
@@ -8591,6 +8595,125 @@ fn inspect_region(
     }
 }
 
+/// Upstream `validate_inspect` (04614ac7a): a REPLACING/CONVERTING operand pair whose operands are
+/// both non-const must be equal in size; cobc rejects a mismatch at compile time ("operands
+/// incompatible" / note "operands differ in size") and accepts identical operands (warning; the
+/// operation degrades to a natural no-op). The candidate mirrors the accept/reject semantics at
+/// check time (the wording differs; that is a diagnostic-shape matter).
+fn validate_inspect_operands(
+    stmt: &[Tok],
+    fields: &HashMap<String, Field>,
+) -> Result<(), RunError> {
+    let mut i = 1usize;
+    while i < stmt.len() {
+        match stmt.get(i) {
+            Some(Tok::Word(w)) if w == "REPLACING" => {
+                i += 1;
+                let mode = match stmt.get(i) {
+                    Some(Tok::Word(m)) => m.clone(),
+                    _ => return Ok(()), // malformed; exec_inspect reports it
+                };
+                match mode.as_str() {
+                    "CHARACTERS" => {
+                        if matches!(stmt.get(i + 1), Some(Tok::Word(b)) if b == "BY") {
+                            i += 2; // BY y
+                        } else {
+                            return Ok(());
+                        }
+                    }
+                    "ALL" | "LEADING" | "FIRST" => {
+                        if matches!(stmt.get(i + 2), Some(Tok::Word(b)) if b == "BY") {
+                            inspect_pair_check(
+                                stmt.get(i + 1),
+                                stmt.get(i + 3),
+                                fields,
+                                "REPLACING",
+                            )?;
+                            i += 4;
+                        } else {
+                            return Ok(());
+                        }
+                    }
+                    _ => return Ok(()),
+                }
+            }
+            Some(Tok::Word(w)) if w == "CONVERTING" => {
+                if matches!(stmt.get(i + 2), Some(Tok::Word(b)) if b == "TO") {
+                    inspect_pair_check(stmt.get(i + 1), stmt.get(i + 3), fields, "CONVERTING")?;
+                    i += 4;
+                } else {
+                    return Ok(());
+                }
+            }
+            _ => i += 1,
+        }
+    }
+    Ok(())
+}
+
+/// One REPLACING/CONVERTING operand pair. Upstream size rules: a FROM figurative constant is
+/// 1 byte; a TO figurative constant skips the comparison (its runtime size is the replaced item's);
+/// identical field operands are accepted; otherwise non-const sizes must match or the compiler
+/// rejects the statement.
+fn inspect_pair_check(
+    x: Option<&Tok>,
+    y: Option<&Tok>,
+    fields: &HashMap<String, Field>,
+    clause: &str,
+) -> Result<(), RunError> {
+    let from_size = |t: Option<&Tok>| -> Result<Option<(usize, Option<String>)>, RunError> {
+        match t {
+            Some(Tok::Str(s)) => Ok(Some((s.len(), None))),
+            Some(Tok::Word(w)) => {
+                if figurative_kind(w).is_some() {
+                    Ok(Some((1, None))) // const: a 1-byte comparand per cobc
+                } else {
+                    match read_field(fields, w)? {
+                        Some(f) => Ok(Some((f.bytes.len(), Some(w.clone())))),
+                        None => Err(RunError::UndefinedName(w.clone())),
+                    }
+                }
+            }
+            _ => Ok(None),
+        }
+    };
+    // A figurative TO operand is const-like: its runtime size is the replaced item's, so the
+    // comparison is skipped (upstream `tag_y != CB_TAG_CONST` guard).
+    let to_size = |t: Option<&Tok>| -> Result<Option<(usize, Option<String>)>, RunError> {
+        match t {
+            Some(Tok::Str(s)) => Ok(Some((s.len(), None))),
+            Some(Tok::Word(w)) => {
+                if figurative_kind(w).is_some() {
+                    Ok(None)
+                } else {
+                    match read_field(fields, w)? {
+                        Some(f) => Ok(Some((f.bytes.len(), Some(w.clone())))),
+                        None => Err(RunError::UndefinedName(w.clone())),
+                    }
+                }
+            }
+            _ => Ok(None),
+        }
+    };
+    let (sx, fx) = match from_size(x)? {
+        Some(v) => v,
+        None => return Ok(()),
+    };
+    let (sy, fy) = match to_size(y)? {
+        Some(v) => v,
+        None => return Ok(()),
+    };
+    if fx.is_some() && fx == fy {
+        return Ok(()); // identical operands: upstream warns; the operation degrades to a no-op
+    }
+    if sx != sy {
+        return Err(RunError::Unsupported(format!(
+            "INSPECT {clause} operands incompatible (operands differ in size)"
+        )));
+    }
+    Ok(())
+}
+
 /// `INSPECT target {TALLYING counter FOR <ALL|LEADING> lit | FOR CHARACTERS [region] | REPLACING
 /// <ALL|LEADING|FIRST> x BY y [region] | CONVERTING from TO to [region]}` -- the byte effects of the
 /// sealed `GNURUST.INSPECT.1` court. A single clause is in the subset; multi-clause/`ALL`-counter-chains
@@ -8918,9 +9041,11 @@ fn exec_examine(
             "ALL" => TallyMode::All(&lit),
             "LEADING" => TallyMode::Leading(&lit),
             "UNTIL" => TallyMode::Characters,
-            other => return Err(RunError::Unsupported(format!(
+            other => {
+                return Err(RunError::Unsupported(format!(
                 "EXAMINE TALLYING: unrecognized mode `{other}` (expected ALL/LEADING/UNTIL FIRST)"
-            ))),
+            )))
+            }
         };
         let region = if modekw == "UNTIL" {
             Region::Before(&lit)
@@ -14480,6 +14605,51 @@ mod tests {
                         DISPLAY \"G=[\" G \"]\".\n\
                         STOP RUN.\n");
         assert_eq!(out, b"C=03\nG=[AB\"\"\"]\n");
+    }
+
+    #[test]
+    fn inspect_operand_validation_matches_upstream_validate_inspect() {
+        // Upstream 04614ac7a (validate_inspect): non-const REPLACING/CONVERTING operand pairs must
+        // be equal in size (compile error otherwise); identical field operands are accepted (warning
+        // upstream, no-op); a figurative TO operand skips the comparison. Verified against cobc 3.2:
+        // 'A' BY 'BB' and SPACES BY 'XY' are compile errors; 'A' BY 'A' and F BY F compile and no-op.
+        let prog = |ins: &str| {
+            format!(
+                "       IDENTIFICATION DIVISION.\n\
+                 PROGRAM-ID. T.\n\
+                 DATA DIVISION.\n\
+                 WORKING-STORAGE SECTION.\n\
+                 01 X PIC X(5) VALUE 'ABABA'.\n\
+                 01 F PIC X(1) VALUE 'A'.\n\
+                 PROCEDURE DIVISION.\n\
+                     {ins}\n\
+                     STOP RUN.\n"
+            )
+        };
+        let d = crate::dialect::Dialect::DEFAULT;
+        // accepted: equal sizes, identical operands, figurative TO
+        check_program(&prog("INSPECT X REPLACING ALL 'A' BY 'B'."), d).expect("equal sizes ok");
+        check_program(&prog("INSPECT X REPLACING ALL F BY F."), d).expect("identical operands ok");
+        check_program(&prog("INSPECT X CONVERTING F TO F."), d).expect("identical converting ok");
+        check_program(&prog("INSPECT X REPLACING ALL 'A' BY SPACES."), d)
+            .expect("figurative TO ok");
+        check_program(&prog("INSPECT X CONVERTING 'ab' TO 'AB'."), d).expect("equal converting ok");
+        // rejected: non-const size mismatch (oracle: compile error)
+        let e = check_program(&prog("INSPECT X REPLACING ALL 'A' BY 'BB'."), d).unwrap_err();
+        assert!(
+            format!("{e:?}").contains("REPLACING operands incompatible"),
+            "got: {e:?}"
+        );
+        let e = check_program(&prog("INSPECT X REPLACING ALL SPACES BY 'XY'."), d).unwrap_err();
+        assert!(
+            format!("{e:?}").contains("REPLACING operands incompatible"),
+            "got: {e:?}"
+        );
+        let e = check_program(&prog("INSPECT X CONVERTING 'ab' TO 'A'."), d).unwrap_err();
+        assert!(
+            format!("{e:?}").contains("CONVERTING operands incompatible"),
+            "got: {e:?}"
+        );
     }
 
     #[test]
