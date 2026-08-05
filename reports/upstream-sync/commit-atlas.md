@@ -661,7 +661,9 @@
 
 ## Phase-2 integration evidence
 
-_None integrated yet._
+| upstream commit | upstream date | status | Rust integration commit |
+|---|---|---|---|
+| `289c9aef58a9` | 2022-02-04 | CONFIGURATION_INTEGRATED | `7b97303952fe` |
 
 ## Non-curated mechanical rows (CI / docs / build / test-only)
 
