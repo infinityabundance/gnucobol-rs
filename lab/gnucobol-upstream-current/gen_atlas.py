@@ -315,6 +315,7 @@ def main() -> int:
             row["superseded_by"] = None
             row["evidence"] = None
             row["integrated"] = False
+            row["lane_adoption"] = False
         else:
             row["curated"] = True
             row["status"] = entry.get("status")
@@ -325,6 +326,7 @@ def main() -> int:
             row["superseded_by"] = entry.get("superseded_by")
             row["evidence"] = entry.get("evidence")
             row["integrated"] = bool(entry.get("evidence"))
+            row["lane_adoption"] = bool(entry.get("lane_adoption"))
             if row["status"] not in STATUSES:
                 print(f"FATAL: bad status {row['status']} for {sha}")
                 return 1
@@ -531,6 +533,19 @@ def write_markdown(rows: list[dict], invariants: dict) -> None:
     else:
         add("_None integrated yet._")
     add("")
+    lane = [r for r in rows if r.get("lane_adoption")]
+    if lane:
+        add("## Lane-adopted test/harness commits (evidence at Phase 3)")
+        add("")
+        add("These test-only / harness-only upstream changes are adopted by the current-upstream suite lane")
+        add("(Phase 3): the lane runs the pinned source tree's own `.at` files, so the test updates are")
+        add("exercised verbatim there. Evidence is recorded when that lane lands.")
+        add("")
+        add("| commit | date | status | subject |")
+        add("|---|---|---|---|")
+        for r in sorted(lane, key=lambda r: r["author_date"]):
+            add(f"| `{r['sha'][:12]}` | {r['author_date'][:10]} | {r['status']} | {r['subject']} |")
+        add("")
     add("## Non-curated mechanical rows (CI / docs / build / test-only)")
     add("")
     mech = [r for r in rows if not r["curated"]]

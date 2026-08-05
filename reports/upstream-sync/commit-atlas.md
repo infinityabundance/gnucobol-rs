@@ -4,7 +4,7 @@
 - admit repo: `lab/admit/gnucobol-upstream-current/`
 - rows: 367 (matches `git rev-list` count)
 - merges: 122; non-merge: 245; first-parent chain: 160
-- curated semantic entries: 156
+- curated semantic entries: 182
 
 ## Status totals
 
@@ -332,7 +332,7 @@
 |---|---|---|---|---|
 | `8ea9ac449c98` | 2022-01-28 | NOT_APPLICABLE_WITH_PROOF | Redispatch ChangeLog entries | None: ChangeLog entry redispatch only |
 | `289c9aef58a9` | 2022-02-04 | CONFIGURATION_INTEGRATED | [GCOS] Add GCOS configuration file | Adopt the GCOS configuration file |
-| `777852c35adf` | 2023-10-17 | TEST_IMPORTED | testcase for [r5195] / [bugs:#923] | Adopt the testcase for r5195/bugs:#923 |
+| `777852c35adf` | 2023-10-17 | TEST_IMPORTED | testcase for [r5195] / [bugs:#923] | Adopted by the current-upstream suite lane; the behavior it tests is ported with 303917744 (module constants) |
 | `12e31f960ebe` | 2023-12-14 | NOT_APPLICABLE_WITH_PROOF | minor doc adjustments and build_windows/config.h adjustment for 3.3-dev | None: 3.3-dev build_windows/config.h adjustments |
 | `470f7db125a4` | 2024-01-16 | FRONTEND_REIMPLEMENTED | adjusted error handling | Adopt the adjusted error-handling behavior: error/warning selection, exit status, listings expectations (run_fundamental, run_misc, listings, syn_*); rm-strict.conf alignment |
 | `85dccf1c72fb` | 2024-01-16 | NOT_APPLICABLE_WITH_PROOF | missed commit of tree.h in [r5185] | None: restores a missed tree.h hunk (codeoptim leading-zero skip) — native codegen optimization |
@@ -352,8 +352,8 @@
 | `8366e1be1cf8` | 2024-05-02 | NOT_APPLICABLE_WITH_PROOF | housekeeping | None: housekeeping (build_aux file removal) |
 | `442e6db6d430` | 2024-05-03 | NOT_APPLICABLE_WITH_PROOF | build and test fixes for Win32 | None: Win32 build and test fixes |
 | `a0937bf4920e` | 2024-05-04 | FRONTEND_REIMPLEMENTED | fixing [bugs:#933] [bugs:#938] [bugs:#966] handling of broken expressions | Improve handling of broken expressions (recovery, no hangs, correct reject) |
-| `7c60012c019b` | 2024-05-04 | TEST_IMPORTED | fixing typo | Adopt the typo fix in run_misc.at |
-| `ed789c8a9bc2` | 2024-05-05 | PLATFORM_BEHAVIOR_INTEGRATED | Win32 fixes, mostly testcases | Adopt Win32-relevant test expectations (run_extensions, run_file, run_misc, used_binaries); the common.c/fileio.c parts are Windows-path fixes |
+| `7c60012c019b` | 2024-05-04 | TEST_IMPORTED | fixing typo | Adopted by the current-upstream suite lane (typo fix in run_misc.at) |
+| `ed789c8a9bc2` | 2024-05-05 | PLATFORM_BEHAVIOR_INTEGRATED | Win32 fixes, mostly testcases | Adopt Win32-relevant test expectations via the current-upstream lane; the common.c/fileio.c parts are Windows-path fixes |
 | `d2df58ad9685` | 2024-05-14 | NOT_APPLICABLE_WITH_PROOF | assorted minor cleanups | None: assorted minor cleanups (C-wide, no single observable behavior; verify with tests) |
 | `67f93f93c5b5` | 2024-05-14 | NOT_APPLICABLE_WITH_PROOF | fix building with MSVC cobc: * flag.def: fix macro usage for MSVC build_windows: * general for libcob: add missing profiling.c | None: MSVC build fixes (flag.def macro usage, build_windows) |
 | `63cb06ce7b87` | 2024-05-15 | NOT_APPLICABLE_WITH_PROOF | more compiler warnings fixed | None: compiler warnings fixed (C internal) |
@@ -368,7 +368,7 @@
 | `71ea358aa910` | 2024-08-10 | FRONTEND_REIMPLEMENTED | work on ALPHABET definitions, especially ALPHABET FOR NATIONAL | Implement ALPHABET definitions, especially ALPHABET FOR NATIONAL (parse + collating behavior) |
 | `41e2e4488de1` | 2024-08-11 | FRONTEND_REIMPLEMENTED | work on ALPHABET definitions, especially ALPHABET FOR NATIONAL - C90 fix for r5310 | Complete ALPHABET FOR NATIONAL support (C90 follow-up) |
 | `5a8666888fad` | 2024-08-28 | FRONTEND_REIMPLEMENTED | Fix bugs reported by the MSVC runtime checker cobc: * tree.c (char_to_precedence_idx, get_char_type_description, valid_char_order): adjusted size of precedence table and gave proper precedence to U libcob: * intrinsics.c (cob_intr_random), move.c (cob_move_display_to_packed): make casts with loss of data explicit using masking to silence the MSVC runtime error checker | Give 'U' proper precedence in the expression precedence table (parser); port masking fixes in random/packed move where the candidate has equivalent numeric paths |
-| `111d21f03445` | 2024-09-20 | TEST_IMPORTED | Minor adjustments (testsuite, ChangeLog entries, C89) | Adopt syn_definition.at updates; the pplex/scanner changes are C89-internal |
+| `111d21f03445` | 2024-09-20 | TEST_IMPORTED | Minor adjustments (testsuite, ChangeLog entries, C89) | Adopted by the current-upstream suite lane (syn_definition.at updates); the pplex/scanner changes are C89-internal |
 | `1104bda61e19` | 2024-09-25 | FRONTEND_REIMPLEMENTED | Check for incompatible data only when a receiver is of category numeric in MOVE or SET | Check for incompatible data in MOVE or SET only when the receiver is of category numeric |
 | `10daa94c8936` | 2024-09-27 | NOT_APPLICABLE_WITH_PROOF | build system update | None: libtool/autotools build system update |
 | `903ba84ff9db` | 2024-09-29 | NOT_APPLICABLE_WITH_PROOF | assorted updates | Verify in Phase 2: mixed C cleanup/updates (cobc, libcob, build, tests) without a single identified candidate-visible behavior; no known semantic delta |
@@ -437,7 +437,7 @@
 | `6a23e2ce5a8c` | 2024-05-02 | NOT_APPLICABLE_WITH_PROOF | housekeeping | None: MinGW strcasecmp redefinition removal + whitespace |
 | `67f8f532e194` | 2024-05-02 | NOT_APPLICABLE_WITH_PROOF | follow up to [r5215] [feature-requests:#459]: support COLLATING SEQUENCE clause on SELECT / INDEXED files | None: COLLATING SEQUENCE clause on SELECT/INDEXED files follow-up |
 | `1b8af634e882` | 2024-05-03 | NOT_APPLICABLE_WITH_PROOF | fixing [r5244] fix... | None: BDB ABI comma fix (DB_VERSION_MAJOR >= 12) |
-| `ed789c8a9bc2` | 2024-05-05 | PLATFORM_BEHAVIOR_INTEGRATED | Win32 fixes, mostly testcases | Adopt Win32-relevant test expectations (run_extensions, run_file, run_misc, used_binaries); the common.c/fileio.c parts are Windows-path fixes |
+| `ed789c8a9bc2` | 2024-05-05 | PLATFORM_BEHAVIOR_INTEGRATED | Win32 fixes, mostly testcases | Adopt Win32-relevant test expectations via the current-upstream lane; the common.c/fileio.c parts are Windows-path fixes |
 | `d2df58ad9685` | 2024-05-14 | NOT_APPLICABLE_WITH_PROOF | assorted minor cleanups | None: assorted minor cleanups (C-wide, no single observable behavior; verify with tests) |
 | `9261f4096868` | 2024-05-14 | NOT_APPLICABLE_WITH_PROOF | minor cleanups and warning fixes | None: minor cleanups and warning fixes in libcob (no observable behavior delta; verify with tests) |
 | `63cb06ce7b87` | 2024-05-15 | NOT_APPLICABLE_WITH_PROOF | more compiler warnings fixed | None: compiler warnings fixed (C internal) |
@@ -514,10 +514,10 @@
 | `7b6995042c4d` | 2024-04-09 | RUNTIME_PORTED | Add a profiling feature cobc: * parser.y: generate calls to "cob_prof_function_call" in the parsetree when profiling is unabled, when entering/leaving profiled blocks * flag.def: add `-fprof` to enable profiling * tree.h: add a flags field to cb_goto, add profiling fields to cb_program, add cb_prof_call enum and export cb_build_prof_call and cb_prof_procedure_fivision functions * tree.c (cb_build_program): initialize the new profiling fields of the cb_program structure * tree.c (cb_build_goto): add a "flags" argument (stored in the cb_program structure) * typeck.c (cb_emit_goto): add a "flags" argument (passed to cb_build_goto) * codegen.c: handle profiling code generation under the cb_flag_prof guard libcob: * Makefile.am: add `profiling.c` to sources * profiling.c: implement profiling functions (time spent in each procedure of the program) * common.c: add 4 environments variables COB_PROF_FILE, COB_PROF_MAX_DEPTH,COB_PROF_ENABLE and COB_PROF_FORMAT * common.c (cob_expand_env_string): add $b (executable basename), $f (executable filename), $d (date in yyyymmdd) and $t (time in hhmmss) * common.c (cob_set_main_argv0): extracted from cob_init * fileio.c (cob_path_to_absolute): extracted from insert and cob_set_main_argv0 config: * runtime.cfg: add COB_PROF_FILE | Implement the profiling feature for the interpreted candidate: -fprof flag; per-procedure time accounting in the interpreter; COB_PROF_FILE/COB_PROF_MAX_DEPTH/COB_PROF_ENABLE/COB_PROF_FORMAT env support; $b/$f/$d/$t expansion in env strings |
 | `4695ee78629d` | 2024-05-02 | CONFIGURATION_INTEGRATED | mf dialect: adjusted missing-statement configuration [bugs:#965] | Adopt mf dialect missing-statement configuration |
 | `1ea4059c6547` | 2024-05-02 | NOT_APPLICABLE_WITH_PROOF | configure now uses pkg-config/ncurses-config to search for ncurses and honors NCURSES_LIBS and NCURSES_CFLAGS | None: configure ncurses detection via pkg-config |
-| `1fa8db0d0e6b` | 2024-07-11 | CONFIGURATION_INTEGRATED | Fix minor alignment / tab issues in config/*.conf | Adopt the alignment/tab normalization in the candidate dialect-configuration files (verify no semantic value change) |
+| `1fa8db0d0e6b` | 2024-07-11 | CONFIGURATION_INTEGRATED | Fix minor alignment / tab issues in config/*.conf | Adopt the alignment/tab normalization: all config/*.conf synced to the pinned upstream head bytes |
 | `6bf47af0209e` | 2024-08-19 | RUNTIME_PORTED | [feature-request:#474]: add runtime configuration to hide cursor for extended screenio | Implement runtime configuration to hide the cursor for extended screenio |
-| `111d21f03445` | 2024-09-20 | TEST_IMPORTED | Minor adjustments (testsuite, ChangeLog entries, C89) | Adopt syn_definition.at updates; the pplex/scanner changes are C89-internal |
-| `a2e4627e6a48` | 2025-01-10 | CONFIGURATION_INTEGRATED | [GCOS dialect] Set init-justify to no * config/gcos-strict.conf: set init-justify to no after testing on GCOS | Adopt init-justify=no for the GCOS-strict dialect |
+| `111d21f03445` | 2024-09-20 | TEST_IMPORTED | Minor adjustments (testsuite, ChangeLog entries, C89) | Adopted by the current-upstream suite lane (syn_definition.at updates); the pplex/scanner changes are C89-internal |
+| `a2e4627e6a48` | 2025-01-10 | CONFIGURATION_INTEGRATED | [GCOS dialect] Set init-justify to no * config/gcos-strict.conf: set init-justify to no after testing on GCOS | Adopt init-justify=no for the GCOS-strict dialect (applied by the gcos-strict.conf custody refresh) |
 | `87500ead47bd` | 2025-01-10 | FRONTEND_REIMPLEMENTED | fixed [bugs:#961]: Nested Elements Mishandled Despite 'with attributes' Specification | Fix nested-element handling with the 'with attributes' specification (SCREEN SECTION data-name qualification) |
 | `54d4963026a1` | 2025-03-31 | NOT_APPLICABLE_WITH_PROOF | Add an EBCDIC/ASCII table generation feature build_windows: * general for cobc: include new gentable.c cobc: * gentable.c: generate EBCDIC/ASCII translation tables * cobc.c, help.c: new --gentable option doc: * gnucobol.texi: document the new --gentable option | None: --gentable generates native C translation tables (EBCDIC/ASCII) |
 | `410097c16722` | 2025-06-03 | NOT_APPLICABLE_WITH_PROOF | NEW CBL functions for VFILE functionality consistent with Microfocus / Fujitsu | None: CBL_* VFILE functions depend on the native VFILE backend |
@@ -531,7 +531,9 @@
 |---|---|---|---|---|
 | `289c9aef58a9` | 2022-02-04 | CONFIGURATION_INTEGRATED | [GCOS] Add GCOS configuration file | Adopt the GCOS configuration file |
 | `0166302909e9` | 2023-08-17 | RUNTIME_PORTED | fix [bugs:#904] MOVE PACKED-DECIMAL unsigned to signed leads to bad sign | Fix MOVE PACKED-DECIMAL unsigned to signed bad sign |
-| `777852c35adf` | 2023-10-17 | TEST_IMPORTED | testcase for [r5195] / [bugs:#923] | Adopt the testcase for r5195/bugs:#923 |
+| `60557e874dec` | 2023-08-22 | TEST_IMPORTED | missing commit for [r5167] - version increase | Adopted by the current-upstream suite lane (version-output expectation in run_misc.at) |
+| `9d4be36a13ea` | 2023-09-16 | TEST_IMPORTED | correction of testsuite for [r5190] | Adopted by the current-upstream suite lane (testsuite correction for r5190) |
+| `777852c35adf` | 2023-10-17 | TEST_IMPORTED | testcase for [r5195] / [bugs:#923] | Adopted by the current-upstream suite lane; the behavior it tests is ported with 303917744 (module constants) |
 | `470f7db125a4` | 2024-01-16 | FRONTEND_REIMPLEMENTED | adjusted error handling | Adopt the adjusted error-handling behavior: error/warning selection, exit status, listings expectations (run_fundamental, run_misc, listings, syn_*); rm-strict.conf alignment |
 | `04614ac7afd2` | 2024-01-17 | RUNTIME_PORTED | Optimizations and syntax checks for INSPECT related functions | INSPECT optimizations and syntax checks: frontend syntax validation + runtime INSPECT behavior alignment |
 | `62b39805ca22` | 2024-01-18 | RUNTIME_PORTED | Fixing [bugs:#914] CLOSE LOCK abends program on OPEN | Fix CLOSE LOCK abend on OPEN (file state handling) |
@@ -540,6 +542,7 @@
 | `f67da51cae38` | 2024-01-22 | RUNTIME_PORTED | Fix bug #917: segfault when accessing a decimal constant after calling a sub-program cobc: * codegen.c (codegen_internal, codegen_finalize): move declaration   of decimal constants from global storage to local storage to   fix bug #917 (segfault on decimal constant after CANCEL on   subprogram) | Decimal constants must live per-module (local storage) and be re-initialized after CANCEL — candidate module state model |
 | `140a030d52ee` | 2024-01-22 | WRAPPER_INTEGRATED | New flag -fdiagnostics-absolute-path to display full paths within error locations * error.c (print_error_prefix), flag.def: new flag -fdiagnostics-absolute-paths to print the full path of a file for diagnostics; this flag can be activated if your editor and build system do not correctly work together to locate files from diagnostic output | Implement -fdiagnostics-absolute-path flag (full paths within diagnostics) |
 | `44848f58b437` | 2024-01-22 | WRAPPER_INTEGRATED | Minor fixes * cobc/cobc.c (cobc_clean_up): when save-temps specifies a directory, do not move object files and preprocess files when they were specified as an explicit target on the command line (-E, -c) * libcob/common.c (cob_get_strerror), libcob/coblocal.h: export as utility function * libcob/common.c (cob_expand_env_string): fix potention buffer overflow | save-temps directory behavior: do not move object/preprocessed files when an explicit target (-E, -c) was given; adopt env-string expansion overflow fix |
+| `6e358998b272` | 2024-01-22 | TEST_IMPORTED | Fix falses positives due to path differences in testsuite (run_misc.at) on Windows | Adopted by the current-upstream suite lane (Windows path-difference fix in run_misc.at) |
 | `e36a124b2b72` | 2024-01-31 | WRAPPER_INTEGRATED | Add options --copy COPYBOOK and --include HEADER to cobc | Implement --copy COPYBOOK and --include HEADER options (adopt source-location mapping) |
 | `300b542f3caa` | 2024-02-16 | NOT_APPLICABLE_WITH_PROOF | fileio refactoring | Verify in Phase 2: fileio refactoring (native C internals); no candidate-visible behavior expected |
 | `106e7ce6c98c` | 2024-02-20 | NOT_APPLICABLE_WITH_PROOF | FR #459: support COLLATING SEQUENCE clause on SELECT / INDEXED files (currently only for the BDB backend) cobc: * codegen.c (output_file_initialization): output the indexed file/keys collating sequence (were already present in the AST) * tree.c (validate_indexed_key_field): process postponed key collating sequences * parser.y (collating_sequence_clause, collating_sequence_clause_key): replace CB_PENDING by CB_UNFINISHED on file and key collating sequence * flag.def, tree.c, tree.h, cobc.c, parser.y: add and handle a new -fdefault-file-colseq flag to specify the default collating sequence to use for files without a collating sequence clause libcob: * fileio.c (bdb_setkeycol, bdb_bt_compare, indexed_open, ...): take the file collating sequence into account when comparing keys * common.c, coblocal.h: rename common_cmps to cob_cmps and make it available locally | None: COLLATING SEQUENCE clause on SELECT/INDEXED files (BDB only) plus -fdefault-file-colseq flag affecting only indexed files |
@@ -549,8 +552,9 @@
 | `82100d64de35` | 2024-04-27 | NOT_APPLICABLE_WITH_PROOF | Optimization of memory usage in replace.c | None: memory optimization in the C replace.c; candidate REPLACE layer is independent Rust |
 | `442e6db6d430` | 2024-05-03 | NOT_APPLICABLE_WITH_PROOF | build and test fixes for Win32 | None: Win32 build and test fixes |
 | `a0937bf4920e` | 2024-05-04 | FRONTEND_REIMPLEMENTED | fixing [bugs:#933] [bugs:#938] [bugs:#966] handling of broken expressions | Improve handling of broken expressions (recovery, no hangs, correct reject) |
-| `7c60012c019b` | 2024-05-04 | TEST_IMPORTED | fixing typo | Adopt the typo fix in run_misc.at |
-| `ed789c8a9bc2` | 2024-05-05 | PLATFORM_BEHAVIOR_INTEGRATED | Win32 fixes, mostly testcases | Adopt Win32-relevant test expectations (run_extensions, run_file, run_misc, used_binaries); the common.c/fileio.c parts are Windows-path fixes |
+| `7c60012c019b` | 2024-05-04 | TEST_IMPORTED | fixing typo | Adopted by the current-upstream suite lane (typo fix in run_misc.at) |
+| `ed789c8a9bc2` | 2024-05-05 | PLATFORM_BEHAVIOR_INTEGRATED | Win32 fixes, mostly testcases | Adopt Win32-relevant test expectations via the current-upstream lane; the common.c/fileio.c parts are Windows-path fixes |
+| `1daa3931493b` | 2024-05-06 | TEST_IMPORTED | portability fix for [r5249] | Adopted by the current-upstream suite lane (portability fix for r5249) |
 | `d2df58ad9685` | 2024-05-14 | NOT_APPLICABLE_WITH_PROOF | assorted minor cleanups | None: assorted minor cleanups (C-wide, no single observable behavior; verify with tests) |
 | `9261f4096868` | 2024-05-14 | NOT_APPLICABLE_WITH_PROOF | minor cleanups and warning fixes | None: minor cleanups and warning fixes in libcob (no observable behavior delta; verify with tests) |
 | `63cb06ce7b87` | 2024-05-15 | NOT_APPLICABLE_WITH_PROOF | more compiler warnings fixed | None: compiler warnings fixed (C internal) |
@@ -562,21 +566,28 @@
 | `9f1a64c32e11` | 2024-07-23 | RUNTIME_PORTED | [feature-requests:#448] using state structures instead of state vars for strings | Use state structures instead of state vars for STRING/UNSTRING/INSPECT: port the reworked string-operation state handling |
 | `0fa2bf5f5238` | 2024-07-26 | FRONTEND_REIMPLEMENTED | increase portability for Micro Focus and ACUCOBOL-GT | Increase dialect portability for Micro Focus and ACUCOBOL-GT (reserved words/config.def/parser) |
 | `ec5562cfb9f6` | 2024-07-30 | RUNTIME_PORTED | Adjustment to support the 2023 standard for edited numeric picture strings and to fix [bugs:#935] | Support the 2023 standard for edited numeric picture strings and fix bugs:#935 (picture-string validation + runtime edited move) |
+| `db0e8067d3e8` | 2024-07-31 | TEST_IMPORTED | fix small error in compile error expected results | Adopted by the current-upstream suite lane (compile-error expected results fix) |
+| `1b01ffd2398e` | 2024-08-03 | TEST_IMPORTED | Testuite fixes for MSVC * testsuite.src/run_file.at, testsuite.src/run_misc.at: fix a few tests that break under MSVC Debug while working under MSVC Release, by forcing a flush of stdout with fflush and using cob_free instead of free in C codes | Adopted by the current-upstream suite lane (MSVC test fixes) |
 | `71ea358aa910` | 2024-08-10 | FRONTEND_REIMPLEMENTED | work on ALPHABET definitions, especially ALPHABET FOR NATIONAL | Implement ALPHABET definitions, especially ALPHABET FOR NATIONAL (parse + collating behavior) |
 | `6bf47af0209e` | 2024-08-19 | RUNTIME_PORTED | [feature-request:#474]: add runtime configuration to hide cursor for extended screenio | Implement runtime configuration to hide the cursor for extended screenio |
 | `808c9be88a50` | 2024-08-27 | HARNESS_ADOPTED | Retrieve archive of NIST test suite from sourceforge instead of from an out-dated URL | Adopt the current NIST archive URL in the candidate NIST harness |
 | `5a8666888fad` | 2024-08-28 | FRONTEND_REIMPLEMENTED | Fix bugs reported by the MSVC runtime checker cobc: * tree.c (char_to_precedence_idx, get_char_type_description, valid_char_order): adjusted size of precedence table and gave proper precedence to U libcob: * intrinsics.c (cob_intr_random), move.c (cob_move_display_to_packed): make casts with loss of data explicit using masking to silence the MSVC runtime error checker | Give 'U' proper precedence in the expression precedence table (parser); port masking fixes in random/packed move where the candidate has equivalent numeric paths |
 | `97668518028e` | 2024-09-09 | HARNESS_ADOPTED | work on "make checkmanual" | Adopt checkmanual workflow improvements in the candidate doc harness |
-| `111d21f03445` | 2024-09-20 | TEST_IMPORTED | Minor adjustments (testsuite, ChangeLog entries, C89) | Adopt syn_definition.at updates; the pplex/scanner changes are C89-internal |
+| `a234462ff94b` | 2024-09-13 | TEST_IMPORTED | testsuite environment update | Adopted by the current-upstream suite lane (testsuite environment update) |
+| `111d21f03445` | 2024-09-20 | TEST_IMPORTED | Minor adjustments (testsuite, ChangeLog entries, C89) | Adopted by the current-upstream suite lane (syn_definition.at updates); the pplex/scanner changes are C89-internal |
 | `7b09c750ff7d` | 2024-09-20 | RUNTIME_PORTED | Fix [bugs:#990] COBOL screen, problem positioning cursor on line 1 | Fix cursor positioning on line 1 (COBOL screen) |
 | `1104bda61e19` | 2024-09-25 | FRONTEND_REIMPLEMENTED | Check for incompatible data only when a receiver is of category numeric in MOVE or SET | Check for incompatible data in MOVE or SET only when the receiver is of category numeric |
 | `7b3047cb2616` | 2024-09-27 | HARNESS_ADOPTED | updaste for NIST85 | Adopt the NIST85 run-definition updates in the candidate NIST85 harness |
 | `903ba84ff9db` | 2024-09-29 | NOT_APPLICABLE_WITH_PROOF | assorted updates | Verify in Phase 2: mixed C cleanup/updates (cobc, libcob, build, tests) without a single identified candidate-visible behavior; no known semantic delta |
 | `49da19a3dfc0` | 2024-09-30 | WRAPPER_INTEGRATED | Add dependencies options and -fcopybook-deps cobc: * pplex.l (cb_text_list): prevent duplicates * cobc.c, help.c, pplex.l: add new flags to output dependencies following gcc: -M to output deps only, -MD to output deps while compiling (in .d files), -MP to output phony targets, -MG to keep missing copybooks, -MQ <target> to Makefile-quote target ; add -fcopybook-deps to output only copybook names instead of file paths. -fcopybook-deps also forces -E, -foneline-deps, -MT=copybooks, disables errors on missing copybooks and removes output on stdout doc: * gnucobol.texi: document new dependencies options | Implement -M/-MD/-MP/-MG/-MQ dependency options + -fcopybook-deps (copybook-only deps, forces -E -foneline-deps -MT=copybooks, disables missing-copybook errors) |
 | `9b0259d78f87` | 2024-10-01 | NOT_APPLICABLE_WITH_PROOF | Support collating sequence for indexed file keys of alphanumeric class | None: collating sequence for indexed file keys of alphanumeric class (indexed backend) |
+| `710f053fbd7c` | 2024-10-02 | TEST_IMPORTED | testsuite update for special cases | Adopted by the current-upstream suite lane (special-cases test updates) |
 | `3f7c44b6f516` | 2024-10-02 | WRAPPER_INTEGRATED | improve stdin compilation | Improve stdin compilation: cobc-rs must compile from stdin with the documented naming/artifact behavior |
 | `c53ae5f80351` | 2024-10-02 | RUNTIME_PORTED | signal handler updates | Signal handler updates: port the handler registration/behavior semantics |
+| `ca09f172185f` | 2024-10-04 | TEST_IMPORTED | minor testuite update | Adopted by the current-upstream suite lane (minor testsuite update) |
 | `b583a357302a` | 2024-10-08 | HARNESS_ADOPTED | build and test updates | Adopt the build-and-test updates relevant to the candidate harness |
+| `0cc8207d14de` | 2024-10-11 | TEST_IMPORTED | follow-up to r5356 - fixed skip via atlocal_win | Adopted by the current-upstream suite lane (skip via atlocal_win) |
+| `190139b8baee` | 2024-10-11 | TEST_IMPORTED | follow-up to r5356 - fixed skip via atlocal_win | Adopted by the current-upstream suite lane (skip via atlocal_win) |
 | `ac862070c3e8` | 2024-10-24 | RUNTIME_PORTED | fixed [bugs:#999] ACCEPT with TIMEOUT issue when looping thru the verb | Fix ACCEPT with TIMEOUT looping through the verb (candidate ACCEPT TIMEOUT semantics) |
 | `a6c4f2440452` | 2024-11-18 | BLOCKED_BY_NATIVE_ARTIFACT_BOUNDARY | Add XML/JSON GENERATE tests for PIC P | Track tests: XML/JSON GENERATE tests for PIC P depend on the native XML/JSON backend |
 | `2a53351eae5a` | 2024-11-18 | BLOCKED_BY_NATIVE_ARTIFACT_BOUNDARY | Add PANEL functions from CURSES | Track only: PANEL functions from CURSES (native curses/panel dependency) |
@@ -594,6 +605,8 @@
 | `8a7c349d13ad` | 2025-02-12 | FRONTEND_REIMPLEMENTED | FR #176: "Implementation of GC directive to include .h (c/c++) files" cobc: * pplex.l, ppparse.y, cobc.h, codegen.c (output_gnucobol_defines): new >>IMP INCLUDE directive to include one or multiple header files in the generated C code (same behavior as the --include but with one directive per file) * scanner.l: the leading space for all internal directives is removed in the lexer. Source previously preprocessed may need to be adjusted | Implement the >>IMP INCLUDE directive (include .h/.c++ headers) at the preprocessing level; adopt the scanner change (leading space removed for internal directives) |
 | `3f99dba47432` | 2025-03-26 | NOT_APPLICABLE_WITH_PROOF | minor, mostly build updates | None: minor mostly-autotools build updates |
 | `54d4963026a1` | 2025-03-31 | NOT_APPLICABLE_WITH_PROOF | Add an EBCDIC/ASCII table generation feature build_windows: * general for cobc: include new gentable.c cobc: * gentable.c: generate EBCDIC/ASCII translation tables * cobc.c, help.c: new --gentable option doc: * gnucobol.texi: document the new --gentable option | None: --gentable generates native C translation tables (EBCDIC/ASCII) |
+| `0a761c9fa42c` | 2025-04-04 | TEST_IMPORTED | Fix SIGTERM test randomly failing in tests/testsuite.src/used_binaries.at | Adopted by the current-upstream suite lane (SIGTERM test flake fix) |
+| `f2106ff244e7` | 2025-04-07 | TEST_IMPORTED | Follow-up to r5473 - add missing comment | Adopted by the current-upstream suite lane (comment-only follow-up) |
 | `dc0cddebe0f0` | 2025-04-15 | WRAPPER_INTEGRATED | Fixes to the dependency generation feature introduced by [r5345] cobc: * cobc.c (process_filename): ensure we don't keep the preprocessed file when using -M or -fcopybook-deps * cobc.c, cobc.h, help.c, pplex.l: make -fcopybook-deps an experimental feature, activable with the EXPERIMENTAL_COPYBOOK_DEPS_OPTION flag | Fix -M/-fcopybook-deps behavior: do not keep the preprocessed file; gate -fcopybook-deps behind the experimental option; adopt tests |
 | `79c65d0ecf1a` | 2025-04-16 | FRONTEND_REIMPLEMENTED | Fix [bugs:#948]: comparison with HIGH-VALUE in presence of collating sequences cobc: * tree.h (cb_program): add low_value and high_value fields to hold the low and high values used by the program collating sequence * tree.c (cb_build_program): initialize the low_value and high_value fields to reasonable default values * typeck.c: replace hard-coded cob_refer_ascii and cob_refer_ebcdic by ebcdic_to_ascii and ascii_to_ebcdic * typeck.c (cb_validate_collating): set the program's low_value and high_value fields * typeck.c (validate_alphabet): use the new tables, set the alphabet's low and high values * cobc.h: export the new symbols defined in typeck.c * cobc.c (process_command_line): always load the collating table * scanner.l (scan_ebcdic_char): remove code that loads and use a local collating table, use the table defined in typeck.c instead * codegen.c: replace hard-coded 0 and 255 / 0xff contants with the low_value and high_value fields where appropriate * codegen.c (output_low_value, output_high_value): move the cob_all_low and cob_all_high fields from global to local * codegen.c (output_collating_tables): remove local tables and code that loads the tables, since they are now loaded from cobc.c libcob: * strings.c: use the collating_sequence field of cob_module to determine the low value instead of the hard-coded constant "\0" | Program-level low/high collating values: compute per-program collating low/high in the frontend; runtime comparison (HIGH-VALUE / LOW-VALUE in presence of collating sequences) uses them |
 | `da5c185222c7` | 2025-05-13 | HARNESS_ADOPTED | Testing and overriding the diff command * configure.ac: testing working diff with the option to override by DIFF tests: * atlocal.in, atlocal_win, cobol85/Makefile.am, cobol85/Makefile.module.in, testsuite.src/*.at: use the new DIFF variable to invoke the diff command | Adopt DIFF-override support in the candidate testsuite harness |
@@ -613,6 +626,7 @@
 | `d877fb362d20` | 2025-10-31 | HARNESS_ADOPTED | test runner: perf record addition and quote-fix | Adopt perf-record support and quote fixes in the candidate test runner |
 | `bf0b5878a898` | 2025-11-12 | BLOCKED_BY_NATIVE_ARTIFACT_BOUNDARY | XML and JSON updates | Track only: XML and JSON updates (native backend) |
 | `8dd5b382cf01` | 2025-11-17 | HARNESS_ADOPTED | quoting adjustments for use of builddir | Adopt the builddir quoting adjustments in the candidate testsuite harness |
+| `a3d9d6435401` | 2025-11-18 | HARNESS_ADOPTED | drop bashisms in atlocal.in and pre-inst-env.in | Adopt the bashism removal in the candidate testsuite harness |
 | `b836c467e7ed` | 2025-11-18 | RUNTIME_PORTED | cleanup memory handling in libcob for restart | Cleanup memory handling in libcob for restart: port module-restart state cleanup semantics |
 | `13963e15a2da` | 2025-11-18 | WRAPPER_INTEGRATED | ensure full output for -ftcmd using multiple continuation lines as necessary | -ftcmd listing output must continue across multiple lines instead of truncating (candidate listing generation) |
 | `a207a45955ec` | 2025-11-20 | RUNTIME_PORTED | new runtime configuration COB_SIGNAL_REGIME, allows skipping registration of the signal handler | Implement COB_SIGNAL_REGIME: valid values; registration policy (do-not-register / register-only-if-unclaimed / any other admitted modes); do not clobber external handlers; Unix coverage; classify unsupported platforms; async-signal-safe; runtime reporting |
@@ -620,6 +634,7 @@
 | `39ab4808c7e5` | 2025-12-02 | WRAPPER_INTEGRATED | listing header change: basename only | Listing header must show the basename only (candidate listing generation) |
 | `4b72d0a9faac` | 2025-12-04 | RUNTIME_PORTED | improve memory handling in edge-cases | Improve memory handling in edge cases: port any observable bounds/state fixes; adopt tests |
 | `c4eea8102820` | 2025-12-05 | FRONTEND_REIMPLEMENTED | fix areacheck - ENTRY statement should begin in area B not area A | Fix area-check: ENTRY statement must begin in area B, not area A (candidate checker area validation) |
+| `34efe755f6f4` | 2025-12-06 | TEST_IMPORTED | test update | Adopted by the current-upstream suite lane (test update) |
 | `9e0d66418efc` | 2025-12-29 | FRONTEND_REIMPLEMENTED | cobc/tree.c (finalize_file): if file is EXTFH enabled then don't warn for ORGANIZATION INDEXED, even when compiler is configured --without-db | Suppress the ORGANIZATION INDEXED warning when the file is EXTFH-enabled (candidate checker must not warn where upstream does not) |
 | `50b58f682700` | 2025-12-29 | RUNTIME_PORTED | new COB_LOAD_GLOBAL boolean | Implement COB_LOAD_GLOBAL runtime configuration: determine upstream default and platform history; define interpreted-module equivalent distinguishing local vs global registry visibility; test preload, duplicates, CANCEL/reload, process isolation; keep native-DSO non-claim |
 | `47dda86c0013` | 2026-05-26 | FRONTEND_REIMPLEMENTED | Config option tab-width can receive a list of comma-separated widths | Implement -ftab-width=w1,w2,... list semantics: each 1..12, last repeats indefinitely, malformed/empty/overflow lists fail with stable config errors; apply to fixed/free/auto formats, preprocessing, listing, diagnostics; repeated options follow upstream precedence |
@@ -638,17 +653,25 @@
 
 | commit | date | status | subject | action |
 |---|---|---|---|---|
+| `c140aafc1568` | 2023-08-22 | CONFIGURATION_INTEGRATED | configure.ac: add -fstack-clash-protection to --enable-hardening[=no] | None: configure.ac hardening flag is native C build infrastructure |
 | `12e31f960ebe` | 2023-12-14 | NOT_APPLICABLE_WITH_PROOF | minor doc adjustments and build_windows/config.h adjustment for 3.3-dev | None: 3.3-dev build_windows/config.h adjustments |
 | `2f9892458c54` | 2024-01-22 | NOT_APPLICABLE_WITH_PROOF | Fix bug #920: Codegen: output of integer literals in generated C broken with MinGW * configure.ac: add checks to allow using stdint.h and inttypes.h * libcob/common.h: use stdint.h and inttypes.h when available to define cob_s64_t, cob_u64_t and the various CB_FMT_ macros | None: MinGW integer-literal codegen + stdint usage |
 | `1ea4059c6547` | 2024-05-02 | NOT_APPLICABLE_WITH_PROOF | configure now uses pkg-config/ncurses-config to search for ncurses and honors NCURSES_LIBS and NCURSES_CFLAGS | None: configure ncurses detection via pkg-config |
+| `63bd0f81fa4d` | 2024-05-14 | CONFIGURATION_INTEGRATED | fix macOS testsuite issues * configure.ac: update flags for building dynamic libraries on macOS (helps fixing testsuite issues on recent macOS versions) | None: native macOS build/test flags |
 | `71ea358aa910` | 2024-08-10 | FRONTEND_REIMPLEMENTED | work on ALPHABET definitions, especially ALPHABET FOR NATIONAL | Implement ALPHABET definitions, especially ALPHABET FOR NATIONAL (parse + collating behavior) |
+| `9744112d5560` | 2024-09-07 | CONFIGURATION_INTEGRATED | build system update | None: autotools build system update |
 | `10daa94c8936` | 2024-09-27 | NOT_APPLICABLE_WITH_PROOF | build system update | None: libtool/autotools build system update |
 | `903ba84ff9db` | 2024-09-29 | NOT_APPLICABLE_WITH_PROOF | assorted updates | Verify in Phase 2: mixed C cleanup/updates (cobc, libcob, build, tests) without a single identified candidate-visible behavior; no known semantic delta |
 | `88937849b860` | 2024-10-02 | CONFIGURATION_INTEGRATED | new options for configure for customized version string / bug report URL | Adopt configurable version string / bug-report URL surfaces where the candidate exposes equivalents |
 | `b583a357302a` | 2024-10-08 | HARNESS_ADOPTED | build and test updates | Adopt the build-and-test updates relevant to the candidate harness |
 | `2a53351eae5a` | 2024-11-18 | BLOCKED_BY_NATIVE_ARTIFACT_BOUNDARY | Add PANEL functions from CURSES | Track only: PANEL functions from CURSES (native curses/panel dependency) |
 | `d5eb0eb02335` | 2024-11-19 | BLOCKED_BY_NATIVE_ARTIFACT_BOUNDARY | follow-up to r5369 - panel update | Track only: PANEL update (curses) |
+| `c2ee239a5209` | 2024-12-08 | CONFIGURATION_INTEGRATED | follow-up to r5369 - panel update | None: configure.ac follow-up is native build infra |
+| `dda41815fe1f` | 2024-12-08 | CONFIGURATION_INTEGRATED | fix copy+paste error in r5389 | None: configure.ac copy+paste fix is native build infra |
+| `c265f251f14f` | 2025-02-11 | CONFIGURATION_INTEGRATED | Fix configure.ac for Clang * configure.ac: add -Wno-unused-command-line-argument to CFLAGS under Clang, to prevent some features to be mistakenly detected as missing (in particular -Wno-pointer-sign and -fstack-clash-protection) | None: configure.ac Clang flag is native build infra |
+| `7824bb9f16e4` | 2025-02-11 | CONFIGURATION_INTEGRATED | configure cleanup | None: configure cleanup is native build infra |
 | `3f99dba47432` | 2025-03-26 | NOT_APPLICABLE_WITH_PROOF | minor, mostly build updates | None: minor mostly-autotools build updates |
+| `aa297a7c6743` | 2025-03-27 | CONFIGURATION_INTEGRATED | build update | None: autotools build update |
 | `54d4963026a1` | 2025-03-31 | NOT_APPLICABLE_WITH_PROOF | Add an EBCDIC/ASCII table generation feature build_windows: * general for cobc: include new gentable.c cobc: * gentable.c: generate EBCDIC/ASCII translation tables * cobc.c, help.c: new --gentable option doc: * gnucobol.texi: document the new --gentable option | None: --gentable generates native C translation tables (EBCDIC/ASCII) |
 | `da5c185222c7` | 2025-05-13 | HARNESS_ADOPTED | Testing and overriding the diff command * configure.ac: testing working diff with the option to override by DIFF tests: * atlocal.in, atlocal_win, cobol85/Makefile.am, cobol85/Makefile.module.in, testsuite.src/*.at: use the new DIFF variable to invoke the diff command | Adopt DIFF-override support in the candidate testsuite harness |
 | `486565722c48` | 2025-05-20 | RUNTIME_PORTED | Limit sed usage in testsuite, remove listing-sed cobc: * cobc.c (set_compile_date): fix SOURCE_DATE_EPOCH being ignored on subsequent invocations libcob: * common.c (cob_set_date_from_epoch): fix incorrect conversion of epoch (was off by one day) tests: * testsuite.src/run_misc.at, testsuite.src/syn_misc.at: reduce the use of sed by using SOURCE_DATE_EPOCH when possible and using @&t@ quadrigraphs in expected output with trailing spaces * listing-sed.sh: removed as no longer needed * atlocal.in, atlocal_win: remove the no longer needed UNIFY_LISTING variable | Fix SOURCE_DATE_EPOCH being ignored on subsequent invocations; fix epoch conversion; remove listing-sed dependency from harness |
@@ -657,6 +680,8 @@
 | `94c8c561555a` | 2025-09-17 | HARNESS_ADOPTED | fix #1142 build system support for embeded paths | Adopt build-system support for embedded paths in the candidate harness |
 | `bc5c13b27467` | 2025-11-14 | NOT_APPLICABLE_WITH_PROOF | portability updates | None: C portability updates |
 | `8dd5b382cf01` | 2025-11-17 | HARNESS_ADOPTED | quoting adjustments for use of builddir | Adopt the builddir quoting adjustments in the candidate testsuite harness |
+| `a3d9d6435401` | 2025-11-18 | HARNESS_ADOPTED | drop bashisms in atlocal.in and pre-inst-env.in | Adopt the bashism removal in the candidate testsuite harness |
+| `f49bf5314302` | 2025-11-20 | CONFIGURATION_INTEGRATED | configure adjustments | None: configure adjustments are native build infra |
 | `a207a45955ec` | 2025-11-20 | RUNTIME_PORTED | new runtime configuration COB_SIGNAL_REGIME, allows skipping registration of the signal handler | Implement COB_SIGNAL_REGIME: valid values; registration policy (do-not-register / register-only-if-unclaimed / any other admitted modes); do not clobber external handlers; Unix coverage; classify unsupported platforms; async-signal-safe; runtime reporting |
 
 ## Phase-2 integration evidence
@@ -665,6 +690,48 @@
 |---|---|---|---|
 | `289c9aef58a9` | 2022-02-04 | CONFIGURATION_INTEGRATED | `7b97303952fe` |
 | `0166302909e9` | 2023-08-17 | RUNTIME_PORTED | `37a3779b1d66` |
+| `1fa8db0d0e6b` | 2024-07-11 | CONFIGURATION_INTEGRATED | `BATCH` |
+| `a2e4627e6a48` | 2025-01-10 | CONFIGURATION_INTEGRATED | `7b97303952fe` |
+
+## Lane-adopted test/harness commits (evidence at Phase 3)
+
+These test-only / harness-only upstream changes are adopted by the current-upstream suite lane
+(Phase 3): the lane runs the pinned source tree's own `.at` files, so the test updates are
+exercised verbatim there. Evidence is recorded when that lane lands.
+
+| commit | date | status | subject |
+|---|---|---|---|
+| `60557e874dec` | 2023-08-22 | TEST_IMPORTED | missing commit for [r5167] - version increase |
+| `c140aafc1568` | 2023-08-22 | CONFIGURATION_INTEGRATED | configure.ac: add -fstack-clash-protection to --enable-hardening[=no] |
+| `9d4be36a13ea` | 2023-09-16 | TEST_IMPORTED | correction of testsuite for [r5190] |
+| `777852c35adf` | 2023-10-17 | TEST_IMPORTED | testcase for [r5195] / [bugs:#923] |
+| `6e358998b272` | 2024-01-22 | TEST_IMPORTED | Fix falses positives due to path differences in testsuite (run_misc.at) on Windows |
+| `7c60012c019b` | 2024-05-04 | TEST_IMPORTED | fixing typo |
+| `ed789c8a9bc2` | 2024-05-05 | PLATFORM_BEHAVIOR_INTEGRATED | Win32 fixes, mostly testcases |
+| `1daa3931493b` | 2024-05-06 | TEST_IMPORTED | portability fix for [r5249] |
+| `63bd0f81fa4d` | 2024-05-14 | CONFIGURATION_INTEGRATED | fix macOS testsuite issues * configure.ac: update flags for building dynamic libraries on macOS (helps fixing testsuite issues on recent macOS versions) |
+| `db0e8067d3e8` | 2024-07-31 | TEST_IMPORTED | fix small error in compile error expected results |
+| `1b01ffd2398e` | 2024-08-03 | TEST_IMPORTED | Testuite fixes for MSVC * testsuite.src/run_file.at, testsuite.src/run_misc.at: fix a few tests that break under MSVC Debug while working under MSVC Release, by forcing a flush of stdout with fflush and using cob_free instead of free in C codes |
+| `9744112d5560` | 2024-09-07 | CONFIGURATION_INTEGRATED | build system update |
+| `a234462ff94b` | 2024-09-13 | TEST_IMPORTED | testsuite environment update |
+| `111d21f03445` | 2024-09-20 | TEST_IMPORTED | Minor adjustments (testsuite, ChangeLog entries, C89) |
+| `710f053fbd7c` | 2024-10-02 | TEST_IMPORTED | testsuite update for special cases |
+| `88937849b860` | 2024-10-02 | CONFIGURATION_INTEGRATED | new options for configure for customized version string / bug report URL |
+| `929b403b68ff` | 2024-10-03 | PLATFORM_BEHAVIOR_INTEGRATED | fix [r5349] missing PKGVERSION for build_windows |
+| `ca09f172185f` | 2024-10-04 | TEST_IMPORTED | minor testuite update |
+| `0cc8207d14de` | 2024-10-11 | TEST_IMPORTED | follow-up to r5356 - fixed skip via atlocal_win |
+| `190139b8baee` | 2024-10-11 | TEST_IMPORTED | follow-up to r5356 - fixed skip via atlocal_win |
+| `c2ee239a5209` | 2024-12-08 | CONFIGURATION_INTEGRATED | follow-up to r5369 - panel update |
+| `dda41815fe1f` | 2024-12-08 | CONFIGURATION_INTEGRATED | fix copy+paste error in r5389 |
+| `c265f251f14f` | 2025-02-11 | CONFIGURATION_INTEGRATED | Fix configure.ac for Clang * configure.ac: add -Wno-unused-command-line-argument to CFLAGS under Clang, to prevent some features to be mistakenly detected as missing (in particular -Wno-pointer-sign and -fstack-clash-protection) |
+| `7824bb9f16e4` | 2025-02-11 | CONFIGURATION_INTEGRATED | configure cleanup |
+| `aa297a7c6743` | 2025-03-27 | CONFIGURATION_INTEGRATED | build update |
+| `0a761c9fa42c` | 2025-04-04 | TEST_IMPORTED | Fix SIGTERM test randomly failing in tests/testsuite.src/used_binaries.at |
+| `f2106ff244e7` | 2025-04-07 | TEST_IMPORTED | Follow-up to r5473 - add missing comment |
+| `26a5cba4eda9` | 2025-07-29 | CONFIGURATION_INTEGRATED | missing file in r5552 from gettext infrastructure update |
+| `a3d9d6435401` | 2025-11-18 | HARNESS_ADOPTED | drop bashisms in atlocal.in and pre-inst-env.in |
+| `f49bf5314302` | 2025-11-20 | CONFIGURATION_INTEGRATED | configure adjustments |
+| `34efe755f6f4` | 2025-12-06 | TEST_IMPORTED | test update |
 
 ## Non-curated mechanical rows (CI / docs / build / test-only)
 
@@ -735,12 +802,8 @@
 - `6b4405108a30` 2023-07-11 [UPSTREAM_MERGE_ACCOUNTED] Merge branch 'gnucobol-3.x' into gcos4gnucobol-3.x
 - `0ab36fd83692` 2023-07-26 [UPSTREAM_MERGE_ACCOUNTED] Merge branch 'gnucobol-3.x' into gcos4gnucobol-3.x
 - `c0d64addfd83` 2023-08-15 [UPSTREAM_MERGE_ACCOUNTED] Merge branch 'gnucobol-3.x' into gcos4gnucobol-3.x
-- `60557e874dec` 2023-08-22 [TEST_IMPORTED] missing commit for [r5167] - version increase
-- `c140aafc1568` 2023-08-22 [CONFIGURATION_INTEGRATED] configure.ac: add -fstack-clash-protection to --enable-hardening[=no]
-- `9d4be36a13ea` 2023-09-16 [TEST_IMPORTED] correction of testsuite for [r5190]
 - `98a5c787c1e5` 2024-01-11 [UPSTREAM_MERGE_ACCOUNTED] Merge branch 'gnucobol-3.x' into gcos4gnucobol-3.x
 - `f059c849512a` 2024-01-22 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
-- `6e358998b272` 2024-01-22 [TEST_IMPORTED] Fix falses positives due to path differences in testsuite (run_misc.at) on Windows
 - `93d5877e42b1` 2024-01-25 [NOT_APPLICABLE_WITH_PROOF] follow-up to r5208 "header include"
 - `824f2a6445e0` 2024-01-26 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
 - `2ff35a3e3725` 2024-01-31 [UPSTREAM_MERGE_ACCOUNTED] Merge branch 'gnucobol-3.x' into gcos4gnucobol-3.x
@@ -752,10 +815,8 @@
 - `eb74013d3e4f` 2024-03-18 [CI_ONLY_ACCOUNTED] Add/Update Windows workflows
 - `2e620aa926b6` 2024-04-22 [UPSTREAM_MERGE_ACCOUNTED] Merge branch 'gnucobol-3.x' into gcos4gnucobol-3.x
 - `87c4fb2905ed` 2024-04-27 [UPSTREAM_MERGE_ACCOUNTED] Merge branch 'gnucobol-3.x' into gcos4gnucobol-3.x
-- `1daa3931493b` 2024-05-06 [TEST_IMPORTED] portability fix for [r5249]
 - `5ba97ae7594f` 2024-05-13 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into HEAD
 - `4f76d0a2021e` 2024-05-13 [CI_ONLY_ACCOUNTED] Fix MacOS CI
-- `63bd0f81fa4d` 2024-05-14 [CONFIGURATION_INTEGRATED] fix macOS testsuite issues * configure.ac: update flags for building dynamic libraries on macOS (helps fixing testsuite issues on recent macOS versions)
 - `70b4076e9e8d` 2024-05-14 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
 - `4907e0d0683e` 2024-05-14 [UPSTREAM_MERGE_ACCOUNTED] Merge pull request #145 from ddeclerck/fix_macos_ci
 - `21b5d516ffd3` 2024-05-16 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
@@ -763,9 +824,7 @@
 - `de6053aad234` 2024-07-12 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
 - `4d51096de843` 2024-07-25 [UPSTREAM_MERGE_ACCOUNTED] Merge pull request #140 from ddeclerck/ci_msvc
 - `00f6832684d8` 2024-07-26 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
-- `db0e8067d3e8` 2024-07-31 [TEST_IMPORTED] fix small error in compile error expected results
 - `a672fbba0388` 2024-08-01 [CI_ONLY_ACCOUNTED] Update MSVC & MSYS1 CI
-- `1b01ffd2398e` 2024-08-03 [TEST_IMPORTED] Testuite fixes for MSVC * testsuite.src/run_file.at, testsuite.src/run_misc.at: fix a few tests that break under MSVC Debug while working under MSVC Release, by forcing a flush of stdout with fflush and using cob_free instead of free in C codes
 - `04fe8aaf44d7` 2024-08-04 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
 - `3e146193295e` 2024-08-11 [NOT_APPLICABLE_WITH_PROOF] added missing iconv.m4 update - follow-up to r5310
 - `56a19214a986` 2024-08-12 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
@@ -788,8 +847,6 @@
 - `c566c4abc0f4` 2024-08-28 [CI_ONLY_ACCOUNTED] Cache `newcob.val` in Windows MSYS2 workflow as well
 - `e31b1ad2059a` 2024-08-28 [CI_ONLY_ACCOUNTED] Tar MSYS2 distribution archive to avoid EMFILE error
 - `fe28973b030f` 2024-08-28 [UPSTREAM_MERGE_ACCOUNTED] Merge pull request #170 from nberth/ci-adjustments-4-gcos4gnucobol-3.x
-- `9744112d5560` 2024-09-07 [CONFIGURATION_INTEGRATED] build system update
-- `a234462ff94b` 2024-09-13 [TEST_IMPORTED] testsuite environment update
 - `f36f1506a16d` 2024-09-19 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
 - `015735daa9c5` 2024-09-20 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
 - `e807aed2c9c9` 2024-09-22 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
@@ -799,19 +856,12 @@
 - `482206f49af4` 2024-09-27 [UPSTREAM_MERGE_ACCOUNTED] Merge pull request #184 from OCamlPro/ci-minimal-build
 - `61ffca26726a` 2024-09-30 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
 - `799c61376739` 2024-10-02 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
-- `710f053fbd7c` 2024-10-02 [TEST_IMPORTED] testsuite update for special cases
-- `929b403b68ff` 2024-10-03 [PLATFORM_BEHAVIOR_INTEGRATED] fix [r5349] missing PKGVERSION for build_windows
-- `ca09f172185f` 2024-10-04 [TEST_IMPORTED] minor testuite update
 - `7d4a2fd772a6` 2024-10-07 [CI_ONLY_ACCOUNTED] ci adjustments
 - `a23f0dc875f6` 2024-10-07 [UPSTREAM_MERGE_ACCOUNTED] Merge pull request #189 from OCamlPro/ci-update
 - `68b82c88f548` 2024-10-11 [UPSTREAM_MERGE_ACCOUNTED] Merge branch 'gnucobol-3.x' into gcos4gnucobol-3.x
-- `0cc8207d14de` 2024-10-11 [TEST_IMPORTED] follow-up to r5356 - fixed skip via atlocal_win
-- `190139b8baee` 2024-10-11 [TEST_IMPORTED] follow-up to r5356 - fixed skip via atlocal_win
 - `04916dd9371e` 2024-11-22 [UPSTREAM_MERGE_ACCOUNTED] Merge branch 'gnucobol-3.x' into gcos4gnucobol-3.x
 - `16e84a584d7e` 2024-11-24 [CI_ONLY_ACCOUNTED] Fix macOS CI
 - `1be8d3f3493c` 2024-12-06 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
-- `c2ee239a5209` 2024-12-08 [CONFIGURATION_INTEGRATED] follow-up to r5369 - panel update
-- `dda41815fe1f` 2024-12-08 [CONFIGURATION_INTEGRATED] fix copy+paste error in r5389
 - `129abba07f9c` 2024-12-09 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
 - `06d814688dbc` 2024-12-10 [CI_ONLY_ACCOUNTED] Update macos.yml
 - `d5abb19870d0` 2024-12-10 [UPSTREAM_MERGE_ACCOUNTED] Merge pull request #202 from OCamlPro/GitMensch-patch-1
@@ -825,18 +875,13 @@
 - `beeace4cded3` 2025-01-13 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
 - `6698c4bf0e94` 2025-01-19 [CI_ONLY_ACCOUNTED] Fix Ubuntu CI (Coverage)
 - `3fb682569d9e` 2025-01-28 [CI_ONLY_ACCOUNTED] Fix MacOS CI
-- `c265f251f14f` 2025-02-11 [CONFIGURATION_INTEGRATED] Fix configure.ac for Clang * configure.ac: add -Wno-unused-command-line-argument to CFLAGS under Clang, to prevent some features to be mistakenly detected as missing (in particular -Wno-pointer-sign and -fstack-clash-protection)
 - `f88c80ee1363` 2025-02-11 [CI_ONLY_ACCOUNTED] Fix MSYS2 CI
-- `7824bb9f16e4` 2025-02-11 [CONFIGURATION_INTEGRATED] configure cleanup
 - `6cc5a5803005` 2025-02-11 [UPSTREAM_MERGE_ACCOUNTED] Merge pull request #217 from ddeclerck/fix_msys2_ci
 - `369eb24f947e` 2025-02-12 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
 - `85c708085fad` 2025-02-16 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
 - `080e75630cc4` 2025-03-26 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
-- `aa297a7c6743` 2025-03-27 [CONFIGURATION_INTEGRATED] build update
 - `0cb3eab5945e` 2025-03-28 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
 - `c48824511397` 2025-03-31 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
-- `0a761c9fa42c` 2025-04-04 [TEST_IMPORTED] Fix SIGTERM test randomly failing in tests/testsuite.src/used_binaries.at
-- `f2106ff244e7` 2025-04-07 [TEST_IMPORTED] Follow-up to r5473 - add missing comment
 - `cdb87a8b3aa9` 2025-04-07 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
 - `84359ec81a15` 2025-04-16 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
 - `d90e2850e1ed` 2025-04-18 [CI_ONLY_ACCOUNTED] Update CIs
@@ -848,7 +893,6 @@
 - `d3a3a3e6102f` 2025-05-22 [UPSTREAM_MERGE_ACCOUNTED] Merge pull request #232 from ddeclerck/add_32bit_ci
 - `a4be0beded8f` 2025-07-17 [UPSTREAM_MERGE_ACCOUNTED] Merge pull request #235 from OCamlPro/gnucobol-3.x
 - `a006789fa627` 2025-07-21 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
-- `26a5cba4eda9` 2025-07-29 [CONFIGURATION_INTEGRATED] missing file in r5552 from gettext infrastructure update
 - `adf35557a63a` 2025-07-29 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
 - `d8bd3f3a02c8` 2025-07-29 [CI_ONLY_ACCOUNTED] Adjust MSYS2 workflow timeout (was slightly too short)
 - `33057ad3e052` 2025-07-30 [CI_ONLY_ACCOUNTED] Update MacOS CI (DB4 removal imminent)
@@ -858,18 +902,15 @@
 - `1fb152e8b536` 2025-10-21 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gcos4gnucobol-3.x
 - `db111f65bd01` 2025-11-06 [UPSTREAM_MERGE_ACCOUNTED] Merge pull request #251 from OCamlPro/gnucobol-3.x
 - `31ba95f7a4c3` 2025-11-18 [UPSTREAM_MERGE_ACCOUNTED] Merge pull request #253 from OCamlPro/gnucobol-3.x
-- `a3d9d6435401` 2025-11-18 [HARNESS_ADOPTED] drop bashisms in atlocal.in and pre-inst-env.in
 - `5e45c5e64f37` 2025-11-18 [UPSTREAM_MERGE_ACCOUNTED] Merge pull request #254 from OCamlPro/gnucobol-3.x
 - `b1275d4ee475` 2025-11-19 [CI_ONLY_ACCOUNTED] Fix MacOS workflow
 - `eda8905e4404` 2025-11-19 [CI_ONLY_ACCOUNTED] Improve MSYS1 workflow definition
 - `8d7308d92849` 2025-11-20 [CI_ONLY_ACCOUNTED] Change name of main branch in CI workflows
 - `d28f9fab8e27` 2025-11-20 [UPSTREAM_MERGE_ACCOUNTED] Merge pull request #255 from nberth/update-ci-branch
-- `f49bf5314302` 2025-11-20 [CONFIGURATION_INTEGRATED] configure adjustments
 - `a98fcd30cef7` 2025-11-20 [CI_ONLY_ACCOUNTED] Fix CI
 - `deeadffbafb7` 2025-11-20 [CI_ONLY_ACCOUNTED] Update windows-msvc.yml
 - `1fc514e9d166` 2025-12-03 [UPSTREAM_MERGE_ACCOUNTED] Merge pull request #256 from ddeclerck/fix_ci
 - `bc234cd17f19` 2025-12-03 [CI_ONLY_ACCOUNTED] Adjust MSYS2 CI timeout
-- `34efe755f6f4` 2025-12-06 [TEST_IMPORTED] test update
 - `da31b9286647` 2025-12-08 [UPSTREAM_MERGE_ACCOUNTED] Merge remote-tracking branch 'upstream/gnucobol-3.x' into gitside-gnucobol-3.x
 - `fb8f358e91ce` 2025-12-12 [CI_ONLY_ACCOUNTED] Update windows-msvc.yml
 - `3457bd5def5e` 2025-12-24 [CI_ONLY_ACCOUNTED] MSVC CI update

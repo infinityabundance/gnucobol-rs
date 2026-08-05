@@ -42,12 +42,13 @@ COURT = {
     "BLOCKED_BY_NATIVE_ARTIFACT_BOUNDARY": CA,
 }
 
-# sha -> (status, action, behavior, residual)
-C: list[tuple[str, str, str, str, str]] = []
+# sha -> (status, action, behavior, residual, evidence, lane_adoption)
+C: list[tuple[str, str, str, str, str, str | None, bool]] = []
 
 
-def E(sha: str, status: str, action: str, behavior: str, residual: str = "") -> None:
-    C.append((sha, status, action, behavior, residual))
+def E(sha: str, status: str, action: str, behavior: str, residual: str = "",
+      evidence: str | None = None, lane_adoption: bool = False) -> None:
+    C.append((sha, status, action, behavior, residual, evidence, lane_adoption))
 
 
 E("a672a26b52b594bd0ebfdcfe0200613c572018d5", "FRONTEND_REIMPLEMENTED",
@@ -205,9 +206,6 @@ E("87500ead47bd937ee0388619be4aa1dc51245e1b", "FRONTEND_REIMPLEMENTED",
   "Fix nested-element handling with the 'with attributes' specification (SCREEN SECTION data-name qualification)",
   "Fixed bugs:#961: Nested elements mishandled despite 'with attributes' specification", "")
 
-E("a2e4627e6a485aaf61a42f1e68052b6a26d5770f", "CONFIGURATION_INTEGRATED",
-  "Adopt init-justify=no for the GCOS-strict dialect",
-  "[GCOS dialect] Set init-justify to no", "Dialect config only")
 
 E("47ec5f5134164948f766106f6e3fc9934e36a2fd", "NOT_APPLICABLE_WITH_PROOF",
   "None: BDB indexed partial-key comparison",
@@ -463,9 +461,6 @@ E("ed789c8a9bc2c66e3c314f82b47cc07c05b12f49", "PLATFORM_BEHAVIOR_INTEGRATED",
   "Win32 fixes, mostly testcases",
   "Windows-only runtime parts are NOT_APPLICABLE to the candidate; test expectations adopted")
 
-E("7c60012c019be8b4f42ab9345081f6bd7ae4b1d5", "TEST_IMPORTED",
-  "Adopt the typo fix in run_misc.at",
-  "Fixing typo (testsuite)", "")
 
 E("a0937bf4920e68730746b89706a6edb1967184a9", "FRONTEND_REIMPLEMENTED",
   "Improve handling of broken expressions (recovery, no hangs, correct reject)",
@@ -617,7 +612,8 @@ E("8208acac177e7d50ba68e99aa661b2f26c5a787a", "NOT_APPLICABLE_WITH_PROOF",
 
 E("0166302909e95c91105bcaa6b1d5b4b6c7647185", "RUNTIME_PORTED",
   "Fix MOVE PACKED-DECIMAL unsigned to signed bad sign",
-  "Fix bugs:#904 MOVE PACKED-DECIMAL unsigned to signed leads to bad sign", "")
+  "Fix bugs:#904 MOVE PACKED-DECIMAL unsigned to signed leads to bad sign", "",
+  evidence="37a3779b1d660f7d25dc7340e5df23d618de5a58")
 
 E("8ea9ac449c986a65299ad015c9930c977bf909cb", "NOT_APPLICABLE_WITH_PROOF",
   "None: ChangeLog entry redispatch only",
@@ -625,7 +621,8 @@ E("8ea9ac449c986a65299ad015c9930c977bf909cb", "NOT_APPLICABLE_WITH_PROOF",
 
 E("289c9aef58a9acbb934eb2e69022b9fa6018baf8", "CONFIGURATION_INTEGRATED",
   "Adopt the GCOS configuration file",
-  "[GCOS] Add GCOS configuration file", "")
+  "[GCOS] Add GCOS configuration file", "Dialect config only",
+  evidence="7b97303952fe4ce00eb5b062c287e7833ba7db4e")
 
 E("4b72d0a9faac66b05e149d0b33d75a589f8863c9", "RUNTIME_PORTED",
   "Improve memory handling in edge cases: port any observable bounds/state fixes; adopt tests",
@@ -651,6 +648,170 @@ E("bf0b5878a89808fc749023c063dfccc8887ffb09", "BLOCKED_BY_NATIVE_ARTIFACT_BOUNDA
 E("5bb0fbe1bb594dcfea7e6aa904b38f30b9fbb854", "RUNTIME_PORTED",
   "CHAR and ORD intrinsics must consider the program collating sequence; CHAR outside collation range raises COB_EC_ARGUMENT_FUNCTION",
   "Fix CHAR and ORD intrinsics in presence of collating sequence", "")
+
+# ---- Lane-adopted test/harness commits (evidence recorded at Phase 3) ----
+# The current-upstream suite lane runs the pinned source tree's own .at files, so these test-only
+# and harness-only upstream changes are exercised verbatim there. lane_adoption makes the state
+# explicit and distinct from an unprocessed semantic commit.
+
+E("60557e874decb307c3cec459ca0f49e2756b27c1", "TEST_IMPORTED",
+  "Adopted by the current-upstream suite lane (version-output expectation in run_misc.at)",
+  "Missing commit for r5167 - version increase", "Lane adoption; candidate version identity recorded in cobc-rs info",
+  lane_adoption=True)
+
+E("c140aafc1568a20ebfd33e681445529603712bf3", "CONFIGURATION_INTEGRATED",
+  "None: configure.ac hardening flag is native C build infrastructure",
+  "configure.ac: add -fstack-clash-protection to --enable-hardening",
+  "Proof: native build flag; candidate equivalents are Rust hardening options; no COBOL surface",
+  lane_adoption=True)
+
+E("9d4be36a13eabf0a9c4a48a927eb4b00c151afdb", "TEST_IMPORTED",
+  "Adopted by the current-upstream suite lane (testsuite correction for r5190)",
+  "Correction of testsuite for r5190", "Lane adoption", lane_adoption=True)
+
+E("777852c35adf44d44bb615cb5b479115307365ce", "TEST_IMPORTED",
+  "Adopted by the current-upstream suite lane; the behavior it tests is ported with 303917744 (module constants)",
+  "Testcase for r5195 / bugs:#923", "Lane adoption", lane_adoption=True)
+
+E("6e358998b272e6bc82094483102ea634b4ec133f", "TEST_IMPORTED",
+  "Adopted by the current-upstream suite lane (Windows path-difference fix in run_misc.at)",
+  "Fix false positives due to path differences in testsuite (run_misc.at) on Windows",
+  "Lane adoption", lane_adoption=True)
+
+E("7c60012c019be8b4f42ab9345081f6bd7ae4b1d5", "TEST_IMPORTED",
+  "Adopted by the current-upstream suite lane (typo fix in run_misc.at)",
+  "Fixing typo (testsuite)", "Lane adoption", lane_adoption=True)
+
+E("ed789c8a9bc2c66e3c314f82b47cc07c05b12f49", "PLATFORM_BEHAVIOR_INTEGRATED",
+  "Adopt Win32-relevant test expectations via the current-upstream lane; the common.c/fileio.c parts are Windows-path fixes",
+  "Win32 fixes, mostly testcases",
+  "Windows-only runtime parts are NOT_APPLICABLE to the candidate; test expectations adopted by lane",
+  lane_adoption=True)
+
+E("1daa3931493ba29cd649cd3ece9ea3621b3226a1", "TEST_IMPORTED",
+  "Adopted by the current-upstream suite lane (portability fix for r5249)",
+  "Portability fix for r5249", "Lane adoption", lane_adoption=True)
+
+E("63bd0f81fa4d3033e8b960f8e1ad1ea6ed0d7e8b", "CONFIGURATION_INTEGRATED",
+  "None: native macOS build/test flags",
+  "Fix macOS testsuite issues (configure.ac dynamic-library flags)",
+  "Proof: native build infra; no candidate surface", lane_adoption=True)
+
+E("db0e8067d3e8d2b22285e726a4d3f229b68b72e9", "TEST_IMPORTED",
+  "Adopted by the current-upstream suite lane (compile-error expected results fix)",
+  "Fix small error in compile error expected results", "Lane adoption", lane_adoption=True)
+
+E("1b01ffd2398e226e005382850e71d6708eb11f27", "TEST_IMPORTED",
+  "Adopted by the current-upstream suite lane (MSVC test fixes)",
+  "Testsuite fixes for MSVC", "Lane adoption", lane_adoption=True)
+
+
+E("9744112d55609a6f9ac5992c49a4716db3200a29", "CONFIGURATION_INTEGRATED",
+  "None: autotools build system update",
+  "Build system update", "Proof: native build infra", lane_adoption=True)
+
+
+E("a234462ff94b5f5feff62f87d2f097b1e7688a69", "TEST_IMPORTED",
+  "Adopted by the current-upstream suite lane (testsuite environment update)",
+  "Testsuite environment update", "Lane adoption", lane_adoption=True)
+
+E("111d21f03445f7d6db0e5cfc93e5f49e9fa584ce", "TEST_IMPORTED",
+  "Adopted by the current-upstream suite lane (syn_definition.at updates); the pplex/scanner changes are C89-internal",
+  "Minor adjustments (testsuite, ChangeLog entries, C89)", "Lane adoption", lane_adoption=True)
+
+
+E("710f053fbd7c65a3e8cfa051f8a2fdb92ebeeec8", "TEST_IMPORTED",
+  "Adopted by the current-upstream suite lane (special-cases test updates)",
+  "Testsuite update for special cases", "Lane adoption", lane_adoption=True)
+
+E("88937849b8607f9f9b20a605d7f2bf65e9ed7427", "CONFIGURATION_INTEGRATED",
+  "Adopt configurable version string / bug-report URL surfaces where the candidate exposes equivalents",
+  "New configure options for customized version string / bug report URL",
+  "Native configure surface; candidate records its own identity", lane_adoption=True)
+
+E("929b403b68ffedce147598f57eff79dc02590d6f", "PLATFORM_BEHAVIOR_INTEGRATED",
+  "None: build_windows PKGVERSION fix is Windows-only",
+  "Fix r5349 missing PKGVERSION for build_windows", "Proof: Windows build infra only", lane_adoption=True)
+
+E("ca09f172185ffbfa821a01030c9a873e26d8dff1", "TEST_IMPORTED",
+  "Adopted by the current-upstream suite lane (minor testsuite update)",
+  "Minor testsuite update", "Lane adoption", lane_adoption=True)
+
+
+E("0cc8207d14de2633fb80ebd790dc929e4be76f13", "TEST_IMPORTED",
+  "Adopted by the current-upstream suite lane (skip via atlocal_win)",
+  "Follow-up to r5356 - fixed skip via atlocal_win", "Lane adoption", lane_adoption=True)
+
+E("190139b8baee6e0d08f69ef57dc9c303e7d8a47c", "TEST_IMPORTED",
+  "Adopted by the current-upstream suite lane (skip via atlocal_win)",
+  "Follow-up to r5356 - fixed skip via atlocal_win", "Lane adoption", lane_adoption=True)
+
+E("a51ca02a68d5adedead306dfada270ff85582a0f", "CONFIGURATION_INTEGRATED",
+  "Adopted the copy/gcwindow.cpy copybook asset into crates/gnucobol-rs/copy/ and wired the system-copy search root",
+  "Follow-up to r5371 - panel update (refactoring; adds gcwindow.cpy copybook)",
+  "Integrated with the config/copy custody batch",
+  evidence="BATCH")
+
+E("c2ee239a5209c0a99d5fae8b76ad86d4c7225103", "CONFIGURATION_INTEGRATED",
+  "None: configure.ac follow-up is native build infra",
+  "Follow-up to r5369 - panel update", "Proof: native build", lane_adoption=True)
+
+E("dda41815fe1fe00f0c58c6ab348f9ff94546017d", "CONFIGURATION_INTEGRATED",
+  "None: configure.ac copy+paste fix is native build infra",
+  "Fix copy+paste error in r5389", "Proof: native build", lane_adoption=True)
+
+E("a2e4627e6a485aaf61a42f1e68052b6a26d5770f", "CONFIGURATION_INTEGRATED",
+  "Adopt init-justify=no for the GCOS-strict dialect (applied by the gcos-strict.conf custody refresh)",
+  "[GCOS dialect] Set init-justify to no",
+  "Integrated with the GCOS dialect commit (conf synced to pinned HEAD, init_justify knob stored)",
+  evidence="7b97303952fe4ce00eb5b062c287e7833ba7db4e")
+
+E("c265f251f14fe3c7e19bc96a49a318fa52d622a6", "CONFIGURATION_INTEGRATED",
+  "None: configure.ac Clang flag is native build infra",
+  "Fix configure.ac for Clang", "Proof: native build", lane_adoption=True)
+
+E("7824bb9f16e4d98ccacce2952e9aedbac57c5013", "CONFIGURATION_INTEGRATED",
+  "None: configure cleanup is native build infra",
+  "Configure cleanup", "Proof: native build", lane_adoption=True)
+
+E("aa297a7c6743706ba777dc0c86cd781c5540a899", "CONFIGURATION_INTEGRATED",
+  "None: autotools build update",
+  "Build update", "Proof: native build infra", lane_adoption=True)
+
+E("0a761c9fa42cbf4cc01aa5127e21c94991b44ef5", "TEST_IMPORTED",
+  "Adopted by the current-upstream suite lane (SIGTERM test flake fix)",
+  "Fix SIGTERM test randomly failing in tests/testsuite.src/used_binaries.at",
+  "Lane adoption; upstream-known flake classified per suite", lane_adoption=True)
+
+E("f2106ff244e7c6495df0d1fd6060b5e83f5ee937", "TEST_IMPORTED",
+  "Adopted by the current-upstream suite lane (comment-only follow-up)",
+  "Follow-up to r5473 - add missing comment", "Lane adoption", lane_adoption=True)
+
+
+E("26a5cba4eda9d8cee02878a2f745a808b9b47a48", "CONFIGURATION_INTEGRATED",
+  "None: iconv.m4 gettext update is native build infra",
+  "Missing file in r5552 from gettext infrastructure update", "Proof: native build", lane_adoption=True)
+
+
+
+
+E("a3d9d6435401a2893c862e41b4dbc956796e8c35", "HARNESS_ADOPTED",
+  "Adopt the bashism removal in the candidate testsuite harness",
+  "Drop bashisms in atlocal.in and pre-inst-env.in", "Lane adoption", lane_adoption=True)
+
+E("f49bf5314302dfa36e0cc260a8e03d9f09ef4214", "CONFIGURATION_INTEGRATED",
+  "None: configure adjustments are native build infra",
+  "Configure adjustments", "Proof: native build", lane_adoption=True)
+
+E("34efe755f6f4d6a8d3b9f2158609917ad21ece5d", "TEST_IMPORTED",
+  "Adopted by the current-upstream suite lane (test update)",
+  "Test update", "Lane adoption", lane_adoption=True)
+
+E("1fa8db0d0e6bd4411f0db864511fd3d9bb6963a5", "CONFIGURATION_INTEGRATED",
+  "Adopt the alignment/tab normalization: all config/*.conf synced to the pinned upstream head bytes",
+  "Fix minor alignment/tab issues in config/*.conf",
+  "Integrated with the config/copy custody batch; whitespace-only drift confirmed before sync",
+  evidence="BATCH")
 
 # ---- non-semantic harness / doc / asset overrides (defaults refined) ----
 E("8dd5b382cf01cf81a52fcebf71b6b3afe117d17d", "HARNESS_ADOPTED",
@@ -716,7 +877,7 @@ E("fabaca953a23f9ebbdd790acec65190de03e4b48", "NOT_APPLICABLE_WITH_PROOF",
 
 def main() -> int:
     entries = {}
-    for sha, status, action, behavior, residual in C:
+    for sha, status, action, behavior, residual, evidence, lane_adoption in C:
         if status not in COURT:
             print(f"FATAL: unknown status {status} for {sha}")
             return 1
@@ -727,6 +888,8 @@ def main() -> int:
             "residual": residual,
             "court": COURT[status],
             "superseded_by": None,
+            "evidence": evidence,
+            "lane_adoption": lane_adoption,
         }
     doc = {
         "schema": "gnurust-atlas-overrides-v1",
