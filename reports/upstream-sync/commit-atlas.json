@@ -19572,10 +19572,10 @@
    "action": "Implement --copy COPYBOOK and --include HEADER options (adopt source-location mapping)",
    "behavior": "Add options --copy COPYBOOK and --include HEADER to cobc",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
-   "residual": "",
+   "residual": "--copy prepends before preprocessing (court proves >>DEFINE visibility); --include is a native-C boundary (rejected)",
    "superseded_by": null,
-   "evidence": null,
-   "integrated": false,
+   "evidence": "516876868eec0c41a2e82b5b12a4d693c022a9dc",
+   "integrated": true,
    "lane_adoption": false
   },
   {
@@ -20778,10 +20778,10 @@
    "action": "save-temps directory behavior: do not move object/preprocessed files when an explicit target (-E, -c) was given; adopt env-string expansion overflow fix",
    "behavior": "Minor fixes: save-temps with directory target; cob_get_strerror export; env expansion buffer overflow fix",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
-   "residual": "",
+   "residual": "Native-codegen temp handling (candidate temps are always retained); the env-overflow class is inapplicable to the Rust expansion",
    "superseded_by": null,
-   "evidence": null,
-   "integrated": false,
+   "evidence": "516876868eec0c41a2e82b5b12a4d693c022a9dc",
+   "integrated": true,
    "lane_adoption": false
   },
   {
@@ -20854,10 +20854,10 @@
    "action": "Implement -fdiagnostics-absolute-path flag (full paths within diagnostics)",
    "behavior": "New flag -fdiagnostics-absolute-path to display full paths within error locations",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
-   "residual": "",
+   "residual": "Flag parsed, threaded through the launch manifest; CLI court proves the absolute prefix",
    "superseded_by": null,
-   "evidence": null,
-   "integrated": false,
+   "evidence": "516876868eec0c41a2e82b5b12a4d693c022a9dc",
+   "integrated": true,
    "lane_adoption": false
   },
   {

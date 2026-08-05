@@ -521,7 +521,9 @@ E("300b542f3caab9dac639e3eb62f60fdedb6c10a2", "NOT_APPLICABLE_WITH_PROOF",
 
 E("e36a124b2b7247b0b9bcded694ac3e007e461a01", "WRAPPER_INTEGRATED",
   "Implement --copy COPYBOOK and --include HEADER options (adopt source-location mapping)",
-  "Add options --copy COPYBOOK and --include HEADER to cobc", "")
+  "Add options --copy COPYBOOK and --include HEADER to cobc",
+  "--copy prepends before preprocessing (court proves >>DEFINE visibility); --include is a native-C boundary (rejected)",
+  evidence="516876868eec0c41a2e82b5b12a4d693c022a9dc")
 
 E("47ffbd8363bf82482ef7ae3e6a8e9f53b24c1407", "NOT_APPLICABLE_WITH_PROOF",
   "None: performance optimization in the C numeric comparison layer; candidate numeric layer is independent Rust",
@@ -552,11 +554,15 @@ E("12e31f960ebef69a1e8007b94734a53fcbad6168", "NOT_APPLICABLE_WITH_PROOF",
 
 E("44848f58b437cce2eac30106e79a7b943e899b7f", "WRAPPER_INTEGRATED",
   "save-temps directory behavior: do not move object/preprocessed files when an explicit target (-E, -c) was given; adopt env-string expansion overflow fix",
-  "Minor fixes: save-temps with directory target; cob_get_strerror export; env expansion buffer overflow fix", "")
+  "Minor fixes: save-temps with directory target; cob_get_strerror export; env expansion buffer overflow fix",
+  "Native-codegen temp handling (candidate temps are always retained); the env-overflow class is inapplicable to the Rust expansion",
+  evidence="516876868eec0c41a2e82b5b12a4d693c022a9dc")
 
 E("140a030d52eefb0b197a2d994b52b3aefd020c35", "WRAPPER_INTEGRATED",
   "Implement -fdiagnostics-absolute-path flag (full paths within diagnostics)",
-  "New flag -fdiagnostics-absolute-path to display full paths within error locations", "")
+  "New flag -fdiagnostics-absolute-path to display full paths within error locations",
+  "Flag parsed, threaded through the launch manifest; CLI court proves the absolute prefix",
+  evidence="516876868eec0c41a2e82b5b12a4d693c022a9dc")
 
 E("777852c35adf44d44bb615cb5b479115307365ce", "TEST_IMPORTED",
   "Adopt the testcase for r5195/bugs:#923",
