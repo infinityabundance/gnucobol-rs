@@ -664,6 +664,7 @@
 | upstream commit | upstream date | status | Rust integration commit |
 |---|---|---|---|
 | `289c9aef58a9` | 2022-02-04 | CONFIGURATION_INTEGRATED | `7b97303952fe` |
+| `0166302909e9` | 2023-08-17 | RUNTIME_PORTED | `37a3779b1d66` |
 
 ## Non-curated mechanical rows (CI / docs / build / test-only)
 

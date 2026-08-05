@@ -1065,7 +1065,8 @@
    "behavior": "Fix bugs:#904 MOVE PACKED-DECIMAL unsigned to signed leads to bad sign",
    "residual": "",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": "37a3779b1d660f7d25dc7340e5df23d618de5a58"
   },
   "8ea9ac449c986a65299ad015c9930c977bf909cb": {
    "status": "NOT_APPLICABLE_WITH_PROOF",
