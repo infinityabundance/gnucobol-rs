@@ -565,12 +565,14 @@ E("777852c35adf44d44bb615cb5b479115307365ce", "TEST_IMPORTED",
 E("303917744a6c7ce1bfad31a54f2e787fb1c54821", "FRONTEND_REIMPLEMENTED",
   "Generated modules init/clear unused decimal constants: candidate prepared-program must not emit unused constant state that alters module init/clear",
   "Fix bugs:#923: generated modules init/clear unused decimal constants",
-  "Module lifecycle + prepared-program constants")
+  "C codegen layout change; the candidate has no persistent constant cache (bug class inapplicable); pinned by decimal_constant_after_cancel_and_recall_is_clean",
+  evidence="5fc26350c2b9924e238665f5bdd5d9a23102ab54")
 
 E("f67da51cae38c4469e96af8d8c2339175ef61c79", "RUNTIME_PORTED",
   "Decimal constants must live per-module (local storage) and be re-initialized after CANCEL — candidate module state model",
   "Fix bug #917: segfault when accessing a decimal constant after calling a sub-program (CANCEL on subprogram)",
-  "Module lifecycle semantics")
+  "C codegen layout change; CANCEL already drops all candidate module state (call_state removed, VALUE rebuild on next CALL); pinned by decimal_constant_after_cancel_and_recall_is_clean",
+  evidence="5fc26350c2b9924e238665f5bdd5d9a23102ab54")
 
 E("8e2ec25c26bcb09cb520431ee875bc2a13ddcc2d", "RUNTIME_PORTED",
   "Fix partial broken COB_LS_VALIDATE (line-sequential validation)",

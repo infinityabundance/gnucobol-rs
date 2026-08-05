@@ -20955,10 +20955,10 @@
    "action": "Generated modules init/clear unused decimal constants: candidate prepared-program must not emit unused constant state that alters module init/clear",
    "behavior": "Fix bugs:#923: generated modules init/clear unused decimal constants",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
-   "residual": "Module lifecycle + prepared-program constants",
+   "residual": "C codegen layout change; the candidate has no persistent constant cache (bug class inapplicable); pinned by decimal_constant_after_cancel_and_recall_is_clean",
    "superseded_by": null,
-   "evidence": null,
-   "integrated": false,
+   "evidence": "5fc26350c2b9924e238665f5bdd5d9a23102ab54",
+   "integrated": true,
    "lane_adoption": false
   },
   {
@@ -21006,10 +21006,10 @@
    "action": "Decimal constants must live per-module (local storage) and be re-initialized after CANCEL \u2014 candidate module state model",
    "behavior": "Fix bug #917: segfault when accessing a decimal constant after calling a sub-program (CANCEL on subprogram)",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
-   "residual": "Module lifecycle semantics",
+   "residual": "C codegen layout change; CANCEL already drops all candidate module state (call_state removed, VALUE rebuild on next CALL); pinned by decimal_constant_after_cancel_and_recall_is_clean",
    "superseded_by": null,
-   "evidence": null,
-   "integrated": false,
+   "evidence": "5fc26350c2b9924e238665f5bdd5d9a23102ab54",
+   "integrated": true,
    "lane_adoption": false
   },
   {
