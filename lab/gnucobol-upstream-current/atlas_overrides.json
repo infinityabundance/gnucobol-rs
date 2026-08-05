@@ -1247,10 +1247,10 @@
    "status": "RUNTIME_PORTED",
    "action": "INSPECT optimizations and syntax checks: frontend syntax validation + runtime INSPECT behavior alignment",
    "behavior": "Optimizations and syntax checks for INSPECT related functions",
-   "residual": "",
+   "residual": "validate_inspect ported to the checker; conversion table semantics verified identical; sign-on-early-exit is a typed later boundary",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "superseded_by": null,
-   "evidence": null,
+   "evidence": "12239d2da2288e6782ca668abb18b55fc84d879f",
    "lane_adoption": false
   },
   "28b02be15485a8802639b34c8381a4e785251ef6": {

@@ -586,7 +586,9 @@ E("62b39805ca22be04c822267d2c90aaa6ef1e1610", "RUNTIME_PORTED",
 
 E("04614ac7afd2b26cdd4431987996726ffaa8004b", "RUNTIME_PORTED",
   "INSPECT optimizations and syntax checks: frontend syntax validation + runtime INSPECT behavior alignment",
-  "Optimizations and syntax checks for INSPECT related functions", "")
+  "Optimizations and syntax checks for INSPECT related functions",
+  "validate_inspect ported to the checker; conversion table semantics verified identical; sign-on-early-exit is a typed later boundary",
+  evidence="12239d2da2288e6782ca668abb18b55fc84d879f")
 
 E("28b02be15485a8802639b34c8381a4e785251ef6", "RUNTIME_PORTED",
   "Restore the cob_decimal_get_display sign-in-diff fix (numeric display sign behavior)",
