@@ -18906,10 +18906,10 @@
    "action": "Implement the profiling feature for the interpreted candidate: -fprof flag; per-procedure time accounting in the interpreter; COB_PROF_FILE/COB_PROF_MAX_DEPTH/COB_PROF_ENABLE/COB_PROF_FORMAT env support; $b/$f/$d/$t expansion in env strings",
    "behavior": "Add a profiling feature (-fprof; cob_prof_function_call; COB_PROF_* runtime env)",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
-   "residual": "",
+   "residual": "profiling.rs port + paragraph hooks + -fprof; deterministic test-mode clock; depth-overflow warning",
    "superseded_by": null,
-   "evidence": null,
-   "integrated": false,
+   "evidence": "f9e4fa81291961c14be5af1c3d6a884d30ae793f",
+   "integrated": true,
    "lane_adoption": false
   },
   {

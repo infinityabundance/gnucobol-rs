@@ -505,7 +505,9 @@ E("82100d64de35c89ad5980d1b2c8d1ffdd3563570", "NOT_APPLICABLE_WITH_PROOF",
 
 E("7b6995042c4d224d7aed2827387278334b531d17", "RUNTIME_PORTED",
   "Implement the profiling feature for the interpreted candidate: -fprof flag; per-procedure time accounting in the interpreter; COB_PROF_FILE/COB_PROF_MAX_DEPTH/COB_PROF_ENABLE/COB_PROF_FORMAT env support; $b/$f/$d/$t expansion in env strings",
-  "Add a profiling feature (-fprof; cob_prof_function_call; COB_PROF_* runtime env)", "")
+  "Add a profiling feature (-fprof; cob_prof_function_call; COB_PROF_* runtime env)",
+  "profiling.rs port + paragraph hooks + -fprof; deterministic test-mode clock; depth-overflow warning",
+  evidence="f9e4fa81291961c14be5af1c3d6a884d30ae793f")
 
 E("14f0d0908d985b7747ddcac00d8fbfc06092f1c4", "FRONTEND_REIMPLEMENTED",
   "Fix SEGFAULT when checking BY VALUE arguments of a prototype with ANY LENGTH (checker robustness)",

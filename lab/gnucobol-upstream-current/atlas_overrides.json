@@ -1057,10 +1057,10 @@
    "status": "RUNTIME_PORTED",
    "action": "Implement the profiling feature for the interpreted candidate: -fprof flag; per-procedure time accounting in the interpreter; COB_PROF_FILE/COB_PROF_MAX_DEPTH/COB_PROF_ENABLE/COB_PROF_FORMAT env support; $b/$f/$d/$t expansion in env strings",
    "behavior": "Add a profiling feature (-fprof; cob_prof_function_call; COB_PROF_* runtime env)",
-   "residual": "",
+   "residual": "profiling.rs port + paragraph hooks + -fprof; deterministic test-mode clock; depth-overflow warning",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "superseded_by": null,
-   "evidence": null,
+   "evidence": "f9e4fa81291961c14be5af1c3d6a884d30ae793f",
    "lane_adoption": false
   },
   "14f0d0908d985b7747ddcac00d8fbfc06092f1c4": {
