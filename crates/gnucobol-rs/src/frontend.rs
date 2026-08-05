@@ -332,6 +332,9 @@ fn lit_num_attr(digits: u16, scale: i16, signed: bool) -> FieldAttr {
 enum Tok {
     Word(String),
     Str(Vec<u8>),
+    /// `VALUE ALL "lit"` -- the repeating figurative literal (upstream 61479ba0c widened the
+    /// SCREEN SECTION VALUE clause to ALL-literals; the candidate applies it to every VALUE clause).
+    AllLiteral(Vec<u8>),
     Dot,
 }
 
@@ -900,6 +903,10 @@ struct ProgramDef {
     /// `PROGRAM-ID. name IS INITIAL` -- the program's WORKING-STORAGE is re-initialized to its VALUE
     /// clauses on EVERY entry, rather than persisting (static) across CALLs.
     is_initial: bool,
+    /// `PROGRAM-ID. name PROTOTYPE.` -- a prototype declaration (signature only; cobc warns
+    /// 'handling of PROGRAM PROTOTYPE is unfinished'). It is never the run's main program and is
+    /// not executable; CALL targets it as a typed boundary.
+    is_prototype: bool,
 }
 
 /// A file's record organization (the subset). `LINE SEQUENTIAL` writes each record as a `\n`-terminated
@@ -1783,12 +1790,17 @@ fn parse_programs(toks: &[Tok]) -> Result<(String, HashMap<String, ProgramDef>),
     for (idx, &s) in starts.iter().enumerate() {
         let end = starts.get(idx + 1).copied().unwrap_or(toks.len());
         let (name, def) = parse_one_program(toks, s, end)?;
-        if main_name.is_none() {
+        // A PROTOTYPE is a signature-only declaration: never the run's main program (cobc compiles
+        // a prototype-containing source with the FIRST executable program as the entry point).
+        if main_name.is_none() && !def.is_prototype {
             main_name = Some(name.clone());
         }
         map.insert(name, def);
     }
-    Ok((main_name.unwrap(), map))
+    let main_name = main_name.ok_or_else(|| {
+        RunError::Unsupported("no executable program (only PROTOTYPE declarations)".into())
+    })?;
+    Ok((main_name, map))
 }
 
 /// Parse one program from `toks[start..end]` (start is its `PROGRAM-ID`).
@@ -1812,12 +1824,19 @@ fn parse_one_program(
     };
     // PROGRAM-ID. name [IS] [INITIAL | COMMON | RECURSIVE]. -- scan the paragraph (to its '.') for INITIAL.
     let mut is_initial = false;
+    let mut is_prototype = false;
     let mut q = k + 1;
     while let Some(t) = toks.get(q) {
         match t {
             Tok::Dot => break,
             Tok::Word(w) if w == "INITIAL" => {
                 is_initial = true;
+                break;
+            }
+            // `PROGRAM-ID. name PROTOTYPE.` -- a signature-only declaration (upstream 14f0d0908's
+            // grammar surface; cobc warns 'handling of PROGRAM PROTOTYPE is unfinished').
+            Tok::Word(w) if w == "PROTOTYPE" => {
+                is_prototype = true;
                 break;
             }
             _ => q += 1,
@@ -1911,6 +1930,7 @@ fn parse_one_program(
             proc_toks,
             proc_lines,
             is_initial,
+            is_prototype,
         },
     ))
 }
@@ -2923,6 +2943,14 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                     }
                     value = toks.get(k).cloned();
                     k += 1;
+                    // `VALUE ALL "lit"` -- the repeating figurative literal (oracle: PIC X(5)
+                    // VALUE ALL "ab" -> "ababa"; even into a numeric field with a warning).
+                    if matches!(&value, Some(Tok::Word(w)) if w == "ALL") {
+                        if let Some(Tok::Str(s)) = toks.get(k) {
+                            value = Some(Tok::AllLiteral(s.clone()));
+                            k += 1;
+                        }
+                    }
                 }
                 // `USAGE [IS] <form>` -- the explicit clause.
                 Some(Tok::Word(w)) if w == "USAGE" => {
@@ -4976,6 +5004,7 @@ fn run_block(
                                 let nm = match t {
                                     Tok::Str(s) => Some(String::from_utf8_lossy(s).to_string()),
                                     Tok::Word(w) => Some(w.clone()),
+                                    Tok::AllLiteral(_) => None, // not a program name
                                     Tok::Dot => None,
                                 };
                                 if let Some(nm) = nm {
@@ -5467,6 +5496,7 @@ fn tok_to_cond_word(t: &Tok) -> String {
     match t {
         Tok::Word(w) => w.clone(),
         Tok::Str(s) => format!("\u{1}{}", String::from_utf8_lossy(s)),
+        Tok::AllLiteral(s) => format!("\u{1}{}", String::from_utf8_lossy(s)),
         Tok::Dot => ".".into(),
     }
 }
@@ -6249,6 +6279,7 @@ fn eval_cond(
         .map(|tok| match tok {
             Tok::Word(w) => w.clone(),
             Tok::Str(s) => format!("\u{1}{}", String::from_utf8_lossy(s)), // mark string literal
+            Tok::AllLiteral(s) => format!("\u{1}{}", String::from_utf8_lossy(s)),
             Tok::Dot => ".".into(),
         })
         .collect();
@@ -6849,6 +6880,23 @@ fn fill_figurative(f: &mut Field, fig: Fig, decimal_comma: bool) -> Result<(), R
 
 fn init_value(field: &mut Field, v: &Tok) -> Result<(), RunError> {
     match v {
+        Tok::AllLiteral(pat) => {
+            // Oracle (cobc 3.2.0): VALUE ALL "lit" repeats the literal to fill the field
+            // (`PIC X(5) VALUE ALL "ab"` -> "ababa"), truncating a too-long pattern. Applied to
+            // every storage kind (the numeric case compiles with a warning and stores the raw
+            // bytes).
+            if pat.is_empty() {
+                return Err(RunError::Unsupported("empty VALUE ALL".into()));
+            }
+            let n = field.bytes.len();
+            let mut b = Vec::with_capacity(n);
+            while b.len() < n {
+                b.extend_from_slice(pat);
+            }
+            b.truncate(n);
+            field.bytes = b;
+            Ok(())
+        }
         Tok::Str(s) => {
             let src = s.clone();
             store_alnum(field, &src)
@@ -7241,6 +7289,14 @@ fn exec_call(
                 "CALL \"{name}\": not a contained program (external CALL is a boundary)"
             ))
         })?;
+    // A PROTOTYPE is a signature-only declaration: executing it is a typed boundary (cobc's own
+    // prototype handling is unfinished; the ANY LENGTH / BY VALUE argument checks upstream
+    // 14f0d0908 guards are inside that boundary).
+    if callee.is_prototype {
+        return Err(RunError::Unsupported(format!(
+            "CALL \"{name}\": program is a PROTOTYPE declaration (signature-only; execution is a typed boundary)"
+        )));
+    }
 
     // Parse the USING argument list with optional BY REFERENCE/CONTENT modifiers.
     let mut args: Vec<(String, bool)> = Vec::new(); // (caller field name, by_reference)
@@ -7383,6 +7439,7 @@ fn exec_compute_inner(
         match t {
             Tok::Word(w) => split_parens(w, &mut etoks),
             Tok::Str(_) => return Err(RunError::Unsupported("string in COMPUTE".into())),
+            Tok::AllLiteral(_) => return Err(RunError::Unsupported("string in COMPUTE".into())),
             Tok::Dot => {}
         }
     }
@@ -7719,6 +7776,7 @@ fn exec_display(
         let t = &stmt[i];
         match t {
             Tok::Str(s) => operands.push((s.clone(), alnum_attr())),
+            Tok::AllLiteral(s) => operands.push((s.clone(), alnum_attr())),
             Tok::Word(w) => {
                 if w == "UPON" {
                     if let Some(Tok::Word(dev)) = stmt.get(i + 1) {
@@ -12033,6 +12091,7 @@ fn operand_value(
 ) -> Result<(Vec<u8>, FieldAttr), RunError> {
     match t {
         Tok::Str(s) => Ok((s.clone(), alnum_attr())),
+        Tok::AllLiteral(s) => Ok((s.clone(), alnum_attr())),
         Tok::Word(w) => {
             if let Some(f) = read_field(fields, w)? {
                 match &f.storage {
@@ -12421,6 +12480,13 @@ fn eval_function_call(
                 }
             }
             Tok::Str(s) => {
+                raw.push(' ');
+                raw.push('\u{1}');
+                raw.push_str(&strs.len().to_string());
+                strs.push(s.clone());
+            }
+            Tok::AllLiteral(s) => {
+                // VALUE ALL literal used as an operand: its bytes behave like a string literal.
                 raw.push(' ');
                 raw.push('\u{1}');
                 raw.push_str(&strs.len().to_string());
@@ -14693,6 +14759,65 @@ mod tests {
                         DISPLAY \"G=[\" G \"]\".\n\
                         STOP RUN.\n");
         assert_eq!(out, b"C=03\nG=[AB\"\"\"]\n");
+    }
+
+    #[test]
+    fn value_all_literal_repeats_to_fill() {
+        // Upstream 61479ba0c widened the SCREEN SECTION VALUE clause to ALL-literals; the general
+        // `VALUE ALL "lit"` surface is a pre-existing cobc feature. Oracle (cobc 3.2.0):
+        // PIC X(5) VALUE ALL "-" -> "-----"; PIC X(5) VALUE ALL "ab" -> "ababa" (repeat,
+        // truncate). Residual: VALUE ALL into a NUMERIC field compiles with a warning and stores
+        // the raw bytes; the candidate initializes those bytes but its numeric-display path
+        // normalizes them, so that warning-only corner is a documented residual.
+        let out = run("       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 A PIC X(5) VALUE ALL \"-\".\n\
+                    01 B PIC X(5) VALUE ALL \"ab\".\n\
+                    01 E PIC ZZZZ9.\n\
+                    PROCEDURE DIVISION.\n\
+                        DISPLAY \"[\" A \"]\".\n\
+                        DISPLAY \"[\" B \"]\".\n\
+                        MOVE 42 TO E.\n\
+                        DISPLAY \"[\" E \"]\".\n\
+                        STOP RUN.\n");
+        assert_eq!(out, b"[-----]\n[ababa]\n[   42]\n");
+    }
+
+    #[test]
+    fn prototype_declaration_is_not_the_main_program() {
+        // Upstream 14f0d0908 guards prototype-argument checking (ANY LENGTH items only as BY
+        // REFERENCE formal parameters; the C segfault on an error node). The candidate's
+        // prototype surface: `PROGRAM-ID. name PROTOTYPE.` is a signature-only declaration --
+        // never selected as the run's main program (oracle: cobc compiles a prototype-containing
+        // source with the FIRST executable program as entry), and CALL to a prototype is a typed
+        // boundary.
+        let out = run("       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. SUB PROTOTYPE.\n\
+                    DATA DIVISION.\n\
+                    LINKAGE SECTION.\n\
+                    01 P.\n\
+                    PROCEDURE DIVISION USING BY VALUE P.\n\
+                    END PROGRAM SUB.\n\
+                    IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. M.\n\
+                    PROCEDURE DIVISION.\n\
+                        DISPLAY \"M\".\n\
+                        STOP RUN.\n");
+        assert_eq!(
+            out, b"M\n",
+            "the executable program, not the prototype, runs"
+        );
+        // CALL to a prototype-only unit fails closed (signature-only).
+        let src2 = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. M.\n       PROCEDURE DIVISION.\n           CALL \"SUB\".\n           STOP RUN.\n       END PROGRAM M.\n       IDENTIFICATION DIVISION.\n       PROGRAM-ID. SUB PROTOTYPE.\n       PROCEDURE DIVISION.\n       END PROGRAM SUB.\n";
+        set_source_file("prog.cob");
+        let err = run_program(src2).unwrap_err();
+        set_source_file("");
+        assert!(
+            format!("{err:?}").contains("PROTOTYPE"),
+            "CALL to a prototype fails closed: {err:?}"
+        );
     }
 
     #[test]
