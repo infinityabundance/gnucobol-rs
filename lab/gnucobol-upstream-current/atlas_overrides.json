@@ -1217,10 +1217,10 @@
    "status": "RUNTIME_PORTED",
    "action": "Fix partial broken COB_LS_VALIDATE (line-sequential validation)",
    "behavior": "Fix bugs:#918 partial broken COB_LS_VALIDATE",
-   "residual": "",
+   "residual": "C macro-argument fix; the candidate already checked every position; pinned by validate_checks_every_byte_position",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "superseded_by": null,
-   "evidence": null,
+   "evidence": "1a28cdc579375de5fb4415c3ce5281c41dd606c4",
    "lane_adoption": false
   },
   "0b22d441757efc5fa1d18e0767bb54fb31203eb1": {

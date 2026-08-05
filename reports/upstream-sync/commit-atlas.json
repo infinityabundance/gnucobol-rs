@@ -21058,10 +21058,10 @@
    "action": "Fix partial broken COB_LS_VALIDATE (line-sequential validation)",
    "behavior": "Fix bugs:#918 partial broken COB_LS_VALIDATE",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
-   "residual": "",
+   "residual": "C macro-argument fix; the candidate already checked every position; pinned by validate_checks_every_byte_position",
    "superseded_by": null,
-   "evidence": null,
-   "integrated": false,
+   "evidence": "1a28cdc579375de5fb4415c3ce5281c41dd606c4",
+   "integrated": true,
    "lane_adoption": false
   },
   {

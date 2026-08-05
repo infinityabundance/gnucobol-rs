@@ -574,7 +574,9 @@ E("f67da51cae38c4469e96af8d8c2339175ef61c79", "RUNTIME_PORTED",
 
 E("8e2ec25c26bcb09cb520431ee875bc2a13ddcc2d", "RUNTIME_PORTED",
   "Fix partial broken COB_LS_VALIDATE (line-sequential validation)",
-  "Fix bugs:#918 partial broken COB_LS_VALIDATE", "")
+  "Fix bugs:#918 partial broken COB_LS_VALIDATE",
+  "C macro-argument fix; the candidate already checked every position; pinned by validate_checks_every_byte_position",
+  evidence="1a28cdc579375de5fb4415c3ce5281c41dd606c4")
 
 E("0b22d441757efc5fa1d18e0767bb54fb31203eb1", "RUNTIME_PORTED",
   "Fix DISPLAY and ACCEPT with simple attributes SIGSEGV (candidate screen statements with attribute handling)",
