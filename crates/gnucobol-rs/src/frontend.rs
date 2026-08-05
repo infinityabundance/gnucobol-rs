@@ -14336,6 +14336,39 @@ mod tests {
     }
 
     #[test]
+    fn decimal_constant_after_cancel_and_recall_is_clean() {
+        use crate::dialect::Dialect;
+        // Upstream f67da51cae (bugs:#917) + 303917744 (bugs:#923): the C codegen stored decimal
+        // constants globally, so a constant used after CANCEL on a subprogram could read stale/
+        // freed state (segfault); the fix moves them to per-program local storage, re-initialized
+        // on entry, and only the constants a program actually uses are emitted. The candidate has
+        // no persistent decimal-constant cache (literals are materialized per execution and CANCEL
+        // drops all module state), so the bug class is inapplicable; this court pins the fixed
+        // semantics: a large decimal constant used in a called program yields identical results
+        // across CALL / CANCEL / re-CALL.
+        let src = "       IDENTIFICATION DIVISION.\n\
+                   PROGRAM-ID. M.\n\
+                   PROCEDURE DIVISION.\n\
+                       CALL \"S\".\n\
+                       CANCEL \"S\".\n\
+                       CALL \"S\".\n\
+                       STOP RUN.\n\
+                   END PROGRAM M.\n\
+                   IDENTIFICATION DIVISION.\n\
+                   PROGRAM-ID. S.\n\
+                   DATA DIVISION.\n\
+                   WORKING-STORAGE SECTION.\n\
+                   01 R PIC 9(18).\n\
+                   PROCEDURE DIVISION.\n\
+                       COMPUTE R = 123456789012345678 / 2.\n\
+                       DISPLAY R.\n\
+                   END PROGRAM S.\n";
+        let (out, rc) = run_program_dialect_with_rc(src, Dialect::DEFAULT).unwrap();
+        assert_eq!(rc, 0);
+        assert_eq!(out, b"061728394506172839\n061728394506172839\n");
+    }
+
+    #[test]
     fn stop_run_in_callee_unwinds_whole_run() {
         use crate::dialect::Dialect;
         // STOP RUN inside a CALLed contained program halts the WHOLE run: the caller's post-CALL
