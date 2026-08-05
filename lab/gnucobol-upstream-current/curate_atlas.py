@@ -604,7 +604,8 @@ E("85dccf1c72fb4cf4a7ab32e313e09c0d2fbc7e33", "NOT_APPLICABLE_WITH_PROOF",
 E("470f7db125a42594bcc187b60c2d6757731758f0", "FRONTEND_REIMPLEMENTED",
   "Adopt the adjusted error-handling behavior: error/warning selection, exit status, listings expectations (run_fundamental, run_misc, listings, syn_*); rm-strict.conf alignment",
   "Adjusted error handling (cobc-wide; 25 files incl. tests)",
-  "Diagnostic wording parity remains a separate dimension; semantic accept/reject and exit statuses must match")
+  "Diagnostic wording parity remains a separate dimension; semantic accept/reject and exit statuses must match",
+  evidence="5ca48188321193d158498003f2f7336161b138e3")
 
 E("8208acac177e7d50ba68e99aa661b2f26c5a787a", "NOT_APPLICABLE_WITH_PROOF",
   "None: native version.h increase",
