@@ -590,11 +590,15 @@ E("04614ac7afd2b26cdd4431987996726ffaa8004b", "RUNTIME_PORTED",
 
 E("28b02be15485a8802639b34c8381a4e785251ef6", "RUNTIME_PORTED",
   "Restore the cob_decimal_get_display sign-in-diff fix (numeric display sign behavior)",
-  "Restore code disabled by the previous commit (numeric sign fix)", "")
+  "Restore code disabled by the previous commit (numeric sign fix)",
+  "The restored branch is the general decimal-display path the candidate already implements; no candidate change needed",
+  evidence="6921f51a3abadd577c346cfaabb2625979a534ab")
 
 E("c3d5860bf219b0679e0771a0611cc91b61dbe3a1", "RUNTIME_PORTED",
   "Adopt cob_add_int scale handling and packed_is_negative semantics (numeric behavior)",
-  "Minor cleanup and optimizations in libcob (numeric.c: scale handling, sign checks)", "")
+  "Minor cleanup and optimizations in libcob (numeric.c: scale handling, sign checks)",
+  "Behavior-preserving for the candidate; semantics pinned by courts (add_int_on_scaling_p, packed_is_negative)",
+  evidence="6921f51a3abadd577c346cfaabb2625979a534ab")
 
 E("85dccf1c72fb4cf4a7ab32e313e09c0d2fbc7e33", "NOT_APPLICABLE_WITH_PROOF",
   "None: restores a missed tree.h hunk (codeoptim leading-zero skip) — native codegen optimization",

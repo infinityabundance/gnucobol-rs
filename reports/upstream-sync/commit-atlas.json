@@ -21355,10 +21355,10 @@
    "action": "Restore the cob_decimal_get_display sign-in-diff fix (numeric display sign behavior)",
    "behavior": "Restore code disabled by the previous commit (numeric sign fix)",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
-   "residual": "",
+   "residual": "The restored branch is the general decimal-display path the candidate already implements; no candidate change needed",
    "superseded_by": null,
-   "evidence": null,
-   "integrated": false,
+   "evidence": "6921f51a3abadd577c346cfaabb2625979a534ab",
+   "integrated": true,
    "lane_adoption": false
   },
   {
@@ -21411,10 +21411,10 @@
    "action": "Adopt cob_add_int scale handling and packed_is_negative semantics (numeric behavior)",
    "behavior": "Minor cleanup and optimizations in libcob (numeric.c: scale handling, sign checks)",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
-   "residual": "",
+   "residual": "Behavior-preserving for the candidate; semantics pinned by courts (add_int_on_scaling_p, packed_is_negative)",
    "superseded_by": null,
-   "evidence": null,
-   "integrated": false,
+   "evidence": "6921f51a3abadd577c346cfaabb2625979a534ab",
+   "integrated": true,
    "lane_adoption": false
   },
   {
