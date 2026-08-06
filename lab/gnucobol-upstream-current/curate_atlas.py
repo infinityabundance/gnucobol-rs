@@ -74,8 +74,8 @@ E("50b58f682700bdb1513f7b88769e1942fab73ef7", "RUNTIME_PORTED",
 E("9e0d66418efce0cfd7a429b4cd0ef1c0be2b3204", "FRONTEND_REIMPLEMENTED",
   "Suppress the ORGANIZATION INDEXED warning when the file is EXTFH-enabled (candidate checker must not warn where upstream does not)",
   "cobc no longer warns about ORGANIZATION INDEXED for EXTFH files even when built --without-db",
-  "EXCEPTION: indexed-file runtime remains unsupported; this is a checker-warning-only change")
-
+  "EXCEPTION: indexed-file runtime remains unsupported; this is a checker-warning-only change",
+  evidence="a1e11a009237870025747e73426897722a00a6dd")
 E("c4eea8102820f2d9becd2572a0f0b16edbb557d7", "FRONTEND_REIMPLEMENTED",
   "Fix area-check: ENTRY statement must begin in area B, not area A (candidate checker area validation)",
   "ENTRY areacheck corrected to area B", "",
@@ -169,8 +169,8 @@ E("486565722c48b21b50165f61e830442e1d5d97ad", "RUNTIME_PORTED",
 E("79c65d0ecf1a0752e96939979fe0b4210e960e36", "FRONTEND_REIMPLEMENTED",
   "Program-level low/high collating values: compute per-program collating low/high in the frontend; runtime comparison (HIGH-VALUE / LOW-VALUE in presence of collating sequences) uses them",
   "Fix comparison with HIGH-VALUE in the presence of collating sequences",
-  "Frontend collating tables + runtime strings.c equivalent")
-
+  "Frontend collating tables + runtime strings.c equivalent",
+  evidence="a1e11a009237870025747e73426897722a00a6dd")
 E("dc0cddebe0f026adbe27e82f83563a9c88b58510", "WRAPPER_INTEGRATED",
   "Fix -M/-fcopybook-deps behavior: do not keep the preprocessed file; gate -fcopybook-deps behind the experimental option; adopt tests",
   "Fixes to the dependency generation feature from r5345; -fcopybook-deps made experimental", "",
@@ -204,8 +204,8 @@ E("23b5446c13ed379d4928b051c0fa576a2d72b67c", "NOT_APPLICABLE_WITH_PROOF",
 
 E("87500ead47bd937ee0388619be4aa1dc51245e1b", "FRONTEND_REIMPLEMENTED",
   "Fix nested-element handling with the 'with attributes' specification (SCREEN SECTION data-name qualification)",
-  "Fixed bugs:#961: Nested elements mishandled despite 'with attributes' specification", "")
-
+  "Fixed bugs:#961: Nested elements mishandled despite 'with attributes' specification", "",
+  evidence="a1e11a009237870025747e73426897722a00a6dd")
 
 E("47ec5f5134164948f766106f6e3fc9934e36a2fd", "NOT_APPLICABLE_WITH_PROOF",
   "None: BDB indexed partial-key comparison",
