@@ -62,7 +62,11 @@ pub fn intrinsic_numval(s: &str) -> Numval {
     if scaled == 0 {
         negative = false; // +0
     }
-    Numval { negative, scaled, scale: frac_digits.len() as u32 }
+    Numval {
+        negative,
+        scaled,
+        scale: frac_digits.len() as u32,
+    }
 }
 
 /// `FUNCTION NUMVAL(s)` honoring `DECIMAL-POINT IS COMMA`: when `decimal_comma`, `,` is the decimal point
@@ -244,7 +248,11 @@ fn cobol_epoch() -> i64 {
 
 /// `FUNCTION INTEGER-OF-DATE(YYYYMMDD)` — the integer day number (1601-01-01 = 1) for a Gregorian date.
 pub fn intrinsic_integer_of_date(yyyymmdd: u32) -> i64 {
-    let (y, m, d) = ((yyyymmdd / 10000) as i64, ((yyyymmdd / 100) % 100) as i64, (yyyymmdd % 100) as i64);
+    let (y, m, d) = (
+        (yyyymmdd / 10000) as i64,
+        ((yyyymmdd / 100) % 100) as i64,
+        (yyyymmdd % 100) as i64,
+    );
     days_from_civil(y, m, d) - cobol_epoch()
 }
 
@@ -275,7 +283,10 @@ pub fn intrinsic_day_of_integer(n: i64) -> u32 {
 // as an owned `(bytes, attr)` pair (the byte content is what the oracle observes); the rotating temp pool
 // the C uses is just memory reuse — RAII here. The value logic is the already-sealed `intrinsic_*` fns.
 
-use crate::attr::{FieldAttr, COB_FLAG_HAVE_SIGN, COB_TYPE_ALPHANUMERIC, COB_TYPE_NUMERIC_BINARY, COB_TYPE_NUMERIC_DISPLAY};
+use crate::attr::{
+    FieldAttr, COB_FLAG_HAVE_SIGN, COB_TYPE_ALPHANUMERIC, COB_TYPE_NUMERIC_BINARY,
+    COB_TYPE_NUMERIC_DISPLAY,
+};
 
 /// A `cob_intr_*` result field: the data bytes + their attribute.
 pub type IntrField = (Vec<u8>, FieldAttr);
@@ -289,7 +300,12 @@ pub fn make_field_entry(attr: &FieldAttr, size: usize) -> IntrField {
 /// `cob_alloc_set_field_uint (val)` (intrinsic.c): a 4-byte native `BINARY` result field (`PIC 9(9) COMP`)
 /// holding the unsigned value.
 pub fn cob_alloc_set_field_uint(val: u32) -> IntrField {
-    let attr = FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags: 0 };
+    let attr = FieldAttr {
+        field_type: COB_TYPE_NUMERIC_BINARY,
+        digits: 9,
+        scale: 0,
+        flags: 0,
+    };
     (val.to_ne_bytes().to_vec(), attr)
 }
 
@@ -297,24 +313,73 @@ pub fn cob_alloc_set_field_uint(val: u32) -> IntrField {
 /// `val < 0`.
 pub fn cob_alloc_set_field_int(val: i32) -> IntrField {
     let flags = if val < 0 { COB_FLAG_HAVE_SIGN } else { 0 };
-    let attr = FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags };
+    let attr = FieldAttr {
+        field_type: COB_TYPE_NUMERIC_BINARY,
+        digits: 9,
+        scale: 0,
+        flags,
+    };
     (val.to_ne_bytes().to_vec(), attr)
 }
 
-const ALPHA1: FieldAttr = FieldAttr { field_type: COB_TYPE_ALPHANUMERIC, digits: 0, scale: 0, flags: 0 };
+const ALPHA1: FieldAttr = FieldAttr {
+    field_type: COB_TYPE_ALPHANUMERIC,
+    digits: 0,
+    scale: 0,
+    flags: 0,
+};
 
 /// `cob_intr_ord (srcfield)` (intrinsic.c): `FUNCTION ORD(c)` — `*data + 1` as a `BINARY` result.
-pub fn cob_intr_ord(src: &[u8]) -> IntrField {
-    cob_alloc_set_field_uint(src.first().copied().unwrap_or(0) as u32 + 1)
+pub fn cob_intr_char(
+    src: &[u8],
+    src_attr: &FieldAttr,
+    collation: Option<&[u8; 256]>,
+) -> (IntrField, bool) {
+    let i = crate::accessors::cob_get_int(src, src_attr);
+    // Upstream 5bb0fbe1b: FUNCTION CHAR uses the program collating sequence: the character whose
+    // collating weight equals (i - 1); i outside 1..=256, or a weight with no source character,
+    // raises EC-ARGUMENT-FUNCTION and returns 0.
+    if !(1..=256).contains(&i) {
+        let mut r = make_field_entry(&ALPHA1, 1);
+        r.0[0] = 0;
+        return (r, true);
+    }
+    let target = (i - 1) as u8;
+    match collation {
+        None => {
+            let mut r = make_field_entry(&ALPHA1, 1);
+            r.0[0] = target;
+            (r, false)
+        }
+        Some(col) => {
+            // inverse: the first byte whose weight equals `target` (col is a permutation for the
+            // EBCDIC alphabet; a weight with no source byte is an argument error).
+            let mut chr = 0usize;
+            while chr < 255 && col[chr] != target {
+                chr += 1;
+            }
+            let mut r = make_field_entry(&ALPHA1, 1);
+            if chr == 255 && col[255] != target {
+                r.0[0] = 0;
+                (r, true)
+            } else {
+                r.0[0] = chr as u8;
+                (r, false)
+            }
+        }
+    }
 }
 
-/// `cob_intr_char (srcfield)` (intrinsic.c): `FUNCTION CHAR(n)` — a 1-byte field holding `n-1` when
-/// `n` is in `1..=256`, else `0`. `n` is read from the source as an integer.
-pub fn cob_intr_char(src: &[u8], src_attr: &FieldAttr) -> IntrField {
-    let i = crate::accessors::cob_get_int(src, src_attr);
-    let mut r = make_field_entry(&ALPHA1, 1);
-    r.0[0] = if !(1..=256).contains(&i) { 0 } else { (i - 1) as u8 };
-    r
+/// `cob_intr_ord (srcfield)` (intrinsic.c): `FUNCTION ORD` -- the collating position of the first
+/// byte (1-based). With a program collating sequence, the position is the byte's weight + 1
+/// (upstream 5bb0fbe1b).
+pub fn cob_intr_ord(src: &[u8], collation: Option<&[u8; 256]>) -> IntrField {
+    let chr = src.first().copied().unwrap_or(0);
+    let ord = match collation {
+        None => chr as u32 + 1,
+        Some(col) => col[chr as usize] as u32 + 1,
+    };
+    cob_alloc_set_field_uint(ord)
 }
 
 /// `cob_intr_byte_length (srcfield)` (intrinsic.c): `FUNCTION BYTE-LENGTH` — the field's byte size.
@@ -356,9 +421,17 @@ fn calc_ref_mod(data: Vec<u8>, offset: i32, length: i32) -> IntrField {
 fn intr_refmod(data: Vec<u8>, offset: i32, length: i32) -> IntrField {
     if offset > 0 {
         let start = (offset - 1).max(0) as usize;
-        let len = if length > 0 { length as usize } else { data.len().saturating_sub(start) };
+        let len = if length > 0 {
+            length as usize
+        } else {
+            data.len().saturating_sub(start)
+        };
         let end = (start + len).min(data.len());
-        let slice = if start <= data.len() { data[start..end].to_vec() } else { Vec::new() };
+        let slice = if start <= data.len() {
+            data[start..end].to_vec()
+        } else {
+            Vec::new()
+        };
         (slice, ALPHA1)
     } else {
         (data, ALPHA1)
@@ -368,11 +441,21 @@ fn intr_refmod(data: Vec<u8>, offset: i32, length: i32) -> IntrField {
 // ---- numeric-result cob_intr_* (over the sealed CobDecimal layer) -------------------------------
 
 use crate::accessors::cob_get_int;
-use crate::int_pow::cob_s32_pow;
-use crate::attr::{COB_TYPE_ALPHANUMERIC_ALL, COB_TYPE_ALPHANUMERIC_EDITED, COB_TYPE_NUMERIC_COMP5, COB_TYPE_NUMERIC_DOUBLE, COB_TYPE_NUMERIC_EDITED, COB_TYPE_NUMERIC_FLOAT, COB_TYPE_NUMERIC_L_DOUBLE, COB_TYPE_NUMERIC_PACKED};
-use crate::cob_decimal::{cob_decimal_add, cob_decimal_cmp, cob_decimal_div, cob_decimal_get_field, cob_decimal_get_mpf, cob_decimal_mul, cob_decimal_set_field, cob_decimal_set_mpf, cob_decimal_sub, CobDecimal};
-use crate::mpf::{cob_mpf_acos, cob_mpf_asin, cob_mpf_atan, cob_mpf_cos, cob_mpf_exp, cob_mpf_log, cob_mpf_log10, cob_mpf_sin, cob_mpf_tan, cob_pi, Mpf, COB_MPF_PREC};
+use crate::attr::{
+    COB_TYPE_ALPHANUMERIC_ALL, COB_TYPE_ALPHANUMERIC_EDITED, COB_TYPE_NUMERIC_COMP5,
+    COB_TYPE_NUMERIC_DOUBLE, COB_TYPE_NUMERIC_EDITED, COB_TYPE_NUMERIC_FLOAT,
+    COB_TYPE_NUMERIC_L_DOUBLE, COB_TYPE_NUMERIC_PACKED,
+};
+use crate::cob_decimal::{
+    cob_decimal_add, cob_decimal_cmp, cob_decimal_div, cob_decimal_get_field, cob_decimal_get_mpf,
+    cob_decimal_mul, cob_decimal_set_field, cob_decimal_set_mpf, cob_decimal_sub, CobDecimal,
+};
 use crate::gmp::Mpz;
+use crate::int_pow::cob_s32_pow;
+use crate::mpf::{
+    cob_mpf_acos, cob_mpf_asin, cob_mpf_atan, cob_mpf_cos, cob_mpf_exp, cob_mpf_log, cob_mpf_log10,
+    cob_mpf_sin, cob_mpf_tan, cob_pi, Mpf, COB_MPF_PREC,
+};
 
 /// `cob_trim_decimal (d)` (intrinsic.c): strip trailing decimal zeros, lowering the scale (a zero value
 /// becomes scale 0).
@@ -402,16 +485,40 @@ pub fn cob_alloc_field(d: &mut CobDecimal) -> (FieldAttr, usize) {
     let flags = if neg { COB_FLAG_HAVE_SIGN } else { 0 };
     let bitnum = d.value.sizeinbase2();
     if bitnum < (33 - negsign) && d.scale < 10 {
-        (FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: d.scale as i16, flags }, 4)
+        (
+            FieldAttr {
+                field_type: COB_TYPE_NUMERIC_BINARY,
+                digits: 9,
+                scale: d.scale as i16,
+                flags,
+            },
+            4,
+        )
     } else if bitnum < (65 - negsign) && d.scale < 19 {
-        (FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 20, scale: d.scale as i16, flags }, 8)
+        (
+            FieldAttr {
+                field_type: COB_TYPE_NUMERIC_BINARY,
+                digits: 20,
+                scale: d.scale as i16,
+                flags,
+            },
+            8,
+        )
     } else {
         // `mpz_sizeinbase(value, 10)` — GMP estimates the base-10 digit count from the bit length and may
         // return the exact count OR one too many (it is exact only for power-of-two bases). The result
         // field width follows that estimate, so replicate the formula (chars_per_bit_exactly = log10(2)).
         let digits10 = (d.value.sizeinbase2() as f64 * 0.301_029_995_663_981_2_f64) as usize + 1;
         let size = digits10.max(d.scale.max(0) as usize);
-        (FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: size as u16, scale: d.scale as i16, flags }, size)
+        (
+            FieldAttr {
+                field_type: COB_TYPE_NUMERIC_DISPLAY,
+                digits: size as u16,
+                scale: d.scale as i16,
+                flags,
+            },
+            size,
+        )
     }
 }
 
@@ -479,7 +586,10 @@ pub fn cob_intr_concatenate(offset: i32, length: i32, parts: &[&[u8]]) -> IntrFi
 
 /// `cob_intr_sum (params, ...)` (intrinsic.c): `FUNCTION SUM` — the sum of the numeric operands.
 pub fn cob_intr_sum(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
-    let mut d = CobDecimal { value: Mpz::from_u64(0), scale: 0 };
+    let mut d = CobDecimal {
+        value: Mpz::from_u64(0),
+        scale: 0,
+    };
     for (f, a) in fields {
         let d2 = cob_decimal_set_field(f, a);
         cob_decimal_add(&mut d, &d2);
@@ -492,7 +602,13 @@ pub fn cob_intr_sum(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
 pub fn cob_intr_max(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
     let mut best = 0usize;
     for i in 1..fields.len() {
-        if crate::cob_decimal::cob_numeric_cmp(fields[i].0, fields[i].1, fields[best].0, fields[best].1) > 0 {
+        if crate::cob_decimal::cob_numeric_cmp(
+            fields[i].0,
+            fields[i].1,
+            fields[best].0,
+            fields[best].1,
+        ) > 0
+        {
             best = i;
         }
     }
@@ -503,7 +619,13 @@ pub fn cob_intr_max(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
 pub fn cob_intr_min(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
     let mut best = 0usize;
     for i in 1..fields.len() {
-        if crate::cob_decimal::cob_numeric_cmp(fields[i].0, fields[i].1, fields[best].0, fields[best].1) < 0 {
+        if crate::cob_decimal::cob_numeric_cmp(
+            fields[i].0,
+            fields[i].1,
+            fields[best].0,
+            fields[best].1,
+        ) < 0
+        {
             best = i;
         }
     }
@@ -559,7 +681,10 @@ pub fn cob_intr_midrange(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
     let mut d = cob_decimal_set_field(fields[mn].0, fields[mn].1);
     let dmax = cob_decimal_set_field(fields[mx].0, fields[mx].1);
     cob_decimal_add(&mut d, &dmax);
-    let two = CobDecimal { value: Mpz::from_u64(2), scale: 0 };
+    let two = CobDecimal {
+        value: Mpz::from_u64(2),
+        scale: 0,
+    };
     let _ = cob_decimal_div(&mut d, &two);
     intr_decimal_result(d)
 }
@@ -569,12 +694,18 @@ pub fn cob_intr_mean(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
     if fields.len() == 1 {
         return (fields[0].0.to_vec(), *fields[0].1);
     }
-    let mut d = CobDecimal { value: Mpz::from_u64(0), scale: 0 };
+    let mut d = CobDecimal {
+        value: Mpz::from_u64(0),
+        scale: 0,
+    };
     for (f, a) in fields {
         let d2 = cob_decimal_set_field(f, a);
         cob_decimal_add(&mut d, &d2);
     }
-    let n = CobDecimal { value: Mpz::from_u64(fields.len() as u64), scale: 0 };
+    let n = CobDecimal {
+        value: Mpz::from_u64(fields.len() as u64),
+        scale: 0,
+    };
     let _ = cob_decimal_div(&mut d, &n);
     intr_decimal_result(d)
 }
@@ -588,7 +719,8 @@ pub fn cob_intr_median(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
     }
     let mut order: Vec<usize> = (0..n).collect();
     order.sort_by(|&a, &b| {
-        crate::cob_decimal::cob_numeric_cmp(fields[a].0, fields[a].1, fields[b].0, fields[b].1).cmp(&0)
+        crate::cob_decimal::cob_numeric_cmp(fields[a].0, fields[a].1, fields[b].0, fields[b].1)
+            .cmp(&0)
     });
     let i = n / 2;
     if n % 2 == 1 {
@@ -598,7 +730,10 @@ pub fn cob_intr_median(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
         let mut d = cob_decimal_set_field(fields[order[i - 1]].0, fields[order[i - 1]].1);
         let d2 = cob_decimal_set_field(fields[order[i]].0, fields[order[i]].1);
         cob_decimal_add(&mut d, &d2);
-        let two = CobDecimal { value: Mpz::from_u64(2), scale: 0 };
+        let two = CobDecimal {
+            value: Mpz::from_u64(2),
+            scale: 0,
+        };
         let _ = cob_decimal_div(&mut d, &two);
         intr_decimal_result(d)
     }
@@ -688,7 +823,10 @@ pub fn cob_intr_bit_to_char(src: &[u8]) -> IntrField {
 
 /// `10^digits - 1` as a decimal at the given scale (the all-nines magnitude of a `digits`-digit field).
 fn nines_decimal(digits: u16, scale: i16) -> CobDecimal {
-    CobDecimal { value: Mpz::ui_pow_ui(10, digits as u32).sub_ui(1), scale: scale as i32 }
+    CobDecimal {
+        value: Mpz::ui_pow_ui(10, digits as u32).sub_ui(1),
+        scale: scale as i32,
+    }
 }
 
 /// `cob_intr_lowest_algebraic (srcfield)` (intrinsic.c): `FUNCTION LOWEST-ALGEBRAIC` — the smallest value
@@ -705,7 +843,10 @@ pub fn cob_intr_lowest_algebraic(src_len: usize, attr: &FieldAttr) -> IntrField 
             }
             let mut d = if attr.field_type == COB_TYPE_NUMERIC_COMP5 {
                 let expo = (src_len as u32) * 8 - 1;
-                CobDecimal { value: Mpz::ui_pow_ui(2, expo), scale: attr.scale as i32 }
+                CobDecimal {
+                    value: Mpz::ui_pow_ui(2, expo),
+                    scale: attr.scale as i32,
+                }
             } else {
                 nines_decimal(attr.digits, attr.scale)
             };
@@ -740,7 +881,10 @@ pub fn cob_intr_highest_algebraic(src_len: usize, attr: &FieldAttr) -> IntrField
                 if attr.flags & COB_FLAG_HAVE_SIGN != 0 {
                     expo -= 1;
                 }
-                CobDecimal { value: Mpz::ui_pow_ui(2, expo).sub_ui(1), scale: attr.scale as i32 }
+                CobDecimal {
+                    value: Mpz::ui_pow_ui(2, expo).sub_ui(1),
+                    scale: attr.scale as i32,
+                }
             } else {
                 nines_decimal(attr.digits, attr.scale)
             };
@@ -756,7 +900,14 @@ pub fn cob_intr_highest_algebraic(src_len: usize, attr: &FieldAttr) -> IntrField
 /// `valid_decimal_time (seconds_from_midnight)` (intrinsic.c): the time-of-day is valid when the
 /// seconds-from-midnight count does not exceed `SECONDS_IN_DAY` (86400).
 fn valid_decimal_time(seconds_from_midnight: &CobDecimal) -> bool {
-    let seconds_in_day = CobDecimal { value: { let mut m = Mpz::new(); m.set_ui(86400); m }, scale: 0 };
+    let seconds_in_day = CobDecimal {
+        value: {
+            let mut m = Mpz::new();
+            m.set_ui(86400);
+            m
+        },
+        scale: 0,
+    };
     cob_decimal_cmp(seconds_from_midnight, &seconds_in_day) <= 0
 }
 
@@ -772,12 +923,26 @@ pub fn cob_intr_combined_datetime(
     if !valid_integer_date(srdays) {
         return cob_alloc_set_field_uint(0);
     }
-    let mut combined = CobDecimal { value: { let mut m = Mpz::new(); m.set_ui(srdays as u64); m }, scale: 0 };
+    let mut combined = CobDecimal {
+        value: {
+            let mut m = Mpz::new();
+            m.set_ui(srdays as u64);
+            m
+        },
+        scale: 0,
+    };
     let mut srtime = cob_decimal_set_field(time, time_attr);
     if !valid_decimal_time(&srtime) {
         return cob_alloc_set_field_uint(0);
     }
-    let hundred_thousand = CobDecimal { value: { let mut m = Mpz::new(); m.set_ui(100000); m }, scale: 0 };
+    let hundred_thousand = CobDecimal {
+        value: {
+            let mut m = Mpz::new();
+            m.set_ui(100000);
+            m
+        },
+        scale: 0,
+    };
     let _ = cob_decimal_div(&mut srtime, &hundred_thousand);
     cob_decimal_add(&mut combined, &srtime);
     intr_decimal_result(combined)
@@ -835,7 +1000,13 @@ pub fn cob_intr_test_day_yyyyddd(src: &[u8], src_attr: &FieldAttr) -> IntrField 
 /// `cob_intr_trim (offset, length, srcfield, direction)` (intrinsic.c): `FUNCTION TRIM` — strips spaces;
 /// `direction` 0 trims both ends, 1 (LEADING) trims the left, 2 (TRAILING) trims the right. An all-space
 /// source yields a zero-length result. Reference modification is applied when `offset > 0`.
-pub fn cob_intr_trim(offset: i32, length: i32, src: &[u8], src_attr: &FieldAttr, direction: i32) -> IntrField {
+pub fn cob_intr_trim(
+    offset: i32,
+    length: i32,
+    src: &[u8],
+    src_attr: &FieldAttr,
+    direction: i32,
+) -> IntrField {
     if src.iter().all(|&b| b == b' ') {
         return (Vec::new(), *src_attr);
     }
@@ -862,7 +1033,9 @@ pub fn cob_intr_trim(offset: i32, length: i32, src: &[u8], src_attr: &FieldAttr,
 /// `strncasecmp` under `LC_ALL=C`).
 fn run_eq(a: &[u8], b: &[u8], case_insensitive: bool) -> bool {
     if case_insensitive {
-        a.iter().zip(b).all(|(&x, &y)| x.to_ascii_lowercase() == y.to_ascii_lowercase())
+        a.iter()
+            .zip(b)
+            .all(|(&x, &y)| x.to_ascii_lowercase() == y.to_ascii_lowercase())
     } else {
         a == b
     }
@@ -875,16 +1048,25 @@ fn run_eq(a: &[u8], b: &[u8], case_insensitive: bool) -> bool {
 /// `offset > 0`.
 /// Whether a `(match, replacement)` pair matches `original` at index `i`.
 fn substitute_match_at(original: &[u8], i: usize, m: &[u8], case_insensitive: bool) -> bool {
-    !m.is_empty() && i + m.len() <= original.len() && run_eq(&original[i..i + m.len()], m, case_insensitive)
+    !m.is_empty()
+        && i + m.len() <= original.len()
+        && run_eq(&original[i..i + m.len()], m, case_insensitive)
 }
 
 /// `get_substituted_size (original, matches, reps, numreps, cmp)` (intrinsic.c): the length of the
 /// SUBSTITUTE result (first matching pair at each position advances by its match length).
-fn get_substituted_size(original: &[u8], pairs: &[(&[u8], &[u8])], case_insensitive: bool) -> usize {
+fn get_substituted_size(
+    original: &[u8],
+    pairs: &[(&[u8], &[u8])],
+    case_insensitive: bool,
+) -> usize {
     let mut size = 0;
     let mut i = 0;
     while i < original.len() {
-        match pairs.iter().find(|(m, _)| substitute_match_at(original, i, m, case_insensitive)) {
+        match pairs
+            .iter()
+            .find(|(m, _)| substitute_match_at(original, i, m, case_insensitive))
+        {
             Some((m, r)) => {
                 size += r.len();
                 i += m.len();
@@ -900,10 +1082,18 @@ fn get_substituted_size(original: &[u8], pairs: &[(&[u8], &[u8])], case_insensit
 
 /// `substitute_matches (original, matches, reps, numreps, cmp, replaced_begin)` (intrinsic.c): write the
 /// SUBSTITUTE result into `out`.
-fn substitute_matches(original: &[u8], pairs: &[(&[u8], &[u8])], case_insensitive: bool, out: &mut Vec<u8>) {
+fn substitute_matches(
+    original: &[u8],
+    pairs: &[(&[u8], &[u8])],
+    case_insensitive: bool,
+    out: &mut Vec<u8>,
+) {
     let mut i = 0;
     while i < original.len() {
-        match pairs.iter().find(|(m, _)| substitute_match_at(original, i, m, case_insensitive)) {
+        match pairs
+            .iter()
+            .find(|(m, _)| substitute_match_at(original, i, m, case_insensitive))
+        {
             Some((m, r)) => {
                 out.extend_from_slice(r);
                 i += m.len();
@@ -919,7 +1109,13 @@ fn substitute_matches(original: &[u8], pairs: &[(&[u8], &[u8])], case_insensitiv
 /// `substitute (offset, length, params, cmp_func, ...)` (intrinsic.c): the shared engine behind
 /// `FUNCTION SUBSTITUTE`/`SUBSTITUTE-CASE` — size the result, write the matches, optionally reference-modify.
 /// An empty match operand is skipped (libcob would otherwise loop).
-fn substitute(offset: i32, length: i32, original: &[u8], pairs: &[(&[u8], &[u8])], case_insensitive: bool) -> IntrField {
+fn substitute(
+    offset: i32,
+    length: i32,
+    original: &[u8],
+    pairs: &[(&[u8], &[u8])],
+    case_insensitive: bool,
+) -> IntrField {
     let mut out = Vec::with_capacity(get_substituted_size(original, pairs, case_insensitive));
     substitute_matches(original, pairs, case_insensitive, &mut out);
     if offset > 0 {
@@ -930,13 +1126,23 @@ fn substitute(offset: i32, length: i32, original: &[u8], pairs: &[(&[u8], &[u8])
 
 /// `cob_intr_substitute (offset, length, params, ...)` (intrinsic.c): `FUNCTION SUBSTITUTE` — case-sensitive
 /// pattern replacement.
-pub fn cob_intr_substitute(offset: i32, length: i32, original: &[u8], pairs: &[(&[u8], &[u8])]) -> IntrField {
+pub fn cob_intr_substitute(
+    offset: i32,
+    length: i32,
+    original: &[u8],
+    pairs: &[(&[u8], &[u8])],
+) -> IntrField {
     substitute(offset, length, original, pairs, false)
 }
 
 /// `cob_intr_substitute_case (offset, length, params, ...)` (intrinsic.c): `FUNCTION SUBSTITUTE-CASE` —
 /// case-insensitive pattern replacement.
-pub fn cob_intr_substitute_case(offset: i32, length: i32, original: &[u8], pairs: &[(&[u8], &[u8])]) -> IntrField {
+pub fn cob_intr_substitute_case(
+    offset: i32,
+    length: i32,
+    original: &[u8],
+    pairs: &[(&[u8], &[u8])],
+) -> IntrField {
     substitute(offset, length, original, pairs, true)
 }
 
@@ -1034,12 +1240,25 @@ pub fn cob_intr_stored_char_length(src: &[u8]) -> IntrField {
 /// **fatal-errors** (aborts). A library port cannot abort here, so this returns an empty field — the
 /// documented not-implemented boundary (these `FUNCTION`s are genuinely unimplemented in GnuCOBOL 3.2).
 pub fn error_not_implemented() -> IntrField {
-    (Vec::new(), FieldAttr { field_type: COB_TYPE_ALPHANUMERIC, digits: 0, scale: 0, flags: 0 })
+    (
+        Vec::new(),
+        FieldAttr {
+            field_type: COB_TYPE_ALPHANUMERIC,
+            digits: 0,
+            scale: 0,
+            flags: 0,
+        },
+    )
 }
 
 /// `cob_intr_boolean_of_integer (f1, f2)` (intrinsic.c): unimplemented upstream — see
 /// [`error_not_implemented`].
-pub fn cob_intr_boolean_of_integer(_f1: &[u8], _a1: &FieldAttr, _f2: &[u8], _a2: &FieldAttr) -> IntrField {
+pub fn cob_intr_boolean_of_integer(
+    _f1: &[u8],
+    _a1: &FieldAttr,
+    _f2: &[u8],
+    _a2: &FieldAttr,
+) -> IntrField {
     error_not_implemented()
 }
 
@@ -1054,7 +1273,10 @@ fn numval_to_decimal(nv: &Numval) -> CobDecimal {
     if nv.negative {
         value.neg();
     }
-    CobDecimal { value, scale: nv.scale as i32 }
+    CobDecimal {
+        value,
+        scale: nv.scale as i32,
+    }
 }
 
 /// `cob_intr_numval (srcfield)` (intrinsic.c): `FUNCTION NUMVAL(s)` — parse the field's text to a numeric
@@ -1067,7 +1289,11 @@ pub fn cob_intr_numval(src: &[u8]) -> IntrField {
 /// through the sealed value-logic (`intrinsic_numval` / `intrinsic_numval_c`).
 fn numval(src: &[u8], numval_c: bool) -> IntrField {
     let s = String::from_utf8_lossy(src);
-    let nv = if numval_c { intrinsic_numval_c(&s) } else { intrinsic_numval(&s) };
+    let nv = if numval_c {
+        intrinsic_numval_c(&s)
+    } else {
+        intrinsic_numval(&s)
+    };
     intr_decimal_result(numval_to_decimal(&nv))
 }
 
@@ -1109,7 +1335,9 @@ pub fn cob_check_numval(
                 b'0'..=b'9' | b'+' | b'-' | b'.' | b',' | b'*' => return 1,
                 b' ' => {}
                 _ => {
-                    if pos < cmax - 1 && (&cur[pos..pos + 2] == b"CR" || &cur[pos..pos + 2] == b"DB") {
+                    if pos < cmax - 1
+                        && (&cur[pos..pos + 2] == b"CR" || &cur[pos..pos + 2] == b"DB")
+                    {
                         return 1;
                     }
                     if begi.is_none() {
@@ -1435,7 +1663,13 @@ pub fn cob_intr_test_numval_f(src: &[u8]) -> IntrField {
 
 /// `cob_mod_or_rem (f1, f2, func_is_rem)` (intrinsic.c): the shared `MOD`/`REM` core —
 /// `f1 - q*f2` where `q` is `floor(f1/f2)` (MOD) or `trunc(f1/f2)` (REM). A zero divisor yields `0`.
-pub fn cob_mod_or_rem(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr, func_is_rem: bool) -> IntrField {
+pub fn cob_mod_or_rem(
+    f1: &[u8],
+    a1: &FieldAttr,
+    f2: &[u8],
+    a2: &FieldAttr,
+    func_is_rem: bool,
+) -> IntrField {
     let mut q = cob_decimal_set_field(f1, a1);
     let d3 = cob_decimal_set_field(f2, a2);
     if d3.value.sgn() == 0 {
@@ -1566,23 +1800,39 @@ pub fn cob_intr_integer_of_day(src: &[u8], src_attr: &FieldAttr) -> IntrField {
 /// `cob_intr_date_of_integer (srcdays)` (intrinsic.c): `FUNCTION DATE-OF-INTEGER(days)` — an 8-digit
 /// `YYYYMMDD` DISPLAY field, or `"00000000"` for an out-of-range day.
 pub fn cob_intr_date_of_integer(src: &[u8], src_attr: &FieldAttr) -> IntrField {
-    let attr = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 8, scale: 0, flags: 0 };
+    let attr = FieldAttr {
+        field_type: COB_TYPE_NUMERIC_DISPLAY,
+        digits: 8,
+        scale: 0,
+        flags: 0,
+    };
     let days = crate::accessors::cob_get_int(src, src_attr);
     if !valid_integer_date(days) {
         return (b"00000000".to_vec(), attr);
     }
-    (format!("{:08}", intrinsic_date_of_integer(days as i64)).into_bytes(), attr)
+    (
+        format!("{:08}", intrinsic_date_of_integer(days as i64)).into_bytes(),
+        attr,
+    )
 }
 
 /// `cob_intr_day_of_integer (srcdays)` (intrinsic.c): `FUNCTION DAY-OF-INTEGER(days)` — a 7-digit
 /// `YYYYDDD` DISPLAY field.
 pub fn cob_intr_day_of_integer(src: &[u8], src_attr: &FieldAttr) -> IntrField {
-    let attr = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 7, scale: 0, flags: 0 };
+    let attr = FieldAttr {
+        field_type: COB_TYPE_NUMERIC_DISPLAY,
+        digits: 7,
+        scale: 0,
+        flags: 0,
+    };
     let days = crate::accessors::cob_get_int(src, src_attr);
     if !valid_integer_date(days) {
         return (b"0000000".to_vec(), attr);
     }
-    (format!("{:07}", intrinsic_day_of_integer(days as i64)).into_bytes(), attr)
+    (
+        format!("{:07}", intrinsic_day_of_integer(days as i64)).into_bytes(),
+        attr,
+    )
 }
 
 // ---- formatted date/time machinery (intrinsic.c) ------------------------------------------------
@@ -1608,7 +1858,11 @@ fn days_up_to_year(year: i32) -> u32 {
 /// `integer_of_date (year, month, days)` (intrinsic.c): the 1601-based day number for a calendar date.
 fn integer_of_date(year: i32, month: i32, days: i32) -> u32 {
     let mut totaldays = days_up_to_year(year);
-    totaldays += if leap_year(year) { LEAP_DAYS[(month - 1) as usize] } else { NORMAL_DAYS[(month - 1) as usize] } as u32;
+    totaldays += if leap_year(year) {
+        LEAP_DAYS[(month - 1) as usize]
+    } else {
+        NORMAL_DAYS[(month - 1) as usize]
+    } as u32;
     totaldays + days as u32
 }
 
@@ -1773,7 +2027,10 @@ fn test_hyphen_presence(with_hyphens: bool, d: &[u8], offset: &mut i32) -> i32 {
 
 /// `test_month (date, offset, month)` (intrinsic.c): the two `MM` digits (`01..12`).
 fn test_month(d: &[u8], offset: &mut i32, month: &mut i32) -> i32 {
-    return_if_not_zero!(test_char_cond(date_at(d, *offset) == b'0' || date_at(d, *offset) == b'1', offset));
+    return_if_not_zero!(test_char_cond(
+        date_at(d, *offset) == b'0' || date_at(d, *offset) == b'1',
+        offset
+    ));
     let first_digit = (date_at(d, *offset - 1) & 0x0F) as i32;
     if first_digit == 0 {
         return_if_not_zero!(test_char_in_range(b'1', b'9', date_at(d, *offset), offset));
@@ -1786,17 +2043,31 @@ fn test_month(d: &[u8], offset: &mut i32, month: &mut i32) -> i32 {
 
 /// `test_day_of_month (date, year, month, offset)` (intrinsic.c): `DD` bounded by the month length.
 fn test_day_of_month(d: &[u8], year: i32, month: i32, offset: &mut i32) -> i32 {
-    let days_in_month = if leap_year(year) { LEAP_MONTH_DAYS[month as usize] } else { NORMAL_MONTH_DAYS[month as usize] };
+    let days_in_month = if leap_year(year) {
+        LEAP_MONTH_DAYS[month as usize]
+    } else {
+        NORMAL_MONTH_DAYS[month as usize]
+    };
     let max_first_digit = b'0' + (days_in_month / 10) as u8;
     let max_second_digit = b'0' + (days_in_month % 10) as u8;
-    return_if_not_zero!(test_char_in_range(b'0', max_first_digit, date_at(d, *offset), offset));
+    return_if_not_zero!(test_char_in_range(
+        b'0',
+        max_first_digit,
+        date_at(d, *offset),
+        offset
+    ));
     let first_digit = date_at(d, *offset - 1);
     if first_digit == b'0' {
         return_if_not_zero!(test_char_in_range(b'1', b'9', date_at(d, *offset), offset));
     } else if first_digit != max_first_digit {
         return_if_not_zero!(test_digit(date_at(d, *offset), offset));
     } else {
-        return_if_not_zero!(test_char_in_range(b'0', max_second_digit, date_at(d, *offset), offset));
+        return_if_not_zero!(test_char_in_range(
+            b'0',
+            max_second_digit,
+            date_at(d, *offset),
+            offset
+        ));
     }
     0
 }
@@ -1817,7 +2088,12 @@ fn test_day_of_year(d: &[u8], year: i32, offset: &mut i32) -> i32 {
         return_if_not_zero!(test_digit(date_at(d, *offset), offset));
     } else {
         let max_last_digit = if leap_year(year) { b'6' } else { b'5' };
-        return_if_not_zero!(test_char_in_range(b'0', max_last_digit, date_at(d, *offset), offset));
+        return_if_not_zero!(test_char_in_range(
+            b'0',
+            max_last_digit,
+            date_at(d, *offset),
+            offset
+        ));
     }
     0
 }
@@ -1837,7 +2113,12 @@ fn test_week(d: &[u8], year: i32, offset: &mut i32) -> i32 {
         return_if_not_zero!(test_digit(date_at(d, *offset), offset));
     } else {
         let max_last_digit = if max_week(year) == 53 { b'3' } else { b'2' };
-        return_if_not_zero!(test_char_in_range(b'0', max_last_digit, date_at(d, *offset), offset));
+        return_if_not_zero!(test_char_in_range(
+            b'0',
+            max_last_digit,
+            date_at(d, *offset),
+            offset
+        ));
     }
     0
 }
@@ -1946,7 +2227,10 @@ fn parse_date_format_string(format: &[u8]) -> DateFormat {
     } else {
         DaysFormat::Wwwd
     };
-    DateFormat { days, with_hyphens: format.get(4) == Some(&b'-') }
+    DateFormat {
+        days,
+        with_hyphens: format.get(4) == Some(&b'-'),
+    }
 }
 
 /// `decimal_places_for_seconds (str, point_pos)` (intrinsic.c): count of `'s'` after the decimal point.
@@ -2034,7 +2318,11 @@ fn parse_time_format_string(s: &[u8]) -> TimeFormat {
     } else {
         TimeExtra::None
     };
-    TimeFormat { with_colons, decimal_places, extra }
+    TimeFormat {
+        with_colons,
+        decimal_places,
+        extra,
+    }
 }
 
 /// `split_around_t (str, first, second)` (intrinsic.c): split `<date>T<time>` around the `'T'`, capping the
@@ -2165,7 +2453,11 @@ pub fn cob_intr_integer_of_formatted_date(fmt: &[u8], date: &[u8]) -> IntrField 
     };
     let date_fmt = parse_date_format_string(&format_str);
 
-    let date_str: Vec<u8> = if is_date { original_date.clone() } else { split_around_t(&original_date).0 };
+    let date_str: Vec<u8> = if is_date {
+        original_date.clone()
+    } else {
+        split_around_t(&original_date).0
+    };
     if test_formatted_date(date_fmt, &date_str, true) != 0 {
         return cob_alloc_set_field_uint(0);
     }
@@ -2249,7 +2541,13 @@ fn valid_day_and_format(day: i32, format: &[u8]) -> bool {
 /// `cob_intr_formatted_date (offset, length, format_field, days_field)` (intrinsic.c):
 /// `FUNCTION FORMATTED-DATE(format, integer-date)` — render the day number as a date string of the format's
 /// own width; an invalid day or format yields all spaces. Reference modification applies when `offset > 0`.
-pub fn cob_intr_formatted_date(offset: i32, length: i32, fmt: &[u8], days: &[u8], days_attr: &FieldAttr) -> IntrField {
+pub fn cob_intr_formatted_date(
+    offset: i32,
+    length: i32,
+    fmt: &[u8],
+    days: &[u8],
+    days_attr: &FieldAttr,
+) -> IntrField {
     const COB_DATESTR_MAX: usize = 10;
     let format_str = copy_data_to_null_terminated_str(fmt, COB_DATESTR_MAX);
     let field_length = format_str.len();
@@ -2366,7 +2664,12 @@ fn test_formatted_time(format: TimeFormat, t: &[u8], dec_pt: u8) -> i32 {
     return_if_not_zero!(test_minute(t, &mut offset));
     return_if_not_zero!(test_colon_presence(format.with_colons, t, &mut offset));
     return_if_not_zero!(test_second(t, &mut offset));
-    return_if_not_zero!(test_decimal_places(format.decimal_places, dec_pt, t, &mut offset));
+    return_if_not_zero!(test_decimal_places(
+        format.decimal_places,
+        dec_pt,
+        t,
+        &mut offset
+    ));
     return_if_not_zero!(test_time_end(format, t, &mut offset));
     return_if_not_zero!(test_no_trailing_junk(t, offset, true));
     0
@@ -2409,19 +2712,34 @@ pub fn cob_intr_test_formatted_datetime(fmt: &[u8], datetime: &[u8]) -> IntrFiel
         (Vec::new(), formatted_datetime.clone())
     };
 
-    let time_part_offset = if date_present { formatted_date.len() as i32 + 1 } else { 0 };
+    let time_part_offset = if date_present {
+        formatted_date.len() as i32 + 1
+    } else {
+        0
+    };
 
     if date_present {
-        let error_pos = test_formatted_date(parse_date_format_string(&date_format_str), &formatted_date, !time_present);
+        let error_pos = test_formatted_date(
+            parse_date_format_string(&date_format_str),
+            &formatted_date,
+            !time_present,
+        );
         if error_pos != 0 {
             return cob_alloc_set_field_uint(error_pos as u32);
         }
     }
-    if date_present && time_present && date_at(&formatted_datetime, formatted_date.len() as i32) != b'T' {
+    if date_present
+        && time_present
+        && date_at(&formatted_datetime, formatted_date.len() as i32) != b'T'
+    {
         return cob_alloc_set_field_uint(formatted_date.len() as u32 + 1);
     }
     if time_present {
-        let error_pos = test_formatted_time(parse_time_format_string(&time_format_str), &formatted_time, dec_pt);
+        let error_pos = test_formatted_time(
+            parse_time_format_string(&time_format_str),
+            &formatted_time,
+            dec_pt,
+        );
         if error_pos != 0 {
             return cob_alloc_set_field_uint((time_part_offset + error_pos) as u32);
         }
@@ -2536,7 +2854,10 @@ pub fn cob_intr_numval_f(src: &[u8], dec_pt: u8) -> IntrField {
     if digits == 0 {
         final_buff.push(b'0');
     }
-    let mut d = CobDecimal { value: Mpz::from_decimal_string(&String::from_utf8_lossy(&final_buff)), scale: 0 };
+    let mut d = CobDecimal {
+        value: Mpz::from_decimal_string(&String::from_utf8_lossy(&final_buff)),
+        scale: 0,
+    };
     if exponent > 9999 {
         exponent = 9999;
     }
@@ -2578,7 +2899,11 @@ fn valid_time(seconds_from_midnight: i32) -> bool {
 /// scale 1). gnucobol-rs uses a fresh scale-0 base, yielding the well-defined mathematically-correct value;
 /// byte-equality holds whenever `cob_d1` is clean (scale 0) at the call, which the oracle battery arranges.
 fn seconds_from_formatted_time(format: TimeFormat, s: &[u8]) -> CobDecimal {
-    let (hpos, mpos, spos) = if format.with_colons { (0, 3, 6) } else { (0, 2, 4) };
+    let (hpos, mpos, spos) = if format.with_colons {
+        (0, 3, 6)
+    } else {
+        (0, 2, 4)
+    };
     let hours = scan_uint(s, hpos, 2);
     let minutes = scan_uint(s, mpos, 2);
     let seconds = scan_uint(s, spos, 2);
@@ -2588,7 +2913,8 @@ fn seconds_from_formatted_time(format: TimeFormat, s: &[u8]) -> CobDecimal {
         let offset = if format.with_colons { 9 } else { 7 };
         let mut unscaled_fraction = 0i64;
         for k in 0..format.decimal_places {
-            unscaled_fraction = unscaled_fraction * 10 + (date_at(s, (offset + k) as i32) & 0x0F) as i64;
+            unscaled_fraction =
+                unscaled_fraction * 10 + (date_at(s, (offset + k) as i32) & 0x0F) as i64;
         }
         let frac = CobDecimal {
             value: {
@@ -2598,11 +2924,25 @@ fn seconds_from_formatted_time(format: TimeFormat, s: &[u8]) -> CobDecimal {
             },
             scale: format.decimal_places as i32,
         };
-        let mut total = CobDecimal { value: { let mut m = Mpz::new(); m.set_ui(total_seconds as u64); m }, scale: 0 };
+        let mut total = CobDecimal {
+            value: {
+                let mut m = Mpz::new();
+                m.set_ui(total_seconds as u64);
+                m
+            },
+            scale: 0,
+        };
         cob_decimal_add(&mut total, &frac);
         total
     } else {
-        CobDecimal { value: { let mut m = Mpz::new(); m.set_ui(total_seconds as u64); m }, scale: 0 }
+        CobDecimal {
+            value: {
+                let mut m = Mpz::new();
+                m.set_ui(total_seconds as u64);
+                m
+            },
+            scale: 0,
+        }
     }
 }
 
@@ -2625,7 +2965,10 @@ pub fn cob_intr_seconds_from_formatted_time(fmt: &[u8], time: &[u8]) -> IntrFiel
     let (time_format_str, time_str): (Vec<u8>, Vec<u8>) = if is_datetime {
         (split_around_t(&format_str).1, split_around_t(time).1)
     } else {
-        (format_str.clone(), time[..str_length.min(time.len())].to_vec())
+        (
+            format_str.clone(),
+            time[..str_length.min(time.len())].to_vec(),
+        )
     };
 
     let time_fmt = parse_time_format_string(&time_format_str);
@@ -2639,7 +2982,14 @@ pub fn cob_intr_seconds_from_formatted_time(fmt: &[u8], time: &[u8]) -> IntrFiel
 /// (`decimal(time) - floor(time)`).
 fn get_fractional_seconds(time: &[u8], attr: &FieldAttr) -> CobDecimal {
     let seconds = cob_get_int(time, attr);
-    let whole = CobDecimal { value: { let mut m = Mpz::new(); m.set_ui(seconds as u64); m }, scale: 0 };
+    let whole = CobDecimal {
+        value: {
+            let mut m = Mpz::new();
+            m.set_ui(seconds as u64);
+            m
+        },
+        scale: 0,
+    };
     let mut fraction = cob_decimal_set_field(time, attr);
     cob_decimal_sub(&mut fraction, &whole);
     fraction
@@ -2675,7 +3025,12 @@ fn get_system_offset_time_ptr() -> Option<i32> {
 
 /// `add_decimal_digits (decimal_places, second_fraction, buff, buff_pos)` (intrinsic.c): append the decimal
 /// point and `decimal_places` fractional digits of `second_fraction`, right-padded with zeros.
-fn add_decimal_digits(decimal_places: usize, second_fraction: &CobDecimal, buff: &mut Vec<u8>, dec_pt: u8) {
+fn add_decimal_digits(
+    decimal_places: usize,
+    second_fraction: &CobDecimal,
+    buff: &mut Vec<u8>,
+    dec_pt: u8,
+) {
     let mut scale = second_fraction.scale;
     let mut fraction = second_fraction.value.get_ui();
     buff.push(dec_pt);
@@ -2713,7 +3068,13 @@ fn add_offset_time(with_colon: bool, offset_time: Option<i32>, buff: &mut Vec<u8
 
 /// `format_time (format, time, second_fraction, offset_time, buff)` (intrinsic.c): render seconds-since-
 /// midnight as a time string; returns the date overflow (-1/0/+1) a `Z` zone shift may introduce.
-fn format_time(format: TimeFormat, time: i32, second_fraction: &CobDecimal, offset_time: Option<i32>, dec_pt: u8) -> (i32, Vec<u8>) {
+fn format_time(
+    format: TimeFormat,
+    time: i32,
+    second_fraction: &CobDecimal,
+    offset_time: Option<i32>,
+    dec_pt: u8,
+) -> (i32, Vec<u8>) {
     let mut hours = time / 3600;
     let rem = time % 3600;
     let mut minutes = rem / 60;
@@ -2761,8 +3122,17 @@ fn format_time(format: TimeFormat, time: i32, second_fraction: &CobDecimal, offs
 
 /// `format_datetime (date_fmt, time_fmt, days, whole_seconds, frac, offset_time, buff)` (intrinsic.c):
 /// `<date>T<time>`, the date adjusted by any `Z`-offset day overflow.
-fn format_datetime(date_fmt: DateFormat, time_fmt: TimeFormat, days: i32, whole_seconds: i32, fractional: &CobDecimal, offset_time: Option<i32>, dec_pt: u8) -> Vec<u8> {
-    let (overflow, formatted_time) = format_time(time_fmt, whole_seconds, fractional, offset_time, dec_pt);
+fn format_datetime(
+    date_fmt: DateFormat,
+    time_fmt: TimeFormat,
+    days: i32,
+    whole_seconds: i32,
+    fractional: &CobDecimal,
+    offset_time: Option<i32>,
+    dec_pt: u8,
+) -> Vec<u8> {
+    let (overflow, formatted_time) =
+        format_time(time_fmt, whole_seconds, fractional, offset_time, dec_pt);
     let mut buff = format_date(date_fmt, days + overflow);
     buff.push(b'T');
     buff.extend_from_slice(&formatted_time);
@@ -2785,7 +3155,15 @@ fn formatted_spaces(field_length: usize, offset: i32, length: i32) -> IntrField 
 /// time format. The `use_system_offset` argument selects the host UTC offset (the clock-deferral boundary);
 /// the explicit-offset path is sealed. Invalid time/format/offset yields all spaces.
 #[allow(clippy::too_many_arguments)]
-pub fn cob_intr_formatted_time(offset: i32, length: i32, fmt: &[u8], time: &[u8], time_attr: &FieldAttr, offset_time_field: Option<(&[u8], &FieldAttr)>, use_system_offset: bool) -> IntrField {
+pub fn cob_intr_formatted_time(
+    offset: i32,
+    length: i32,
+    fmt: &[u8],
+    time: &[u8],
+    time_attr: &FieldAttr,
+    offset_time_field: Option<(&[u8], &FieldAttr)>,
+    use_system_offset: bool,
+) -> IntrField {
     const COB_TIMESTR_MAX: usize = 25;
     let dec_pt = b'.';
     let format_str = copy_data_to_null_terminated_str(fmt, COB_TIMESTR_MAX);
@@ -2808,7 +3186,8 @@ pub fn cob_intr_formatted_time(offset: i32, length: i32, fmt: &[u8], time: &[u8]
             None => return formatted_spaces(field_length, offset, length),
         }
     };
-    let (_overflow, mut buff) = format_time(format, whole_seconds, &fractional, offset_time, dec_pt);
+    let (_overflow, mut buff) =
+        format_time(format, whole_seconds, &fractional, offset_time, dec_pt);
     buff.resize(field_length, 0);
     if offset > 0 {
         return intr_refmod(buff, offset, length);
@@ -2821,7 +3200,17 @@ pub fn cob_intr_formatted_time(offset: i32, length: i32, fmt: &[u8], time: &[u8]
 /// the date carried by any `Z`-offset day overflow. `use_system_offset` is the clock-deferral boundary;
 /// the explicit-offset path is sealed. Invalid format/date/time/offset yields all spaces.
 #[allow(clippy::too_many_arguments)]
-pub fn cob_intr_formatted_datetime(offset: i32, length: i32, fmt: &[u8], days: &[u8], days_attr: &FieldAttr, time: &[u8], time_attr: &FieldAttr, offset_time_field: Option<(&[u8], &FieldAttr)>, use_system_offset: bool) -> IntrField {
+pub fn cob_intr_formatted_datetime(
+    offset: i32,
+    length: i32,
+    fmt: &[u8],
+    days: &[u8],
+    days_attr: &FieldAttr,
+    time: &[u8],
+    time_attr: &FieldAttr,
+    offset_time_field: Option<(&[u8], &FieldAttr)>,
+    use_system_offset: bool,
+) -> IntrField {
     const COB_DATETIMESTR_MAX: usize = 36;
     let dec_pt = b'.';
     let fmt_str = copy_data_to_null_terminated_str(fmt, COB_DATETIMESTR_MAX);
@@ -2850,7 +3239,15 @@ pub fn cob_intr_formatted_datetime(offset: i32, length: i32, fmt: &[u8], days: &
     };
     let date_fmt = parse_date_format_string(&date_fmt_str);
     let fractional = get_fractional_seconds(time, time_attr);
-    let mut buff = format_datetime(date_fmt, time_fmt, days_val, whole_seconds, &fractional, offset_time, dec_pt);
+    let mut buff = format_datetime(
+        date_fmt,
+        time_fmt,
+        days_val,
+        whole_seconds,
+        &fractional,
+        offset_time,
+        dec_pt,
+    );
     buff.resize(field_length, 0);
     if offset > 0 {
         return intr_refmod(buff, offset, length);
@@ -2951,7 +3348,10 @@ pub fn cob_intr_sqrt(src: &[u8], attr: &FieldAttr) -> IntrField {
     if d1.value.sgn() == -1 {
         return cob_alloc_set_field_uint(0);
     }
-    let mut d2 = CobDecimal { value: Mpz::from_u64(5), scale: 1 };
+    let mut d2 = CobDecimal {
+        value: Mpz::from_u64(5),
+        scale: 1,
+    };
     cob_trim_decimal(&mut d1);
     cob_decimal_pow(&mut d1, &mut d2);
     intr_decimal_result(d1)
@@ -2990,14 +3390,23 @@ pub fn cob_intr_exp10(src: &[u8], attr: &FieldAttr) -> IntrField {
             if sign == -1 && v >= i32::MIN as i128 && v <= i32::MAX as i128 {
                 // 10^(-n) = 1 with scale n.
                 let n = (-v) as i32;
-                return intr_decimal_result(CobDecimal { value: Mpz::from_u64(1), scale: n });
+                return intr_decimal_result(CobDecimal {
+                    value: Mpz::from_u64(1),
+                    scale: n,
+                });
             }
             if sign == 1 && v <= u64::MAX as i128 {
-                return intr_decimal_result(CobDecimal { value: Mpz::ui_pow_ui(10, v as u32), scale: 0 });
+                return intr_decimal_result(CobDecimal {
+                    value: Mpz::ui_pow_ui(10, v as u32),
+                    scale: 0,
+                });
             }
         }
     }
-    let mut d2 = CobDecimal { value: Mpz::from_u64(10), scale: 0 };
+    let mut d2 = CobDecimal {
+        value: Mpz::from_u64(10),
+        scale: 0,
+    };
     cob_decimal_pow(&mut d2, &mut d1);
     intr_decimal_result(d2)
 }
@@ -3031,7 +3440,9 @@ pub fn cob_intr_log10(src: &[u8], attr: &FieldAttr) -> IntrField {
     if d1.scale == 0 && d1.value.to_i128() == Some(1) {
         return cob_alloc_set_field_uint(0);
     }
-    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_log10(&cob_decimal_get_mpf(&d1))))
+    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_log10(&cob_decimal_get_mpf(
+        &d1,
+    ))))
 }
 
 /// `cob_intr_sin (srcfield)` (intrinsic.c): `FUNCTION SIN(x)`.
@@ -3058,33 +3469,51 @@ pub fn cob_intr_atan(src: &[u8], attr: &FieldAttr) -> IntrField {
     if d1.value.sgn() == 0 {
         return cob_alloc_set_field_uint(0);
     }
-    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_atan(&cob_decimal_get_mpf(&d1))))
+    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_atan(&cob_decimal_get_mpf(
+        &d1,
+    ))))
 }
 
 /// `cob_intr_asin (srcfield)` (intrinsic.c): `FUNCTION ASIN(x)`; `|x| > 1` is an exception (0),
 /// `ASIN(0) = 0`.
 pub fn cob_intr_asin(src: &[u8], attr: &FieldAttr) -> IntrField {
     let d1 = cob_decimal_set_field(src, attr);
-    let neg1 = CobDecimal { value: Mpz::from_i64(-1), scale: 0 };
-    let pos1 = CobDecimal { value: Mpz::from_u64(1), scale: 0 };
+    let neg1 = CobDecimal {
+        value: Mpz::from_i64(-1),
+        scale: 0,
+    };
+    let pos1 = CobDecimal {
+        value: Mpz::from_u64(1),
+        scale: 0,
+    };
     if cob_decimal_cmp(&d1, &neg1) < 0 || cob_decimal_cmp(&d1, &pos1) > 0 {
         return cob_alloc_set_field_uint(0);
     }
     if d1.value.sgn() == 0 {
         return cob_alloc_set_field_uint(0);
     }
-    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_asin(&cob_decimal_get_mpf(&d1))))
+    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_asin(&cob_decimal_get_mpf(
+        &d1,
+    ))))
 }
 
 /// `cob_intr_acos (srcfield)` (intrinsic.c): `FUNCTION ACOS(x)`; `|x| > 1` is an exception (0).
 pub fn cob_intr_acos(src: &[u8], attr: &FieldAttr) -> IntrField {
     let d1 = cob_decimal_set_field(src, attr);
-    let neg1 = CobDecimal { value: Mpz::from_i64(-1), scale: 0 };
-    let pos1 = CobDecimal { value: Mpz::from_u64(1), scale: 0 };
+    let neg1 = CobDecimal {
+        value: Mpz::from_i64(-1),
+        scale: 0,
+    };
+    let pos1 = CobDecimal {
+        value: Mpz::from_u64(1),
+        scale: 0,
+    };
     if cob_decimal_cmp(&d1, &neg1) < 0 || cob_decimal_cmp(&d1, &pos1) > 0 {
         return cob_alloc_set_field_uint(0);
     }
-    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_acos(&cob_decimal_get_mpf(&d1))))
+    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_acos(&cob_decimal_get_mpf(
+        &d1,
+    ))))
 }
 
 /// `cob_intr_pi ()` (intrinsic.c): `FUNCTION PI` — the constant pi.
@@ -3094,7 +3523,10 @@ pub fn cob_intr_pi() -> IntrField {
 
 /// `cob_intr_e ()` (intrinsic.c): `FUNCTION E` — Euler's number, `exp(1)`.
 pub fn cob_intr_e() -> IntrField {
-    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_exp(&Mpf::set_ui(1, COB_MPF_PREC))))
+    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_exp(&Mpf::set_ui(
+        1,
+        COB_MPF_PREC,
+    ))))
 }
 
 /// `cob_intr_binop (f1, op, f2)` (intrinsic.c): the runtime binary operator behind compiler-generated
@@ -3102,11 +3534,25 @@ pub fn cob_intr_e() -> IntrField {
 /// (`+`/`-`/`*`/`/`/`^`) on the decimal value (`/` by zero yields 0; `^` via [`cob_decimal_pow`]).
 pub fn cob_intr_binop(f1: &[u8], a1: &FieldAttr, op: u8, f2: &[u8], a2: &FieldAttr) -> IntrField {
     match op {
-        b'a' => return cob_alloc_set_field_uint((cob_get_int(f1, a1) & cob_get_int(f2, a2)) as u32),
-        b'o' => return cob_alloc_set_field_uint((cob_get_int(f1, a1) | cob_get_int(f2, a2)) as u32),
-        b'e' => return cob_alloc_set_field_uint((cob_get_int(f1, a1) ^ cob_get_int(f2, a2)) as u32),
-        b'l' => return cob_alloc_set_field_uint(cob_get_int(f1, a1).wrapping_shl(cob_get_int(f2, a2) as u32) as u32),
-        b'r' => return cob_alloc_set_field_uint(cob_get_int(f1, a1).wrapping_shr(cob_get_int(f2, a2) as u32) as u32),
+        b'a' => {
+            return cob_alloc_set_field_uint((cob_get_int(f1, a1) & cob_get_int(f2, a2)) as u32)
+        }
+        b'o' => {
+            return cob_alloc_set_field_uint((cob_get_int(f1, a1) | cob_get_int(f2, a2)) as u32)
+        }
+        b'e' => {
+            return cob_alloc_set_field_uint((cob_get_int(f1, a1) ^ cob_get_int(f2, a2)) as u32)
+        }
+        b'l' => {
+            return cob_alloc_set_field_uint(
+                cob_get_int(f1, a1).wrapping_shl(cob_get_int(f2, a2) as u32) as u32,
+            )
+        }
+        b'r' => {
+            return cob_alloc_set_field_uint(
+                cob_get_int(f1, a1).wrapping_shr(cob_get_int(f2, a2) as u32) as u32,
+            )
+        }
         b'n' => return cob_alloc_set_field_uint(!cob_get_int(f2, a2) as u32),
         _ => {}
     }
@@ -3118,7 +3564,10 @@ pub fn cob_intr_binop(f1: &[u8], a1: &FieldAttr, op: u8, f2: &[u8], a2: &FieldAt
         b'*' => cob_decimal_mul(&mut d1, &d2),
         b'/' => {
             if d2.value.sgn() == 0 {
-                d1 = CobDecimal { value: Mpz::new(), scale: 0 };
+                d1 = CobDecimal {
+                    value: Mpz::new(),
+                    scale: 0,
+                };
             } else {
                 let _ = cob_decimal_div(&mut d1, &d2);
             }
@@ -3140,17 +3589,32 @@ pub fn cob_intr_annuity(p1: &[u8], a1: &FieldAttr, p2: &[u8], a2: &FieldAttr) ->
         return cob_alloc_set_field_uint(0);
     }
     if sign == 0 {
-        d1 = CobDecimal { value: Mpz::from_u64(1), scale: 0 };
+        d1 = CobDecimal {
+            value: Mpz::from_u64(1),
+            scale: 0,
+        };
         let _ = cob_decimal_div(&mut d1, &d2);
         return intr_decimal_result(d1);
     }
     d2.value.neg(); // -P2
-    let mut d3 = CobDecimal { value: d1.value.clone(), scale: d1.scale };
-    cob_decimal_add(&mut d3, &CobDecimal { value: Mpz::from_u64(1), scale: 0 }); // 1 + P1
+    let mut d3 = CobDecimal {
+        value: d1.value.clone(),
+        scale: d1.scale,
+    };
+    cob_decimal_add(
+        &mut d3,
+        &CobDecimal {
+            value: Mpz::from_u64(1),
+            scale: 0,
+        },
+    ); // 1 + P1
     cob_trim_decimal(&mut d3);
     cob_trim_decimal(&mut d2);
     cob_decimal_pow(&mut d3, &mut d2); // (1 + P1) ^ -P2
-    let mut d4 = CobDecimal { value: Mpz::from_u64(1), scale: 0 };
+    let mut d4 = CobDecimal {
+        value: Mpz::from_u64(1),
+        scale: 0,
+    };
     cob_decimal_sub(&mut d4, &d3); // 1 - (1 + P1) ^ -P2
     cob_trim_decimal(&mut d4);
     cob_trim_decimal(&mut d1);
@@ -3160,14 +3624,30 @@ pub fn cob_intr_annuity(p1: &[u8], a1: &FieldAttr, p2: &[u8], a2: &FieldAttr) ->
 
 /// `cob_intr_present_value (rate, flows...)` (intrinsic.c): `FUNCTION PRESENT-VALUE` —
 /// `sum_i flow_i / (1 + rate)^i` (i from 1).
-pub fn cob_intr_present_value(rate: &[u8], rate_attr: &FieldAttr, flows: &[(&[u8], &FieldAttr)]) -> IntrField {
+pub fn cob_intr_present_value(
+    rate: &[u8],
+    rate_attr: &FieldAttr,
+    flows: &[(&[u8], &FieldAttr)],
+) -> IntrField {
     let mut base = cob_decimal_set_field(rate, rate_attr);
-    cob_decimal_add(&mut base, &CobDecimal { value: Mpz::from_u64(1), scale: 0 }); // 1 + rate
-    let mut acc = CobDecimal { value: Mpz::new(), scale: 0 };
+    cob_decimal_add(
+        &mut base,
+        &CobDecimal {
+            value: Mpz::from_u64(1),
+            scale: 0,
+        },
+    ); // 1 + rate
+    let mut acc = CobDecimal {
+        value: Mpz::new(),
+        scale: 0,
+    };
     for (i, (data, attr)) in flows.iter().enumerate() {
         let idx = i + 1;
         let mut flow = cob_decimal_set_field(data, attr);
-        let mut denom = CobDecimal { value: base.value.clone(), scale: base.scale };
+        let mut denom = CobDecimal {
+            value: base.value.clone(),
+            scale: base.scale,
+        };
         if idx > 1 {
             denom.value = denom.value.pow_ui(idx as u32);
             denom.scale *= idx as i32;
@@ -3180,11 +3660,17 @@ pub fn cob_intr_present_value(rate: &[u8], rate_attr: &FieldAttr, flows: &[(&[u8
 
 /// `calc_mean_of_args (args)` (intrinsic.c): the arithmetic mean `sum(args) / n`.
 fn calc_mean_of_args(args: &[(&[u8], &FieldAttr)]) -> CobDecimal {
-    let mut mean = CobDecimal { value: Mpz::new(), scale: 0 };
+    let mut mean = CobDecimal {
+        value: Mpz::new(),
+        scale: 0,
+    };
     for (data, attr) in args {
         cob_decimal_add(&mut mean, &cob_decimal_set_field(data, attr));
     }
-    let n = CobDecimal { value: Mpz::from_u64(args.len() as u64), scale: 0 };
+    let n = CobDecimal {
+        value: Mpz::from_u64(args.len() as u64),
+        scale: 0,
+    };
     let _ = cob_decimal_div(&mut mean, &n);
     mean
 }
@@ -3193,9 +3679,15 @@ fn calc_mean_of_args(args: &[(&[u8], &FieldAttr)]) -> CobDecimal {
 /// (`n == 1` -> 0).
 fn calc_variance_of_args(args: &[(&[u8], &FieldAttr)], mean: &CobDecimal) -> CobDecimal {
     if args.len() == 1 {
-        return CobDecimal { value: Mpz::new(), scale: 0 };
+        return CobDecimal {
+            value: Mpz::new(),
+            scale: 0,
+        };
     }
-    let mut sum = CobDecimal { value: Mpz::new(), scale: 0 };
+    let mut sum = CobDecimal {
+        value: Mpz::new(),
+        scale: 0,
+    };
     for (data, attr) in args {
         let mut diff = cob_decimal_set_field(data, attr);
         cob_decimal_sub(&mut diff, mean);
@@ -3203,7 +3695,10 @@ fn calc_variance_of_args(args: &[(&[u8], &FieldAttr)], mean: &CobDecimal) -> Cob
         cob_decimal_mul(&mut diff, &sq);
         cob_decimal_add(&mut sum, &diff);
     }
-    let n = CobDecimal { value: Mpz::from_u64(args.len() as u64), scale: 0 };
+    let n = CobDecimal {
+        value: Mpz::from_u64(args.len() as u64),
+        scale: 0,
+    };
     let _ = cob_decimal_div(&mut sum, &n);
     sum
 }
@@ -3224,7 +3719,10 @@ pub fn cob_intr_variance(args: &[(&[u8], &FieldAttr)]) -> IntrField {
 pub fn cob_intr_standard_deviation(args: &[(&[u8], &FieldAttr)]) -> IntrField {
     let mut d1 = get_variance(args);
     cob_trim_decimal(&mut d1);
-    let mut half = CobDecimal { value: Mpz::from_u64(5), scale: 1 };
+    let mut half = CobDecimal {
+        value: Mpz::from_u64(5),
+        scale: 1,
+    };
     cob_decimal_pow(&mut d1, &mut half);
     intr_decimal_result(d1)
 }
@@ -3238,7 +3736,11 @@ pub fn cob_intr_display_of(_offset: i32, _length: i32, _args: &[(&[u8], &FieldAt
 
 /// `cob_intr_national_of (offset, length, params, ...)` (intrinsic.c): `FUNCTION NATIONAL-OF` —
 /// unimplemented in GnuCOBOL 3.2; see [`error_not_implemented`].
-pub fn cob_intr_national_of(_offset: i32, _length: i32, _args: &[(&[u8], &FieldAttr)]) -> IntrField {
+pub fn cob_intr_national_of(
+    _offset: i32,
+    _length: i32,
+    _args: &[(&[u8], &FieldAttr)],
+) -> IntrField {
     error_not_implemented()
 }
 
@@ -3290,7 +3792,9 @@ struct CobTime {
 /// `offset_known` is false). Non-deterministic — used only when `COB_CURRENT_DATE` is unset.
 fn cob_get_current_date_and_time_from_os(want_nano: bool) -> CobTime {
     use std::time::{SystemTime, UNIX_EPOCH};
-    let dur = SystemTime::now().duration_since(UNIX_EPOCH).unwrap_or_default();
+    let dur = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default();
     let secs = dur.as_secs() as i64;
     let (y, m, d) = civil_from_days(secs.div_euclid(86400));
     let rem = secs.rem_euclid(86400);
@@ -3301,7 +3805,11 @@ fn cob_get_current_date_and_time_from_os(want_nano: bool) -> CobTime {
         hour: (rem / 3600) as i32,
         minute: ((rem % 3600) / 60) as i32,
         second: (rem % 60) as i32,
-        nanosecond: if want_nano { dur.subsec_nanos() as i32 } else { 0 },
+        nanosecond: if want_nano {
+            dur.subsec_nanos() as i32
+        } else {
+            0
+        },
         utc_offset: 0,
         offset_known: false,
     }
@@ -3325,7 +3833,17 @@ fn scan_date_digits(s: &[u8], p: &mut usize, max: usize) -> (i32, usize) {
 /// `check_current_date` (common.c): parse the `COB_CURRENT_DATE` override string into a [`CobTime`] constant
 /// (`-1` for a templated/absent component). Returns `None` when the variable is empty.
 fn parse_current_date(s: &[u8]) -> Option<CobTime> {
-    let mut t = CobTime { year: -1, month: -1, day_of_month: -1, hour: -1, minute: -1, second: -1, nanosecond: -1, utc_offset: 0, offset_known: false };
+    let mut t = CobTime {
+        year: -1,
+        month: -1,
+        day_of_month: -1,
+        hour: -1,
+        minute: -1,
+        second: -1,
+        nanosecond: -1,
+        utc_offset: 0,
+        offset_known: false,
+    };
     let mut p = 0usize;
     while p < s.len() && (s[p] == 0x27 || s[p] == 0x22 || s[p].is_ascii_whitespace()) {
         p += 1;
@@ -3435,7 +3953,8 @@ fn parse_current_date(s: &[u8]) -> Option<CobTime> {
             while digs.len() < 4 {
                 digs.push(0);
             }
-            let off = digs[0] as i32 * 600 + digs[1] as i32 * 60 + digs[2] as i32 * 10 + digs[3] as i32;
+            let off =
+                digs[0] as i32 * 600 + digs[1] as i32 * 60 + digs[2] as i32 * 10 + digs[3] as i32;
             t.utc_offset = if neg { -off } else { off };
             t.offset_known = true;
         }
@@ -3551,9 +4070,17 @@ pub fn cob_intr_current_date(offset: i32, length: i32) -> IntrField {
 /// As [`cob_intr_current_date`] but honoring an **explicit** `COB_CURRENT_DATE` override value -- e.g. the
 /// `current_date` setting loaded from `runtime.cfg` (see `crate::common_configload::cob_runtime_config_value`).
 /// `None` -> the system clock. This is the consuming end of the `cli-runtime-cfg` file-load wiring.
-pub fn cob_intr_current_date_cfg(offset: i32, length: i32, override_val: Option<&[u8]>) -> IntrField {
+pub fn cob_intr_current_date_cfg(
+    offset: i32,
+    length: i32,
+    override_val: Option<&[u8]>,
+) -> IntrField {
     let want_nano = !(offset == 1 && length <= 14);
-    current_date_field(cob_get_current_datetime_with(want_nano, override_val), offset, length)
+    current_date_field(
+        cob_get_current_datetime_with(want_nano, override_val),
+        offset,
+        length,
+    )
 }
 
 /// `cob_intr_seconds_past_midnight ()` (intrinsic.c): `FUNCTION SECONDS-PAST-MIDNIGHT` (real-clock based).
@@ -3567,9 +4094,28 @@ fn format_current_date(date_fmt: DateFormat, time_fmt: TimeFormat) -> Vec<u8> {
     let time = cob_get_current_datetime(true);
     let days = integer_of_date(time.year, time.month, time.day_of_month) as i32;
     let seconds_from_midnight = time.hour * 3600 + time.minute * 60 + time.second;
-    let fractional = CobDecimal { value: { let mut m = Mpz::new(); m.set_ui(time.nanosecond as u64); m }, scale: 9 };
-    let offset_time = if time.offset_known { Some(time.utc_offset) } else { None };
-    format_datetime(date_fmt, time_fmt, days, seconds_from_midnight, &fractional, offset_time, b'.')
+    let fractional = CobDecimal {
+        value: {
+            let mut m = Mpz::new();
+            m.set_ui(time.nanosecond as u64);
+            m
+        },
+        scale: 9,
+    };
+    let offset_time = if time.offset_known {
+        Some(time.utc_offset)
+    } else {
+        None
+    };
+    format_datetime(
+        date_fmt,
+        time_fmt,
+        days,
+        seconds_from_midnight,
+        &fractional,
+        offset_time,
+        b'.',
+    )
 }
 
 /// `cob_intr_formatted_current_date (offset, length, format_field)` (intrinsic.c):
@@ -3653,14 +4199,30 @@ pub fn cob_intr_module_path(path: Option<&[u8]>) -> IntrField {
 pub fn cob_intr_module_date(module_date: u32) -> IntrField {
     let mut b = format!("{module_date:08}").into_bytes();
     b.truncate(8);
-    (b, FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 8, scale: 0, flags: 0 })
+    (
+        b,
+        FieldAttr {
+            field_type: COB_TYPE_NUMERIC_DISPLAY,
+            digits: 8,
+            scale: 0,
+            flags: 0,
+        },
+    )
 }
 
 /// `cob_intr_module_time ()` (intrinsic.c): `FUNCTION MODULE-TIME` — a 6-digit `DISPLAY` field.
 pub fn cob_intr_module_time(module_time: u32) -> IntrField {
     let mut b = format!("{module_time:06}").into_bytes();
     b.truncate(6);
-    (b, FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 6, scale: 0, flags: 0 })
+    (
+        b,
+        FieldAttr {
+            field_type: COB_TYPE_NUMERIC_DISPLAY,
+            digits: 6,
+            scale: 0,
+            flags: 0,
+        },
+    )
 }
 
 /// `cob_intr_exception_status ()` (intrinsic.c): `FUNCTION EXCEPTION-STATUS` — the last exception's name in
@@ -3687,7 +4249,9 @@ pub fn cob_intr_exception_statement(statement: Option<&[u8]>) -> IntrField {
 
 /// `cob_intr_exception_location ()` (intrinsic.c): `FUNCTION EXCEPTION-LOCATION` — `id; para OF section;
 /// line` (with the variants when section/paragraph are absent); a single space when no exception is active.
-pub fn cob_intr_exception_location(state: Option<(&[u8], Option<&[u8]>, Option<&[u8]>, u32)>) -> IntrField {
+pub fn cob_intr_exception_location(
+    state: Option<(&[u8], Option<&[u8]>, Option<&[u8]>, u32)>,
+) -> IntrField {
     match state {
         None => (vec![b' '], ALPHA1),
         Some((id, section, paragraph, line)) => {
@@ -3728,7 +4292,11 @@ pub fn cob_intr_exception_file(state: Option<(&[u8], &[u8])>) -> IntrField {
 fn field_is_numeric(attr: &FieldAttr) -> bool {
     matches!(
         attr.field_type,
-        COB_TYPE_NUMERIC_DISPLAY | COB_TYPE_NUMERIC_BINARY | COB_TYPE_NUMERIC_PACKED | COB_TYPE_NUMERIC_COMP5 | COB_TYPE_NUMERIC_EDITED
+        COB_TYPE_NUMERIC_DISPLAY
+            | COB_TYPE_NUMERIC_BINARY
+            | COB_TYPE_NUMERIC_PACKED
+            | COB_TYPE_NUMERIC_COMP5
+            | COB_TYPE_NUMERIC_EDITED
     )
 }
 
@@ -3744,7 +4312,13 @@ fn locale_time(hours: i32, minutes: i32, seconds: i32) -> Vec<u8> {
 
 /// `cob_intr_locale_date (offset, length, srcfield, locale_field)` (intrinsic.c): `FUNCTION LOCALE-DATE` —
 /// a `YYYYMMDD` rendered per LC_TIME's D_FMT (`mm/dd/yy` in the C locale).
-pub fn cob_intr_locale_date(offset: i32, length: i32, src: &[u8], attr: &FieldAttr, _locale: Option<&[u8]>) -> IntrField {
+pub fn cob_intr_locale_date(
+    offset: i32,
+    length: i32,
+    src: &[u8],
+    attr: &FieldAttr,
+    _locale: Option<&[u8]>,
+) -> IntrField {
     let indate = if field_is_numeric(attr) {
         cob_get_int(src, attr)
     } else {
@@ -3774,12 +4348,22 @@ pub fn cob_intr_locale_date(offset: i32, length: i32, src: &[u8], attr: &FieldAt
     if !valid_day_of_month(year, month, days) {
         return locale_derror();
     }
-    cob_alloc_set_field_str(format!("{month:02}/{days:02}/{:02}", year % 100).as_bytes(), offset, length)
+    cob_alloc_set_field_str(
+        format!("{month:02}/{days:02}/{:02}", year % 100).as_bytes(),
+        offset,
+        length,
+    )
 }
 
 /// `cob_intr_locale_time (offset, length, srcfield, locale_field)` (intrinsic.c): `FUNCTION LOCALE-TIME` —
 /// an `HHMMSS` rendered per LC_TIME's T_FMT (`hh:mm:ss` in the C locale).
-pub fn cob_intr_locale_time(offset: i32, length: i32, src: &[u8], attr: &FieldAttr, _locale: Option<&[u8]>) -> IntrField {
+pub fn cob_intr_locale_time(
+    offset: i32,
+    length: i32,
+    src: &[u8],
+    attr: &FieldAttr,
+    _locale: Option<&[u8]>,
+) -> IntrField {
     let indate = if field_is_numeric(attr) {
         cob_get_int(src, attr)
     } else {
@@ -3813,7 +4397,13 @@ pub fn cob_intr_locale_time(offset: i32, length: i32, src: &[u8], attr: &FieldAt
 
 /// `cob_intr_lcl_time_from_secs (offset, length, srcfield, locale_field)` (intrinsic.c):
 /// `FUNCTION LOCALE-TIME-FROM-SECONDS` — seconds-since-midnight rendered per LC_TIME's T_FMT.
-pub fn cob_intr_lcl_time_from_secs(offset: i32, length: i32, src: &[u8], attr: &FieldAttr, _locale: Option<&[u8]>) -> IntrField {
+pub fn cob_intr_lcl_time_from_secs(
+    offset: i32,
+    length: i32,
+    src: &[u8],
+    attr: &FieldAttr,
+    _locale: Option<&[u8]>,
+) -> IntrField {
     if !field_is_numeric(attr) {
         return locale_derror();
     }
@@ -3928,9 +4518,13 @@ pub fn cob_intr_content_of(offset: i32, length: i32, ptr: &[u8], _request_len: u
 /// windowing parameters for YEAR-TO-YYYY / DATE-TO-YYYYMMDD / DAY-TO-YYYYDDD — `interval` defaults to 50,
 /// `current_year` to the system year.
 #[allow(dead_code)] // exact-name 1:1 helper; equivalent logic is inlined at the call sites
-fn get_interval_and_current_year_from_args(interval_arg: Option<i32>, current_year_arg: Option<i32>) -> (i32, i32) {
+fn get_interval_and_current_year_from_args(
+    interval_arg: Option<i32>,
+    current_year_arg: Option<i32>,
+) -> (i32, i32) {
     let interval = interval_arg.unwrap_or(50);
-    let current_year = current_year_arg.unwrap_or_else(|| cob_get_current_date_and_time_from_os(false).year);
+    let current_year =
+        current_year_arg.unwrap_or_else(|| cob_get_current_date_and_time_from_os(false).year);
     (interval, current_year)
 }
 
@@ -3943,7 +4537,12 @@ fn cob_put_indirect_field(f: &[u8], attr: &FieldAttr) -> (Vec<u8>, FieldAttr) {
 
 /// `cob_get_indirect_field (f)` (intrinsic.c): `cob_move` the stashed field into `f`.
 #[allow(dead_code)] // exact-name 1:1 helper; equivalent logic is inlined at the call sites
-fn cob_get_indirect_field(stored: &[u8], stored_attr: &FieldAttr, dst_attr: &FieldAttr, dst_len: usize) -> Vec<u8> {
+fn cob_get_indirect_field(
+    stored: &[u8],
+    stored_attr: &FieldAttr,
+    dst_attr: &FieldAttr,
+    dst_len: usize,
+) -> Vec<u8> {
     let mut out = vec![0u8; dst_len];
     let _ = crate::move_ops::cob_move(stored, stored_attr, &mut out, dst_attr);
     out
@@ -3952,13 +4551,24 @@ fn cob_get_indirect_field(stored: &[u8], stored_attr: &FieldAttr, dst_attr: &Fie
 /// `cob_decimal_move_temp (src, dst)` (intrinsic.c): move a numeric `src` through a signed-`DISPLAY`
 /// temporary sized to its trimmed magnitude into `dst`.
 #[allow(dead_code)] // exact-name 1:1 helper; equivalent logic is inlined at the call sites
-fn cob_decimal_move_temp(src: &[u8], src_attr: &FieldAttr, dst_attr: &FieldAttr, dst_len: usize) -> Vec<u8> {
+fn cob_decimal_move_temp(
+    src: &[u8],
+    src_attr: &FieldAttr,
+    dst_attr: &FieldAttr,
+    dst_len: usize,
+) -> Vec<u8> {
     let mut d = cob_decimal_set_field(src, src_attr);
     cob_trim_decimal(&mut d);
     let size10 = (d.value.sizeinbase2() as f64 * 0.301_029_995_663_981_2_f64) as usize + 1;
     let size = size10.max(d.scale.max(0) as usize);
-    let tattr = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: size as u16, scale: d.scale as i16, flags: COB_FLAG_HAVE_SIGN };
-    let temp = cob_decimal_get_field(d, &tattr, size, crate::arith::Round::Truncate, false).unwrap_or_else(|_| vec![0u8; size]);
+    let tattr = FieldAttr {
+        field_type: COB_TYPE_NUMERIC_DISPLAY,
+        digits: size as u16,
+        scale: d.scale as i16,
+        flags: COB_FLAG_HAVE_SIGN,
+    };
+    let temp = cob_decimal_get_field(d, &tattr, size, crate::arith::Round::Truncate, false)
+        .unwrap_or_else(|_| vec![0u8; size]);
     let mut out = vec![0u8; dst_len];
     let _ = crate::move_ops::cob_move(&temp, &tattr, &mut out, dst_attr);
     out
@@ -3991,7 +4601,9 @@ impl Mt19937 {
         let mut mt = [0u32; 624];
         mt[0] = seed;
         for i in 1..624 {
-            mt[i] = 1_812_433_253u32.wrapping_mul(mt[i - 1] ^ (mt[i - 1] >> 30)).wrapping_add(i as u32);
+            mt[i] = 1_812_433_253u32
+                .wrapping_mul(mt[i - 1] ^ (mt[i - 1] >> 30))
+                .wrapping_add(i as u32);
         }
         Mt19937 { mt, mti: 624 }
     }
@@ -4043,7 +4655,12 @@ pub fn cob_intr_random(seed: Option<i64>) -> IntrField {
         }
         st.as_mut().unwrap().next_f64()
     });
-    let attr = FieldAttr { field_type: COB_TYPE_NUMERIC_DOUBLE, digits: 20, scale: 9, flags: COB_FLAG_HAVE_SIGN };
+    let attr = FieldAttr {
+        field_type: COB_TYPE_NUMERIC_DOUBLE,
+        digits: 20,
+        scale: 9,
+        flags: COB_FLAG_HAVE_SIGN,
+    };
     (val.to_le_bytes().to_vec(), attr)
 }
 
@@ -4106,7 +4723,12 @@ mod tests {
     }
     #[test]
     fn stored_char_length_and_unimplemented() {
-        let u3 = FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags: 0 };
+        let u3 = FieldAttr {
+            field_type: COB_TYPE_NUMERIC_BINARY,
+            digits: 9,
+            scale: 0,
+            flags: 0,
+        };
         let (d, a) = cob_intr_stored_char_length(b"HI   ");
         assert_eq!(crate::accessors::cob_get_int(&d, &a), 2);
         let (d, _) = cob_intr_stored_char_length(b"     ");
@@ -4119,13 +4741,24 @@ mod tests {
     fn cob_intr_numeric_results() {
         use crate::attr::COB_FLAG_HAVE_SIGN;
         // S9(2)V99: -12.34 stored as "123t" (trailing negative overpunch '4'->'t'=0x74); +12.34 = "1234".
-        let sattr = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 4, scale: 2, flags: COB_FLAG_HAVE_SIGN };
+        let sattr = FieldAttr {
+            field_type: COB_TYPE_NUMERIC_DISPLAY,
+            digits: 4,
+            scale: 2,
+            flags: COB_FLAG_HAVE_SIGN,
+        };
         let neg = b"123t";
         let pos = b"1234";
         let bin = |d: &[u8], a: &FieldAttr| crate::accessors::cob_get_int(d, a);
         // SIGN
-        assert_eq!(bin(&cob_intr_sign(neg, &sattr).0, &cob_intr_sign(neg, &sattr).1), -1);
-        assert_eq!(bin(&cob_intr_sign(pos, &sattr).0, &cob_intr_sign(pos, &sattr).1), 1);
+        assert_eq!(
+            bin(&cob_intr_sign(neg, &sattr).0, &cob_intr_sign(neg, &sattr).1),
+            -1
+        );
+        assert_eq!(
+            bin(&cob_intr_sign(pos, &sattr).0, &cob_intr_sign(pos, &sattr).1),
+            1
+        );
         // INTEGER (floor): -12.34 -> -13 ; 12.34 -> 12
         let (d, a) = cob_intr_integer(neg, &sattr);
         assert_eq!(bin(&d, &a), -13);
@@ -4142,7 +4775,12 @@ mod tests {
 
     #[test]
     fn cob_intr_date_wrappers() {
-        let disp = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 8, scale: 0, flags: 0 };
+        let disp = FieldAttr {
+            field_type: COB_TYPE_NUMERIC_DISPLAY,
+            digits: 8,
+            scale: 0,
+            flags: 0,
+        };
         // validators
         assert!(leap_year(2000));
         assert!(!leap_year(1900));
@@ -4156,29 +4794,71 @@ mod tests {
         let (d, a) = cob_intr_integer_of_date(b"20240229", &disp);
         let days = crate::accessors::cob_get_int(&d, &a);
         assert!(days > 0);
-        let days_disp = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 9, scale: 0, flags: 0 };
+        let days_disp = FieldAttr {
+            field_type: COB_TYPE_NUMERIC_DISPLAY,
+            digits: 9,
+            scale: 0,
+            flags: 0,
+        };
         let dbytes = format!("{days:09}").into_bytes();
         let (back, _) = cob_intr_date_of_integer(&dbytes, &days_disp);
         assert_eq!(back, b"20240229");
         // invalid date -> 0 / "00000000"
-        assert_eq!(crate::accessors::cob_get_int(&cob_intr_integer_of_date(b"20240230", &disp).0,
-            &FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags: 0 }), 0);
-        assert_eq!(cob_intr_date_of_integer(b"000000000", &days_disp).0, b"00000000");
+        assert_eq!(
+            crate::accessors::cob_get_int(
+                &cob_intr_integer_of_date(b"20240230", &disp).0,
+                &FieldAttr {
+                    field_type: COB_TYPE_NUMERIC_BINARY,
+                    digits: 9,
+                    scale: 0,
+                    flags: 0
+                }
+            ),
+            0
+        );
+        assert_eq!(
+            cob_intr_date_of_integer(b"000000000", &days_disp).0,
+            b"00000000"
+        );
     }
 
     #[test]
     fn cob_intr_result_fields() {
         use crate::attr::COB_TYPE_ALPHANUMERIC;
-        let an = FieldAttr { field_type: COB_TYPE_ALPHANUMERIC, digits: 0, scale: 0, flags: 0 };
+        let an = FieldAttr {
+            field_type: COB_TYPE_ALPHANUMERIC,
+            digits: 0,
+            scale: 0,
+            flags: 0,
+        };
         // ORD('A') = 66 -> 4-byte native binary
-        let (d, a) = cob_intr_ord(b"A");
+        let (d, a) = cob_intr_ord(b"A", None);
         assert_eq!(crate::accessors::cob_get_int(&d, &a), 66);
         // CHAR(66) = 'A'
-        let (d, _) = cob_intr_char(b"\x42\x00\x00\x00", &FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags: 0 });
-        assert_eq!(d, b"A");
-        // CHAR out of range -> 0
-        let (d, _) = cob_intr_char(b"\x00\x00\x00\x00", &FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags: 0 });
-        assert_eq!(d, &[0u8]);
+        let (d, _) = cob_intr_char(
+            b"\x42\x00\x00\x00",
+            &FieldAttr {
+                field_type: COB_TYPE_NUMERIC_BINARY,
+                digits: 9,
+                scale: 0,
+                flags: 0,
+            },
+            None,
+        );
+        assert_eq!(d.0, b"A");
+        // CHAR out of range -> 0 + argument error
+        let (d, err) = cob_intr_char(
+            b"\x00\x00\x00\x00",
+            &FieldAttr {
+                field_type: COB_TYPE_NUMERIC_BINARY,
+                digits: 9,
+                scale: 0,
+                flags: 0,
+            },
+            None,
+        );
+        assert_eq!(d.0, &[0u8]);
+        assert!(err, "CHAR(0) raises EC-ARGUMENT-FUNCTION");
         // BYTE-LENGTH / LENGTH
         let (d, a) = cob_intr_byte_length(7);
         assert_eq!(crate::accessors::cob_get_int(&d, &a), 7);
@@ -4198,7 +4878,10 @@ mod tests {
         // Under the admitted C.UTF-8 oracle, UPPER-CASE/LOWER-CASE fold ONLY ASCII; a byte >=128 is left
         // untouched -- built-cobc: UPPER-CASE of `E9 61 0A` -> `e9 41 0a`. (Locale-sensitive 8-bit folding
         // only occurs under a non-C LC_CTYPE, outside the pinned locale -- so the port is faithful here.)
-        assert_eq!(cob_intr_upper_case(0, 0, &[0xE9, b'a', 0x0A]).0, vec![0xE9, b'A', 0x0A]);
+        assert_eq!(
+            cob_intr_upper_case(0, 0, &[0xE9, b'a', 0x0A]).0,
+            vec![0xE9, b'A', 0x0A]
+        );
         assert_eq!(cob_intr_lower_case(0, 0, &[0xC9, b'A']).0, vec![0xC9, b'a']);
         // LOCALE-COMPARE uses LC_COLLATE = byte order under C.UTF-8 (strcoll == memcmp): built-cobc gives
         // `a`<`b` and `b`>`a`. So the port's bytewise compare is faithful under the pinned locale.
@@ -4207,11 +4890,21 @@ mod tests {
         assert_eq!(cob_intr_locale_compare(b"a", b"a", None).0, b"=");
         // LOCALE-DATE renders per LC_TIME's D_FMT = `%m/%d/%y` under C.UTF-8: built-cobc LOCALE-DATE of
         // 20200615 -> `06/15/20`. The port hardcodes that oracle D_FMT, so it is faithful.
-        let datt = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 8, scale: 0, flags: 0 };
+        let datt = FieldAttr {
+            field_type: COB_TYPE_NUMERIC_DISPLAY,
+            digits: 8,
+            scale: 0,
+            flags: 0,
+        };
         let ld = cob_intr_locale_date(0, 0, b"20200615", &datt, None).0;
         assert_eq!(&ld[..8], b"06/15/20");
         // LOCALE-TIME per LC_TIME's T_FMT = `%H:%M:%S` under C.UTF-8: 123456 -> `12:34:56`.
-        let tatt = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 6, scale: 0, flags: 0 };
+        let tatt = FieldAttr {
+            field_type: COB_TYPE_NUMERIC_DISPLAY,
+            digits: 6,
+            scale: 0,
+            flags: 0,
+        };
         let lt = cob_intr_locale_time(0, 0, b"123456", &tatt, None).0;
         assert_eq!(&lt[..8], b"12:34:56");
     }
@@ -4227,12 +4920,24 @@ mod tests {
     #[test]
     fn numval_honors_decimal_comma_and_currency_sign() {
         // DECIMAL-POINT IS COMMA: built-cobc NUMVAL("1.234,56") = 1234.56 ('.' grouping, ',' decimal).
-        assert_eq!(numval_display(&intrinsic_numval_cfg("1.234,56", true), 8, 4), "+00001234.5600");
+        assert_eq!(
+            numval_display(&intrinsic_numval_cfg("1.234,56", true), 8, 4),
+            "+00001234.5600"
+        );
         // CURRENCY SIGN IS "F" + DECIMAL-POINT IS COMMA: NUMVAL-C("F1.234,56") = 1234.56.
-        assert_eq!(numval_display(&intrinsic_numval_c_cfg("F1.234,56", 'F', true), 8, 4), "+00001234.5600");
+        assert_eq!(
+            numval_display(&intrinsic_numval_c_cfg("F1.234,56", 'F', true), 8, 4),
+            "+00001234.5600"
+        );
         // The default ($/'.'/no-comma) wrappers are byte-unchanged.
-        assert_eq!(numval_display(&intrinsic_numval_c("$1,234.56"), 8, 4), "+00001234.5600");
-        assert_eq!(numval_display(&intrinsic_numval_cfg("1,234.56", false), 8, 4), "+00001234.5600");
+        assert_eq!(
+            numval_display(&intrinsic_numval_c("$1,234.56"), 8, 4),
+            "+00001234.5600"
+        );
+        assert_eq!(
+            numval_display(&intrinsic_numval_cfg("1,234.56", false), 8, 4),
+            "+00001234.5600"
+        );
     }
     #[test]
     fn date_conversion_intrinsics_match_oracle() {
@@ -4255,9 +4960,27 @@ mod tests {
     }
     #[test]
     fn ord_char_are_one_based_inverses() {
-        assert_eq!([intrinsic_ord(b'A'), intrinsic_ord(b'0'), intrinsic_ord(b' '), intrinsic_ord(b'z')], [66, 49, 33, 123]);
-        assert_eq!([intrinsic_char(66), intrinsic_char(49), intrinsic_char(1), intrinsic_char(256)], [b'A', b'0', 0, 255]);
-        for n in 1u32..=256 { assert_eq!(intrinsic_ord(intrinsic_char(n)), n); } // round-trip
+        assert_eq!(
+            [
+                intrinsic_ord(b'A'),
+                intrinsic_ord(b'0'),
+                intrinsic_ord(b' '),
+                intrinsic_ord(b'z')
+            ],
+            [66, 49, 33, 123]
+        );
+        assert_eq!(
+            [
+                intrinsic_char(66),
+                intrinsic_char(49),
+                intrinsic_char(1),
+                intrinsic_char(256)
+            ],
+            [b'A', b'0', 0, 255]
+        );
+        for n in 1u32..=256 {
+            assert_eq!(intrinsic_ord(intrinsic_char(n)), n);
+        } // round-trip
     }
     #[test]
     fn case_and_reverse_transforms() {
@@ -4268,20 +4991,53 @@ mod tests {
     }
     #[test]
     fn integer_is_floor_integer_part_truncates() {
-        let im = |s: &str| intrinsic_integer(intrinsic_numval(s).signed_mag(), intrinsic_numval(s).scale);
-        let ip = |s: &str| intrinsic_integer_part(intrinsic_numval(s).signed_mag(), intrinsic_numval(s).scale);
+        let im = |s: &str| {
+            intrinsic_integer(intrinsic_numval(s).signed_mag(), intrinsic_numval(s).scale)
+        };
+        let ip = |s: &str| {
+            intrinsic_integer_part(intrinsic_numval(s).signed_mag(), intrinsic_numval(s).scale)
+        };
         // INTEGER (floor): 3.7->3, -3.7->-4, 2.5->2, -2.5->-3, -3.0->-3, -0.1->-1
-        assert_eq!([im("3.7"), im("-3.7"), im("2.5"), im("-2.5"), im("-3.0"), im("-0.1")], [3, -4, 2, -3, -3, -1]);
+        assert_eq!(
+            [
+                im("3.7"),
+                im("-3.7"),
+                im("2.5"),
+                im("-2.5"),
+                im("-3.0"),
+                im("-0.1")
+            ],
+            [3, -4, 2, -3, -3, -1]
+        );
         // INTEGER-PART (truncate): 3.7->3, -3.7->-3, 2.5->2, -2.5->-2, 0.9->0
-        assert_eq!([ip("3.7"), ip("-3.7"), ip("2.5"), ip("-2.5"), ip("0.9")], [3, -3, 2, -2, 0]);
+        assert_eq!(
+            [ip("3.7"), ip("-3.7"), ip("2.5"), ip("-2.5"), ip("0.9")],
+            [3, -3, 2, -2, 0]
+        );
     }
     #[test]
     fn mod_takes_divisor_sign_rem_takes_dividend_sign() {
         // MOD -> divisor sign: (17,5)=2 (-17,5)=3 (17,-5)=-3 (-17,-5)=-2
-        assert_eq!([intrinsic_mod(17, 5), intrinsic_mod(-17, 5), intrinsic_mod(17, -5), intrinsic_mod(-17, -5)], [2, 3, -3, -2]);
+        assert_eq!(
+            [
+                intrinsic_mod(17, 5),
+                intrinsic_mod(-17, 5),
+                intrinsic_mod(17, -5),
+                intrinsic_mod(-17, -5)
+            ],
+            [2, 3, -3, -2]
+        );
         assert_eq!([intrinsic_mod(15, 5), intrinsic_mod(0, 5)], [0, 0]);
         // REM -> dividend sign: (17,5)=2 (-17,5)=-2 (17,-5)=2 (-17,-5)=-2
-        assert_eq!([intrinsic_rem(17, 5), intrinsic_rem(-17, 5), intrinsic_rem(17, -5), intrinsic_rem(-17, -5)], [2, -2, 2, -2]);
+        assert_eq!(
+            [
+                intrinsic_rem(17, 5),
+                intrinsic_rem(-17, 5),
+                intrinsic_rem(17, -5),
+                intrinsic_rem(-17, -5)
+            ],
+            [2, -2, 2, -2]
+        );
     }
     #[test]
     fn numval_matches_oracle() {
@@ -4397,7 +5153,7 @@ mod tests {
         assert_eq!(test_day_of_year(b"366", 2023, &mut o), 3);
         let mut o = 0;
         assert_eq!(test_day_of_year(b"000", 2024, &mut o), 3); // 000 invalid
-        // test_hyphen_presence
+                                                               // test_hyphen_presence
         let mut o = 0;
         assert_eq!(test_hyphen_presence(true, b"-", &mut o), 0);
         assert_eq!(o, 1);
@@ -4418,7 +5174,7 @@ mod tests {
         assert_eq!(test_week(b"52", 2024, &mut o), 0);
         let mut o = 0;
         assert_eq!(test_week(b"00", 2024, &mut o), 2); // week 00 invalid
-        // test_day_of_week: 1..7.
+                                                       // test_day_of_week: 1..7.
         let mut o = 0;
         assert_eq!(test_day_of_week(b"7", &mut o), 0);
         let mut o = 0;
@@ -4430,12 +5186,18 @@ mod tests {
     #[test]
     fn date_end_and_trailing_junk() {
         // test_date_end for a YYYYMMDD-shaped tail (mmdd).
-        let fmt_mmdd = DateFormat { days: DaysFormat::Mmdd, with_hyphens: false };
+        let fmt_mmdd = DateFormat {
+            days: DaysFormat::Mmdd,
+            with_hyphens: false,
+        };
         let mut o = 0;
         assert_eq!(test_date_end(fmt_mmdd, b"0229", 2024, &mut o), 0);
         assert_eq!(o, 4);
         // test_date_end for ddd.
-        let fmt_ddd = DateFormat { days: DaysFormat::Ddd, with_hyphens: false };
+        let fmt_ddd = DateFormat {
+            days: DaysFormat::Ddd,
+            with_hyphens: false,
+        };
         let mut o = 0;
         assert_eq!(test_date_end(fmt_ddd, b"060", 2024, &mut o), 0);
         // test_no_trailing_junk: trailing spaces OK at end-of-string.
@@ -4497,7 +5259,11 @@ mod tests {
 
     #[test]
     fn offset_time_validators() {
-        let fmt_off = TimeFormat { with_colons: false, decimal_places: 0, extra: TimeExtra::OffsetTime };
+        let fmt_off = TimeFormat {
+            with_colons: false,
+            decimal_places: 0,
+            extra: TimeExtra::OffsetTime,
+        };
         // "+0130" valid offset.
         let mut o = 0;
         assert_eq!(test_offset_time(fmt_off, b"+0130", &mut o), 0);
@@ -4510,13 +5276,21 @@ mod tests {
         let mut o = 0;
         assert_eq!(test_offset_time(fmt_off, b"x000", &mut o), 1);
         // test_time_end with a Z zone.
-        let fmt_z = TimeFormat { with_colons: false, decimal_places: 0, extra: TimeExtra::Z };
+        let fmt_z = TimeFormat {
+            with_colons: false,
+            decimal_places: 0,
+            extra: TimeExtra::Z,
+        };
         let mut o = 0;
         assert_eq!(test_time_end(fmt_z, b"Z", &mut o), 0);
-        let fmt_none = TimeFormat { with_colons: false, decimal_places: 0, extra: TimeExtra::None };
+        let fmt_none = TimeFormat {
+            with_colons: false,
+            decimal_places: 0,
+            extra: TimeExtra::None,
+        };
         let mut o = 4;
         assert_eq!(test_time_end(fmt_none, b"", &mut o), 0); // None: no zone
-        // valid_offset_time: |offset| < 1440 minutes.
+                                                             // valid_offset_time: |offset| < 1440 minutes.
         assert!(valid_offset_time(0));
         assert!(valid_offset_time(1439));
         assert!(valid_offset_time(-1439));
@@ -4573,16 +5347,34 @@ mod tests {
 
     #[test]
     fn integer_of_formatted_parts() {
-        let fmt_mmdd = DateFormat { days: DaysFormat::Mmdd, with_hyphens: false };
+        let fmt_mmdd = DateFormat {
+            days: DaysFormat::Mmdd,
+            with_hyphens: false,
+        };
         // integer_of_mmdd: parse "0229" with year 2024 -> same as integer_of_date(2024,2,29).
-        assert_eq!(integer_of_mmdd(fmt_mmdd, 2024, b"0229"), integer_of_date(2024, 2, 29));
-        let fmt_mmdd_h = DateFormat { days: DaysFormat::Mmdd, with_hyphens: true };
-        assert_eq!(integer_of_mmdd(fmt_mmdd_h, 2024, b"02-29"), integer_of_date(2024, 2, 29));
+        assert_eq!(
+            integer_of_mmdd(fmt_mmdd, 2024, b"0229"),
+            integer_of_date(2024, 2, 29)
+        );
+        let fmt_mmdd_h = DateFormat {
+            days: DaysFormat::Mmdd,
+            with_hyphens: true,
+        };
+        assert_eq!(
+            integer_of_mmdd(fmt_mmdd_h, 2024, b"02-29"),
+            integer_of_date(2024, 2, 29)
+        );
         // integer_of_ddd: "061" of 2024 -> 2024-03-01.
         assert_eq!(integer_of_ddd(2024, b"061"), integer_of_date(2024, 3, 1));
         // integer_of_wwwd: ISO 2024-W01-1 == 2024-01-01.
-        let fmt_w = DateFormat { days: DaysFormat::Wwwd, with_hyphens: false };
-        assert_eq!(integer_of_wwwd(fmt_w, 2024, b"W011"), integer_of_date(2024, 1, 1));
+        let fmt_w = DateFormat {
+            days: DaysFormat::Wwwd,
+            with_hyphens: false,
+        };
+        assert_eq!(
+            integer_of_wwwd(fmt_w, 2024, b"W011"),
+            integer_of_date(2024, 1, 1)
+        );
     }
 
     #[test]
@@ -4609,7 +5401,14 @@ mod tests {
         assert_eq!(buff, b"12Z");
         // add_decimal_digits: '.' then `decimal_places` fraction digits, right-padded with zeros.
         // second_fraction = 0.5 (value 5 scale 1) -> ".500" for 3 places.
-        let frac = CobDecimal { value: { let mut m = Mpz::new(); m.set_ui(5); m }, scale: 1 };
+        let frac = CobDecimal {
+            value: {
+                let mut m = Mpz::new();
+                m.set_ui(5);
+                m
+            },
+            scale: 1,
+        };
         let mut buff = Vec::new();
         add_decimal_digits(3, &frac, &mut buff, b'.');
         assert_eq!(buff, b".500");
@@ -4639,13 +5438,26 @@ mod tests {
 
     #[test]
     fn unimplemented_intrinsics_return_empty() {
-        let an = FieldAttr { field_type: COB_TYPE_ALPHANUMERIC, digits: 0, scale: 0, flags: 0 };
+        let an = FieldAttr {
+            field_type: COB_TYPE_ALPHANUMERIC,
+            digits: 0,
+            scale: 0,
+            flags: 0,
+        };
         // These FUNCTIONs are unimplemented in GnuCOBOL 3.2 -> empty not-implemented field.
-        assert!(cob_intr_boolean_of_integer(b"1", &an, b"8", &an).0.is_empty());
+        assert!(cob_intr_boolean_of_integer(b"1", &an, b"8", &an)
+            .0
+            .is_empty());
         assert!(cob_intr_char_national(b"A", &an).0.is_empty());
-        assert!(cob_intr_display_of(0, 0, &[(b"A".as_slice(), &an)]).0.is_empty());
-        assert!(cob_intr_national_of(0, 0, &[(b"A".as_slice(), &an)]).0.is_empty());
-        assert!(cob_intr_standard_compare(&[(b"A".as_slice(), &an)]).0.is_empty());
+        assert!(cob_intr_display_of(0, 0, &[(b"A".as_slice(), &an)])
+            .0
+            .is_empty());
+        assert!(cob_intr_national_of(0, 0, &[(b"A".as_slice(), &an)])
+            .0
+            .is_empty());
+        assert!(cob_intr_standard_compare(&[(b"A".as_slice(), &an)])
+            .0
+            .is_empty());
         assert!(cob_intr_exception_file_n().0.is_empty());
         assert!(cob_intr_exception_location_n().0.is_empty());
     }
@@ -4734,7 +5546,17 @@ mod kani_proofs {
     fn length_of_alpha_is_n() {
         let n: usize = kani::any();
         kani::assume(n >= 1 && n <= 9);
-        let pic = match n { 1=>"X(1)",2=>"X(2)",3=>"X(3)",4=>"X(4)",5=>"X(5)",6=>"X(6)",7=>"X(7)",8=>"X(8)",_=>"X(9)" };
+        let pic = match n {
+            1 => "X(1)",
+            2 => "X(2)",
+            3 => "X(3)",
+            4 => "X(4)",
+            5 => "X(5)",
+            6 => "X(6)",
+            7 => "X(7)",
+            8 => "X(8)",
+            _ => "X(9)",
+        };
         assert_eq!(intrinsic_length(pic, Usage::Display).unwrap(), n);
     }
 }

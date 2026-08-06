@@ -667,6 +667,7 @@ pub fn run_program_redirected(
     let (main_name, program_map) = parse_programs(&toks)?;
     let switches = parse_switches(&toks, first_proc);
     let collation = parse_collation(&toks, first_proc);
+    set_collation(collation);
     let file_defs: HashMap<String, FileDef> = program_map
         .get(&main_name)
         .map(|p| {
@@ -772,6 +773,7 @@ pub fn check_program(source: &str, dialect: crate::dialect::Dialect) -> Result<(
     let (main_name, program_map) = parse_programs(&toks)?;
     let switches = parse_switches(&toks, first_proc);
     let collation = parse_collation(&toks, first_proc);
+    set_collation(collation);
     let file_defs: HashMap<String, FileDef> = program_map
         .get(&main_name)
         .map(|p| {
@@ -3926,6 +3928,21 @@ thread_local! {
 /// Record the source-file path for `FUNCTION MODULE-SOURCE` (the host sets this before running a program).
 pub fn set_source_file(path: &str) {
     SOURCE_FILE.with(|s| *s.borrow_mut() = path.to_string());
+}
+
+/// The per-run program collating sequence (upstream `COB_MODULE_PTR->collating_sequence`), set by
+/// the run boundary from `parse_collation`; `None` = no sequence (the identity CHAR/ORD path).
+/// Used by FUNCTION CHAR / ORD (upstream 5bb0fbe1b) and the collating comparisons.
+thread_local! {
+    static COLLATION: std::cell::RefCell<Option<[u8; 256]>> = const { std::cell::RefCell::new(None) };
+}
+
+pub fn set_collation(col: Option<[u8; 256]>) {
+    COLLATION.with(|c| *c.borrow_mut() = col);
+}
+
+fn current_collation() -> Option<[u8; 256]> {
+    COLLATION.with(|c| *c.borrow())
 }
 
 /// Record the program command line (the run boundary sets it for `cobcrun module args...`; cleared
@@ -12263,10 +12280,14 @@ fn eval_intrinsic(
             let a = a0()?;
             ix::cob_intr_sign(&a.0, &a.1)
         }
-        "ORD" => ix::cob_intr_ord(&a0()?.0),
+        "ORD" => ix::cob_intr_ord(&a0()?.0, current_collation().as_ref()),
         "CHAR" => {
             let a = a0()?;
-            ix::cob_intr_char(&a.0, &a.1)
+            let (f, arg_err) = ix::cob_intr_char(&a.0, &a.1, current_collation().as_ref());
+            if arg_err {
+                set_exception("EC-ARGUMENT-FUNCTION");
+            }
+            f
         }
         "HEX-OF" => ix::cob_intr_hex_of(&a0()?.0),
         "HEX-TO-CHAR" => ix::cob_intr_hex_to_char(&a0()?.0),
@@ -15046,6 +15067,36 @@ mod tests {
         );
         assert_eq!(a, b"20010909\n");
         std::env::remove_var("SOURCE_DATE_EPOCH");
+    }
+
+    #[test]
+    fn char_ord_honor_program_collating_sequence() {
+        // Upstream 5bb0fbe1b: FUNCTION CHAR / ORD must use the program collating sequence
+        // (3.2's FIXME). Under ALPHABET EB IS EBCDIC + PROGRAM COLLATING SEQUENCE IS EB:
+        // ORD("A") = 0xC1 + 1 = 194 and CHAR(194) = "A" (the inverse). The STABLE 3.2 oracle
+        // still prints 66 and the raw byte (pre-fix); the candidate follows current upstream
+        // (drift recorded). CHAR outside 1..256, or a weight with no source character, raises
+        // EC-ARGUMENT-FUNCTION and returns 0.
+        let out = run("       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    ENVIRONMENT DIVISION.\n\
+                    CONFIGURATION SECTION.\n\
+                    SPECIAL-NAMES. ALPHABET EB IS EBCDIC.\n\
+                    OBJECT-COMPUTER. PROGRAM COLLATING SEQUENCE IS EB.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 O PIC 9(5).\n\
+                    01 C PIC X.\n\
+                    PROCEDURE DIVISION.\n\
+                        COMPUTE O = FUNCTION ORD(\"A\").\n\
+                        DISPLAY O.\n\
+                        MOVE FUNCTION CHAR(194) TO C.\n\
+                        DISPLAY \"[\" C \"]\".\n\
+                        STOP RUN.\n");
+        assert_eq!(out, b"00194\n[A]\n");
+        // without a collating sequence the identity path is unchanged (ORD('A') = 66, CHAR(66) = 'A').
+        let out2 = run("       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 O PIC 9(5).\n       01 C PIC X.\n       PROCEDURE DIVISION.\n           COMPUTE O = FUNCTION ORD(\"A\").\n           DISPLAY O.\n           MOVE FUNCTION CHAR(66) TO C.\n           DISPLAY \"[\" C \"]\".\n           STOP RUN.\n");
+        assert_eq!(out2, b"00066\n[A]\n");
     }
 
     #[test]
