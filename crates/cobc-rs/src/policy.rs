@@ -227,6 +227,8 @@ pub fn registry() -> Vec<Entry> {
           "pre-copy a copybook before each source (upstream e36a124b2): its text is prepended to the source before preprocessing, so it can carry REPLACEments or prototypes"),
         e("--include", &["--include", "-include"], OptionPolicy::RejectedUnsupported, OptCategory::NativeArtifact, true,
           "include a C header in the generated C file: the candidate has no generated C (native-artifact boundary; reject honestly)"),
+        e("-fwinmain", &["-fwinmain"], OptionPolicy::RejectedUnsupported, OptCategory::NativeArtifact, false,
+          "Win32 GUI subsystem flag (upstream bba2a4ee7 makes its help visible on Win32/Cygwin): the candidate is not a Windows native-code driver; reject honestly"),
         e("-fdiagnostics-absolute-path", &["-fdiagnostics-absolute-path"], OptionPolicy::Translated, OptCategory::Diagnostic, false,
           "display full paths within diagnostics (upstream 140a030d5): the candidate's source-file diagnostic prefix is made absolute"),
         e("-MP", &["-MP"], OptionPolicy::Translated, OptCategory::OutputSelection, false,

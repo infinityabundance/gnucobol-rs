@@ -15100,6 +15100,39 @@ mod tests {
     }
 
     #[test]
+    fn remaining_boundary_surfaces_fail_closed() {
+        // Upstream batch of small surfaces; each candidate boundary is verified to fail closed
+        // promptly (no hang, no silent mis-execution):
+        // - ac862070c (ACCEPT with TIMEOUT): interactive/screen ACCEPT is a runtime non-claim.
+        // - c4eea8102 (ENTRY area-B rule): ENTRY is rejected as a statement (the area rule sits
+        //   inside that boundary).
+        // - 2c092ca14 (>>SET trailing periods): the candidate's preprocessor drops unknown >>
+        //   directives without hanging; the SET-directive period rule is inside the preprocessor
+        //   boundary.
+        // - 8a7c349d1 (>>IMP INCLUDE), 13963e15a / 39ab4808c (listing/-ftcmd), 50b58f682
+        //   (COB_LOAD_GLOBAL), 02964e42e (is_test rename): native-code, listing, DSO-registry and
+        //   C-ABI surfaces the candidate does not implement (typed boundaries recorded).
+        let t0 = std::time::Instant::now();
+        let err = run_program(
+            "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 X PIC 9.\n       PROCEDURE DIVISION.\n           ACCEPT X WITH TIMEOUT 5.\n           STOP RUN.\n",
+        )
+        .unwrap_err();
+        assert!(
+            t0.elapsed().as_millis() < 1000,
+            "ACCEPT TIMEOUT terminates promptly"
+        );
+        assert!(format!("{err:?}").contains("non-claim"), "{err:?}");
+        let err2 = run_program(
+            "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n           ENTRY \"ALT\".\n           STOP RUN.\n",
+        )
+        .unwrap_err();
+        assert!(format!("{err2:?}").contains("ENTRY"), "{err2:?}");
+        // a >>SET directive is dropped without hanging (the run proceeds).
+        let out = run("       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n       >>SET EC-ALL-CHECKING\n           DISPLAY \"OK\".\n           STOP RUN.\n");
+        assert_eq!(out, b"OK\n");
+    }
+
+    #[test]
     fn close_with_lock_state_machine_matches_current_upstream() {
         // Upstream 62b39805c (bugs:#914) + 0b22d4417: CLOSE WITH LOCK puts the file in the LOCKED
         // state; re-OPEN reports 38 (CLOSED WITH LOCK); READ on a non-INPUT/I-O file reports 47
