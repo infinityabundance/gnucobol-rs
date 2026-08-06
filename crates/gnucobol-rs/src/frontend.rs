@@ -9646,7 +9646,11 @@ fn compile_tm() -> Result<(i64, u32, u32, u32, u32, u32), RunError> {
     }
     let days = epoch / 86400;
     let sod = epoch % 86400;
-    let (y, mon, d) = civil_from_days(days - 1);
+    // Upstream 946f3e638: the epoch conversion was off by one day (the old C stuffed tm_mday =
+    // days + 1 into mktime); the fix uses the straight localtime conversion, i.e. day 0 is
+    // 1970-01-01 -- the same civil-calendar arithmetic cob_set_date_from_epoch uses. (The STABLE
+    // 3.2 oracle still has the bug: SOURCE_DATE_EPOCH=1000000000 -> MODULE-DATE 20010908.)
+    let (y, mon, d) = civil_from_days(days);
     Ok((
         y,
         mon,
@@ -15015,6 +15019,33 @@ mod tests {
             mv, b"[000]\n",
             "alphanumeric->numeric via variable zero-fills (oracle-matched)"
         );
+    }
+
+    #[test]
+    fn epoch_family_matches_fixed_upstream_semantics() {
+        // Upstream 486565722 / 946f3e638 / eb8536cfc: the C's mktime-stuffed epoch conversion was
+        // off by one day and SOURCE_DATE_EPOCH could be ignored on later invocations; the fix
+        // delegates to set_cob_time_from_localtime and re-reads SOURCE_DATE_EPOCH per compile.
+        // The candidate's cob_set_date_from_epoch is pure civil-calendar arithmetic (day 0 =
+        // 1970-01-01) and compile_tm reads SOURCE_DATE_EPOCH fresh per run -- both bug classes
+        // are inapplicable. This court pins the fixed semantics: the epoch decomposition matches
+        // the known-good values and FUNCTION MODULE-DATE is stable across runs under a pinned
+        // epoch.
+        let t0 = crate::common_cmdline::cob_set_date_from_epoch(b"0").unwrap();
+        assert_eq!((t0.year, t0.month, t0.day_of_month), (1970, 1, 1));
+        let t1 = crate::common_cmdline::cob_set_date_from_epoch(b"1000000000").unwrap();
+        assert_eq!((t1.year, t1.month, t1.day_of_month), (2001, 9, 9));
+        // SOURCE_DATE_EPOCH is honoured identically on every invocation (fresh read per run).
+        std::env::set_var("SOURCE_DATE_EPOCH", "1000000000");
+        let prog = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n           DISPLAY FUNCTION MODULE-DATE.\n           STOP RUN.\n";
+        let a = run(prog);
+        let b = run(prog);
+        assert_eq!(
+            a, b,
+            "SOURCE_DATE_EPOCH yields a stable MODULE-DATE across invocations"
+        );
+        assert_eq!(a, b"20010909\n");
+        std::env::remove_var("SOURCE_DATE_EPOCH");
     }
 
     #[test]
