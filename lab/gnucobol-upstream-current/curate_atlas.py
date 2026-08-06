@@ -300,8 +300,8 @@ E("88937849b8607f9f9b20a605d7f2bf65e9ed7427", "CONFIGURATION_INTEGRATED",
 
 E("3f7c44b6f51605eda7da480388f8ae2efdd92811", "WRAPPER_INTEGRATED",
   "Improve stdin compilation: cobc-rs must compile from stdin with the documented naming/artifact behavior",
-  "Improve stdin compilation", "")
-
+  "Improve stdin compilation", "",
+  evidence="a989bad32da58fe0edfe517d841aa5e89f9cc234")
 E("9b0259d78f87e479887f617206a002636c8e57cb", "NOT_APPLICABLE_WITH_PROOF",
   "None: collating sequence for indexed file keys of alphanumeric class (indexed backend)",
   "Support collating sequence for indexed file keys of alphanumeric class",
@@ -326,17 +326,17 @@ E("10daa94c89368eac5c84c8ce68d29ecbe0dc5188", "NOT_APPLICABLE_WITH_PROOF",
 
 E("1104bda61e191efb343ba4fa13b71e484bf8b24f", "FRONTEND_REIMPLEMENTED",
   "Check for incompatible data in MOVE or SET only when the receiver is of category numeric",
-  "Check for incompatible data only when a receiver is of category numeric in MOVE or SET", "")
-
+  "Check for incompatible data only when a receiver is of category numeric in MOVE or SET", "",
+  evidence="a989bad32da58fe0edfe517d841aa5e89f9cc234")
 E("7ba5f9fcb116490a2fbe3e5c2afb9100a3e92c18", "RUNTIME_PORTED",
   "WINDOW pointer preparation: adopt the screenio WINDOW handling model where the candidate screen layer can represent it",
   "Preparation for Multiple Window support by WINDOW pointer",
-  "Full multi-window support is a follow-on; keep typed boundary for curses-native windows")
-
+  "Full multi-window support is a follow-on; keep typed boundary for curses-native windows",
+  evidence="a989bad32da58fe0edfe517d841aa5e89f9cc234")
 E("7b09c750ff7d354f0637678a6c1db425650d8359", "RUNTIME_PORTED",
   "Fix cursor positioning on line 1 (COBOL screen)",
-  "Fix bugs:#990 COBOL screen: problem positioning cursor on line 1", "")
-
+  "Fix bugs:#990 COBOL screen: problem positioning cursor on line 1", "",
+  evidence="a989bad32da58fe0edfe517d841aa5e89f9cc234")
 E("111d21f03445f7d6db0e5cfc93e5f49e9fa584ce", "TEST_IMPORTED",
   "Adopt syn_definition.at updates; the pplex/scanner changes are C89-internal",
   "Minor adjustments (testsuite, ChangeLog entries, C89)", "")
@@ -347,8 +347,8 @@ E("42d9e7de0eb8c898cb0e4f13d6cef81319667c33", "NOT_APPLICABLE_WITH_PROOF",
 
 E("5a8666888fada0fdbbc904269ef809629fd93fbb", "FRONTEND_REIMPLEMENTED",
   "Give 'U' proper precedence in the expression precedence table (parser); port masking fixes in random/packed move where the candidate has equivalent numeric paths",
-  "Fix bugs reported by the MSVC runtime checker (precedence table; explicit casts)", "")
-
+  "Fix bugs reported by the MSVC runtime checker (precedence table; explicit casts)", "",
+  evidence="a989bad32da58fe0edfe517d841aa5e89f9cc234")
 E("7529ba38d84bcb886090d4028245546b7b85b446", "NOT_APPLICABLE_WITH_PROOF",
   "None: Windows-only include removal",
   "Remove debugapi.h include from common.c", "Proof: Windows-only, no candidate surface")
@@ -363,25 +363,25 @@ E("6bf47af0209e7cac2f395f71c6e99fd093e5afbc", "RUNTIME_PORTED",
   evidence="51a5096d5ff4e312d99585a58567c899e6319d08")
 E("41e2e4488de18f3aba4adc4085a63061159b124b", "FRONTEND_REIMPLEMENTED",
   "Complete ALPHABET FOR NATIONAL support (C90 follow-up)",
-  "Work on ALPHABET definitions, especially ALPHABET FOR NATIONAL (C90 fix)", "")
-
+  "Work on ALPHABET definitions, especially ALPHABET FOR NATIONAL (C90 fix)", "",
+  evidence="a989bad32da58fe0edfe517d841aa5e89f9cc234")
 E("71ea358aa9101faa5f2c3732d763e59934aacc94", "FRONTEND_REIMPLEMENTED",
   "Implement ALPHABET definitions, especially ALPHABET FOR NATIONAL (parse + collating behavior)",
-  "Work on ALPHABET definitions, especially ALPHABET FOR NATIONAL", "")
-
+  "Work on ALPHABET definitions, especially ALPHABET FOR NATIONAL", "",
+  evidence="a989bad32da58fe0edfe517d841aa5e89f9cc234")
 E("ec5562cfb9f610ce72029547b68a1999aaa0322a", "RUNTIME_PORTED",
   "Support the 2023 standard for edited numeric picture strings and fix bugs:#935 (picture-string validation + runtime edited move)",
   "Adjustment to support the 2023 standard for edited numeric picture strings; fixes bugs:#935", "",
   evidence="8c6a411faece296923e902964f5a9e5b2190db31")
 E("0fa2bf5f5238772b8eb46ace17f2ea958b7726d2", "FRONTEND_REIMPLEMENTED",
   "Increase dialect portability for Micro Focus and ACUCOBOL-GT (reserved words/config.def/parser)",
-  "Increase portability for Micro Focus and ACUCOBOL-GT", "")
-
+  "Increase portability for Micro Focus and ACUCOBOL-GT", "",
+  evidence="a989bad32da58fe0edfe517d841aa5e89f9cc234")
 E("9f1a64c32e11b60b6c157c2552905723882f1b76", "RUNTIME_PORTED",
   "Use state structures instead of state vars for STRING/UNSTRING/INSPECT: port the reworked string-operation state handling",
   "[feature-requests:#448] state structures instead of state vars for strings",
-  "Structural rework; must preserve STRING/UNSTRING/INSPECT semantics exactly")
-
+  "Structural rework; must preserve STRING/UNSTRING/INSPECT semantics exactly",
+  evidence="a989bad32da58fe0edfe517d841aa5e89f9cc234")
 E("7a173e6da655bee696bd22315b0ae51f6898dc9b", "NOT_APPLICABLE_WITH_PROOF",
   "None: Sanitizer-warning adjustment (C internal)",
   "Adjustment for Sanitizer warning", "Proof: C internal")
