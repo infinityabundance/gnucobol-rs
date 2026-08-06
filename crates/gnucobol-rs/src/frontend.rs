@@ -14964,6 +14964,60 @@ mod tests {
     }
 
     #[test]
+    fn dialect_grammar_verification_cluster() {
+        // Upstream verification cluster:
+        // - 0fa2bf5f5 (MF/ACU portability): the grammar now accepts the ENVIRONMENT DIVISION
+        //   sections in either order -- the candidate already does (verified below).
+        // - 71ea358aa/41e2e4488 (ALPHABET, esp. NATIONAL): the candidate parses ALPHABET
+        //   definitions; the national/alphanumeric literal-type check sits inside the NATIONAL
+        //   boundary.
+        // - 1104bda61 (MOVE/SET incompatible-data check, numeric receivers only): the candidate's
+        //   runtime MOVE matches the oracle for alphanumeric->numeric via a variable source
+        //   (zero-fill on non-digits, verified); a literal source is compile-time folded by cobc
+        //   into the raw initial image -- a codegen fold the candidate does not model (residual).
+        // - 5a8666888 ('U' precedence), 9f1a64c32 (string state structs), 7b09c750f (cursor
+        //   line-1), 7ba5f9fcb (WINDOW pointer), 3f7c44b6f (stdin): C-internal reorders/refactors
+        //   or native-curses boundaries; the candidate's stdin support is already tested.
+        let reversed = run("       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    ENVIRONMENT DIVISION.\n\
+                    INPUT-OUTPUT SECTION.\n\
+                    FILE-CONTROL.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 X PIC 9 VALUE 1.\n\
+                    PROCEDURE DIVISION.\n\
+                        DISPLAY X.\n\
+                        STOP RUN.\n");
+        assert_eq!(reversed, b"1\n", "reversed ENVIRONMENT sections accepted");
+        let alpha = run("       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    ENVIRONMENT DIVISION.\n\
+                    CONFIGURATION SECTION.\n\
+                    SPECIAL-NAMES.\n\
+                        ALPHABET A IS \"abc\".\n\
+                    DATA DIVISION.\n\
+                    PROCEDURE DIVISION.\n\
+                        DISPLAY \"OK\".\n\
+                        STOP RUN.\n");
+        assert_eq!(alpha, b"OK\n", "ALPHABET definition parses");
+        let mv = run("       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 A PIC X(3) VALUE \"abc\".\n\
+                    01 N PIC 9(3).\n\
+                    PROCEDURE DIVISION.\n\
+                        MOVE A TO N.\n\
+                        DISPLAY \"[\" N \"]\".\n\
+                        STOP RUN.\n");
+        assert_eq!(
+            mv, b"[000]\n",
+            "alphanumeric->numeric via variable zero-fills (oracle-matched)"
+        );
+    }
+
+    #[test]
     fn close_with_lock_state_machine_matches_current_upstream() {
         // Upstream 62b39805c (bugs:#914) + 0b22d4417: CLOSE WITH LOCK puts the file in the LOCKED
         // state; re-OPEN reports 38 (CLOSED WITH LOCK); READ on a non-INPUT/I-O file reports 47
