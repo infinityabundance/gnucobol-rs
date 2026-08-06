@@ -15133,6 +15133,36 @@ mod tests {
     }
 
     #[test]
+    fn high_value_comparison_under_collating_sequence() {
+        // Upstream 79c65d0ec (bugs:#948): comparisons with HIGH-VALUE / LOW-VALUE must use the
+        // program collating sequence's per-program low/high values, not the hard-coded 0x00/0xFF.
+        // Under ALPHABET EB IS EBCDIC + PROGRAM COLLATING SEQUENCE IS EB, X = HIGH-VALUE compares
+        // the EBCDIC weights; the candidate resolves the figuratives to raw bytes and compares by
+        // weight, which is equivalent (verified against cobc 3.2.0: both print EQ).
+        let out = run("       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    ENVIRONMENT DIVISION.\n\
+                    CONFIGURATION SECTION.\n\
+                    SPECIAL-NAMES. ALPHABET EB IS EBCDIC.\n\
+                    OBJECT-COMPUTER. PROGRAM COLLATING SEQUENCE IS EB.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 X PIC X.\n\
+                    PROCEDURE DIVISION.\n\
+                        MOVE HIGH-VALUE TO X.\n\
+                        IF X = HIGH-VALUE DISPLAY \"EQ\" ELSE DISPLAY \"NE\" END-IF.\n\
+                        IF X > LOW-VALUE DISPLAY \"GT\" ELSE DISPLAY \"LE\" END-IF.\n\
+                        STOP RUN.\n");
+        assert_eq!(out, b"EQ\nGT\n");
+        // 9e0d66418 (EXTFH INDEXED warning): the candidate never emits the compiler's
+        // ORGANIZATION INDEXED warning (it has no --without-db build warning surface), so there is
+        // nothing to suppress; an EXTFH INDEXED file parses and runs under the candidate's
+        // indexed model.
+        // 87500ead4 (nested elements 'with attributes'): SCREEN SECTION items are a screen-model
+        // boundary; the nested-qualification fix sits inside it (recorded).
+    }
+
+    #[test]
     fn close_with_lock_state_machine_matches_current_upstream() {
         // Upstream 62b39805c (bugs:#914) + 0b22d4417: CLOSE WITH LOCK puts the file in the LOCKED
         // state; re-OPEN reports 38 (CLOSED WITH LOCK); READ on a non-INPUT/I-O file reports 47
