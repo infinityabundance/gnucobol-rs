@@ -733,6 +733,7 @@
 | `486565722c48` | 2025-05-20 | RUNTIME_PORTED | `7e901d13bc77` |
 | `946f3e638c8f` | 2025-05-22 | RUNTIME_PORTED | `7e901d13bc77` |
 | `eb8536cfcd33` | 2025-05-26 | RUNTIME_PORTED | `7e901d13bc77` |
+| `5bb0fbe1bb59` | 2025-10-21 | RUNTIME_PORTED | `6f4f95fd7fc5` |
 | `a207a45955ec` | 2025-11-20 | RUNTIME_PORTED | `8d786cda97bd` |
 
 ## Lane-adopted test/harness commits (evidence at Phase 3)

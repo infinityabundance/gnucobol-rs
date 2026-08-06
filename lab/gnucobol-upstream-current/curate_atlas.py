@@ -678,8 +678,8 @@ E("bf0b5878a89808fc749023c063dfccc8887ffb09", "BLOCKED_BY_NATIVE_ARTIFACT_BOUNDA
 
 E("5bb0fbe1bb594dcfea7e6aa904b38f30b9fbb854", "RUNTIME_PORTED",
   "CHAR and ORD intrinsics must consider the program collating sequence; CHAR outside collation range raises COB_EC_ARGUMENT_FUNCTION",
-  "Fix CHAR and ORD intrinsics in presence of collating sequence", "")
-
+  "Fix CHAR and ORD intrinsics in presence of collating sequence", "",
+  evidence="6f4f95fd7fc5bea5225659802324b30d38f60d30")
 # ---- Lane-adopted test/harness commits (evidence recorded at Phase 3) ----
 # The current-upstream suite lane runs the pinned source tree's own .at files, so these test-only
 # and harness-only upstream changes are exercised verbatim there. lane_adoption makes the state
