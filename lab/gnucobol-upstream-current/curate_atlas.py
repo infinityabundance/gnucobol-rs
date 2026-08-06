@@ -155,17 +155,17 @@ E("a5253353db128332c515aac0d601b491194da1f2", "NOT_APPLICABLE_WITH_PROOF",
 E("eb8536cfcd335924e92af7aac7f2b3d6fd94b78b", "RUNTIME_PORTED",
   "Apply the further date-from-epoch adjustments (final state of the family)",
   "Follow-up to r5531: further adjustments to date computation from epoch",
-  "Supersedes the intermediate states of 946f3e638/486565722")
-
+  "Supersedes the intermediate states of 946f3e638/486565722",
+  evidence="7e901d13bc776a79d78e6567636f14de11c543b5")
 E("946f3e638c8f1d7c25abc098275faf515869e493", "RUNTIME_PORTED",
   "Fix epoch date conversion (was off by one day) in the candidate date routines; adopt TZ=UTC global test environment",
   "Simplifies and fixes computation of dates from epoch (off-by-one-day); tests run with TZ=UTC for reproducibility",
-  "TZ=UTC adoption is HARNESS_ADOPTED in the candidate test env")
-
+  "TZ=UTC adoption is HARNESS_ADOPTED in the candidate test env",
+  evidence="7e901d13bc776a79d78e6567636f14de11c543b5")
 E("486565722c48b21b50165f61e830442e1d5d97ad", "RUNTIME_PORTED",
   "Fix SOURCE_DATE_EPOCH being ignored on subsequent invocations; fix epoch conversion; remove listing-sed dependency from harness",
-  "SOURCE_DATE_EPOCH honored consistently; epoch conversion fixed; testsuite reduced sed usage", "")
-
+  "SOURCE_DATE_EPOCH honored consistently; epoch conversion fixed; testsuite reduced sed usage", "",
+  evidence="7e901d13bc776a79d78e6567636f14de11c543b5")
 E("79c65d0ecf1a0752e96939979fe0b4210e960e36", "FRONTEND_REIMPLEMENTED",
   "Program-level low/high collating values: compute per-program collating low/high in the frontend; runtime comparison (HIGH-VALUE / LOW-VALUE in presence of collating sequences) uses them",
   "Fix comparison with HIGH-VALUE in the presence of collating sequences",

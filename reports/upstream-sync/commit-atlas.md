@@ -728,6 +728,9 @@
 | `44c96d20a12e` | 2024-12-17 | RUNTIME_PORTED | `8c6a411faece` |
 | `921108ea29fc` | 2024-12-20 | RUNTIME_PORTED | `8c6a411faece` |
 | `a2e4627e6a48` | 2025-01-10 | CONFIGURATION_INTEGRATED | `7b97303952fe` |
+| `486565722c48` | 2025-05-20 | RUNTIME_PORTED | `7e901d13bc77` |
+| `946f3e638c8f` | 2025-05-22 | RUNTIME_PORTED | `7e901d13bc77` |
+| `eb8536cfcd33` | 2025-05-26 | RUNTIME_PORTED | `7e901d13bc77` |
 
 ## Lane-adopted test/harness commits (evidence at Phase 3)
 
