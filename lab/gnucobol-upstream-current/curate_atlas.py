@@ -309,8 +309,8 @@ E("9b0259d78f87e479887f617206a002636c8e57cb", "NOT_APPLICABLE_WITH_PROOF",
 
 E("49da19a3dfc05fa7beaed1ac9c1d08a16ee7dd61", "WRAPPER_INTEGRATED",
   "Implement -M/-MD/-MP/-MG/-MQ dependency options + -fcopybook-deps (copybook-only deps, forces -E -foneline-deps -MT=copybooks, disables missing-copybook errors)",
-  "Add dependencies options and -fcopybook-deps", "")
-
+  "Add dependencies options and -fcopybook-deps", "",
+  evidence="51a5096d5ff4e312d99585a58567c899e6319d08")
 E("a3e00bed1f21ce0f66315039be08c629574c9184", "NOT_APPLICABLE_WITH_PROOF",
   "None: C preprocessor conditional fix (#elif)",
   "Fix bad line in r5343 (preprocessor)", "Proof: C internal")
@@ -359,8 +359,8 @@ E("816bd2be16d88e9ea9f17f2e047fd08844d7f8c2", "NOT_APPLICABLE_WITH_PROOF",
 
 E("6bf47af0209e7cac2f395f71c6e99fd093e5afbc", "RUNTIME_PORTED",
   "Implement runtime configuration to hide the cursor for extended screenio",
-  "[feature-request:#474] runtime configuration to hide cursor for extended screenio", "")
-
+  "[feature-request:#474] runtime configuration to hide cursor for extended screenio", "",
+  evidence="51a5096d5ff4e312d99585a58567c899e6319d08")
 E("41e2e4488de18f3aba4adc4085a63061159b124b", "FRONTEND_REIMPLEMENTED",
   "Complete ALPHABET FOR NATIONAL support (C90 follow-up)",
   "Work on ALPHABET definitions, especially ALPHABET FOR NATIONAL (C90 fix)", "")
