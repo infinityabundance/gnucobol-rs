@@ -92,8 +92,8 @@ E("2c092ca140b49bc39289ed3ad72953c2a329b0dd", "FRONTEND_REIMPLEMENTED",
 E("a207a45955ec1b1932e994fcc4db12677963d19a", "RUNTIME_PORTED",
   "Implement COB_SIGNAL_REGIME: valid values; registration policy (do-not-register / register-only-if-unclaimed / any other admitted modes); do not clobber external handlers; Unix coverage; classify unsupported platforms; async-signal-safe; runtime reporting",
   "New runtime config COB_SIGNAL_REGIME allows skipping registration of the signal handler",
-  "Unsupported platforms classified honestly")
-
+  "Unsupported platforms classified honestly",
+  evidence="8d786cda97bd9ed37a145de2889b40beef12db85")
 E("13963e15a2da604b7a0392a06f9a8ec81db9bf04", "WRAPPER_INTEGRATED",
   "-ftcmd listing output must continue across multiple lines instead of truncating (candidate listing generation)",
   "Full -ftcmd output using multiple continuation lines as necessary", "")
@@ -287,12 +287,12 @@ E("ef11be499f4c6f2a3f6907443d54590e1db6f659", "NOT_APPLICABLE_WITH_PROOF",
 
 E("3f897122aacdd6610c14117b28442013a4574cde", "RUNTIME_PORTED",
   "Signal and stack handling update: align candidate signal-registration and stack-guard behavior with upstream semantics",
-  "Signal and stack handling update", "Feeds into COB_SIGNAL_REGIME work (a207a4595)")
-
+  "Signal and stack handling update", "Feeds into COB_SIGNAL_REGIME work (a207a4595)",
+  evidence="8d786cda97bd9ed37a145de2889b40beef12db85")
 E("c53ae5f803518dc7a0e1e88ee08ac060e423ca1b", "RUNTIME_PORTED",
   "Signal handler updates: port the handler registration/behavior semantics",
-  "Signal handler updates", "")
-
+  "Signal handler updates", "",
+  evidence="8d786cda97bd9ed37a145de2889b40beef12db85")
 E("88937849b8607f9f9b20a605d7f2bf65e9ed7427", "CONFIGURATION_INTEGRATED",
   "Adopt configurable version string / bug-report URL surfaces where the candidate exposes equivalents",
   "New configure options for customized version string / bug report URL",
