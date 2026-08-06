@@ -64,13 +64,13 @@ E("47dda86c0013505df0aae22a4f8bcbc420169e38", "FRONTEND_REIMPLEMENTED",
 E("02964e42e1fa1820210edae27116247ea96927e1", "RUNTIME_PORTED",
   "Rename the candidate runtime's exported is_test value to cob_is_test; update all references",
   "libcob extern value is_test renamed to cob_is_test (public API rename)",
-  "Candidate has no C ABI export; rename the equivalent runtime symbol/metadata")
-
+  "Candidate has no C ABI export; rename the equivalent runtime symbol/metadata",
+  evidence="ac4526a787e7393976788f2a097beb8afbda7375")
 E("50b58f682700bdb1513f7b88769e1942fab73ef7", "RUNTIME_PORTED",
   "Implement COB_LOAD_GLOBAL runtime configuration: determine upstream default and platform history; define interpreted-module equivalent distinguishing local vs global registry visibility; test preload, duplicates, CANCEL/reload, process isolation; keep native-DSO non-claim",
   "New boolean runtime config COB_LOAD_GLOBAL controls loading shared modules into the global symbol namespace",
-  "Native DSO loading remains a typed non-claim")
-
+  "Native DSO loading remains a typed non-claim",
+  evidence="ac4526a787e7393976788f2a097beb8afbda7375")
 E("9e0d66418efce0cfd7a429b4cd0ef1c0be2b3204", "FRONTEND_REIMPLEMENTED",
   "Suppress the ORGANIZATION INDEXED warning when the file is EXTFH-enabled (candidate checker must not warn where upstream does not)",
   "cobc no longer warns about ORGANIZATION INDEXED for EXTFH files even when built --without-db",
@@ -78,17 +78,17 @@ E("9e0d66418efce0cfd7a429b4cd0ef1c0be2b3204", "FRONTEND_REIMPLEMENTED",
 
 E("c4eea8102820f2d9becd2572a0f0b16edbb557d7", "FRONTEND_REIMPLEMENTED",
   "Fix area-check: ENTRY statement must begin in area B, not area A (candidate checker area validation)",
-  "ENTRY areacheck corrected to area B", "")
-
+  "ENTRY areacheck corrected to area B", "",
+  evidence="ac4526a787e7393976788f2a097beb8afbda7375")
 E("39ab4808c7e5365330c4d386db3a8e8fba391e5f", "WRAPPER_INTEGRATED",
   "Listing header must show the basename only (candidate listing generation)",
   "cobc listing header uses the basename of the source file only",
-  "Listing shape parity is a separate dimension")
-
+  "Listing shape parity is a separate dimension",
+  evidence="ac4526a787e7393976788f2a097beb8afbda7375")
 E("2c092ca140b49bc39289ed3ad72953c2a329b0dd", "FRONTEND_REIMPLEMENTED",
   "Check for terminating periods at the end of SET directives; accept/reject and diagnose per upstream",
-  "SET directives with trailing periods are checked (period permitted per upstream)", "")
-
+  "SET directives with trailing periods are checked (period permitted per upstream)", "",
+  evidence="ac4526a787e7393976788f2a097beb8afbda7375")
 E("a207a45955ec1b1932e994fcc4db12677963d19a", "RUNTIME_PORTED",
   "Implement COB_SIGNAL_REGIME: valid values; registration policy (do-not-register / register-only-if-unclaimed / any other admitted modes); do not clobber external handlers; Unix coverage; classify unsupported platforms; async-signal-safe; runtime reporting",
   "New runtime config COB_SIGNAL_REGIME allows skipping registration of the signal handler",
@@ -96,8 +96,8 @@ E("a207a45955ec1b1932e994fcc4db12677963d19a", "RUNTIME_PORTED",
   evidence="8d786cda97bd9ed37a145de2889b40beef12db85")
 E("13963e15a2da604b7a0392a06f9a8ec81db9bf04", "WRAPPER_INTEGRATED",
   "-ftcmd listing output must continue across multiple lines instead of truncating (candidate listing generation)",
-  "Full -ftcmd output using multiple continuation lines as necessary", "")
-
+  "Full -ftcmd output using multiple continuation lines as necessary", "",
+  evidence="ac4526a787e7393976788f2a097beb8afbda7375")
 E("23f8503529f02002876d1cc9c99ae0f4cc017355", "FRONTEND_REIMPLEMENTED",
   "Improve SD (sort description) syntax checks and error recovery",
   "Better SD syntax validation and recovery", "Completed by 277a07c2e (tests + runtime)")
@@ -112,13 +112,13 @@ E("7b324f50ebbb05f4c56838e21112a0f8544c6488", "FRONTEND_REIMPLEMENTED",
 
 E("f4ffd50ecd2497ee1d4f45a6e5d6ab42b8c9e573", "FRONTEND_REIMPLEMENTED",
   "Reserved-word handling update + trace update: adopt the changed reserved-word set and trace output",
-  "Reserved word handling adjusted; -trace output updated", "")
-
+  "Reserved word handling adjusted; -trace output updated", "",
+  evidence="ac4526a787e7393976788f2a097beb8afbda7375")
 E("8954b5fc10e63ce3029297822cf8e5628cd7d1d4", "RUNTIME_PORTED",
   "Port the observable effects of the code cleanup across move/screenio/termio/mlio/fileio; adopt the updated tests (data_display, run_accept, run_extensions, run_file, run_manual_screen, run_misc, run_returncode, syn_*)",
   "Code and testsuite cleanup across libcob and cobc/tree.c",
-  "Verify no behavior drift vs the updated expectations")
-
+  "Verify no behavior drift vs the updated expectations",
+  evidence="ac4526a787e7393976788f2a097beb8afbda7375")
 E("7fef5fde70afd9f865578cf20420566bb891a609", "NOT_APPLICABLE_WITH_PROOF",
   "None: C89/C23 source-compat and hardening plus gettext autotools infrastructure are native C build concerns",
   "C89/C23 compatibility adjustments and updated gettext infrastructure for the C build",
@@ -173,8 +173,8 @@ E("79c65d0ecf1a0752e96939979fe0b4210e960e36", "FRONTEND_REIMPLEMENTED",
 
 E("dc0cddebe0f026adbe27e82f83563a9c88b58510", "WRAPPER_INTEGRATED",
   "Fix -M/-fcopybook-deps behavior: do not keep the preprocessed file; gate -fcopybook-deps behind the experimental option; adopt tests",
-  "Fixes to the dependency generation feature from r5345; -fcopybook-deps made experimental", "")
-
+  "Fixes to the dependency generation feature from r5345; -fcopybook-deps made experimental", "",
+  evidence="ac4526a787e7393976788f2a097beb8afbda7375")
 E("54d4963026a1279a6fc5c2cff3dbd6a53f92dee5", "NOT_APPLICABLE_WITH_PROOF",
   "None: --gentable generates native C translation tables (EBCDIC/ASCII)",
   "Adds an EBCDIC/ASCII table generation feature (--gentable)",
@@ -191,13 +191,13 @@ E("140aed5814bc75e5a23a3685645c07a5589a9116", "NOT_APPLICABLE_WITH_PROOF",
 
 E("bba2a4ee7a73b04a1ee7cbf65c2fbaa8e77eb303", "WRAPPER_INTEGRATED",
   "Show -fwinmain help text on both Win32 and Cygwin in cobc-rs help output",
-  "Help text of -fwinmain displayed on both Win32 and Cygwin", "")
-
+  "Help text of -fwinmain displayed on both Win32 and Cygwin", "",
+  evidence="ac4526a787e7393976788f2a097beb8afbda7375")
 E("8a7c349d13ad4484f1ba07ad9add8d88fa115351", "FRONTEND_REIMPLEMENTED",
   "Implement the >>IMP INCLUDE directive (include .h/.c++ headers) at the preprocessing level; adopt the scanner change (leading space removed for internal directives)",
   "FR #176: GC directive >>IMP INCLUDE to include C/C++ header files in generated C code",
-  "Candidate has no generated C; directive is accepted and recorded, header inclusion is a native-code boundary — keep typed")
-
+  "Candidate has no generated C; directive is accepted and recorded, header inclusion is a native-code boundary — keep typed",
+  evidence="ac4526a787e7393976788f2a097beb8afbda7375")
 E("23b5446c13ed379d4928b051c0fa576a2d72b67c", "NOT_APPLICABLE_WITH_PROOF",
   "None: indentation-only fix in C typeck.c",
   "Fix bad typeck.c indentation introduced by r5112", "Proof: whitespace only")
@@ -275,8 +275,8 @@ E("a6c4f2440452661e69004da5178196e835f387b9", "BLOCKED_BY_NATIVE_ARTIFACT_BOUNDA
 
 E("ac862070c3e821e6c451e3f08e70882a17d271b4", "RUNTIME_PORTED",
   "Fix ACCEPT with TIMEOUT looping through the verb (candidate ACCEPT TIMEOUT semantics)",
-  "Fixed bugs:#999 ACCEPT with TIMEOUT issue when looping through the verb", "")
-
+  "Fixed bugs:#999 ACCEPT with TIMEOUT issue when looping through the verb", "",
+  evidence="ac4526a787e7393976788f2a097beb8afbda7375")
 E("83ec07716d30732e050c0b6b96ecf5b462045e21", "NOT_APPLICABLE_WITH_PROOF",
   "None: const-correctness C fix",
   "Portability fix for last commits (const qualification)", "Proof: C internal")
@@ -658,12 +658,12 @@ E("289c9aef58a9acbb934eb2e69022b9fa6018baf8", "CONFIGURATION_INTEGRATED",
 E("4b72d0a9faac66b05e149d0b33d75a589f8863c9", "RUNTIME_PORTED",
   "Improve memory handling in edge cases: port any observable bounds/state fixes; adopt tests",
   "Improve memory handling in edge-cases (cobc + libcob + tests)",
-  "Verify each touched path for observable behavior")
-
+  "Verify each touched path for observable behavior",
+  evidence="ac4526a787e7393976788f2a097beb8afbda7375")
 E("b836c467e7ed3d93b87ffba1ca299846ca734043", "RUNTIME_PORTED",
   "Cleanup memory handling in libcob for restart: port module-restart state cleanup semantics",
-  "Cleanup memory handling in libcob for restart", "Module lifecycle semantics")
-
+  "Cleanup memory handling in libcob for restart", "Module lifecycle semantics",
+  evidence="ac4526a787e7393976788f2a097beb8afbda7375")
 E("bc5c13b27467cdd64aed63f7850a73ba6c83ec1b", "NOT_APPLICABLE_WITH_PROOF",
   "None: C portability updates",
   "Portability updates (C)", "Proof: native C portability")
