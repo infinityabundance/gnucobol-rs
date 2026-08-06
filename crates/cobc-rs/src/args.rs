@@ -35,6 +35,14 @@ pub struct ParsedInvocation {
     pub depfile: Option<String>,
     /// `-MT` dependency targets.
     pub deptargets: Vec<String>,
+    /// `-MP`: emit a phony target for every dependency (upstream 49da19a3d).
+    pub dep_phony: bool,
+    /// `-MQ <target>`: like -MT but Makefile-quote the targets.
+    pub dep_makefile_quote: bool,
+    /// `-MD`: write a `.d` dependency file next to the output while compiling.
+    pub dep_md: bool,
+    /// `-fcopybook-deps`: dependency lines list the COPYBOOK names only (no main source).
+    pub copybook_deps: bool,
     /// Proven no-op options accepted (invocation ledger).
     pub noops: Vec<String>,
     /// Rejected options (kept for the ledger even when parsing fails).
@@ -238,6 +246,16 @@ fn apply_translated(
             }
         }
         "-fdiagnostics-absolute-path" => p.diag_absolute_path = true,
+        "-MP" => p.dep_phony = true,
+        "-MD" => p.dep_md = true,
+        "-MQ" => {
+            // -MQ <target>: like -MT but Makefile-quoted.
+            if let Some(v) = value {
+                p.deptargets.push(v.to_string());
+                p.dep_makefile_quote = true;
+            }
+        }
+        "-fcopybook-deps" => p.copybook_deps = true,
         "-D" => {
             if let Some(v) = value {
                 let (name, val) = match v.split_once('=') {

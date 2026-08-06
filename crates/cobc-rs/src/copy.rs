@@ -133,6 +133,35 @@ impl DepRecorder<'_> {
     }
 }
 
+/// Options for the dependency-file writer (upstream 49da19a3d's -MP / -MQ / -fcopybook-deps).
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub struct DepfileOpts {
+    /// `-MP`: emit a phony target for every dependency.
+    pub phony: bool,
+    /// `-MQ`: Makefile-quote the targets (spaces -> `\ `, `$` -> `$$`).
+    pub quote_targets: bool,
+    /// `-fcopybook-deps`: list the COPYBOOK names only, omitting the main source.
+    pub copybook_only: bool,
+}
+
+/// Makefile-quote a target: `$` -> `$$`, a space outside `$()` -> `\ ` (the upstream
+/// `quote_dependencies` behaviour for -MQ).
+pub fn makefile_quote(s: &str) -> String {
+    let mut out = String::new();
+    let mut chars = s.chars().peekable();
+    while let Some(c) = chars.next() {
+        match c {
+            '$' => out.push_str("$$"),
+            ' ' | '\t' => {
+                out.push('\\');
+                out.push(c);
+            }
+            _ => out.push(c),
+        }
+    }
+    out
+}
+
 /// Write the make-style dependency file for `-MF` (GnuCOBOL shape): each -MT target (or the
 /// default `-o` output) followed by `:` and the space-joined dependency paths.
 pub fn write_depfile(
@@ -140,22 +169,43 @@ pub fn write_depfile(
     targets: &[String],
     deps: &[PathBuf],
     main_source: &Path,
+    opts: DepfileOpts,
 ) -> Result<(), String> {
     let mut line = String::new();
+    let emit = |s: &str, out: &mut String| {
+        if opts.quote_targets {
+            out.push_str(&makefile_quote(s));
+        } else {
+            out.push_str(s);
+        }
+    };
     if targets.is_empty() {
-        line.push_str(&main_source.to_string_lossy());
+        emit(&main_source.to_string_lossy(), &mut line);
     } else {
-        line.push_str(&targets.join(" "));
+        let joined = targets.join(" ");
+        emit(&joined, &mut line);
     }
     line.push(':');
     for d in deps {
         line.push(' ');
         line.push_str(&d.to_string_lossy());
     }
-    // the main source is a dependency of the targets too
-    line.push(' ');
-    line.push_str(&main_source.to_string_lossy());
+    if !opts.copybook_only {
+        // the main source is a dependency of the targets too
+        line.push(' ');
+        line.push_str(&main_source.to_string_lossy());
+    }
     line.push('\n');
+    if opts.phony {
+        for d in deps {
+            line.push_str(&d.to_string_lossy());
+            line.push_str(":\n");
+        }
+        if !opts.copybook_only {
+            line.push_str(&main_source.to_string_lossy());
+            line.push_str(":\n");
+        }
+    }
     // atomically write
     let tmp = path.with_extension("cobr-dep.tmp");
     std::fs::write(&tmp, &line).map_err(|e| format!("write depfile: {e}"))?;

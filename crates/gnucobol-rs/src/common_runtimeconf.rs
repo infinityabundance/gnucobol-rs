@@ -264,6 +264,14 @@ const GC_CONF_DISPLAY: &[ConfRow] = &[
         enums: None,
     },
     ConfRow {
+        env: "COB_HIDE_CURSOR",
+        conf: "hide_cursor",
+        default: Some("0"),
+        group: grp::SCREEN,
+        kind: Bool,
+        enums: None,
+    },
+    ConfRow {
         env: "COB_STACKTRACE",
         conf: "stacktrace",
         default: Some("1"),

@@ -281,6 +281,61 @@ fn profiling_report_is_deterministic_with_cob_prof_env() {
 }
 
 #[test]
+fn dependency_options_mp_mq_md_copybook_deps() {
+    // Upstream 49da19a3d: -MP phony targets, -MQ Makefile-quoted targets, -MD .d-while-compiling,
+    // -fcopybook-deps copybook names only; -MG is a typed reject (the candidate's COPY resolver
+    // reports unresolved names fail-closed).
+    let d = tempfile::tempdir().unwrap();
+    write(d.path(), "CB.cpy", "       01 C PIC X.");
+    write(
+        d.path(),
+        "prog.cob",
+        r#"       IDENTIFICATION DIVISION.
+       PROGRAM-ID. P.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       COPY cb.
+       PROCEDURE DIVISION.
+           STOP RUN.
+"#,
+    );
+    // -MP -MQ "a b" -MF deps.d
+    let o = run_in(
+        d.path(),
+        &["-M", "-MP", "-MQ", "a b", "-MF", "deps.d", "prog.cob"],
+    );
+    assert_eq!(o.status.code(), Some(0), "{}", err_str(&o));
+    let text = std::fs::read_to_string(d.path().join("deps.d")).unwrap();
+    assert!(text.contains("a\\ b:"), "quoted target: {text}");
+    assert!(
+        text.contains("CB.cpy"),
+        "phony target for the copybook: {text}"
+    );
+    // -fcopybook-deps: only copybook names, no main source.
+    let o2 = run_in(d.path(), &["-M", "-fcopybook-deps", "prog.cob"]);
+    assert_eq!(o2.status.code(), Some(0));
+    let out2 = out_str(&o2);
+    assert!(out2.contains("CB.cpy"), "copybook dep listed: {out2}");
+    assert!(
+        !out2.contains("prog.cob"),
+        "main source omitted with -fcopybook-deps: {out2}"
+    );
+    // -MD: compile and write the .d next to the output.
+    let o3 = run_in(d.path(), &["-x", "-o", "prog", "-MD", "prog.cob"]);
+    assert_eq!(o3.status.code(), Some(0), "{}", err_str(&o3));
+    let dtext = std::fs::read_to_string(d.path().join("prog.d")).unwrap();
+    assert!(dtext.contains("prog:"), "-MD writes prog.d: {dtext}");
+    assert!(d.path().join("prog").exists(), "-MD also compiles");
+    // -MG: rejected honestly.
+    let o4 = run_in(d.path(), &["-M", "-MG", "prog.cob"]);
+    assert_ne!(
+        o4.status.code(),
+        Some(0),
+        "-MG must be rejected (typed boundary)"
+    );
+}
+
+#[test]
 fn copy_option_prepends_copybook_before_preprocessing() {
     // Upstream e36a124b2: `--copy <file>` pre-copies the file's text at the beginning of the
     // source, before parsing/preprocessing (the use case is REPLACEments and prototypes). The

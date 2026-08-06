@@ -266,6 +266,11 @@ pub fn write_artifacts(
             &targets,
             &expanded.deps,
             Path::new(&expanded.source_file),
+            copy::DepfileOpts {
+                phony: inv.dep_phony,
+                quote_targets: inv.dep_makefile_quote,
+                copybook_only: inv.copybook_deps,
+            },
         )?;
     }
     Ok(())

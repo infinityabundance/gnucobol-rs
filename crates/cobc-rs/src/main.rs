@@ -279,22 +279,87 @@ fn driver(rest: &[String]) -> i32 {
                     };
                     match &inv.depfile {
                         Some(df) => {
-                            if let Err(e) =
-                                copy::write_depfile(std::path::Path::new(df), &targets, deps, main)
-                            {
+                            if let Err(e) = copy::write_depfile(
+                                std::path::Path::new(df),
+                                &targets,
+                                deps,
+                                main,
+                                copy::DepfileOpts {
+                                    phony: inv.dep_phony,
+                                    quote_targets: inv.dep_makefile_quote,
+                                    copybook_only: inv.copybook_deps,
+                                },
+                            ) {
                                 eprintln!("cobc-rs: {e}");
                                 return EXIT_ERROR;
                             }
                         }
                         None => {
-                            let mut line = format!("{}:", targets.join(" "));
+                            let mut line = String::new();
+                            let emit = |s: &str| -> String {
+                                if inv.dep_makefile_quote {
+                                    copy::makefile_quote(s)
+                                } else {
+                                    s.to_string()
+                                }
+                            };
+                            if targets.is_empty() {
+                                line.push_str(&emit(&src));
+                            } else {
+                                line.push_str(&emit(&targets.join(" ")));
+                            }
+                            line.push(':');
                             for d in deps {
                                 line.push(' ');
                                 line.push_str(&d.to_string_lossy());
                             }
-                            line.push(' ');
-                            line.push_str(main.to_string_lossy().as_ref());
+                            if !inv.copybook_deps {
+                                line.push(' ');
+                                line.push_str(main.to_string_lossy().as_ref());
+                            }
+                            line.push('\n');
+                            if inv.dep_phony {
+                                for d in deps {
+                                    line.push_str(&d.to_string_lossy());
+                                    line.push_str(":\n");
+                                }
+                                if !inv.copybook_deps {
+                                    line.push_str(main.to_string_lossy().as_ref());
+                                    line.push_str(":\n");
+                                }
+                            }
                             println!("{line}");
+                        }
+                    }
+                    // -MD: also compile, writing the .d next to the output (upstream 49da19a3d).
+                    if inv.dep_md {
+                        let out = compile::default_output(&inv);
+                        let df = format!("{out}.d");
+                        if let Err(e) = copy::write_depfile(
+                            std::path::Path::new(&df),
+                            &targets,
+                            deps,
+                            main,
+                            copy::DepfileOpts {
+                                phony: inv.dep_phony,
+                                quote_targets: inv.dep_makefile_quote,
+                                copybook_only: inv.copybook_deps,
+                            },
+                        ) {
+                            eprintln!("cobc-rs: {e}");
+                            return EXIT_ERROR;
+                        }
+                        match compile::expand_source(&inv, &src) {
+                            Ok(expanded) => {
+                                if let Err(e) = compile::write_artifacts(&inv, &expanded, &out) {
+                                    eprintln!("cobc-rs: {e}");
+                                    return EXIT_ERROR;
+                                }
+                            }
+                            Err(e) => {
+                                eprintln!("{e}");
+                                return EXIT_ERROR;
+                            }
                         }
                     }
                     EXIT_OK
@@ -320,6 +385,30 @@ fn driver(rest: &[String]) -> i32 {
                     if let Err(e) = compile::write_artifacts(&inv, &expanded, &out) {
                         eprintln!("cobc-rs: {e}");
                         return EXIT_ERROR;
+                    }
+                    // -MD: write the .d dependency file next to the output while compiling
+                    // (upstream 49da19a3d; -M -MD is handled in the Dependency branch).
+                    if inv.dep_md {
+                        let df = format!("{out}.d");
+                        let targets: Vec<String> = if inv.deptargets.is_empty() {
+                            vec![out.clone()]
+                        } else {
+                            inv.deptargets.clone()
+                        };
+                        if let Err(e) = copy::write_depfile(
+                            std::path::Path::new(&df),
+                            &targets,
+                            &expanded.deps,
+                            std::path::Path::new(&expanded.source_file),
+                            copy::DepfileOpts {
+                                phony: inv.dep_phony,
+                                quote_targets: inv.dep_makefile_quote,
+                                copybook_only: inv.copybook_deps,
+                            },
+                        ) {
+                            eprintln!("cobc-rs: {e}");
+                            return EXIT_ERROR;
+                        }
                     }
                     // NOTE: cobc -m / -x do NOT print the module name on success (a suite
                     // AT_CHECK expects empty stdout); the artifact is written silently.
