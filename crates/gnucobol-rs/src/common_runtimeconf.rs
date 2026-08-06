@@ -82,6 +82,9 @@ const TIMEOPTS: &[(&str, &str)] = &[("0", "1000"), ("1", "100"), ("2", "10"), ("
 const SYNCOPTS: &[(&str, &str)] = &[("P", "1")];
 const VARSEQOPTS: &[(&str, &str)] = &[("0", "0"), ("1", "1"), ("2", "2"), ("3", "3")];
 const COEOPTS: &[(&str, &str)] = &[("0", "0"), ("1", "1"), ("2", "2"), ("3", "3")];
+/// `COB_SIGNAL_REGIME` values (upstream `sighdlrregopts`): 0 = take control (default),
+/// 1 = only if no handler is registered, 2 = register nothing.
+const SIGNALREGIMES: &[(&str, &str)] = &[("0", "0"), ("1", "1"), ("2", "2")];
 
 /// The displayed `gc_conf[]` rows in table order (common.c:469-541), minus `GRP_HIDE` aliases and
 /// rows excluded by this build's `#ifdef`s (`_WIN32`-only `COB_UNIX_LF`/`OS`). `COB_MOUSE_INTERVAL`
@@ -270,6 +273,14 @@ const GC_CONF_DISPLAY: &[ConfRow] = &[
         group: grp::SCREEN,
         kind: Bool,
         enums: None,
+    },
+    ConfRow {
+        env: "COB_SIGNAL_REGIME",
+        conf: "signal_regime",
+        default: Some("0"),
+        group: grp::MISC,
+        kind: Uint,
+        enums: Some(SIGNALREGIMES),
     },
     ConfRow {
         env: "COB_STACKTRACE",
@@ -1115,6 +1126,25 @@ mod tests {
         assert!(s.contains(": COB_BELL               : BEEP     (default)\n")); // enum 0 -> BEEP
         assert!(s.contains(": COB_PHYSICAL_CANCEL    : no       (default)\n")); // bool 0 -> no
         assert!(s.contains(": COB_COL_JUST_LRC       : yes      (default)\n")); // bool "true" -> yes
+    }
+
+    #[test]
+    fn signal_regime_and_hide_cursor_rows_render() {
+        // Upstream a207a4595 (COB_SIGNAL_REGIME) + 6bf47af02 (COB_HIDE_CURSOR): both rows are
+        // part of the --runtime-conf surface with the upstream defaults.
+        let s = String::from_utf8(print_runtime_conf(&clean_sys())).unwrap();
+        assert!(
+            s.contains(": COB_SIGNAL_REGIME      : 0        (default)\n"),
+            "{s}"
+        );
+        assert!(
+            s.contains(": COB_HIDE_CURSOR        : no       (default)\n"),
+            "{s}"
+        );
+        assert!(
+            s.contains(": COB_PROF_ENABLE        : no       (default)\n"),
+            "{s}"
+        );
     }
 
     #[test]

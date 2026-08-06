@@ -81,22 +81,118 @@ pub struct SignalEntry {
 /// `{-1, ..., "unknown"}` row is the lookup fallthrough, not a real signal.
 pub const fn signals() -> &'static [SignalEntry] {
     &[
-        SignalEntry { sig: 2, for_set: 1, for_dump: 0, shortname: "SIGINT", description: "interrupt from keyboard" },
-        SignalEntry { sig: 1, for_set: 1, for_dump: 0, shortname: "SIGHUP", description: "hangup" },
-        SignalEntry { sig: 3, for_set: 1, for_dump: 0, shortname: "SIGQUIT", description: "quit" },
-        SignalEntry { sig: 15, for_set: 1, for_dump: 0, shortname: "SIGTERM", description: "termination" },
-        SignalEntry { sig: 13, for_set: 1, for_dump: 0, shortname: "SIGPIPE", description: "broken pipe" },
-        SignalEntry { sig: 29, for_set: 1, for_dump: 0, shortname: "SIGIO", description: "I/O signal" },
-        SignalEntry { sig: 11, for_set: 2, for_dump: 1, shortname: "SIGSEGV", description: "attempt to reference invalid memory address" },
-        SignalEntry { sig: 7, for_set: 2, for_dump: 1, shortname: "SIGBUS", description: "bus error" },
-        SignalEntry { sig: 8, for_set: 1, for_dump: 1, shortname: "SIGFPE", description: "fatal arithmetic error" },
-        SignalEntry { sig: 4, for_set: 0, for_dump: 0, shortname: "SIGILL", description: "illegal instruction" },
-        SignalEntry { sig: 6, for_set: 0, for_dump: 0, shortname: "SIGABRT", description: "abort" },
-        SignalEntry { sig: 9, for_set: 0, for_dump: 0, shortname: "SIGKILL", description: "process killed" },
-        SignalEntry { sig: 14, for_set: 0, for_dump: 0, shortname: "SIGALRM", description: "alarm signal" },
-        SignalEntry { sig: 19, for_set: 0, for_dump: 0, shortname: "SIGSTOP", description: "stop process" },
-        SignalEntry { sig: 17, for_set: 0, for_dump: 0, shortname: "SIGCHLD", description: "child process stopped" },
-        SignalEntry { sig: -1, for_set: 0, for_dump: 0, shortname: "unknown", description: "unknown" },
+        SignalEntry {
+            sig: 2,
+            for_set: 1,
+            for_dump: 0,
+            shortname: "SIGINT",
+            description: "interrupt from keyboard",
+        },
+        SignalEntry {
+            sig: 1,
+            for_set: 1,
+            for_dump: 0,
+            shortname: "SIGHUP",
+            description: "hangup",
+        },
+        SignalEntry {
+            sig: 3,
+            for_set: 1,
+            for_dump: 0,
+            shortname: "SIGQUIT",
+            description: "quit",
+        },
+        SignalEntry {
+            sig: 15,
+            for_set: 1,
+            for_dump: 0,
+            shortname: "SIGTERM",
+            description: "termination",
+        },
+        SignalEntry {
+            sig: 13,
+            for_set: 1,
+            for_dump: 0,
+            shortname: "SIGPIPE",
+            description: "broken pipe",
+        },
+        SignalEntry {
+            sig: 29,
+            for_set: 1,
+            for_dump: 0,
+            shortname: "SIGIO",
+            description: "I/O signal",
+        },
+        SignalEntry {
+            sig: 11,
+            for_set: 2,
+            for_dump: 1,
+            shortname: "SIGSEGV",
+            description: "attempt to reference invalid memory address",
+        },
+        SignalEntry {
+            sig: 7,
+            for_set: 2,
+            for_dump: 1,
+            shortname: "SIGBUS",
+            description: "bus error",
+        },
+        SignalEntry {
+            sig: 8,
+            for_set: 1,
+            for_dump: 1,
+            shortname: "SIGFPE",
+            description: "fatal arithmetic error",
+        },
+        SignalEntry {
+            sig: 4,
+            for_set: 0,
+            for_dump: 0,
+            shortname: "SIGILL",
+            description: "illegal instruction",
+        },
+        SignalEntry {
+            sig: 6,
+            for_set: 0,
+            for_dump: 0,
+            shortname: "SIGABRT",
+            description: "abort",
+        },
+        SignalEntry {
+            sig: 9,
+            for_set: 0,
+            for_dump: 0,
+            shortname: "SIGKILL",
+            description: "process killed",
+        },
+        SignalEntry {
+            sig: 14,
+            for_set: 0,
+            for_dump: 0,
+            shortname: "SIGALRM",
+            description: "alarm signal",
+        },
+        SignalEntry {
+            sig: 19,
+            for_set: 0,
+            for_dump: 0,
+            shortname: "SIGSTOP",
+            description: "stop process",
+        },
+        SignalEntry {
+            sig: 17,
+            for_set: 0,
+            for_dump: 0,
+            shortname: "SIGCHLD",
+            description: "child process stopped",
+        },
+        SignalEntry {
+            sig: -1,
+            for_set: 0,
+            for_dump: 0,
+            shortname: "unknown",
+            description: "unknown",
+        },
     ]
 }
 
@@ -232,7 +328,12 @@ pub fn cob_sig_handler(
     // if an explicit requested coredump could not be created -> re-raise SIGABRT (cob_core_on_error == 4).
     let reraise_sig = if core_on_error == 4 { SIGABRT } else { sig };
 
-    SigHandlerDecision { stderr_text: out, skip_dump, termination, reraise_sig }
+    SigHandlerDecision {
+        stderr_text: out,
+        skip_dump,
+        termination,
+        reraise_sig,
+    }
 }
 
 // ======================================================================================================
@@ -287,7 +388,10 @@ pub fn cob_set_signal() -> Vec<SignalSetAction> {
     let mut out = Vec::new();
     for entry in &signals()[..NUM_SIGNALS] {
         if entry.for_set != 0 {
-            out.push(SignalSetAction { sig: entry.sig, direct: entry.for_set == 2 });
+            out.push(SignalSetAction {
+                sig: entry.sig,
+                direct: entry.for_set == 2,
+            });
         }
     }
     out
@@ -311,7 +415,9 @@ pub struct RegSighndDecision {
 /// is the boundary. The C body is `if (!cob_initialized) cob_set_signal(); cob_ext_sighdl = sighnd;` --
 /// the pure part is "do we need to install handlers first?", returned here.
 pub fn cob_reg_sighnd(cob_initialized: bool) -> RegSighndDecision {
-    RegSighndDecision { must_set_signal: !cob_initialized }
+    RegSighndDecision {
+        must_set_signal: !cob_initialized,
+    }
 }
 
 // ======================================================================================================
@@ -353,7 +459,10 @@ pub fn raise_arg_mismatch(cob_stmt_exception: bool) -> i32 {
 pub fn raise_arg_mismatch_message(name: &str, reason: ArgMismatch) -> Vec<u8> {
     match reason {
         ArgMismatch::NotPassed => format!("LINKAGE item {name} not passed by caller").into_bytes(),
-        ArgMismatch::TooSmall { callee_size, caller_size } => format!(
+        ArgMismatch::TooSmall {
+            callee_size,
+            caller_size,
+        } => format!(
             "LINKAGE item {name} (size {callee_size}) too small in the caller (size {caller_size})"
         )
         .into_bytes(),
@@ -693,17 +802,20 @@ pub struct CommonInitDecision {
 /// config side effect); otherwise the leading char selects binary mode (`Y/y/O/o/T/t/1`). `cob_unix_lf`
 /// supplies the already-parsed config flag for the `setptr` path. On non-Windows this is always
 /// `use_unix_lf == false`.
-pub fn cob_common_init(unix_lf_env: Option<&[u8]>, setptr: bool, cob_unix_lf: bool) -> CommonInitDecision {
+pub fn cob_common_init(
+    unix_lf_env: Option<&[u8]>,
+    setptr: bool,
+    cob_unix_lf: bool,
+) -> CommonInitDecision {
     match unix_lf_env {
         None => CommonInitDecision { use_unix_lf: false },
         Some(s) => {
             if setptr {
-                CommonInitDecision { use_unix_lf: cob_unix_lf }
+                CommonInitDecision {
+                    use_unix_lf: cob_unix_lf,
+                }
             } else if let Some(&c) = s.first() {
-                let use_unix_lf = matches!(
-                    c,
-                    b'Y' | b'y' | b'O' | b'o' | b'T' | b't' | b'1'
-                );
+                let use_unix_lf = matches!(c, b'Y' | b'y' | b'O' | b'o' | b'T' | b't' | b'1');
                 CommonInitDecision { use_unix_lf }
             } else {
                 CommonInitDecision { use_unix_lf: false }
@@ -724,7 +836,12 @@ pub fn cob_common_init(unix_lf_env: Option<&[u8]>, setptr: bool, cob_unix_lf: bo
 /// fits in `CB_IVAL_SIZE` it is printed as-is; otherwise it is word-wrapped on spaces, continuation
 /// lines indented to the value column (`CB_IMSG_SIZE + 3`). The `(default)` substitution is only
 /// reached for `format == 1` with a matching value -- modeled via `default_val`.
-pub fn var_print(msg: &[u8], val: Option<&[u8]>, default_val: Option<&[u8]>, format: u32) -> Vec<u8> {
+pub fn var_print(
+    msg: &[u8],
+    val: Option<&[u8]>,
+    default_val: Option<&[u8]>,
+    format: u32,
+) -> Vec<u8> {
     let mut out = Vec::new();
 
     // label column
@@ -746,9 +863,7 @@ pub fn var_print(msg: &[u8], val: Option<&[u8]>, default_val: Option<&[u8]>, for
             out.push(b'\n');
             return out;
         }
-        (Some(v), Some(dv))
-            if format == 1 && (v.first() == Some(&b'0') || v == dv) =>
-        {
+        (Some(v), Some(dv)) if format == 1 && (v.first() == Some(&b'0') || v == dv) => {
             // val = default_val " (default)"
             let mut s = dv.to_vec();
             s.extend_from_slice(b" (default)");
@@ -979,7 +1094,10 @@ mod tests {
         assert!(!d.skip_dump);
         assert_eq!(d.reraise_sig, SIGSEGV);
         let s = String::from_utf8_lossy(&d.stderr_text);
-        assert!(s.contains("attempt to reference invalid memory address"), "{s}");
+        assert!(
+            s.contains("attempt to reference invalid memory address"),
+            "{s}"
+        );
         assert!(s.contains("(signal SIGSEGV)"), "{s}");
         assert!(s.contains("prog.cob:12: "), "{s}");
     }
@@ -994,10 +1112,31 @@ mod tests {
     }
 
     #[test]
+    fn signal_regime_and_table_match_current_upstream() {
+        // Upstream c53ae5f80 / 3f897122a / a207a4595: signal-handler updates, stack handling and
+        // the COB_SIGNAL_REGIME registration strategy (0 = take control, 1 = only if no handler
+        // registered, 2 = register nothing; common.c cob_set_signal at head).
+        // The candidate registers NO OS signal handlers (it is an in-process interpreter); its
+        // model is the pure signal table + cob_sig_handler diagnostic decision -- the OS
+        // registration machinery is a typed boundary, and the candidate's effective regime is
+        // '2'-like (recorded). This court pins the table identity and the regime row.
+        let tbl = signals();
+        let by_sig = |s: i32| -> &'static SignalEntry { tbl.iter().find(|e| e.sig == s).unwrap() };
+        assert_eq!(by_sig(2).for_set, 1, "SIGINT");
+        assert_eq!(by_sig(15).for_set, 1, "SIGTERM");
+        assert_eq!(by_sig(11).for_set, 2, "SIGSEGV hard error");
+        assert_eq!(by_sig(6).for_set, 0, "SIGABRT not taken");
+        // the regime row is part of the runtime-conf surface (verified in common_runtimeconf).
+    }
+
+    #[test]
     fn sig_handler_unknown_signal_notice() {
         let d = cob_sig_handler(9999, b"", true, 0);
         let s = String::from_utf8_lossy(&d.stderr_text);
-        assert!(s.contains("cob_sig_handler caught not handled signal: 9999"), "{s}");
+        assert!(
+            s.contains("cob_sig_handler caught not handled signal: 9999"),
+            "{s}"
+        );
         assert!(s.contains("(signal unknown)"), "{s}");
     }
 
@@ -1010,7 +1149,10 @@ mod tests {
     #[test]
     fn raise_dispatch_via_os_on_linux() {
         assert_eq!(cob_raise(SIGABRT, true), RaiseDispatch::ViaOs(SIGABRT));
-        assert_eq!(cob_raise(SIGABRT, false), RaiseDispatch::ExternalHandlerOnly);
+        assert_eq!(
+            cob_raise(SIGABRT, false),
+            RaiseDispatch::ExternalHandlerOnly
+        );
     }
 
     #[test]
@@ -1042,7 +1184,10 @@ mod tests {
         assert_eq!(
             raise_arg_mismatch_message(
                 "'X' of 'Y'",
-                ArgMismatch::TooSmall { callee_size: 10, caller_size: 4 }
+                ArgMismatch::TooSmall {
+                    callee_size: 10,
+                    caller_size: 4
+                }
             ),
             b"LINKAGE item 'X' of 'Y' (size 10) too small in the caller (size 4)".to_vec()
         );
@@ -1117,7 +1262,7 @@ mod tests {
         assert!(cob_common_init(Some(b"Y"), false, false).use_unix_lf);
         assert!(cob_common_init(Some(b"true"), false, false).use_unix_lf); // 't'
         assert!(!cob_common_init(Some(b"no"), false, false).use_unix_lf); // 'n'
-        // setptr path uses the pre-parsed flag
+                                                                          // setptr path uses the pre-parsed flag
         assert!(cob_common_init(Some(b"whatever"), true, true).use_unix_lf);
         assert!(!cob_common_init(Some(b"whatever"), true, false).use_unix_lf);
     }
@@ -1162,8 +1307,16 @@ mod tests {
     #[test]
     fn print_info_assembles_lines() {
         let lines = vec![
-            InfoLine { label: b"CC".to_vec(), value: Some(b"gcc".to_vec()), format: 0 },
-            InfoLine { label: b"64bit-mode".to_vec(), value: Some(b"yes".to_vec()), format: 0 },
+            InfoLine {
+                label: b"CC".to_vec(),
+                value: Some(b"gcc".to_vec()),
+                format: 0,
+            },
+            InfoLine {
+                label: b"64bit-mode".to_vec(),
+                value: Some(b"yes".to_vec()),
+                format: 0,
+            },
         ];
         let out = print_info(b"build information\n", &lines);
         let s = String::from_utf8_lossy(&out);
@@ -1174,7 +1327,10 @@ mod tests {
 
     #[test]
     fn print_runtime_conf_grouped_table() {
-        let headings = vec![(1u32, b"CALL configuration".to_vec()), (4u32, b"Miscellaneous".to_vec())];
+        let headings = vec![
+            (1u32, b"CALL configuration".to_vec()),
+            (4u32, b"Miscellaneous".to_vec()),
+        ];
         let rows = vec![
             ConfRow {
                 group: 1,
@@ -1205,8 +1361,16 @@ mod tests {
     #[test]
     fn print_info_detailed_assembles_header_and_lines() {
         let lines = vec![
-            InfoLine { label: b"CC".to_vec(), value: Some(b"gcc".to_vec()), format: 0 },
-            InfoLine { label: b"version".to_vec(), value: Some(b"3.2.0".to_vec()), format: 0 },
+            InfoLine {
+                label: b"CC".to_vec(),
+                value: Some(b"gcc".to_vec()),
+                format: 0,
+            },
+            InfoLine {
+                label: b"version".to_vec(),
+                value: Some(b"3.2.0".to_vec()),
+                format: 0,
+            },
         ];
         let out = print_info_detailed(b"build information\n", &lines);
         let s = String::from_utf8_lossy(&out);
@@ -1214,7 +1378,10 @@ mod tests {
         assert!(s.contains("gcc"), "{s}");
         assert!(s.contains("3.2.0"), "{s}");
         // each InfoLine renders through var_print: the label column is 24 wide, then " : ".
-        assert_eq!(out[b"build information\n".len()..][..24], b"CC                      "[..]);
+        assert_eq!(
+            out[b"build information\n".len()..][..24],
+            b"CC                      "[..]
+        );
         // header-only with no lines is just the header.
         assert_eq!(print_info_detailed(b"hdr\n", &[]), b"hdr\n".to_vec());
     }
