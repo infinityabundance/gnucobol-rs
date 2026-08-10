@@ -4,12 +4,12 @@
   "files": [
     {
       "active": 97,
-      "direct": 71,
+      "direct": 72,
       "evidenced_any": 97,
       "file": "numeric.c",
       "lifecycle": 6,
       "oracle": 20,
-      "transitive": 23,
+      "transitive": 22,
       "unevidenced": []
     },
     {
@@ -141,11 +141,11 @@
   "schema": "gnurust-function-evidence-v2",
   "totals": {
     "active": 1138,
-    "direct": 965,
+    "direct": 966,
     "evidenced_any": 1138,
     "lifecycle": 97,
     "oracle": 215,
-    "transitive": 147,
+    "transitive": 146,
     "unevidenced": 0
   }
 }

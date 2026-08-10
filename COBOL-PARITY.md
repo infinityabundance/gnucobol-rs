@@ -167,7 +167,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 ## Front-end coverage -- what runs, and the COMPLETE fail-closed map
 
-The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **76 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 212 of them, de-duplicated from the 240 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 212: **0 feature gaps** (the genuine remaining work), **14 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **198 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
+The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **76 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 221 of them, de-duplicated from the 256 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 221: **0 feature gaps** (the genuine remaining work), **14 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **207 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
 
 ### Completion scorecard
 
@@ -302,7 +302,7 @@ The admitted GnuCOBOL 3.2 oracle itself cannot run these (COMMUNICATION SECTION,
 |  | FUNCTION <x>: COB_CURRENT_DATE has no year |
 |  | FUNCTION CURRENT-DATE requires a pinned COB_CURRENT_DATE (the live clock is a non-claim) |
 
-### D. Input-validation guards -- malformed input rejected (198)
+### D. Input-validation guards -- malformed input rejected (207)
 
 Not feature gaps: these reject malformed / incomplete source (a missing operand, an undeclared file, a non-integer subscript) that cobc also rejects. Listed so the inventory is provably COMPLETE: B + C + D together account for every distinct fail-closed form in the source (nothing cherry-picked).
 
@@ -362,7 +362,8 @@ Not feature gaps: these reject malformed / incomplete source (a missing operand,
 |  | INITIALIZE REPLACING: no category given |
 |  | INITIALIZE REPLACING: unrecognized category `<x>` (expected NUMERIC/ALPHANUMERIC/ALPHABETIC/NUMERIC-EDITED/ALPHANUMERIC-EDITED) |
 |  | INITIALIZE: no item named |
-| `INSPECT` | INSPECT CONVERTING: expected TO |
+| `INSPECT` | INSPECT <x> operands incompatible (operands differ in size) |
+|  | INSPECT CONVERTING: expected TO |
 |  | INSPECT REPLACING CHARACTERS: expected BY |
 |  | INSPECT REPLACING: expected BY |
 |  | INSPECT REPLACING: missing mode |
@@ -428,14 +429,18 @@ Not feature gaps: these reject malformed / incomplete source (a missing operand,
 |  | SET: expected `TO` or `UP\|DOWN BY` (cobc rejects a SET with neither) |
 |  | SET: no target before TO |
 | `SORT / MERGE` | RELEASE `<x>`: not an SD/FD record |
+|  | RELEASE `<x>`: record is not a sort-file record |
 |  | RELEASE: missing record |
 |  | RETURN: `<x>` is not a declared file |
+|  | RETURN: `<x>` must be an SD filename |
 |  | RETURN: missing sort file |
 |  | SORT INPUT PROCEDURE: unknown paragraph `<x>` |
 |  | SORT OUTPUT PROCEDURE: unknown paragraph `<x>` |
 |  | SORT/MERGE KEY `<x>` is not a field of the sort record |
+|  | SORT/MERGE USING: `<x>` is not a declared file |
 |  | SORT/MERGE requires GIVING or OUTPUT PROCEDURE |
 |  | SORT/MERGE requires USING or INPUT PROCEDURE |
+|  | SORT/MERGE: `<x>` must be an SD filename |
 |  | SORT/MERGE: no KEY given |
 |  | SORT: `<x>` is not a declared file |
 |  | SORT: missing sort file |
@@ -453,6 +458,7 @@ Not feature gaps: these reject malformed / incomplete source (a missing operand,
 | `USAGE` | USAGE with no form |
 |  | unrecognized USAGE <x> |
 | `VALUE` | empty VALUE |
+|  | empty VALUE ALL |
 | `file I/O` | CLOSE: `<x>` is not a declared file |
 |  | DELETE requires a RELATIVE or INDEXED file (invalid on SEQUENTIAL) |
 |  | DELETE: `<x>` is not a declared file |
@@ -480,6 +486,8 @@ Not feature gaps: these reject malformed / incomplete source (a missing operand,
 | `level numbers` | expected data name after a level number |
 |  | unsupported level number <x> |
 | `other` | <x> form (target/giving) |
+|  | <x>: `<x>` is not a declared file |
+|  | <x>: `<x>` must be an SD filename |
 |  | <x>: no receiver |
 |  | <x>: no source operands |
 |  | INDEXED RECORD KEY `<x>` is not a field of the record |
@@ -495,6 +503,7 @@ Not feature gaps: these reject malformed / incomplete source (a missing operand,
 |  | invalid binary digit in <x> literal |
 |  | invalid hex digit in <x> literal |
 |  | multi-dimension leaf needs <x> subscript(s), got <x> |
+|  | no executable program (only PROTOTYPE declarations) |
 |  | not a numeric literal: <x> |
 |  | reference-modification length '<x>' is not an integer |
 |  | reference-modification start '<x>' is not an integer |

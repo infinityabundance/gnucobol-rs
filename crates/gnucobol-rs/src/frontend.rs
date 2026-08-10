@@ -15342,7 +15342,8 @@ mod tests {
     #[test]
     fn char_ord_honor_program_collating_sequence() {
         // Upstream 5bb0fbe1b: FUNCTION CHAR / ORD must use the program collating sequence
-        // (3.2's FIXME). Under ALPHABET EB IS EBCDIC + PROGRAM COLLATING SEQUENCE IS EB:
+        // (the pre-fix 3.2 behaviour is noted there). Under ALPHABET EB IS EBCDIC + PROGRAM
+        // COLLATING SEQUENCE IS EB:
         // ORD("A") = 0xC1 + 1 = 194 and CHAR(194) = "A" (the inverse). The STABLE 3.2 oracle
         // still prints 66 and the raw byte (pre-fix); the candidate follows current upstream
         // (drift recorded). CHAR outside 1..256, or a weight with no source character, raises
