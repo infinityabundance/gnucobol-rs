@@ -215,6 +215,21 @@ fn run(cmd: Command) -> Result<(), String> {
                 Err(format!("{} gate failure(s)", fails.len()))
             }
         }
+        Command::ExtractManual {
+            lane,
+            candidate,
+            json,
+        } => {
+            let counts = cli::cmd_extract_manual(&lane, candidate)?;
+            if !json {
+                let total: usize = counts.values().sum();
+                println!("extract-manual: {total} classified units (lanes {lane})");
+                for (k, v) in &counts {
+                    println!("  {k}: {v}");
+                }
+            }
+            emit(&counts, json)
+        }
         Command::ExtractCcvs85 { json } => {
             let counts = cli::cmd_extract_ccvs85()?;
             if !json {

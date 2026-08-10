@@ -70,6 +70,11 @@ pub enum Command {
     ExtractCcvs85 {
         json: bool,
     },
+    ExtractManual {
+        lane: String,
+        candidate: bool,
+        json: bool,
+    },
 }
 
 #[derive(Debug, Clone, PartialEq, Default)]
@@ -217,6 +222,19 @@ pub fn parse(args: &[String]) -> Result<Command, String> {
         "gate" => Ok(Command::Gate { json }),
         "check-updates" => Ok(Command::CheckUpdates { json }),
         "extract-ccvs85" => Ok(Command::ExtractCcvs85 { json }),
+        "extract-manual" => {
+            let lane = args
+                .iter()
+                .skip(1)
+                .find_map(|a| a.strip_prefix("--lane=").map(|v| v.to_string()))
+                .unwrap_or_else(|| "both".to_string());
+            let candidate = !args.iter().any(|a| a == "--no-candidate");
+            Ok(Command::ExtractManual {
+                lane,
+                candidate,
+                json,
+            })
+        }
         "probe-step" => Ok(Command::ProbeStep {
             manifest: args
                 .iter()
@@ -1188,6 +1206,70 @@ pub fn cmd_extract_ccvs85() -> Result<BTreeMap<String, usize>, String> {
     let root = crate::extract::workspace_root()?;
     let out_dir = root.join("reports").join("valid-corpus").join("ccvs85");
     crate::extract::ccvs85::write_reports(&root, &out_dir)
+}
+
+/// `extract-manual`: Phase 4 -- classify every manual code block and verify every complete
+/// example with the documented (or derived) command.
+pub fn cmd_extract_manual(
+    lane_arg: &str,
+    candidate: bool,
+) -> Result<BTreeMap<String, usize>, String> {
+    let root = crate::extract::workspace_root()?;
+    let (store, _ms) = stores()?;
+    let packages_root = store.root().join("packages");
+    let lanes: Vec<(String, PathBuf, &str)> = match lane_arg {
+        "stable-3.2" => vec![(
+            "stable-3.2".to_string(),
+            root.join("lab/admit/gnucobol-3.2/doc/gnucobol.texi"),
+            "3.2.0",
+        )],
+        "current" => vec![(
+            "current".to_string(),
+            root.join("lab/admit/gnucobol-upstream-current/doc/gnucobol.texi"),
+            "5568b8fc770f",
+        )],
+        "both" => vec![
+            (
+                "stable-3.2".to_string(),
+                root.join("lab/admit/gnucobol-3.2/doc/gnucobol.texi"),
+                "3.2.0",
+            ),
+            (
+                "current".to_string(),
+                root.join("lab/admit/gnucobol-upstream-current/doc/gnucobol.texi"),
+                "5568b8fc770f",
+            ),
+        ],
+        other => {
+            return Err(format!(
+                "unknown lane {other:?} (stable-3.2 | current | both)"
+            ))
+        }
+    };
+    let mut merged: BTreeMap<String, usize> = BTreeMap::new();
+    for (lane, texi, revision) in lanes {
+        if !texi.exists() {
+            return Err(format!("manual source missing: {}", texi.display()));
+        }
+        let out_dir = root
+            .join("reports")
+            .join("valid-corpus")
+            .join("gnucobol-manual")
+            .join(&lane);
+        let counts = crate::extract::manual::extract_manual(
+            &root,
+            &texi,
+            &lane,
+            revision,
+            &packages_root,
+            &out_dir,
+            candidate,
+        )?;
+        for (k, v) in counts {
+            *merged.entry(format!("{lane}/{k}")).or_default() += v;
+        }
+    }
+    Ok(merged)
 }
 
 /// `check-updates`: load every fetch spec under `specs_dir` and produce drift reports (no

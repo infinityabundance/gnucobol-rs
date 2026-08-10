@@ -13,6 +13,7 @@ pub mod at;
 pub mod candidate;
 pub mod ccvs85;
 pub mod m4;
+pub mod manual;
 pub mod oracle;
 pub mod package;
 pub mod report;

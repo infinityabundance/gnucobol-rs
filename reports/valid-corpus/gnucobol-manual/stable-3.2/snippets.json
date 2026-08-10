@@ -1,0 +1,471 @@
+[
+  {
+    "classification": "CompleteExecutable",
+    "content": "---- hello.cob -------------------------\n      * Sample COBOL program\n       IDENTIFICATION DIVISION.\n       PROGRAM-ID. hello.\n       PROCEDURE DIVISION.\n           DISPLAY \"Hello, world!\".\n           STOP RUN.\n----------------------------------------",
+    "kind": "example",
+    "line": 204,
+    "section": "Hello, world!"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cobc -x hello.cob\n$ ./hello\nHello, world!",
+    "kind": "example",
+    "line": 217,
+    "section": "Hello, world!"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cobc -x -o hello-world hello.cob\n$ ./hello-world\nHello, world!",
+    "kind": "example",
+    "line": 229,
+    "section": "Hello, world!"
+  },
+  {
+    "classification": "CompleteExecutable",
+    "content": "---- hellonew.cob ----------------\n*> Sample GnuCOBOL program\nidentification division.\nprogram-id. hellonew.\nprocedure division.\ndisplay\n   \"Hello, new world!\"\nend-display\ngoback.\n----------------------------------",
+    "kind": "example",
+    "line": 238,
+    "section": "Hello, world!"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cobc -x -free hellonew.cob\n$ ./hellonew\nHello, new world!",
+    "kind": "example",
+    "line": 253,
+    "section": "Hello, world!"
+  },
+  {
+    "classification": "ExpectedOutput",
+    "content": "GnuCOBOL 3.0.0   test.cbl                   Mon May 14 10:23:45 2018  Page 0001\n\nLINE    PG/LN  A...B...........................................................\n\n000001         IDENTIFICATION   DIVISION.\n000002         PROGRAM-ID.      prog.\n000003         ENVIRONMENT DIVISION.\n000004         CONFIGURATION SECTION.\n000005         DATA             DIVISION.\n000006         WORKING-STORAGE  SECTION.\n000007         COPY 'values.cpy'.\n000001C        78  I   VALUE 20.\n000002C        78  J   VALUE 5000.\n000003C        78  M   VALUE 5.\n000008         01  SETUP-REC.\n000009             05  FL1       PIC X(04).\n000010             05  FL2       PIC ZZZZZ.\n000011             05  FL3       PIC 9(04).\n000012             05  FL4       PIC 9(08) COMP.\n000013             05  FL5       PIC 9(04) COMP-4.\n000014             05  FL6       PIC Z,ZZZ.99.\n000015             05  FL7       PIC S9(05) SIGN LEADING SEPARATE.\n000016             05  FL8       PIC X(04).\n000017             05  FL9 REDEFINES FL8 PIC 9(04).\n000018             05  FLA.\n000019                 10  FLB OCCURS I TIMES.\n000020                     15  FLC PIC X(02).\n000021                 10  FLD   PIC X(20).\n000022             05  FLD1      PIC X(100).\n000023             05  FLD2 OCCURS M TO J TIMES DEPENDING ON FL5.\n000024                 10  FILLER PIC X(01).\n000025             05  FLD3      PIC X(3).\n000026             05  FLD4      PIC X(4).\n000027         PROCEDURE        DIVISION.\n000028             STOP RUN.",
+    "kind": "smallexample",
+    "line": 792,
+    "section": "Listing options"
+  },
+  {
+    "classification": "Other",
+    "content": "GnuCOBOL 3.0.0   test.cbl                   Mon May 14 10:23:45 2018  Page 0002\n\nSIZE TYPE           LVL  NAME                           PICTURE\n\n5204 GROUP          01   SETUP-REC\n0004 ALPHANUMERIC   05     FL1                          X(04)\n0005 ALPHANUMERIC   05     FL2                          ZZZZZ\n0004 ALPHANUMERIC   05     FL3                          9(04)\n0004 NUMERIC        05     FL4                          9(08) COMP\n0002 NUMERIC        05     FL5                          9(04) COMP\n0008 ALPHANUMERIC   05     FL6                          Z,ZZZ.99\n0006 ALPHANUMERIC   05     FL7                          S9(05)\n0004 ALPHANUMERIC   05     FL8                          X(04)\n0004 ALPHANUMERIC-R 05     FL9                          9(04)\n0060 ALPHANUMERIC   05     FLA\n0040 ALPHANUMERIC   10       FLB                        OCCURS 20\n0002 ALPHANUMERIC   15         FLC                      X(02)\n0020 ALPHANUMERIC   10       FLD                        X(20)\n0100 ALPHANUMERIC   05     FLD1                         X(100)\n5000 ALPHANUMERIC   05     FLD2                         OCCURS 5 TO 5000\n0001 ALPHANUMERIC   10       FILLER                     X(01)\n0003 ALPHANUMERIC   05     FLD3                         X(3)\n0004 ALPHANUMERIC   05     FLD4                         X(4)",
+    "kind": "smallexample",
+    "line": 840,
+    "section": "Listing options"
+  },
+  {
+    "classification": "Other",
+    "content": "0 warnings in compilation group\n2 errors in compilation group",
+    "kind": "example",
+    "line": 873,
+    "section": "Listing options"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cobc -x -o prog main.cob subr1.cob subr2.cob",
+    "kind": "example",
+    "line": 982,
+    "section": "Static linking"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cobc -c subr1.cob\n$ cobc -c subr2.cob\n$ cobc -c -x main.cob\n$ cobc -x -o prog main.o subr1.o subr2.o",
+    "kind": "example",
+    "line": 990,
+    "section": "Static linking"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cobc -o prog main.cob subrs.c",
+    "kind": "example",
+    "line": 999,
+    "section": "Static linking"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cobc -c subrs.c\n$ cobc -c -x main.cob\n$ cobc -x -o prog main.o subrs.o",
+    "kind": "example",
+    "line": 1004,
+    "section": "Static linking"
+  },
+  {
+    "classification": "PartialSnippet",
+    "content": "CALL \"subr\" USING X.",
+    "kind": "example",
+    "line": 1016,
+    "section": "Static linking"
+  },
+  {
+    "classification": "CCode",
+    "content": "int (*func)() = cob_resolve(\"subr\");\nif (func != NULL)\n  func (X);",
+    "kind": "example",
+    "line": 1022,
+    "section": "Static linking"
+  },
+  {
+    "classification": "Other",
+    "content": "subr(X);",
+    "kind": "example",
+    "line": 1031,
+    "section": "Static linking"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cobc -m main.cob subr.cob",
+    "kind": "example",
+    "line": 1048,
+    "section": "Driver program"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cp subr.so /your/cobol/lib",
+    "kind": "example",
+    "line": 1056,
+    "section": "Driver program"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ export COB_LIBRARY_PATH=/your/cobol/lib",
+    "kind": "example",
+    "line": 1061,
+    "section": "Driver program"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cobcrun main",
+    "kind": "example",
+    "line": 1070,
+    "section": "Driver program"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cobc -x -o main main.cob",
+    "kind": "example",
+    "line": 1077,
+    "section": "Compiling programs separately"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cobc -m subr.cob",
+    "kind": "example",
+    "line": 1082,
+    "section": "Compiling programs separately"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cp subr.so /your/cobol/lib",
+    "kind": "example",
+    "line": 1090,
+    "section": "Compiling programs separately"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ export COB_LIBRARY_PATH=/your/cobol/lib\n$ ./main",
+    "kind": "example",
+    "line": 1096,
+    "section": "Compiling programs separately"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cobc -c subr1.cob\n$ cobc -c subr2.cob\n$ cc -c subr3.c\n$ cc -shared -o libsubrs.so subr1.o subr2.o subr3.o",
+    "kind": "example",
+    "line": 1107,
+    "section": "Building library"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cp libsubrs.so /usr/lib",
+    "kind": "example",
+    "line": 1120,
+    "section": "Using library"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cp libsubrs.so /your/cobol/lib\n$ export LD_LIBRARY_PATH=/your/cobol/lib",
+    "kind": "example",
+    "line": 1124,
+    "section": "Using library"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cobc -x main.cob -L/your/cobol/lib -lsubrs",
+    "kind": "example",
+    "line": 1130,
+    "section": "Using library"
+  },
+  {
+    "classification": "CCode",
+    "content": "#include <libcob.h>\n\nint\nmain (int argc, char **argv)\n@{\n  /* initialize your program */\n  ...\n\n  /* initialize the COBOL run-time library */\n  cob_init (argc, argv);\n\n  /* rest of your program */\n  ...\n\n  /* Clean up and terminate - This does not return */\n  cob_stop_run (return_status);\n@}",
+    "kind": "example",
+    "line": 1160,
+    "section": "Writing Main Program in C"
+  },
+  {
+    "classification": "Other",
+    "content": "cobc -x main.c",
+    "kind": "example",
+    "line": 1186,
+    "section": "Writing Main Program in C"
+  },
+  {
+    "classification": "Other",
+    "content": "cobc -x --verbose main.c   # using -x -v or -xv would be also possible",
+    "kind": "example",
+    "line": 1192,
+    "section": "Writing Main Program in C"
+  },
+  {
+    "classification": "Other",
+    "content": "cobc -c main.c\ncobc -x main.o",
+    "kind": "example",
+    "line": 1198,
+    "section": "Writing Main Program in C"
+  },
+  {
+    "classification": "Other",
+    "content": "cc -c @`{}cob-config --cflags@`{} main.c    # compile only\ncc -o main main.o @`{}cob-config --libs@`{} # link only\n",
+    "kind": "example",
+    "line": 1206,
+    "section": "Writing Main Program in C"
+  },
+  {
+    "classification": "CompleteExecutable",
+    "content": "---- say.cob ---------------------------\n       IDENTIFICATION DIVISION.\n       PROGRAM-ID. say.\n       ENVIRONMENT DIVISION.\n       DATA DIVISION.\n       LINKAGE SECTION.\n       01 hello PIC X(7).\n       01 world PIC X(6).\n       PROCEDURE DIVISION USING hello world.\n           DISPLAY hello world.\n           GOBACK.\n----------------------------------------",
+    "kind": "example",
+    "line": 1218,
+    "section": "Static linking with COBOL programs"
+  },
+  {
+    "classification": "Other",
+    "content": "extern int say(char *hello, char *world);",
+    "kind": "example",
+    "line": 1238,
+    "section": "Static linking with COBOL programs"
+  },
+  {
+    "classification": "CCode",
+    "content": "---- hello.c ---------------------------\n#include <libcob.h>\n\nextern int say(char *hello, char *world);\n\nint\nmain()\n@{\n  int ret;\n  char hello[8] = \"Hello, \";\n  char world[7] = \"world!\";\n\n  /* initialize the COBOL run-time library */\n  cob_init(0, NULL);\n\n  /* call the static module and store its return code */\n  ret = say(hello, world);\n\n  /* shutdown the COBOL run-time library, keep program running */\n  (void)cob_tidy();\n\n  return ret;\n@}\n----------------------------------------",
+    "kind": "example",
+    "line": 1244,
+    "section": "Static linking with COBOL programs"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cobc -x hello.c say.cob\n$ ./hello\nHello, world!",
+    "kind": "example",
+    "line": 1273,
+    "section": "Static linking with COBOL programs"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cc -c `cob-config --cflags` hello.c\n$ cobc -c -static say.cob\n$ cobc -x -o hello hello.o say.o\n$ ./hello\nHello, world!",
+    "kind": "example",
+    "line": 1281,
+    "section": "Static linking with COBOL programs"
+  },
+  {
+    "classification": "CCode",
+    "content": "---- hello-dynamic.c -------------------\n#include <libcob.h>\n\nstatic int (*say)(char *hello, char *world);\n\nint main()\n@{\n  int ret;\n  char hello[8] = \"Hello, \";\n  char world[7] = \"world!\";\n\n  /* initialize the COBOL run-time library */\n  cob_init(0, NULL);\n\n  /* Find the module with PROGRAM-ID \"say\". */\n  say = cob_resolve(\"say\");\n\n  /* If there is no such module, show error and exit. */\n  if(say == NULL) @{\n    fprintf(stderr, \"%s\\n\", cob_resolve_error());\n    exit(1);\n  @}\n\n  /* Call the module found ... */\n  ret = say(hello, world);\n\n  /* ...and exit with the return code. */\n  cob_stop_run(ret);\n@}\n----------------------------------------",
+    "kind": "example",
+    "line": 1306,
+    "section": "Dynamic linking with COBOL programs"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cobc -x -o hello hello-dynamic.c\n$ cobc -m say.cob\n$ export COB_LIBRARY_PATH=.\n$ ./hello\nHello, world!",
+    "kind": "example",
+    "line": 1341,
+    "section": "Dynamic linking with COBOL programs"
+  },
+  {
+    "classification": "CCode",
+    "content": "---- hello-dynamic2.c ------------------\n#include <libcob.h>\n\nint main()\n@{\n  int ret;\n  char hello[8] = \"Hello, \";\n  char world[7] = \"world!\";\n\n  void *cob_argv[2];\n  cob_argv[0] = hello;\n  cob_argv[1] = world;\n\n  /* initialize the COBOL run-time library */\n  cob_init(0, NULL);\n\n  /* do a CALL, expecting the module to exist,\n     otherwise exiting with an error. */\n  ret = cob_call (\"say\", 2, cob_argv);\n\n  /* ...and exit with the return code. */\n  cob_stop_run(ret);\n@}\n----------------------------------------",
+    "kind": "example",
+    "line": 1352,
+    "section": "Dynamic linking with COBOL programs"
+  },
+  {
+    "classification": "CCode",
+    "content": "---- hello-dynamic3.c ------------------\n#include <libcob.h>\n\nint main()\n@{\n  int ret;\n  char hello[8] = \"Hello, \";\n  char world[7] = \"world!\";\n\n  void *cob_argv[2];\n  cob_argv[0] = hello;\n  cob_argv[1] = world;\n\n  /* initialize the COBOL run-time library */\n  cob_init(0, NULL);\n\n  /* do a CALL, catching all possible results, */\n  ret = cob_call_with_exception_check (\"say\", 2, cob_argv);\n\n  switch (ret) @{\n  case 0:  /* program coming back */\n\n    /* Clean up and terminate runtime */\n    cob_runtime_hint(\"program exited with return code %d\",\n       cob_last_exit_code ());\n    cob_tidy ();\n    break;\n\n  case 1:  /* normal exit */\n    cob_runtime_hint(\"STOP RUN with return code %d\",\n       cob_last_exit_code ());\n    break;\n\n  case -1:  /* error exit */\n    cob_runtime_hint(\"error exit with return code %d and error \\\"%s\\\"\",\n       cob_last_exit_code (), cob_last_runtime_error ());\n    break;\n\n  case -2:  /* hard error exit */\n    cob_runtime_hint(\"hard error exit with return code %d and error \\\"%s\\\"\",\n       cob_last_exit_code (), cob_last_runtime_error ());\n    break;\n\n  case -3:  /* signal handler  exit */\n    cob_runtime_hint(\"signal handler exit with signal %d and error \\\"%s\\\"\",\n       cob_last_exit_code (), cob_last_runtime_error ());\n    break;\n\n  default:\n    cob_runtime_hint(\"unexpected return from cob_call_with_exception_check,\"\n       \" last exit code %d, last error \\\"%s\\\"\",\n       cob_last_exit_code (), cob_last_runtime_error ());\n    break;\n  @}\n\n  /* ...and exit with zero if no error happened */\n  exit(ret != 0 && ret != 1);\n@}\n----------------------------------------",
+    "kind": "example",
+    "line": 1389,
+    "section": "Dynamic linking with COBOL programs"
+  },
+  {
+    "classification": "CCode",
+    "content": "---- say.c -----------------------------\nint say(char *hello, char *world)\n@{\n  int i;\n  for(i = 0; i < 7; i++)\n    putchar(hello[i]);\n  for(i = 0; i < 6; i++)\n    putchar(world[i]);\n  putchar('\\n');\n  return 0;\n@}\n----------------------------------------",
+    "kind": "example",
+    "line": 1458,
+    "section": "Static linking with C programs"
+  },
+  {
+    "classification": "CompleteExecutable",
+    "content": "---- hello.cob -------------------------\n       IDENTIFICATION DIVISION.\n       PROGRAM-ID. hello.\n       ENVIRONMENT DIVISION.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 hello PIC X(7) VALUE \"Hello, \".\n       01 world PIC X(6) VALUE \"world!\".\n       PROCEDURE DIVISION.\n       CALL \"say\" USING hello world.\n       STOP RUN.\n----------------------------------------",
+    "kind": "example",
+    "line": 1480,
+    "section": "Static linking with C programs"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cobc -x -o hello -static hello.cob say.c\n$ ./hello\nHello, world!",
+    "kind": "example",
+    "line": 1497,
+    "section": "Static linking with C programs"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cc -c say.c\n$ cobc -c -static -x hello.cob\n$ cobc -x -o hello hello.o say.o\n$ ./hello\nHello, world!",
+    "kind": "example",
+    "line": 1505,
+    "section": "Static linking with C programs"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cobc -m say.c\n$ cobc -x hello.cob\n$ export COB_LIBRARY_PATH=.\n$ ./hello\nHello, world!",
+    "kind": "example",
+    "line": 1519,
+    "section": "Dynamic linking with C programs"
+  },
+  {
+    "classification": "CommandExample",
+    "content": "$ cc -shared -o say.so say.c\n$ cobc -x hello.cob\n$ export COB_LIBRARY_PATH=.\n$ ./hello\nHello, world!",
+    "kind": "example",
+    "line": 1529,
+    "section": "Dynamic linking with C programs"
+  },
+  {
+    "classification": "CCode",
+    "content": "enum cob_runtime_option_switch @{\n   COB_SET_RUNTIME_TRACE_FILE              /* 'p' is  FILE *  */\n   COB_SET_RUNTIME_DISPLAY_PRINTER_FILE    /* 'p' is  FILE *  */\n   COB_SET_RUNTIME_RESCAN_ENV              /* rescan environment variables */\n   COB_SET_RUNTIME_DISPLAY_PUNCH_FILE      /* 'p' is  FILE *  */\n@};\nCOB_EXPIMP  void  cob_set_runtime_option   (enum cob_runtime_option_switch opt, void *p);",
+    "kind": "smallexample",
+    "line": 1547,
+    "section": "Redirecting output to a (FILE *)"
+  },
+  {
+    "classification": "Other",
+    "content": "cob_set_runtime_option (COB_SET_RUNTIME_TRACE_FILE,\n                        (void*)((FILE*)myfd));",
+    "kind": "example",
+    "line": 1558,
+    "section": "Redirecting output to a (FILE *)"
+  },
+  {
+    "classification": "Other",
+    "content": "cob_set_runtime_option (COB_SET_RUNTIME_DISPLAY_PRINTER_FILE, \n                        (void*)((FILE*)myfd));",
+    "kind": "example",
+    "line": 1564,
+    "section": "Redirecting output to a (FILE *)"
+  },
+  {
+    "classification": "Other",
+    "content": "cob_set_runtime_option (COB_SET_RUNTIME_DISPLAY_PUNCH_FILE,\n                         (void*)((FILE*)myfd));",
+    "kind": "example",
+    "line": 1570,
+    "section": "Redirecting output to a (FILE *)"
+  },
+  {
+    "classification": "CCode",
+    "content": "COB_EXPIMP  void *\ncob_get_runtime_option (enum cob_runtime_option_switch opt);",
+    "kind": "example",
+    "line": 1576,
+    "section": "Redirecting output to a (FILE *)"
+  },
+  {
+    "classification": "CCode",
+    "content": "COB_EXPIMP int\ncob_load_collation (const char *col_name,\n                    cob_u8_t *ebcdic_to_ascii,\n                    cob_u8_t *ascii_to_ebcdic)",
+    "kind": "example",
+    "line": 1587,
+    "section": "Loading EBCDIC/ASCII translation tables (collating sequences)"
+  },
+  {
+    "classification": "Pseudocode",
+    "content": "Select @var{file} assign to \"/tmp/myfile.txt\".",
+    "kind": "example",
+    "line": 1780,
+    "section": "Literal file."
+  },
+  {
+    "classification": "Pseudocode",
+    "content": "Select @var{file} assign to my-file.\n\n01  my-file            pic x(512).\n\nMove \"/tmp/myfile.txt\" to my-file.\nOpen output <file>.",
+    "kind": "example",
+    "line": 1789,
+    "section": "<variable>"
+  },
+  {
+    "classification": "Pseudocode",
+    "content": "export myfile=/tmp/myfile.txt\n\nSelect @var{file} assign to external myfile.",
+    "kind": "example",
+    "line": 1803,
+    "section": "<environment variable>"
+  },
+  {
+    "classification": "Pseudocode",
+    "content": "ACCEPT @var{variable-1}\n   LINE @var{variable-2} | @var{literal-1} COLUMN @var{variable-3} | @var{literal-2}\n   WITH\n      AUTO-SKIP | AUTO\n      BACKGROUND-COLOR @var{variable-4 }| @var{literal-3}\n      BELL | BEEP\n      BLINK\n      FOREGROUND-COLOR @var{variable-5} | @var{literal-4}\n      LOWLIGHT | HIGHLIGHT\n      PROMPT\n      PROTECTED\n      SIZE [IS] @var{variable-6} | @var{literal-5}\n      UPDATE\n   ON EXCEPTION\n      @var{exception processing}\n   NOT ON EXCEPTION\n      @var{normal processing}\nEND-ACCEPT.",
+    "kind": "example",
+    "line": 1829,
+    "section": "Extended ACCEPT statement"
+  },
+  {
+    "classification": "Pseudocode",
+    "content": "\nDISPLAY @var{variable-1} | @var{literal-1} | @var{figurative constant}\n   LINE @var{line} COLUMN @var{column}\n   WITH BELL\n        BLANK LINE | SCREEN\n        ERASE EOL | EOS\n        SIZE [IS] @var{variable-2} | @var{literal-2}\nEND-DISPLAY.\n",
+    "kind": "example",
+    "line": 2093,
+    "section": "Extended DISPLAY statement"
+  },
+  {
+    "classification": "CompleteExecutable",
+    "content": "       identification division.\n       program-id. zlen.\n       data division.\n       working-storage section.\n       01 ptr   usage pointer.\n       01 str   pic x(4) value z\"abc\".\n\n      *> Testing CONTENT-LENGTH\n       procedure division.\n\n       set ptr to address of str\n       display content-length(ptr)\n\n       goback.\n       end program hosted.",
+    "kind": "example",
+    "line": 2218,
+    "section": "CONTENT-LENGTH"
+  },
+  {
+    "classification": "CompleteExecutable",
+    "content": "       identification division.\n       program-id. contents.\n       data division.\n       working-storage section.\n       01 ptr   usage pointer.\n       01 str   pic x(4) value z\"abc\".\n\n      *> Testing CONTENT-OF\n       procedure division.\n\n       set ptr to address of str\n       display content-of(ptr)\n       display content-of(ptr, 2)\n       display content-of(ptr)(2:2)\n\n       goback.\n       end program hosted.",
+    "kind": "example",
+    "line": 2246,
+    "section": "CONTENT-OF"
+  },
+  {
+    "classification": "CompleteCompileOnly",
+    "content": "        identification division.\n        program-id. prog.\n\n        data division.\n        working-storage section.\n            78 shortoptions value \"jkl\".\n\n            01 longoptions.\n                05 optionrecord occurs 2 times.\n                    10 optionname   pic x(25).\n                    10 has-value    pic 9.\n                    10 valpoint     pointer value NULL.\n                    10 return-value pic x(4).\n\n            01 longind     pic 99.\n            01 long-only   pic 9 value 1.\n\n            01 return-char pic x(4).\n            01 opt-val     pic x(10).\n\n            01 counter     pic 9 value 0.",
+    "kind": "example",
+    "line": 2288,
+    "section": "CBL_GC_GETOPT"
+  },
+  {
+    "classification": "Other",
+    "content": "\"ab:c::d\"",
+    "kind": "example",
+    "line": 2320,
+    "section": "CBL_GC_GETOPT"
+  },
+  {
+    "classification": "PartialSnippet",
+    "content": "        procedure division.\n            move \"version\" to optionname   (1).\n            move 0         to has-value    (1).\n            move \"v\"       to return-value (1).\n\n            move \"verbose\" to optionname   (2).\n            move 0         to has-value    (2).\n            move \"V\"       to return-value (2).\n\n            perform with test after until return-code = -1\n                call 'CBL_GC_GETOPT' using\n                   by reference shortoptions longoptions longind\n                   by value long-only\n                   by reference return-char opt-val\n                end-call\n\n                display return-char end-display\n                display opt-val     end-display\n            end-perform\n            stop run.\n",
+    "kind": "example",
+    "line": 2340,
+    "section": "CBL_GC_GETOPT"
+  },
+  {
+    "classification": "CompleteExecutable",
+    "content": "HOSTED identification division.\n       program-id. hosted.\n       data division.\n       working-storage section.\n       01 argc  usage binary-long.\n       01 argv  usage pointer.\n\n       01 stdin usage pointer.\n       01 stdout usage pointer.\n       01 stderr usage pointer.\n\n       01 errno usage pointer.\n       01 err   usage binary-long based.\n\n       01 domain usage float-long value 3.0.\n\n       01 tzname usage pointer.\n       01 tznames usage pointer based.\n          05 tzs usage pointer occurs 2 times.\n\n       01 timezone   usage binary-long.\n       01 daylight   usage binary-short.\n\n\n      *> Testing CBL_GC_HOSTED\n       procedure division.\n       call \"CBL_GC_HOSTED\" using stdin \"stdin\"\n       display \"stdin                : \" stdin\n       call \"feof\" using by value stdin\n       display \"feof stdin           : \" return-code\n\n       call \"CBL_GC_HOSTED\" using stdout \"stdout\"\n       display \"stdout               : \" stdout\n       call \"fprintf\" using by value stdout by content \"Hello\" & x\"0a\"\n\n       call \"CBL_GC_HOSTED\" using stderr \"stderr\"\n       display \"stderr               : \" stderr\n       call \"fprintf\" using by value stderr by content \"on err\" & x\"0a\"\n\n       call \"CBL_GC_HOSTED\" using argc \"argc\"\n       display \"argc                 : \" argc\n\n       call \"CBL_GC_HOSTED\" using argv \"argv\"\n       display \"argv                 : \" argv\n\n       call \"args\" using by value argc argv\n\n       call \"CBL_GC_HOSTED\" using errno \"errno\"\n       display \"&errno               : \" errno\n       set address of err to errno\n       display \"errno                : \" err\n       call \"acos\" using by value domain\n       display \"errno after acos(3.0): \" err \", EDOM is 33\"\n\n       call \"CBL_GC_HOSTED\" using argc \"arg\"\n       display \"'arg' lookup         : \" return-code\n       call \"CBL_GC_HOSTED\" using null \"argc\"\n       display \"null with argc       : \" return-code\n       display \"argc is still        : \" argc\n\n\n       *> the following only returns zero if the system has HAVE_TIMEZONE set\n\n       call \"CBL_GC_HOSTED\" using daylight \"daylight \"\n       display \"'timezone' lookup    : \" return-code\n\n       if return-code not = 0\n          display \"system doesn't has timezone\"\n       else\n\n          display \"timezone is          : \" timezone\n\n          call \"CBL_GC_HOSTED\" using daylight \"daylight \"\n          display \"'daylight' lookup    : \" return-code\n          display \"daylight is          : \" daylight\n\n          set environment \"TZ\" to \"PST8PDT\"\n          call static \"tzset\" returning omitted on exception continue end-call\n\n          call \"CBL_GC_HOSTED\" using tzname \"tzname\"\n          display \"'tzname' lookup      : \" return-code\n\n          *> tzs(1) will point to z\"PST\" and tzs(2) to z\"PDT\"\n          if return-code equal 0 and tzname not equal null then\n              set address of tznames to tzname\n              if tzs(1) not equal null then\n                 display \"tzs #1               : \" tzs(1)\n              end-if\n              if tzs(2) not equal null then\n                 display \"tzs #2               : \" tzs(2)\n              end-if\n          end-if\n\n       end-if\n\n       goback.\n       end program hosted.",
+    "kind": "example",
+    "line": 2423,
+    "section": "CBL_GC_HOSTED"
+  },
+  {
+    "classification": "CCode",
+    "content": "      *> Waiting a half second\n       call \"CBL_GC_NANOSLEEP\" using \"500000000\" end-call\n\n      *> Waiting five seconds using compiler string catenation for readability\n       call \"CBL_GC_NANOSLEEP\" using \"500\" & \"0000000\"  end-call",
+    "kind": "example",
+    "line": 2530,
+    "section": "CBL_GC_NANOSLEEP"
+  },
+  {
+    "classification": "CompleteExecutable",
+    "content": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. prog.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 CHILD-PID   PIC S9(9) BINARY.\n       01 WAIT-STS    PIC S9(9) BINARY.\n       PROCEDURE DIVISION.\n\n           CALL \"CBL_GC_FORK\" RETURNING CHILD-PID END-CALL\n           EVALUATE TRUE\n              WHEN CHILD-PID = ZERO\n                 PERFORM CHILD-CODE\n              WHEN CHILD-PID > ZERO\n                 PERFORM PARENT-CODE\n              WHEN CHILD-PID = -1\n                 DISPLAY 'CBL_GC_FORK is not available '\n                         'on the current system!'\n                 END-DISPLAY\n                 PERFORM CHILD-CODE\n                 MOVE 0 TO CHILD-PID\n                 PERFORM PARENT-CODE\n              WHEN OTHER\n                 MULTIPLY CHILD-PID BY -1 END-MULTIPLY\n                 DISPLAY 'CBL_GC_FORK returned system error: '\n                         CHILD-PID\n                 END-DISPLAY\n           END-EVALUATE\n\n           STOP RUN.\n\n       CHILD-CODE.\n           CALL \"C$SLEEP\" USING 1 END-CALL\n           DISPLAY \"Hello, I am the child\"\n           END-DISPLAY\n           MOVE 2 TO RETURN-CODE\n\n           CONTINUE.\n\n       PARENT-CODE.\n           DISPLAY \"Hello, I am the parent\"\n           END-DISPLAY\n           CALL \"CBL_GC_WAITPID\" USING CHILD-PID RETURNING WAIT-STS\n           END-CALL\n           MOVE 0 TO RETURN-CODE\n           EVALUATE TRUE\n              WHEN WAIT-STS >= 0\n                 DISPLAY 'Child ended with status: '\n                         WAIT-STS\n                 END-DISPLAY\n              WHEN WAIT-STS = -1\n                 DISPLAY 'CBL_GC_WAITPID is not available '\n                         'on the current system!'\n                 END-DISPLAY\n              WHEN WAIT-STS < -1\n                 MULTIPLY -1 BY WAIT-STS END-MULTIPLY\n                 DISPLAY 'CBL_GC_WAITPID returned system error: ' WAIT-STS\n                 END-DISPLAY\n           END-EVALUATE\n\n           CONTINUE.",
+    "kind": "example",
+    "line": 2560,
+    "section": "CBL_GC_FORK"
+  },
+  {
+    "classification": "CCode",
+    "content": "        CALL \"CBL_GC_WAITPID\" USING CHILD-PID RETURNING WAIT-STS\n        END-CALL\n        MOVE 0 TO RETURN-CODE\n        DISPLAY 'CBL_GC_WAITPID ended with status: ' WAIT-STS\n        END-DISPLAY",
+    "kind": "example",
+    "line": 2635,
+    "section": "CBL_GC_WAITPID"
+  }
+]
