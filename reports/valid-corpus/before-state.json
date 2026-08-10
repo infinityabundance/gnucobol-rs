@@ -1,0 +1,69 @@
+{
+  "schema": "gnurust-valid-corpus-before-state-v1",
+  "generated_at": "2026-08-10T00:00:00Z",
+  "repository_head": "69523663a",
+  "gate_results": {
+    "cargo_test_workspace": "PASS (25 test binaries, 0 failures) after repairing the pre-existing stale cob_intr_rows.rs example",
+    "lab_check_docs": "PASS after mechanical regeneration (receipts, casefiles, FUNCTION-EVIDENCE, COBOL/FILE-PARITY, support packet, root config/) + the documented @no32 drift exemption for p77_compile_step",
+    "lab_verify_sealed_courts": "PASS (107 green, 0 red); KOBOLD (shim) SKIP = the .kobold sibling crate is absent from this workspace (environmental, not a court failure)",
+    "lab_gnucobol_testsuite_run_docker": "NOT RE-RUN in Phase 0.2: multi-hour isolated-rootless-Docker evidence run; the committed two-pass determinism + no-delegation + privacy evidence is present and its freshness gate passed inside verify-sealed-courts; full re-run scheduled at Phase 13",
+    "lab_ccvs85_run_docker": "NOT RE-RUN in Phase 0.2: same rationale; GNURUST.CCVS85.2/.3/.4 evidence gate PASSED inside verify-sealed-courts; full re-run scheduled at Phase 13"
+  },
+  "historical_evidence_preserved": {
+    "statement": "No historical GnuCOBOL 3.2 / CCVS85 / v0.8.54 / v0.8.55 evidence was overwritten or weakened; every changed file in this phase is a regenerated derived artifact (receipts/casefiles/parity/support/config-copy) whose regeneration is the documented maintenance path, or a documented-drift exemption.",
+    "changed_derived_artifacts": [
+      "reports/receipts/GNURUST.FRONTEND.1/*",
+      "reports/receipts/GNURUST.ELITE-REPLAY.2/*",
+      "reports/casefiles/GNURUST.FRONTEND.1/*",
+      "FUNCTION-EVIDENCE.md + reports/port-index/evidence.json",
+      "COBOL-PARITY.md + FILE-PARITY.md",
+      "reports/support-packet/support-packet.json",
+      "config/*.conf (re-copy of crates/gnucobol-rs/config)"
+    ],
+    "frozen_inputs": {
+      "ccvs85_materialized_units": "reports/ccvs85/materialized-units.json (untouched)",
+      "ccvs85_oracle_results": "reports/ccvs85/oracle-results.json (untouched)",
+      "testsuite_oracle_results": "reports/gnucobol-testsuite/oracle-results.json (untouched)"
+    }
+  },
+  "frozen_reference": {
+    "suite": {
+      "total_tests": 1282,
+      "determinism": "reports/gnucobol-testsuite/determinism.json (two-pass identical)",
+      "no_delegation": "reports/gnucobol-testsuite/no-delegation.json (candidate phase isolated)",
+      "by_primary_classification": {
+        "CANDIDATE_CHECK_REJECT": 652, "OBSERVABLE_MATCH": 193, "WRAPPER_OPTION_UNSUPPORTED": 180,
+        "CANDIDATE_RUNTIME_FAIL": 136, "ORACLE_XFAIL": 31, "CANDIDATE_PARSE_REJECT": 31,
+        "WRAPPER_INVOCATION_MALFORMED": 25, "CANDIDATE_UNSUPPORTED": 21, "ORACLE_SKIP": 9,
+        "CANDIDATE_MODULE_MODEL_UNSUPPORTED": 4
+      }
+    },
+    "ccvs85": {
+      "units_total": 512,
+      "evidence_gate": "GNURUST.CCVS85.2/.3/.4 differential court (evidence gate) PASS",
+      "by_final_classification": {
+        "RUST_REJECT_UNSUPPORTED": 190, "NON_EXECUTABLE_LIBRARY": 119, "ORACLE_RUN_FAIL": 64,
+        "OUTPUT_MISMATCH": 42, "RUST_REJECT_PARSE": 36, "RAW_OUTPUT_MATCH": 27,
+        "ORACLE_COMPILE_REJECT": 18, "GENERATED_FILE_MISMATCH": 8, "ORACLE_COMPILE_ERROR": 3,
+        "NON_EXECUTABLE_DATA": 2, "HARNESS_BLOCKED": 1, "RUST_REJECT_RUNTIME_BOUNDARY": 1,
+        "ORACLE_TIMEOUT": 1
+      }
+    },
+    "math": {
+      "math_tests_total": 323,
+      "reconciliation_invariant": "sum of classification totals == 323; every math id unique and a member of the full suite inventory"
+    }
+  },
+  "oracle_identity": {
+    "stable": "GnuCOBOL 3.2.0 at lab/oracle/prefix (host-built; used by all sweeps and the sealed courts)",
+    "current_upstream": "admitted source at lab/admit/gnucobol-upstream-current (pinned head 5568b8fc770f)",
+    "ccvs85_court_oracle": "GnuCOBOL 3.2 inside the isolated Docker court"
+  },
+  "candidate_identity": {
+    "crate": "gnucobol-rs 0.8.55",
+    "cobc_rs": "0.1.0 (interpreter; never native codegen)",
+    "examples": "cobrun (interpreter entry)"
+  },
+  "compiler_invocation_census": "reports/gnucobol-testsuite/invocation-census.json (unchanged)",
+  "source_inventory_hashes": "reports/gnucobol-testsuite/* + reports/ccvs85/corpus-index.json (unchanged)"
+}

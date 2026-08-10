@@ -1,0 +1,116 @@
+{
+  "schema": "gnurust-preflight-repository-state-v1",
+  "generated_at": "2026-08-10T00:00:00Z",
+  "repository": {
+    "head": "214cd9cac126d0a7ec8a4f2182ce9a0b7c1145bc",
+    "head_short": "214cd9cac",
+    "head_subject": "atlas: record Phase-2 evidence for 7b324f50e + 277a07c2e + 23f850352",
+    "origin_main": "214cd9cac126d0a7ec8a4f2182ce9a0b7c1145bc",
+    "origin_main_synced": true,
+    "branch": "main",
+    "remote": "https://github.com/infinityabundance/gnucobol-rs.git",
+    "worktree": {
+      "modified_tracked_files": 0,
+      "untracked_preexisting": [
+        "tf1",
+        "tf2",
+        "crates/gnucobol-rs/cob-prof-prog-3243230-20260806-002942.csv",
+        "crates/gnucobol-rs/cob-prof-prog-3251405-20260806-003109.csv"
+      ],
+      "clean_of_unexplained_changes": true
+    },
+    "unpushed_commits": 0
+  },
+  "versioning": {
+    "crates": {
+      "gnucobol-rs": "0.8.55",
+      "cobc-rs": "0.1.0",
+      "gnucobol-rs-testsuite": "0.1.0",
+      "gnucobol-rs-ccvs85": "0.1.0",
+      "gnucobol-rs-port-index": "0.1.0",
+      "gnucobol-rs-ffi": "0.1.0",
+      "cobc-oracle-rs": "0.0.2"
+    },
+    "remote_tags": ["v0.8.55"],
+    "published_crates_claimed": {
+      "gnucobol-rs": "0.8.55",
+      "gnucobol-rs-testsuite": "0.1.0",
+      "gnucobol-rs-ccvs85": "0.1.0",
+      "gnucobol-rs-port-index": "0.1.0"
+    },
+    "publish_verification": "crates.io API unreachable from the sandbox; claimed versions recorded from the committed release evidence (previous session final report); re-verified at Phase 14"
+  },
+  "identities": {
+    "github": "https://github.com/infinityabundance/gnucobol-rs",
+    "codeberg": "not recorded in the repository (Codeberg synchronization is a Phase-14 release step)"
+  },
+  "evidence_counts": {
+    "receipts": 115,
+    "casefiles": 160,
+    "court_campaigns_in_claim_ladder": "see reports/claim-ladder.json"
+  },
+  "suite_summary": {
+    "total_tests": 1282,
+    "by_primary_classification": {
+      "CANDIDATE_CHECK_REJECT": 652,
+      "OBSERVABLE_MATCH": 193,
+      "WRAPPER_OPTION_UNSUPPORTED": 180,
+      "CANDIDATE_RUNTIME_FAIL": 136,
+      "ORACLE_XFAIL": 31,
+      "CANDIDATE_PARSE_REJECT": 31,
+      "WRAPPER_INVOCATION_MALFORMED": 25,
+      "CANDIDATE_UNSUPPORTED": 21,
+      "ORACLE_SKIP": 9,
+      "CANDIDATE_MODEL_MODEL_UNSUPPORTED": 4
+    },
+    "determinism": "two-pass per-test classifications identical (reports/gnucobol-testsuite/determinism.json)",
+    "evidence_path": "reports/gnucobol-testsuite/"
+  },
+  "ccvs85_summary": {
+    "units_total": 512,
+    "by_final_classification": {
+      "NON_EXECUTABLE_LIBRARY": 119,
+      "RUST_REJECT_UNSUPPORTED": 190,
+      "ORACLE_RUN_FAIL": 64,
+      "OUTPUT_MISMATCH": 42,
+      "RUST_REJECT_PARSE": 36,
+      "RAW_OUTPUT_MATCH": 27,
+      "ORACLE_COMPILE_REJECT": 18,
+      "GENERATED_FILE_MISMATCH": 8,
+      "ORACLE_COMPILE_ERROR": 3,
+      "NON_EXECUTABLE_DATA": 2,
+      "HARNESS_BLOCKED": 1,
+      "RUST_REJECT_RUNTIME_BOUNDARY": 1,
+      "ORACLE_TIMEOUT": 1
+    },
+    "evidence_path": "reports/ccvs85/"
+  },
+  "math_summary": {
+    "math_tests_total": 323,
+    "by_at_source": {
+      "run_functions": 126,
+      "run_fundamental": 114,
+      "data_packed": 23,
+      "data_binary": 18,
+      "syn_literals": 16,
+      "syn_value": 13,
+      "data_display": 9,
+      "syn_multiply": 3,
+      "data_pointer": 1
+    },
+    "evidence_path": "reports/gnucobol-runtime-tests/"
+  },
+  "performance_evidence": {
+    "math_performance": "reports/gnucobol-runtime-tests/math-performance.{json,csv,md}",
+    "raw_samples": "reports/gnucobol-runtime-tests/raw-samples/",
+    "perf_receipts": [
+      "reports/receipts/GNURUST.PERFORM.SLICE.1",
+      "reports/receipts/GNURUST.TABLE.PERFORM.SLICE.1"
+    ]
+  },
+  "notes": [
+    "HEAD == origin/main; 0 unpushed commits (pushed c35d6c2b9..214cd9cac immediately before this preflight).",
+    "untracked tf1/tf2 and two cob-prof csv files predate this task and are not part of any tracked change.",
+    "crates.io was unreachable from the sandbox; published-version claims are carried from the committed release evidence and re-verified at Phase 14."
+  ]
+}
