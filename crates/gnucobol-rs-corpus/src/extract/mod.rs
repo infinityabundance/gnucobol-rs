@@ -19,6 +19,7 @@ pub mod omp;
 pub mod oracle;
 pub mod package;
 pub mod report;
+pub mod xcobol;
 
 use crate::extract::at::{parse_at, AtGroup};
 use crate::extract::oracle::{compare_contract, condition_holds, run_step, OracleEnv};

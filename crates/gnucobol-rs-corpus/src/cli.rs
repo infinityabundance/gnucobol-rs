@@ -67,6 +67,13 @@ pub enum Command {
         out: PathBuf,
         json: bool,
     },
+    ProbeFile {
+        dir: PathBuf,
+        file: String,
+        run: bool,
+        out: PathBuf,
+        json: bool,
+    },
     ExtractCcvs85 {
         json: bool,
     },
@@ -81,6 +88,11 @@ pub enum Command {
     },
     ExtractOmp {
         candidate: bool,
+        json: bool,
+    },
+    ExtractXcobol {
+        candidate: bool,
+        oracle: bool,
         json: bool,
     },
 }
@@ -251,6 +263,15 @@ pub fn parse(args: &[String]) -> Result<Command, String> {
             let candidate = !args.iter().any(|a| a == "--no-candidate");
             Ok(Command::ExtractOmp { candidate, json })
         }
+        "extract-xcobol" => {
+            let candidate = !args.iter().any(|a| a == "--no-candidate");
+            let oracle = !args.iter().any(|a| a == "--no-oracle");
+            Ok(Command::ExtractXcobol {
+                candidate,
+                oracle,
+                json,
+            })
+        }
         "probe-step" => Ok(Command::ProbeStep {
             manifest: args
                 .iter()
@@ -277,6 +298,43 @@ pub fn parse(args: &[String]) -> Result<Command, String> {
             },
             json,
         }),
+        "probe-file" => {
+            let dir = args
+                .iter()
+                .skip(1)
+                .find(|a| !a.starts_with('-'))
+                .map(PathBuf::from)
+                .ok_or_else(|| "probe-file: missing directory".to_string())?;
+            let file = args
+                .iter()
+                .find_map(|a| a.strip_prefix("--file=").map(|v| v.to_string()))
+                .ok_or_else(|| "probe-file: missing --file= name".to_string())?;
+            let run = args.iter().any(|a| a == "--run");
+            let out = {
+                let eq = args
+                    .iter()
+                    .find_map(|a| a.strip_prefix("--out=").map(PathBuf::from));
+                match eq {
+                    Some(p) => p,
+                    None => {
+                        let i = args
+                            .iter()
+                            .position(|a| a == "--out")
+                            .ok_or_else(|| "probe-file: missing --out path".to_string())?;
+                        args.get(i + 1)
+                            .map(PathBuf::from)
+                            .ok_or_else(|| "probe-file: missing --out path".to_string())?
+                    }
+                }
+            };
+            Ok(Command::ProbeFile {
+                dir,
+                file,
+                run,
+                out,
+                json,
+            })
+        }
         "extract-testsuite" => {
             let lane = args
                 .iter()
@@ -1304,6 +1362,32 @@ pub fn cmd_extract_omp(candidate: bool) -> Result<BTreeMap<String, usize>, Strin
     let packages_root = store.root().join("packages");
     let out_dir = root.join("reports").join("valid-corpus").join("omp");
     crate::extract::omp::extract_omp(&root, &packages_root, &out_dir, candidate)
+}
+
+/// `extract-xcobol`: Phase 7 -- X-COBOL dataset admission.
+pub fn cmd_extract_xcobol(
+    candidate: bool,
+    oracle: bool,
+) -> Result<BTreeMap<String, usize>, String> {
+    let root = crate::extract::workspace_root()?;
+    let (store, _ms) = stores()?;
+    let packages_root = store.root().join("packages");
+    let out_dir = root.join("reports").join("valid-corpus").join("xcobol");
+    crate::extract::xcobol::extract_xcobol(&root, &packages_root, &out_dir, candidate, oracle)
+}
+
+/// `probe-file`: bounded candidate probe for one file in a directory (generic form used by the
+/// X-COBOL / extras / manual lanes). Writes the PhaseOutcome JSON to `--out`.
+pub fn cmd_probe_file(
+    dir: &Path,
+    filename: &str,
+    run: bool,
+    out_path: &Path,
+) -> Result<Vec<crate::extract::candidate::PhaseOutcome>, String> {
+    let probes = crate::extract::candidate::probe_dir(dir, filename, run);
+    let json = serde_json::to_string_pretty(&probes).map_err(|e| e.to_string())?;
+    std::fs::write(out_path, json).map_err(|e| e.to_string())?;
+    Ok(probes)
 }
 
 /// `check-updates`: load every fetch spec under `specs_dir` and produce drift reports (no

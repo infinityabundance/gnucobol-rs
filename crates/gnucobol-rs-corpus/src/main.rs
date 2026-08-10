@@ -215,6 +215,26 @@ fn run(cmd: Command) -> Result<(), String> {
                 Err(format!("{} gate failure(s)", fails.len()))
             }
         }
+        Command::ExtractXcobol {
+            candidate,
+            oracle,
+            json,
+        } => {
+            let counts = cli::cmd_extract_xcobol(candidate, oracle)?;
+            if !json {
+                println!(
+                    "extract-xcobol: {} repos, {} files",
+                    counts.get("total_repos").copied().unwrap_or(0),
+                    counts.get("total_files").copied().unwrap_or(0)
+                );
+                for (k, v) in &counts {
+                    if k != "total_repos" && k != "total_files" {
+                        println!("  {k}: {v}");
+                    }
+                }
+            }
+            emit(&counts, json)
+        }
         Command::ExtractOmp { candidate, json } => {
             let counts = cli::cmd_extract_omp(candidate)?;
             if !json {
@@ -274,6 +294,26 @@ fn run(cmd: Command) -> Result<(), String> {
                 }
             }
             emit(&counts, json)
+        }
+        Command::ProbeFile {
+            dir,
+            file,
+            run,
+            out,
+            json,
+        } => {
+            let probes = cli::cmd_probe_file(&dir, &file, run, &out)?;
+            if !json {
+                let first = probes.iter().find(|p| !p.ok);
+                match first {
+                    Some(p) => println!(
+                        "probe-file {}: first failure at {} ({})",
+                        file, p.phase, p.diagnostic
+                    ),
+                    None => println!("probe-file {}: all phases ok", file),
+                }
+            }
+            emit(&probes, json)
         }
         Command::ProbeStep {
             manifest,

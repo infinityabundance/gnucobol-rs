@@ -1,0 +1,22 @@
+{
+  "counts": {
+    "DEVELOPMENT": 809,
+    "HELD_OUT_EVALUATION": 101,
+    "VALIDATION": 185
+  },
+  "held_out_repos": [
+    "Apress_cobol-VB-on-.net",
+    "GaloisGirl_Coding",
+    "IBM_datastage-standalone-workshop",
+    "Martinfx_Cobol",
+    "SebastianRzk_gradle-cobol-plugin-unittest-extension",
+    "codetojoy_WarO_COBOL",
+    "gnaresh2328_sonarqube",
+    "laserviking_cob-simpleinventory",
+    "laserviking_cob-todo",
+    "tylerbro93_COBOL-SALES-INVENTORY-REPORT-DEMONSTRATION",
+    "zosconnect_zosconnect-sample-cobol-apirequester"
+  ],
+  "rule": "repo-name structural hash mod 100: <70 DEVELOPMENT, <85 VALIDATION, else HELD_OUT_EVALUATION",
+  "seed": 20260810
+}
