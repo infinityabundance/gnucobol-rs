@@ -28,7 +28,7 @@ use crate::pic::{build_field, Usage};
 use crate::termio::{cob_display, DisplaySettings};
 use crate::value::Decimal;
 use std::cell::{Cell, RefCell};
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 /// The COBOL statement verbs the front-end actually EXECUTES (not merely recognizes as a boundary).
 /// The generated parity tracker (`xtask cobol-parity`) reads this to report front-end coverage, so it
@@ -928,6 +928,11 @@ enum FileOrg {
     /// `ORGANIZATION INDEXED` -- records addressed by a RECORD KEY field within the record. Stored in
     /// `FileState.records`; READ NEXT / START present them in ascending RECORD KEY order.
     Indexed,
+    /// A `SORT DESCRIPTION` (`SD` in the FILE SECTION) -- the work file of `SORT`/`MERGE` and the subject
+    /// of `RELEASE` (input) / `RETURN` (output). Upstream requires the SD to be `SELECT`ed in FILE-CONTROL
+    /// (an SD without a SELECT is "not defined"); SORT/MERGE/RETURN on any other organization is a
+    /// compile-time error ("must be an SD filename"), and RELEASE of an FD record is rejected.
+    Sort,
 }
 
 /// A declared file: its `SELECT` name, the `FD` record descriptions it reads/writes through, the optional
@@ -1862,9 +1867,9 @@ fn parse_one_program(
     // ENVIRONMENT FILE-CONTROL (SELECT ... ) + DATA FILE SECTION (FD + 01 record). The FD record items are
     // added to the field table; each file's metadata becomes a FileDef.
     let file_control = parse_file_control(toks, start, proc_at);
-    let (mut file_recs, file_rec, report_file, file_varying) =
+    let (mut file_recs, file_rec, report_file, file_varying, sort_files) =
         parse_file_section(toks, start, proc_at)?;
-    let files: Vec<FileDef> = file_control
+    let mut files: Vec<FileDef> = file_control
         .into_iter()
         .map(
             |(name, assign, org, status, rel_key, record_key, access_random)| {
@@ -1884,6 +1889,14 @@ fn parse_one_program(
             },
         )
         .collect();
+    // `SD` files (FILE SECTION sort descriptions) become sort-organization files. Upstream requires an SD
+    // to be `SELECT`ed in FILE-CONTROL too (an SD without a SELECT errors "'name' is not defined" at use),
+    // so only SDs that have a SELECT get a FileDef; the others stay undeclared and fail closed when used.
+    for sf in &sort_files {
+        if let Some(f) = files.iter_mut().find(|f| &f.name == sf) {
+            f.org = FileOrg::Sort;
+        }
+    }
     let reports = parse_report_section(toks, start, proc_at, &report_file);
     ws.append(&mut file_recs);
     let linkage = match link_at {
@@ -2108,9 +2121,10 @@ fn parse_file_control(
     out
 }
 
-/// Parse the `FILE SECTION` `FD name [clauses]. 01 record ...` entries -> (the record items to add to the
-/// field table, and a file-name -> record-names map). A file may declare SEVERAL `01` record descriptions
-/// (alternative layouts over one shared record area); all of them are collected, in source order.
+/// Parse the `FILE SECTION` `FD name [clauses]. 01 record ...` / `SD name [clauses]. 01 record ...` entries
+/// -> (the record items to add to the field table, a file-name -> record-names map, and the set of `SD`
+/// (sort-description) file names). A file may declare SEVERAL `01` record descriptions (alternative layouts
+/// over one shared record area); all of them are collected, in source order.
 #[allow(clippy::type_complexity)]
 fn parse_file_section(
     toks: &[Tok],
@@ -2122,12 +2136,21 @@ fn parse_file_section(
         HashMap<String, Vec<String>>,
         HashMap<String, String>,
         HashMap<String, String>,
+        HashSet<String>,
     ),
     RunError,
 > {
     let fs = match find_seq_in(toks, &["FILE", "SECTION"], start, end) {
         Some(i) => i + 2,
-        None => return Ok((Vec::new(), HashMap::new(), HashMap::new(), HashMap::new())),
+        None => {
+            return Ok((
+                Vec::new(),
+                HashMap::new(),
+                HashMap::new(),
+                HashMap::new(),
+                HashSet::new(),
+            ))
+        }
     };
     // the FILE SECTION ends at the next section (WORKING-STORAGE, LOCAL-STORAGE, LINKAGE, or REPORT).
     let ws_at = [
@@ -2143,15 +2166,20 @@ fn parse_file_section(
     let mut file_rec = HashMap::new();
     let mut report_file = HashMap::new();
     let mut file_varying = HashMap::new();
+    let mut sort_files = HashSet::new();
     let mut i = fs;
     while i < ws_at {
         match toks.get(i) {
             Some(Tok::Word(w)) if w == "FD" || w == "SD" => {
+                let is_sort = w == "SD";
                 i += 1;
                 let fname = match toks.get(i) {
                     Some(Tok::Word(w)) => w.clone(),
                     _ => break,
                 };
+                if is_sort {
+                    sort_files.insert(fname.clone());
+                }
                 i += 1;
                 // scan the FD clauses to the period; capture `REPORT[S] [IS|ARE] r1 [r2 ...]` and a
                 // `RECORD [IS] VARYING [IN SIZE] [FROM n] [TO m] [CHARACTERS] [DEPENDING [ON] field]` clause.
@@ -2209,7 +2237,7 @@ fn parse_file_section(
             _ => i += 1,
         }
     }
-    Ok((recs, file_rec, report_file, file_varying))
+    Ok((recs, file_rec, report_file, file_varying, sort_files))
 }
 
 /// Parse the `REPORT SECTION` `RD r1. 01 group [TYPE ...]. ... COLUMN n PIC p {SOURCE id | VALUE lit} ...`
@@ -5232,6 +5260,13 @@ fn run_block(
                             }
                         } else if CHECK_MODE.with(|c| c.get()) && !known_statement_verb(&verb) {
                             return Err(RunError::Unsupported(format!("verb {verb}")));
+                        } else if CHECK_MODE.with(|c| c.get())
+                            && matches!(verb.as_str(), "SORT" | "MERGE" | "RELEASE" | "RETURN")
+                        {
+                            // Upstream 23f850352/277a07c2e: SORT/MERGE/RETURN must name an `SD` file and
+                            // RELEASE a record of an `SD` file -- compile-time errors in cobc; mirror the
+                            // accept/reject here so `-fsyntax-only` fails the same programs.
+                            check_sort_statements(&verb, &stmt, ctx)?;
                         } else if CHECK_MODE.with(|c| c.get()) && verb == "INSPECT" {
                             // Upstream validate_inspect (04614ac7a): REPLACING/CONVERTING operand
                             // size/identity checks happen at compile time; mirror the accept/reject.
@@ -5245,6 +5280,71 @@ fn run_block(
             }
         }
     }
+}
+
+/// Syntax-only ([`check_program`]) validation of the SD operand rules (upstream 23f850352/277a07c2e):
+/// SORT/MERGE work files and RETURN targets must be `SD` (sort-description) files, and RELEASE must name
+/// a record of an `SD` file. Mirrors the runtime checks so `-fsyntax-only` rejects the same programs cobc
+/// rejects at compile time.
+fn check_sort_statements(verb: &str, stmt: &[Tok], ctx: &Ctx) -> Result<(), RunError> {
+    let first = match stmt.first() {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Ok(()), // a structural shape error is the runtime's typed failure
+    };
+    match verb {
+        "SORT" | "MERGE" => match ctx.file_defs.get(&first) {
+            None => {
+                return Err(RunError::Unsupported(format!(
+                    "{verb}: `{first}` is not a declared file"
+                )))
+            }
+            Some(d) if d.org != FileOrg::Sort => {
+                return Err(RunError::Unsupported(format!(
+                    "{verb}: `{first}` must be an SD filename"
+                )))
+            }
+            _ => {}
+        },
+        "RETURN" => match ctx.file_defs.get(&first) {
+            None => {
+                return Err(RunError::Unsupported(format!(
+                    "RETURN: `{first}` is not a declared file"
+                )))
+            }
+            Some(d) if d.org != FileOrg::Sort => {
+                return Err(RunError::Unsupported(format!(
+                    "RETURN: `{first}` must be an SD filename"
+                )))
+            }
+            _ => {}
+        },
+        "RELEASE" => {
+            // RELEASE names a RECORD (not a file); resolve the owning file and require it to be an SD.
+            let fname = match ctx.record_files.get(&first) {
+                Some(f) => f.clone(),
+                None => {
+                    return Err(RunError::Unsupported(format!(
+                        "RELEASE `{first}`: not an SD/FD record"
+                    )))
+                }
+            };
+            match ctx.file_defs.get(&fname) {
+                None => {
+                    return Err(RunError::Unsupported(format!(
+                        "RELEASE `{first}`: not an SD/FD record"
+                    )))
+                }
+                Some(d) if d.org != FileOrg::Sort => {
+                    return Err(RunError::Unsupported(format!(
+                        "RELEASE `{first}`: record is not a sort-file record"
+                    )))
+                }
+                _ => {}
+            }
+        }
+        _ => {}
+    }
+    Ok(())
 }
 
 /// Collect a simple statement's operand tokens from `*pos` until the next statement verb, scope
@@ -10310,8 +10410,9 @@ fn exec_unlock(
 
 /// `SORT sd-file ON {ASCENDING|DESCENDING} KEY key USING in... GIVING out...` (and `MERGE`, same shape) --
 /// read every record from the USING files, order them, and write them to the GIVING files. The subset is a
-/// single **whole-record** KEY (sub-field keys need group items) with USING/GIVING; INPUT/OUTPUT PROCEDURE
-/// (which drive RELEASE/RETURN) is out of subset.
+/// single **whole-record** KEY (sub-field keys need group items); INPUT/OUTPUT PROCEDURE (which drive
+/// RELEASE/RETURN) is supported for in-memory records. The operand must be an `SD` (sort-description) file
+/// -- an FD is the upstream "must be an SD filename" compile error (23f850352/277a07c2e).
 fn exec_sort(
     stmt: &[Tok],
     fields: &mut HashMap<String, Field>,
@@ -10327,6 +10428,13 @@ fn exec_sort(
         .get(&sf)
         .ok_or_else(|| RunError::Unsupported(format!("SORT: `{sf}` is not a declared file")))?
         .clone();
+    // Upstream sort_merge_body (23f850352/277a07c2e): the SORT/MERGE operand must be an `SD` file
+    // description -- an FD (or any other organization) is a compile-time "must be an SD filename" error.
+    if sd_def.org != FileOrg::Sort {
+        return Err(RunError::Unsupported(format!(
+            "SORT/MERGE: `{sf}` must be an SD filename"
+        )));
+    }
     let reclen = read_field(fields, sd_def.primary_record())?
         .map(|f| f.bytes.len())
         .unwrap_or(0);
@@ -10462,9 +10570,31 @@ fn exec_sort(
             .map(|st| st.records.clone())
             .unwrap_or_default();
     } else if !using.is_empty() {
-        let files = ctx.files.borrow();
+        let mut files = ctx.files.borrow_mut();
         for f in &using {
-            if let Some(st) = files.get(&fkey(ctx, f)) {
+            let key = fkey(ctx, f);
+            // Upstream implicitly opens the USING files for input (no explicit OPEN needed); mirror that
+            // by loading a pre-existing REAL file from disk on first use, and fail closed (status 35 --
+            // "file does not exist") when the file is neither in the store nor on disk, exactly like
+            // `OPEN INPUT` does. Never silently sort an empty input that the oracle would reject.
+            if !files.contains_key(&key) {
+                if let Some(def) = ctx.file_defs.get(f) {
+                    if let Some(records) = load_file_from_disk(def, fields) {
+                        files.entry(key.clone()).or_default().records = records;
+                    } else {
+                        drop(files);
+                        return Err(RunError::Runtime(format!(
+                            "SORT/MERGE USING: file does not exist (status = 35) for file `{f}`"
+                        )));
+                    }
+                } else {
+                    drop(files);
+                    return Err(RunError::Unsupported(format!(
+                        "SORT/MERGE USING: `{f}` is not a declared file"
+                    )));
+                }
+            }
+            if let Some(st) = files.get(&key) {
                 for r in &st.records {
                     if r.is_empty() {
                         continue;
@@ -11390,6 +11520,13 @@ fn exec_release(
             .ok_or_else(|| RunError::Unsupported(format!("RELEASE `{rec}`: not an SD/FD record")))?
             .clone()
     };
+    // Upstream (277a07c2e): RELEASE is only allowed on a record description of the SD (sort) file --
+    // releasing an FD record is rejected ("RELEASE not allowed on this record item").
+    if def.org != FileOrg::Sort {
+        return Err(RunError::Unsupported(format!(
+            "RELEASE `{rec}`: record is not a sort-file record"
+        )));
+    }
     let bytes = read_field(fields, &rec)?
         .map(|f| f.bytes)
         .unwrap_or_default();
@@ -11417,6 +11554,18 @@ fn exec_return(
         _ => return Err(RunError::Unsupported("RETURN: missing sort file".into())),
     };
     *pos += 1;
+    // Upstream typeck.c cb_emit_return (277a07c2e): the RETURN target must be an `SD` file description
+    // (an FD, or any undeclared/record name, is a compile-time error -- also checked by `-fsyntax-only`).
+    let def = ctx
+        .file_defs
+        .get(&file)
+        .ok_or_else(|| RunError::Unsupported(format!("RETURN: `{file}` is not a declared file")))?
+        .clone();
+    if def.org != FileOrg::Sort {
+        return Err(RunError::Unsupported(format!(
+            "RETURN: `{file}` must be an SD filename"
+        )));
+    }
     while matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "RECORD") {
         *pos += 1;
     }
@@ -11445,11 +11594,6 @@ fn exec_return(
     if !exec {
         return Ok(false);
     }
-    let def = ctx
-        .file_defs
-        .get(&file)
-        .ok_or_else(|| RunError::Unsupported(format!("RETURN: `{file}` is not a declared file")))?
-        .clone();
     let reclen = read_field(fields, def.primary_record())?
         .map(|f| f.bytes.len())
         .unwrap_or(0);
@@ -14986,6 +15130,132 @@ mod tests {
             );
             let _ = err;
         }
+    }
+
+    #[test]
+    fn sd_sort_file_accept_reject_matrix() {
+        // Upstream 277a07c2e + 23f850352 "improve SD syntax checks and error recovery" (syn_file.at
+        // "SORT files"): SORT/MERGE work files and RETURN targets must be `SD` (sort-description)
+        // files -- an FD operand is cobc's "must be an SD filename" compile error; RELEASE is only
+        // allowed on a record of the SD file (cobc: "RELEASE not allowed on this record item"); an SD
+        // without a SELECT is "not defined"; and a record name in RETURN is "not a file name". The
+        // candidate's typed equivalents fail closed in BOTH the executor and the -fsyntax-only checker.
+        // First the accepted shape: an in-memory SORT round trip through INPUT/OUTPUT PROCEDURE
+        // (RELEASE gathers, RETURN distributes) runs and yields the sorted records:
+        let src = "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    ENVIRONMENT DIVISION.\n\
+                    INPUT-OUTPUT SECTION.\n\
+                    FILE-CONTROL.\n\
+                        SELECT SRT ASSIGN TO \"SRT\".\n\
+                    DATA DIVISION.\n\
+                    FILE SECTION.\n\
+                    SD SRT.\n\
+                    01 SREC PIC X(1).\n\
+                    PROCEDURE DIVISION.\n\
+                        SORT SRT ASCENDING KEY SREC\n\
+                             INPUT PROCEDURE INP-PARA THRU INP-EXIT\n\
+                             OUTPUT PROCEDURE OUTP-PARA THRU OUTP-EXIT.\n\
+                        STOP RUN.\n\
+                    INP-PARA.\n\
+                        MOVE \"c\" TO SREC.\n\
+                        RELEASE SREC.\n\
+                        MOVE \"a\" TO SREC.\n\
+                        RELEASE SREC.\n\
+                        MOVE \"b\" TO SREC.\n\
+                        RELEASE SREC.\n\
+                    INP-EXIT. EXIT.\n\
+                    OUTP-PARA.\n\
+                        RETURN SRT AT END DISPLAY \"DONE\".\n\
+                        DISPLAY SREC.\n\
+                        RETURN SRT AT END DISPLAY \"DONE\".\n\
+                        DISPLAY SREC.\n\
+                        RETURN SRT AT END DISPLAY \"DONE\".\n\
+                        DISPLAY SREC.\n\
+                        RETURN SRT AT END DISPLAY \"DONE\".\n\
+                    OUTP-EXIT. EXIT.\n";
+        assert_eq!(run(src), b"a\nb\nc\nDONE\n");
+        // The reject matrix -- every case fails closed with the typed diagnostic in BOTH the executor
+        // and the checker (cobc's errors are compile-time; the candidate mirrors the accept/reject):
+        let prog = |body: &str| {
+            format!(
+                "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       ENVIRONMENT DIVISION.\n       INPUT-OUTPUT SECTION.\n       FILE-CONTROL.\n           SELECT FD1 ASSIGN TO \"FD1\" ORGANIZATION LINE SEQUENTIAL.\n           SELECT SD1 ASSIGN TO \"SD1\".\n       DATA DIVISION.\n       FILE SECTION.\n       FD FD1.\n       01 FDREC PIC X(3).\n       SD SD1.\n       01 SDREC PIC X(3).\n       PROCEDURE DIVISION.\n           {body}\n           STOP RUN.\n"
+            )
+        };
+        let d = crate::dialect::Dialect::DEFAULT;
+        let rejects: &[(&str, &str)] = &[
+            // SORT on an FD file: cobc "must be an SD filename".
+            ("SORT FD1 ASCENDING KEY FDREC.", "must be an SD filename"),
+            // RETURN on an FD file: cobc "must be an SD filename".
+            ("RETURN FD1 AT END CONTINUE.", "must be an SD filename"),
+            // RETURN on a record name (not a file): cobc "'SDREC' is not a file name".
+            ("RETURN SDREC AT END CONTINUE.", "not a declared file"),
+            // RELEASE of an FD record: cobc "RELEASE not allowed on this record item".
+            ("RELEASE FDREC.", "record is not a sort-file record"),
+        ];
+        for (body, needle) in rejects {
+            let e = run_program(&prog(body)).unwrap_err();
+            assert!(
+                format!("{e:?}").contains(needle),
+                "run {body} -> {e:?} (want {needle})"
+            );
+            let e = check_program(&prog(body), d).unwrap_err();
+            assert!(
+                format!("{e:?}").contains(needle),
+                "check {body} -> {e:?} (want {needle})"
+            );
+        }
+        // An SD without a SELECT is not a declared file (cobc: "'name' is not defined").
+        let no_select = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       FILE SECTION.\n       SD NOSEL.\n       01 NREC PIC X.\n       PROCEDURE DIVISION.\n           SORT NOSEL ASCENDING KEY NREC.\n           STOP RUN.\n";
+        let e = run_program(no_select).unwrap_err();
+        assert!(
+            format!("{e:?}").contains("not a declared file"),
+            "run -> {e:?}"
+        );
+        let e = check_program(no_select, d).unwrap_err();
+        assert!(
+            format!("{e:?}").contains("not a declared file"),
+            "check -> {e:?}"
+        );
+    }
+
+    #[test]
+    fn incomplete_code_fails_closed_promptly() {
+        // Upstream 7b324f50e "parser cleanup and better handling of incomplete code": missing headers,
+        // truncated statements, and malformed SD/FD references must not hang or panic -- they terminate
+        // promptly with a typed diagnostic. The candidate's fail-fast checker is the Rust equivalent of
+        // cobc's bounded parser recovery (whose broken-SD dummy-file fix addresses bugs:#1151).
+        let cases: &[&str] = &[
+            // A data-only source with no PROCEDURE DIVISION (upstream's relaxed copybook parse).
+            "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 X PIC 9.\n",
+            // A truncated SORT statement (no USING/GIVING, no period).
+            "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       ENVIRONMENT DIVISION.\n       INPUT-OUTPUT SECTION.\n       FILE-CONTROL.\n           SELECT SRT ASSIGN TO \"SRT\".\n       DATA DIVISION.\n       FILE SECTION.\n       SD SRT.\n       01 SREC PIC X.\n       PROCEDURE DIVISION.\n           SORT SRT ASCENDING KEY SREC\n",
+            // SORT of a completely undeclared file -- a broken SD reference (bugs:#1151's shape).
+            "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n           SORT GHOST ASCENDING KEY K.\n",
+            // An SD declaring no record description, then SORTed.
+            "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       ENVIRONMENT DIVISION.\n       INPUT-OUTPUT SECTION.\n       FILE-CONTROL.\n           SELECT SRT ASSIGN TO \"SRT\".\n       DATA DIVISION.\n       FILE SECTION.\n       SD SRT.\n       PROCEDURE DIVISION.\n           SORT SRT ASCENDING KEY K.\n",
+            // MS-DOS EOF (0x1A) / file-separator (0x1C) control codes in the source (upstream pplex.l
+            // consumes them as a single newline): the candidate lexes them as an invalid symbol and
+            // must reject the statement promptly instead of looping.
+            "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n\x1a\x1a\x1c           DISPLAY \"OK\".\n           STOP RUN.\n",
+        ];
+        for src in cases {
+            let t0 = std::time::Instant::now();
+            let _ = run_program(src);
+            assert!(
+                t0.elapsed().as_millis() < 1000,
+                "incomplete code must terminate promptly (run): {src:?}"
+            );
+            let t0 = std::time::Instant::now();
+            let _ = check_program(src, crate::dialect::Dialect::DEFAULT);
+            assert!(
+                t0.elapsed().as_millis() < 1000,
+                "incomplete code must terminate promptly (check): {src:?}"
+            );
+        }
+        // The truncated SORT must fail closed with a typed SORT diagnostic (not a hang).
+        let e = run_program(cases[1]).unwrap_err();
+        assert!(format!("{e:?}").contains("SORT"), "got: {e:?}");
     }
 
     #[test]
