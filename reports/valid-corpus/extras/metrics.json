@@ -1,0 +1,1390 @@
+[
+  {
+    "metrics": {
+      "approx_scope_depth": 7,
+      "bytes": 9743,
+      "copy_refs": [],
+      "data_items": 29,
+      "file_descriptions": 0,
+      "level_01_items": 19,
+      "lines": 261,
+      "paragraphs": 6,
+      "program_ids": [
+        "CBL_OC_DUMP"
+      ],
+      "verbs": [
+        "ACCEPT",
+        "ADD",
+        "CALL",
+        "DISPLAY",
+        "EXIT",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "PERFORM",
+        "SET"
+      ]
+    },
+    "program_id": "gnucobol-extras-stable-3.2/CBL_OC_DUMP"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 7,
+      "bytes": 9743,
+      "copy_refs": [],
+      "data_items": 29,
+      "file_descriptions": 0,
+      "level_01_items": 19,
+      "lines": 261,
+      "paragraphs": 6,
+      "program_ids": [
+        "CBL_OC_DUMP"
+      ],
+      "verbs": [
+        "ACCEPT",
+        "ADD",
+        "CALL",
+        "DISPLAY",
+        "EXIT",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "PERFORM",
+        "SET"
+      ]
+    },
+    "program_id": "gnucobol-extras-current/CBL_OC_DUMP"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 6,
+      "bytes": 3118,
+      "copy_refs": [],
+      "data_items": 7,
+      "file_descriptions": 1,
+      "level_01_items": 7,
+      "lines": 112,
+      "paragraphs": 2,
+      "program_ids": [
+        "DF01DATA"
+      ],
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "START",
+        "WRITE"
+      ]
+    },
+    "program_id": "opencbs/DF01DATA.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 2,
+      "bytes": 2778,
+      "copy_refs": [],
+      "data_items": 3,
+      "file_descriptions": 1,
+      "level_01_items": 3,
+      "lines": 102,
+      "paragraphs": 3,
+      "program_ids": [
+        "DF01TEST"
+      ],
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "READ",
+        "SET",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF01TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 1,
+      "bytes": 3440,
+      "copy_refs": [],
+      "data_items": 21,
+      "file_descriptions": 0,
+      "level_01_items": 4,
+      "lines": 92,
+      "paragraphs": 5,
+      "program_ids": [
+        "DF02TEST"
+      ],
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "PERFORM",
+        "SEARCH",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF02TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 2,
+      "bytes": 3413,
+      "copy_refs": [],
+      "data_items": 9,
+      "file_descriptions": 1,
+      "level_01_items": 7,
+      "lines": 121,
+      "paragraphs": 2,
+      "program_ids": [
+        "DF03DATA"
+      ],
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "START",
+        "WRITE"
+      ]
+    },
+    "program_id": "opencbs/DF03DATA.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 2,
+      "bytes": 2858,
+      "copy_refs": [],
+      "data_items": 4,
+      "file_descriptions": 1,
+      "level_01_items": 2,
+      "lines": 102,
+      "paragraphs": 3,
+      "program_ids": [
+        "DF03TEST"
+      ],
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "READ",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF03TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 3256,
+      "copy_refs": [],
+      "data_items": 8,
+      "file_descriptions": 0,
+      "level_01_items": 8,
+      "lines": 83,
+      "paragraphs": 6,
+      "program_ids": [
+        "DF04TEST"
+      ],
+      "verbs": [
+        "ADD",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF04TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 6,
+      "bytes": 3129,
+      "copy_refs": [],
+      "data_items": 7,
+      "file_descriptions": 1,
+      "level_01_items": 7,
+      "lines": 112,
+      "paragraphs": 2,
+      "program_ids": [
+        "DF05DATA"
+      ],
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "START",
+        "WRITE"
+      ]
+    },
+    "program_id": "opencbs/DF05DATA.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 1,
+      "bytes": 3758,
+      "copy_refs": [],
+      "data_items": 7,
+      "file_descriptions": 2,
+      "level_01_items": 3,
+      "lines": 136,
+      "paragraphs": 6,
+      "program_ids": [
+        "DF05TEST"
+      ],
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "EXIT",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "READ",
+        "RETURN",
+        "SORT",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF05TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 1763,
+      "copy_refs": [],
+      "data_items": 4,
+      "file_descriptions": 0,
+      "level_01_items": 2,
+      "lines": 60,
+      "paragraphs": 4,
+      "program_ids": [
+        "DF06TEST"
+      ],
+      "verbs": [
+        "COMPUTE",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF06TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 3,
+      "bytes": 1810,
+      "copy_refs": [],
+      "data_items": 2,
+      "file_descriptions": 0,
+      "level_01_items": 2,
+      "lines": 62,
+      "paragraphs": 3,
+      "program_ids": [
+        "DF07TEST"
+      ],
+      "verbs": [
+        "DISPLAY",
+        "EVALUATE",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "SET",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF07TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 2540,
+      "copy_refs": [],
+      "data_items": 12,
+      "file_descriptions": 0,
+      "level_01_items": 4,
+      "lines": 75,
+      "paragraphs": 5,
+      "program_ids": [
+        "DF08TEST"
+      ],
+      "verbs": [
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "SEARCH",
+        "SET",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF08TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 3073,
+      "copy_refs": [],
+      "data_items": 12,
+      "file_descriptions": 0,
+      "level_01_items": 2,
+      "lines": 86,
+      "paragraphs": 4,
+      "program_ids": [
+        "DF09TEST"
+      ],
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "PERFORM",
+        "SET",
+        "START",
+        "STRING",
+        "UNSTRING"
+      ]
+    },
+    "program_id": "opencbs/DF09TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 1,
+      "bytes": 1699,
+      "copy_refs": [],
+      "data_items": 1,
+      "file_descriptions": 0,
+      "level_01_items": 1,
+      "lines": 57,
+      "paragraphs": 3,
+      "program_ids": [
+        "DF10TEST"
+      ],
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF10TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 1776,
+      "copy_refs": [],
+      "data_items": 4,
+      "file_descriptions": 0,
+      "level_01_items": 4,
+      "lines": 57,
+      "paragraphs": 6,
+      "program_ids": [
+        "DF11TEST"
+      ],
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "START",
+        "STRING"
+      ]
+    },
+    "program_id": "opencbs/DF11TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 2949,
+      "copy_refs": [],
+      "data_items": 5,
+      "file_descriptions": 0,
+      "level_01_items": 5,
+      "lines": 80,
+      "paragraphs": 11,
+      "program_ids": [
+        "DF12TEST"
+      ],
+      "verbs": [
+        "COMPUTE",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF12TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 2465,
+      "copy_refs": [],
+      "data_items": 11,
+      "file_descriptions": 0,
+      "level_01_items": 4,
+      "lines": 78,
+      "paragraphs": 3,
+      "program_ids": [
+        "DF13TEST"
+      ],
+      "verbs": [
+        "DISPLAY",
+        "EXIT",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "PERFORM",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF13TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 1709,
+      "copy_refs": [],
+      "data_items": 2,
+      "file_descriptions": 0,
+      "level_01_items": 2,
+      "lines": 59,
+      "paragraphs": 5,
+      "program_ids": [
+        "DF14TEST"
+      ],
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "RETURN",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF14TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 1908,
+      "copy_refs": [],
+      "data_items": 3,
+      "file_descriptions": 0,
+      "level_01_items": 3,
+      "lines": 60,
+      "paragraphs": 6,
+      "program_ids": [
+        "DF15TEST"
+      ],
+      "verbs": [
+        "COMPUTE",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF15TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 2045,
+      "copy_refs": [],
+      "data_items": 2,
+      "file_descriptions": 0,
+      "level_01_items": 2,
+      "lines": 66,
+      "paragraphs": 4,
+      "program_ids": [
+        "DF16TEST"
+      ],
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "RETURN",
+        "SET",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF16TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 6,
+      "bytes": 3173,
+      "copy_refs": [],
+      "data_items": 7,
+      "file_descriptions": 1,
+      "level_01_items": 7,
+      "lines": 112,
+      "paragraphs": 2,
+      "program_ids": [
+        "DF17DATA"
+      ],
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "START",
+        "WRITE"
+      ]
+    },
+    "program_id": "opencbs/DF17DATA.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 1,
+      "bytes": 3794,
+      "copy_refs": [],
+      "data_items": 6,
+      "file_descriptions": 2,
+      "level_01_items": 4,
+      "lines": 134,
+      "paragraphs": 3,
+      "program_ids": [
+        "DF17TEST"
+      ],
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "READ",
+        "START",
+        "WRITE"
+      ]
+    },
+    "program_id": "opencbs/DF17TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 1290,
+      "copy_refs": [],
+      "data_items": 2,
+      "file_descriptions": 0,
+      "level_01_items": 2,
+      "lines": 50,
+      "paragraphs": 6,
+      "program_ids": [
+        "DF18CALL"
+      ],
+      "verbs": [
+        "ADD",
+        "CALL",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "RETURN",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF18CALL.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 2062,
+      "copy_refs": [],
+      "data_items": 2,
+      "file_descriptions": 0,
+      "level_01_items": 2,
+      "lines": 65,
+      "paragraphs": 3,
+      "program_ids": [
+        "DF18TEST"
+      ],
+      "verbs": [
+        "ADD",
+        "COMPUTE",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "SET",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF18TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 1,
+      "bytes": 3865,
+      "copy_refs": [],
+      "data_items": 14,
+      "file_descriptions": 0,
+      "level_01_items": 4,
+      "lines": 100,
+      "paragraphs": 3,
+      "program_ids": [
+        "DF19TEST"
+      ],
+      "verbs": [
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF19TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 7,
+      "copy_refs": [],
+      "data_items": 0,
+      "file_descriptions": 0,
+      "level_01_items": 0,
+      "lines": 1,
+      "paragraphs": 0,
+      "program_ids": [],
+      "verbs": []
+    },
+    "program_id": "opencbs/DF20TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 6,
+      "bytes": 3118,
+      "copy_refs": [],
+      "data_items": 7,
+      "file_descriptions": 1,
+      "level_01_items": 7,
+      "lines": 112,
+      "paragraphs": 2,
+      "program_ids": [
+        "DF21DATA"
+      ],
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "START",
+        "WRITE"
+      ]
+    },
+    "program_id": "opencbs/DF21DATA.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 1,
+      "bytes": 3807,
+      "copy_refs": [],
+      "data_items": 6,
+      "file_descriptions": 2,
+      "level_01_items": 4,
+      "lines": 134,
+      "paragraphs": 3,
+      "program_ids": [
+        "DF21TEST"
+      ],
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "READ",
+        "START",
+        "WRITE"
+      ]
+    },
+    "program_id": "opencbs/DF21TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 5,
+      "bytes": 3383,
+      "copy_refs": [],
+      "data_items": 8,
+      "file_descriptions": 1,
+      "level_01_items": 7,
+      "lines": 113,
+      "paragraphs": 3,
+      "program_ids": [
+        "DF22DATA"
+      ],
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "OPEN",
+        "START",
+        "WRITE"
+      ]
+    },
+    "program_id": "opencbs/DF22DATA.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 1,
+      "bytes": 3187,
+      "copy_refs": [],
+      "data_items": 5,
+      "file_descriptions": 1,
+      "level_01_items": 4,
+      "lines": 105,
+      "paragraphs": 4,
+      "program_ids": [
+        "DF22TEST"
+      ],
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "OPEN",
+        "READ",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF22TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 2638,
+      "copy_refs": [],
+      "data_items": 12,
+      "file_descriptions": 0,
+      "level_01_items": 4,
+      "lines": 80,
+      "paragraphs": 5,
+      "program_ids": [
+        "DF23TEST"
+      ],
+      "verbs": [
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "SEARCH",
+        "SET",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF23TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 1,
+      "bytes": 2014,
+      "copy_refs": [],
+      "data_items": 7,
+      "file_descriptions": 0,
+      "level_01_items": 3,
+      "lines": 65,
+      "paragraphs": 4,
+      "program_ids": [
+        "DF24TEST"
+      ],
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF24TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 5,
+      "bytes": 3310,
+      "copy_refs": [],
+      "data_items": 8,
+      "file_descriptions": 1,
+      "level_01_items": 7,
+      "lines": 113,
+      "paragraphs": 3,
+      "program_ids": [
+        "DF25DATA"
+      ],
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "OPEN",
+        "START",
+        "WRITE"
+      ]
+    },
+    "program_id": "opencbs/DF25DATA.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 1,
+      "bytes": 5033,
+      "copy_refs": [],
+      "data_items": 10,
+      "file_descriptions": 2,
+      "level_01_items": 8,
+      "lines": 163,
+      "paragraphs": 5,
+      "program_ids": [
+        "DF25TEST"
+      ],
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "OPEN",
+        "READ",
+        "START",
+        "WRITE"
+      ]
+    },
+    "program_id": "opencbs/DF25TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 3577,
+      "copy_refs": [],
+      "data_items": 25,
+      "file_descriptions": 0,
+      "level_01_items": 5,
+      "lines": 93,
+      "paragraphs": 5,
+      "program_ids": [
+        "DF26TEST"
+      ],
+      "verbs": [
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "READ",
+        "SEARCH",
+        "SET",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF26TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 5016,
+      "copy_refs": [],
+      "data_items": 42,
+      "file_descriptions": 0,
+      "level_01_items": 4,
+      "lines": 117,
+      "paragraphs": 6,
+      "program_ids": [
+        "DF27TEST"
+      ],
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "PERFORM",
+        "SET",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF27TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 2,
+      "bytes": 2164,
+      "copy_refs": [],
+      "data_items": 2,
+      "file_descriptions": 0,
+      "level_01_items": 2,
+      "lines": 69,
+      "paragraphs": 4,
+      "program_ids": [
+        "DF28TEST"
+      ],
+      "verbs": [
+        "COMPUTE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF28TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 1,
+      "bytes": 3403,
+      "copy_refs": [],
+      "data_items": 20,
+      "file_descriptions": 1,
+      "level_01_items": 4,
+      "lines": 108,
+      "paragraphs": 3,
+      "program_ids": [
+        "DF29TEST"
+      ],
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "OPEN",
+        "START",
+        "WRITE"
+      ]
+    },
+    "program_id": "opencbs/DF29TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 1413,
+      "copy_refs": [],
+      "data_items": 0,
+      "file_descriptions": 0,
+      "level_01_items": 0,
+      "lines": 47,
+      "paragraphs": 2,
+      "program_ids": [
+        "DF30TEST"
+      ],
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF30TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 1461,
+      "copy_refs": [],
+      "data_items": 2,
+      "file_descriptions": 0,
+      "level_01_items": 2,
+      "lines": 52,
+      "paragraphs": 7,
+      "program_ids": [
+        "DF31CALL"
+      ],
+      "verbs": [
+        "CALL",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "RETURN",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF31CALL.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 1649,
+      "copy_refs": [],
+      "data_items": 4,
+      "file_descriptions": 0,
+      "level_01_items": 4,
+      "lines": 56,
+      "paragraphs": 3,
+      "program_ids": [
+        "DF31TEST"
+      ],
+      "verbs": [
+        "CALL",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "RETURN",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF31TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 1,
+      "bytes": 2416,
+      "copy_refs": [],
+      "data_items": 12,
+      "file_descriptions": 0,
+      "level_01_items": 4,
+      "lines": 82,
+      "paragraphs": 2,
+      "program_ids": [
+        "DF34TEST"
+      ],
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF34TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 2463,
+      "copy_refs": [],
+      "data_items": 8,
+      "file_descriptions": 0,
+      "level_01_items": 2,
+      "lines": 74,
+      "paragraphs": 4,
+      "program_ids": [
+        "DF35TEST"
+      ],
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "INITIALIZE",
+        "MOVE",
+        "START",
+        "STRING",
+        "UNSTRING"
+      ]
+    },
+    "program_id": "opencbs/DF35TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 1721,
+      "copy_refs": [],
+      "data_items": 3,
+      "file_descriptions": 0,
+      "level_01_items": 3,
+      "lines": 57,
+      "paragraphs": 4,
+      "program_ids": [
+        "DF36TEST"
+      ],
+      "verbs": [
+        "COMPUTE",
+        "DISPLAY",
+        "DIVIDE",
+        "GOBACK",
+        "IF",
+        "MULTIPLY",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF36TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 2236,
+      "copy_refs": [],
+      "data_items": 6,
+      "file_descriptions": 0,
+      "level_01_items": 2,
+      "lines": 64,
+      "paragraphs": 6,
+      "program_ids": [
+        "DF39TEST"
+      ],
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF39TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 3575,
+      "copy_refs": [],
+      "data_items": 2,
+      "file_descriptions": 0,
+      "level_01_items": 2,
+      "lines": 117,
+      "paragraphs": 12,
+      "program_ids": [
+        "DF40TEST"
+      ],
+      "verbs": [
+        "CLOSE",
+        "CONTINUE",
+        "DISPLAY",
+        "EVALUATE",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "INITIALIZE",
+        "MOVE",
+        "OPEN",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF40TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 1543,
+      "copy_refs": [],
+      "data_items": 2,
+      "file_descriptions": 0,
+      "level_01_items": 2,
+      "lines": 53,
+      "paragraphs": 4,
+      "program_ids": [
+        "DF41TEST"
+      ],
+      "verbs": [
+        "COMPUTE",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF41TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 1,
+      "bytes": 6307,
+      "copy_refs": [],
+      "data_items": 2,
+      "file_descriptions": 0,
+      "level_01_items": 2,
+      "lines": 196,
+      "paragraphs": 21,
+      "program_ids": [
+        "DF42TEST"
+      ],
+      "verbs": [
+        "CLOSE",
+        "CONTINUE",
+        "DISPLAY",
+        "EVALUATE",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "INITIALIZE",
+        "MOVE",
+        "OPEN",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF42TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 1970,
+      "copy_refs": [],
+      "data_items": 4,
+      "file_descriptions": 0,
+      "level_01_items": 2,
+      "lines": 65,
+      "paragraphs": 6,
+      "program_ids": [
+        "DF44TEST"
+      ],
+      "verbs": [
+        "ADD",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF44TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 1417,
+      "copy_refs": [],
+      "data_items": 2,
+      "file_descriptions": 0,
+      "level_01_items": 2,
+      "lines": 52,
+      "paragraphs": 7,
+      "program_ids": [
+        "DF45CALL"
+      ],
+      "verbs": [
+        "CALL",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "RETURN",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF45CALL.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 1635,
+      "copy_refs": [],
+      "data_items": 4,
+      "file_descriptions": 0,
+      "level_01_items": 4,
+      "lines": 56,
+      "paragraphs": 3,
+      "program_ids": [
+        "DF45TEST"
+      ],
+      "verbs": [
+        "CALL",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "RETURN",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF45TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 2,
+      "bytes": 1818,
+      "copy_refs": [],
+      "data_items": 3,
+      "file_descriptions": 1,
+      "level_01_items": 3,
+      "lines": 76,
+      "paragraphs": 2,
+      "program_ids": [
+        "DF46DATA"
+      ],
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "START",
+        "WRITE"
+      ]
+    },
+    "program_id": "opencbs/DF46DATA.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 2,
+      "bytes": 3259,
+      "copy_refs": [],
+      "data_items": 5,
+      "file_descriptions": 1,
+      "level_01_items": 3,
+      "lines": 113,
+      "paragraphs": 4,
+      "program_ids": [
+        "DF46TEST"
+      ],
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "OPEN",
+        "READ",
+        "REWRITE",
+        "START",
+        "WRITE"
+      ]
+    },
+    "program_id": "opencbs/DF46TEST.CBL"
+  },
+  {
+    "metrics": {
+      "approx_scope_depth": 0,
+      "bytes": 1752,
+      "copy_refs": [],
+      "data_items": 1,
+      "file_descriptions": 0,
+      "level_01_items": 1,
+      "lines": 59,
+      "paragraphs": 3,
+      "program_ids": [
+        "DF47TEST"
+      ],
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "SET",
+        "START"
+      ]
+    },
+    "program_id": "opencbs/DF47TEST.CBL"
+  }
+]

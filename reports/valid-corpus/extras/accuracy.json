@@ -1,0 +1,3828 @@
+[
+  {
+    "program_id": "gnucobol-extras-stable-3.2/CBL_OC_DUMP",
+    "collection": "gnucobol-extras-stable-3.2",
+    "source_rel": "lab/admit/gnucobol-3.2/extras/CBL_OC_DUMP.cob",
+    "content_sha256": "6e143a805abad43bbb7eca99acfb32b21eaa04bff882c133bac754927d6136b1",
+    "source_format": "fixed",
+    "dialect": "mf",
+    "licence": "GPL-3.0-or-later",
+    "metrics": {
+      "lines": 261,
+      "bytes": 9743,
+      "paragraphs": 6,
+      "data_items": 29,
+      "level_01_items": 19,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "CBL_OC_DUMP"
+      ],
+      "approx_scope_depth": 7,
+      "verbs": [
+        "ACCEPT",
+        "ADD",
+        "CALL",
+        "DISPLAY",
+        "EXIT",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "PERFORM",
+        "SET"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [
+      "IMS_REQUIRED",
+      "ZOS_DATASET_REQUIRED"
+    ],
+    "adaptation": "none (compiles with the documented tectonics)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "compiles with the documented tectonics (cobc -m -std=mf -O2)",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "module (not an executable main program); run requires a caller",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": true,
+        "diagnostic": ""
+      }
+    ],
+    "candidate_first_failure": null,
+    "classification": "VALID_MODULE_PROGRAM"
+  },
+  {
+    "program_id": "gnucobol-extras-current/CBL_OC_DUMP",
+    "collection": "gnucobol-extras-current",
+    "source_rel": "lab/admit/gnucobol-upstream-current/extras/CBL_OC_DUMP.cob",
+    "content_sha256": "6e143a805abad43bbb7eca99acfb32b21eaa04bff882c133bac754927d6136b1",
+    "source_format": "fixed",
+    "dialect": "mf",
+    "licence": "GPL-3.0-or-later",
+    "metrics": {
+      "lines": 261,
+      "bytes": 9743,
+      "paragraphs": 6,
+      "data_items": 29,
+      "level_01_items": 19,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "CBL_OC_DUMP"
+      ],
+      "approx_scope_depth": 7,
+      "verbs": [
+        "ACCEPT",
+        "ADD",
+        "CALL",
+        "DISPLAY",
+        "EXIT",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "PERFORM",
+        "SET"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [
+      "IMS_REQUIRED",
+      "ZOS_DATASET_REQUIRED"
+    ],
+    "adaptation": "none (compiles with the documented tectonics)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "compiles with the documented tectonics (cobc -m -std=mf -O2)",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "module (not an executable main program); run requires a caller",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": true,
+        "diagnostic": ""
+      }
+    ],
+    "candidate_first_failure": null,
+    "classification": "VALID_MODULE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF01DATA.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF01DATA.CBL",
+    "content_sha256": "377929b521de698844bfba7bf7a84f670ae3ed323df40b815dcc1937ef4571f6",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 112,
+      "bytes": 3118,
+      "paragraphs": 2,
+      "data_items": 7,
+      "level_01_items": 7,
+      "copy_refs": [],
+      "file_descriptions": 1,
+      "program_ids": [
+        "DF01DATA"
+      ],
+      "approx_scope_depth": 6,
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "START",
+        "WRITE"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF01TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF01TEST.CBL",
+    "content_sha256": "857ddf332c1dcd3c1ad73f3e7505a79289faec34b323b2707b33ee83d247203a",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 102,
+      "bytes": 2778,
+      "paragraphs": 3,
+      "data_items": 3,
+      "level_01_items": 3,
+      "copy_refs": [],
+      "file_descriptions": 1,
+      "program_ids": [
+        "DF01TEST"
+      ],
+      "approx_scope_depth": 2,
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "READ",
+        "SET",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF02TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF02TEST.CBL",
+    "content_sha256": "1b5dacdfd41a8cbca2da3a072edd499729e67dcc4201fe045586947a98bef68f",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 92,
+      "bytes": 3440,
+      "paragraphs": 5,
+      "data_items": 21,
+      "level_01_items": 4,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF02TEST"
+      ],
+      "approx_scope_depth": 1,
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "PERFORM",
+        "SEARCH",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF03DATA.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF03DATA.CBL",
+    "content_sha256": "732648871622e523f0a98b691230194d5d330f265716d3fa5d02916bbf662ce7",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 121,
+      "bytes": 3413,
+      "paragraphs": 2,
+      "data_items": 9,
+      "level_01_items": 7,
+      "copy_refs": [],
+      "file_descriptions": 1,
+      "program_ids": [
+        "DF03DATA"
+      ],
+      "approx_scope_depth": 2,
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "START",
+        "WRITE"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [
+      "VSAM_OR_INDEXED_REQUIRED"
+    ],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "platform services: VSAM_OR_INDEXED_REQUIRED",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "QUARANTINED"
+  },
+  {
+    "program_id": "opencbs/DF03TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF03TEST.CBL",
+    "content_sha256": "11026d7954499527c0ccc022285881a17de9b8e005a61bfa861b929e9ef4cf0e",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 102,
+      "bytes": 2858,
+      "paragraphs": 3,
+      "data_items": 4,
+      "level_01_items": 2,
+      "copy_refs": [],
+      "file_descriptions": 1,
+      "program_ids": [
+        "DF03TEST"
+      ],
+      "approx_scope_depth": 2,
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "READ",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [
+      "VSAM_OR_INDEXED_REQUIRED"
+    ],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "platform services: VSAM_OR_INDEXED_REQUIRED",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "QUARANTINED"
+  },
+  {
+    "program_id": "opencbs/DF04TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF04TEST.CBL",
+    "content_sha256": "75a456a8d092217e74a98953b9f53a6cca276d405031bb62ded9934ccec95d6e",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 83,
+      "bytes": 3256,
+      "paragraphs": 6,
+      "data_items": 8,
+      "level_01_items": 8,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF04TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "ADD",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a\u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a\u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF05DATA.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF05DATA.CBL",
+    "content_sha256": "52afdf3dfb277a72bff90f589cc7ad4f0e14c15e0fe8a9ec5e48a0b11a7975d7",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 112,
+      "bytes": 3129,
+      "paragraphs": 2,
+      "data_items": 7,
+      "level_01_items": 7,
+      "copy_refs": [],
+      "file_descriptions": 1,
+      "program_ids": [
+        "DF05DATA"
+      ],
+      "approx_scope_depth": 6,
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "START",
+        "WRITE"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF05TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF05TEST.CBL",
+    "content_sha256": "45250f317bf04b7d2b274b3dac08bbcb4f7874080a807e35e1c27a9d60e5ec49",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 136,
+      "bytes": 3758,
+      "paragraphs": 6,
+      "data_items": 7,
+      "level_01_items": 3,
+      "copy_refs": [],
+      "file_descriptions": 2,
+      "program_ids": [
+        "DF05TEST"
+      ],
+      "approx_scope_depth": 1,
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "EXIT",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "READ",
+        "RETURN",
+        "SORT",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF06TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF06TEST.CBL",
+    "content_sha256": "e287e33398c410cdc4c6fd3f01c7f25b76e6c53ebe7f93792628f1e4af42e4cb",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 60,
+      "bytes": 1763,
+      "paragraphs": 4,
+      "data_items": 4,
+      "level_01_items": 2,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF06TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "COMPUTE",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF07TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF07TEST.CBL",
+    "content_sha256": "23036428ca8efae826fa270709a2a96a911f1e12206aba50b4d1591834cfc2f3",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 62,
+      "bytes": 1810,
+      "paragraphs": 3,
+      "data_items": 2,
+      "level_01_items": 2,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF07TEST"
+      ],
+      "approx_scope_depth": 3,
+      "verbs": [
+        "DISPLAY",
+        "EVALUATE",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "SET",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "prepare",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "run",
+        "ok": true,
+        "diagnostic": "exit 0"
+      }
+    ],
+    "candidate_first_failure": null,
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF08TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF08TEST.CBL",
+    "content_sha256": "04e92976138b3c476a98bec7ec90538336c6a787b9407a3464cc27ec7a8b7867",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 75,
+      "bytes": 2540,
+      "paragraphs": 5,
+      "data_items": 12,
+      "level_01_items": 4,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF08TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "SEARCH",
+        "SET",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [
+      "VSAM_OR_INDEXED_REQUIRED"
+    ],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "platform services: VSAM_OR_INDEXED_REQUIRED",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "prepare",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "run",
+        "ok": true,
+        "diagnostic": "exit 0"
+      }
+    ],
+    "candidate_first_failure": null,
+    "classification": "QUARANTINED"
+  },
+  {
+    "program_id": "opencbs/DF09TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF09TEST.CBL",
+    "content_sha256": "de1ff7b389595dc3f1ad187da163d7800f3949ddbc4b4c2cc0c6112cf8f5b26e",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 86,
+      "bytes": 3073,
+      "paragraphs": 4,
+      "data_items": 12,
+      "level_01_items": 2,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF09TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "PERFORM",
+        "SET",
+        "START",
+        "STRING",
+        "UNSTRING"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF10TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF10TEST.CBL",
+    "content_sha256": "225aebc5102b905556b141d64150b9bde5dff518b089a5330c0859c30bc126c7",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 57,
+      "bytes": 1699,
+      "paragraphs": 3,
+      "data_items": 1,
+      "level_01_items": 1,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF10TEST"
+      ],
+      "approx_scope_depth": 1,
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF11TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF11TEST.CBL",
+    "content_sha256": "dae3d75091e6326a83df05ae6fcbc367e56e9c3ecc398ed5c5f5d686755b9915",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 57,
+      "bytes": 1776,
+      "paragraphs": 6,
+      "data_items": 4,
+      "level_01_items": 4,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF11TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "START",
+        "STRING"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF12TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF12TEST.CBL",
+    "content_sha256": "df270ea79fbc97616f0c544a3536985cb022cb52c1a0cca7c7e4d1afd2164088",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 80,
+      "bytes": 2949,
+      "paragraphs": 11,
+      "data_items": 5,
+      "level_01_items": 5,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF12TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "COMPUTE",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 1,
+    "oracle_compile_note": "exit Some(1): DF12TEST.CBL:31: error: syntax error, unexpected Identifier |    29 |        01  WS-NUMERIC-FIELD-4          PIC X(11)   VALUE ' 1234567.89'",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "compile failed; no run",
+    "candidate_phases": [],
+    "candidate_first_failure": null,
+    "classification": "INVALID_EXPECTED_REJECT"
+  },
+  {
+    "program_id": "opencbs/DF13TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF13TEST.CBL",
+    "content_sha256": "2440288e5dc0b7a359f32fa6be6b781c30595a4845f9d367cb9519c7f70f98ff",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 78,
+      "bytes": 2465,
+      "paragraphs": 3,
+      "data_items": 11,
+      "level_01_items": 4,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF13TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "DISPLAY",
+        "EXIT",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "PERFORM",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 1,
+    "oracle_compile_note": "exit Some(1): DF13TEST.CBL: in paragraph '1000-LOOP-PEPNOTE': | DF13TEST.CBL:71: error: '1000-EXIT' is not defined",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "compile failed; no run",
+    "candidate_phases": [],
+    "candidate_first_failure": null,
+    "classification": "INVALID_EXPECTED_REJECT"
+  },
+  {
+    "program_id": "opencbs/DF14TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF14TEST.CBL",
+    "content_sha256": "bb745182cacf24b1e1bae0cb4fbb50f7bb519f11683fcc02aece112bdfc6a3d9",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 59,
+      "bytes": 1709,
+      "paragraphs": 5,
+      "data_items": 2,
+      "level_01_items": 2,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF14TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "RETURN",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [
+      "DB2_REQUIRED"
+    ],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 1,
+    "oracle_compile_note": "exit Some(1): DF14TEST.CBL: in paragraph '1000-START-OF-JOB': | DF14TEST.CBL:43: error: syntax error, unexpected Identifier, expecting SECTION or .",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "platform services: DB2_REQUIRED",
+    "candidate_phases": [],
+    "candidate_first_failure": null,
+    "classification": "QUARANTINED"
+  },
+  {
+    "program_id": "opencbs/DF15TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF15TEST.CBL",
+    "content_sha256": "26657e1d429290fa30e978b29031b5285e0489c72f9e583ae95d81c45f44b94a",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 60,
+      "bytes": 1908,
+      "paragraphs": 6,
+      "data_items": 3,
+      "level_01_items": 3,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF15TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "COMPUTE",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 1,
+    "oracle_compile_note": "exit Some(1): DF15TEST.CBL:1: error: syntax error, unexpected SECTION, expecting DIVISION |     1 >        IDENTIFICATION SECTION.",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "compile failed; no run",
+    "candidate_phases": [],
+    "candidate_first_failure": null,
+    "classification": "INVALID_EXPECTED_REJECT"
+  },
+  {
+    "program_id": "opencbs/DF16TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF16TEST.CBL",
+    "content_sha256": "b8afb6c287cbd1c90e4a7cd8c0b4d660e145b7818fccb9aa0e4462dab5203079",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 66,
+      "bytes": 2045,
+      "paragraphs": 4,
+      "data_items": 2,
+      "level_01_items": 2,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF16TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "RETURN",
+        "SET",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [
+      "DB2_REQUIRED"
+    ],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "platform services: DB2_REQUIRED",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "QUARANTINED"
+  },
+  {
+    "program_id": "opencbs/DF17DATA.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF17DATA.CBL",
+    "content_sha256": "8862249b1cfc76e4b25914e6490bcdd25e56c61090f0697be047da36d153c0e4",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 112,
+      "bytes": 3173,
+      "paragraphs": 2,
+      "data_items": 7,
+      "level_01_items": 7,
+      "copy_refs": [],
+      "file_descriptions": 1,
+      "program_ids": [
+        "DF17DATA"
+      ],
+      "approx_scope_depth": 6,
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "START",
+        "WRITE"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF17TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF17TEST.CBL",
+    "content_sha256": "baed021551ae9781847cce31df4c498300f1986fd4be6063ceef592c9971d2c6",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 134,
+      "bytes": 3794,
+      "paragraphs": 3,
+      "data_items": 6,
+      "level_01_items": 4,
+      "copy_refs": [],
+      "file_descriptions": 2,
+      "program_ids": [
+        "DF17TEST"
+      ],
+      "approx_scope_depth": 1,
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "READ",
+        "START",
+        "WRITE"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [
+      "VSAM_OR_INDEXED_REQUIRED"
+    ],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "platform services: VSAM_OR_INDEXED_REQUIRED",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "QUARANTINED"
+  },
+  {
+    "program_id": "opencbs/DF18CALL.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF18CALL.CBL",
+    "content_sha256": "a55a4f9d072d15dcf2ad95ec927ee3dbfafc67fe6ae09ccc7651c6eb063f09cb",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 50,
+      "bytes": 1290,
+      "paragraphs": 6,
+      "data_items": 2,
+      "level_01_items": 2,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF18CALL"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "ADD",
+        "CALL",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "RETURN",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 1,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF18TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF18TEST.CBL",
+    "content_sha256": "46f95b841d960b056e77b79c99a9db49f169b638ef3ebc1188c3254c0456b746",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 65,
+      "bytes": 2062,
+      "paragraphs": 3,
+      "data_items": 2,
+      "level_01_items": 2,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF18TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "ADD",
+        "COMPUTE",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "SET",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 1,
+    "oracle_compile_note": "exit Some(1): DF18TEST.CBL:45: error: executable program requested but PROCEDURE/ENTRY has USING clause |    43 |                                              WS-VARIABLE.",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "compile failed; no run",
+    "candidate_phases": [],
+    "candidate_first_failure": null,
+    "classification": "INVALID_EXPECTED_REJECT"
+  },
+  {
+    "program_id": "opencbs/DF19TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF19TEST.CBL",
+    "content_sha256": "5369601f6f2481eaf2c8de5b58b629f2131df77ab3cea4f297d019546eb19ec3",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 100,
+      "bytes": 3865,
+      "paragraphs": 3,
+      "data_items": 14,
+      "level_01_items": 4,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF19TEST"
+      ],
+      "approx_scope_depth": 1,
+      "verbs": [
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF20TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF20TEST.CBL",
+    "content_sha256": "90a512a5b8a107065c11e103aad9c4a9d9bc5f8b92ac4d962c42dcc1010f9ddb",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 1,
+      "bytes": 7,
+      "paragraphs": 0,
+      "data_items": 0,
+      "level_01_items": 0,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [],
+      "approx_scope_depth": 0,
+      "verbs": []
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 1,
+    "oracle_compile_note": "exit Some(1): DF20TEST.CBL:1: error: PROGRAM-ID header missing |     1 > <EOF>",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "compile failed; no run",
+    "candidate_phases": [],
+    "candidate_first_failure": null,
+    "classification": "INVALID_EXPECTED_REJECT"
+  },
+  {
+    "program_id": "opencbs/DF21DATA.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF21DATA.CBL",
+    "content_sha256": "60966c55493d9eb3c208666b05884ae158bd8bc277fbea78ab77c2c34c07c996",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 112,
+      "bytes": 3118,
+      "paragraphs": 2,
+      "data_items": 7,
+      "level_01_items": 7,
+      "copy_refs": [],
+      "file_descriptions": 1,
+      "program_ids": [
+        "DF21DATA"
+      ],
+      "approx_scope_depth": 6,
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "START",
+        "WRITE"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF21TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF21TEST.CBL",
+    "content_sha256": "913be539626e11a2ffd46aa04bdd820760be739bf6182ca319313dd82f3deb3e",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 134,
+      "bytes": 3807,
+      "paragraphs": 3,
+      "data_items": 6,
+      "level_01_items": 4,
+      "copy_refs": [],
+      "file_descriptions": 2,
+      "program_ids": [
+        "DF21TEST"
+      ],
+      "approx_scope_depth": 1,
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "READ",
+        "START",
+        "WRITE"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [
+      "VSAM_OR_INDEXED_REQUIRED"
+    ],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "platform services: VSAM_OR_INDEXED_REQUIRED",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "QUARANTINED"
+  },
+  {
+    "program_id": "opencbs/DF22DATA.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF22DATA.CBL",
+    "content_sha256": "fa0eae2cb1df8d41d010d8af9e9b8d4f27b303b429be8689db89435da37f1f34",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 113,
+      "bytes": 3383,
+      "paragraphs": 3,
+      "data_items": 8,
+      "level_01_items": 7,
+      "copy_refs": [],
+      "file_descriptions": 1,
+      "program_ids": [
+        "DF22DATA"
+      ],
+      "approx_scope_depth": 5,
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "OPEN",
+        "START",
+        "WRITE"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF22TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF22TEST.CBL",
+    "content_sha256": "764f8c8dfb8241aff75865b2db31b0065de01cf0cff44f87dd843c36ddeb9403",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 105,
+      "bytes": 3187,
+      "paragraphs": 4,
+      "data_items": 5,
+      "level_01_items": 4,
+      "copy_refs": [],
+      "file_descriptions": 1,
+      "program_ids": [
+        "DF22TEST"
+      ],
+      "approx_scope_depth": 1,
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "OPEN",
+        "READ",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF23TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF23TEST.CBL",
+    "content_sha256": "4c5f017f8c5505f7451d2f47602cb79275492a62415fefbb2dc642fa1da93af3",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 80,
+      "bytes": 2638,
+      "paragraphs": 5,
+      "data_items": 12,
+      "level_01_items": 4,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF23TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "SEARCH",
+        "SET",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [
+      "VSAM_OR_INDEXED_REQUIRED"
+    ],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "platform services: VSAM_OR_INDEXED_REQUIRED",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "QUARANTINED"
+  },
+  {
+    "program_id": "opencbs/DF24TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF24TEST.CBL",
+    "content_sha256": "44d7380295e198a1588576434f52a00036ddebbfac653e36c32a96003bfee9a0",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 65,
+      "bytes": 2014,
+      "paragraphs": 4,
+      "data_items": 7,
+      "level_01_items": 3,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF24TEST"
+      ],
+      "approx_scope_depth": 1,
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "prepare",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "run",
+        "ok": true,
+        "diagnostic": "exit 0"
+      }
+    ],
+    "candidate_first_failure": null,
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF25DATA.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF25DATA.CBL",
+    "content_sha256": "ac56c849f8db4c287bd0dddf33b29156c723528207702eb30b11703b0de5296d",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 113,
+      "bytes": 3310,
+      "paragraphs": 3,
+      "data_items": 8,
+      "level_01_items": 7,
+      "copy_refs": [],
+      "file_descriptions": 1,
+      "program_ids": [
+        "DF25DATA"
+      ],
+      "approx_scope_depth": 5,
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "OPEN",
+        "START",
+        "WRITE"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF25TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF25TEST.CBL",
+    "content_sha256": "bd81dade9cc687cb7add6ab9cd1609ea5a42b4116fa7974ef9cc3e01218dd799",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 163,
+      "bytes": 5033,
+      "paragraphs": 5,
+      "data_items": 10,
+      "level_01_items": 8,
+      "copy_refs": [],
+      "file_descriptions": 2,
+      "program_ids": [
+        "DF25TEST"
+      ],
+      "approx_scope_depth": 1,
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "OPEN",
+        "READ",
+        "START",
+        "WRITE"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF26TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF26TEST.CBL",
+    "content_sha256": "b660a6c5ecf7f2cab600768338e88d66e67476abd26b1d79792253ed7f66ded8",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 93,
+      "bytes": 3577,
+      "paragraphs": 5,
+      "data_items": 25,
+      "level_01_items": 5,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF26TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "READ",
+        "SEARCH",
+        "SET",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [
+      "VSAM_OR_INDEXED_REQUIRED"
+    ],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "platform services: VSAM_OR_INDEXED_REQUIRED",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "QUARANTINED"
+  },
+  {
+    "program_id": "opencbs/DF27TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF27TEST.CBL",
+    "content_sha256": "7c30a98bebff0f60b48c515fce8dc5a737f21ee26a9213aef89cbb8b653122d7",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 117,
+      "bytes": 5016,
+      "paragraphs": 6,
+      "data_items": 42,
+      "level_01_items": 4,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF27TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "PERFORM",
+        "SET",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [
+      "VSAM_OR_INDEXED_REQUIRED"
+    ],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 1,
+    "oracle_compile_note": "exit Some(1): DF27TEST.CBL:56: error: syntax error, unexpected Literal |    54 |                10  RD-XXX-TABLE-NBR        PIC 9(04)",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "platform services: VSAM_OR_INDEXED_REQUIRED",
+    "candidate_phases": [],
+    "candidate_first_failure": null,
+    "classification": "QUARANTINED"
+  },
+  {
+    "program_id": "opencbs/DF28TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF28TEST.CBL",
+    "content_sha256": "d63a3859bf08c93dd19c849ef99a2374cafc072bbcd63916b0135f46865b6d5e",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 69,
+      "bytes": 2164,
+      "paragraphs": 4,
+      "data_items": 2,
+      "level_01_items": 2,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF28TEST"
+      ],
+      "approx_scope_depth": 2,
+      "verbs": [
+        "COMPUTE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF29TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF29TEST.CBL",
+    "content_sha256": "ecd668897067192791b4d6841c2fe32188e26a12a6e3e01d205f13a05ba5ad06",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 108,
+      "bytes": 3403,
+      "paragraphs": 3,
+      "data_items": 20,
+      "level_01_items": 4,
+      "copy_refs": [],
+      "file_descriptions": 1,
+      "program_ids": [
+        "DF29TEST"
+      ],
+      "approx_scope_depth": 1,
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "OPEN",
+        "START",
+        "WRITE"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF30TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF30TEST.CBL",
+    "content_sha256": "ae63a9dcff49c39b87a9cee4fd757047eb64bb2c293e1a34c9180f27253c5665",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 47,
+      "bytes": 1413,
+      "paragraphs": 2,
+      "data_items": 0,
+      "level_01_items": 0,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF30TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [
+      "CICS_REQUIRED"
+    ],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "platform services: CICS_REQUIRED",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "QUARANTINED"
+  },
+  {
+    "program_id": "opencbs/DF31CALL.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF31CALL.CBL",
+    "content_sha256": "931aa95f75e3ccec92cbe6e23ea1ca09264babaa90ff179cb4b0cb84db4f3962",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 52,
+      "bytes": 1461,
+      "paragraphs": 7,
+      "data_items": 2,
+      "level_01_items": 2,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF31CALL"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "CALL",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "RETURN",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 1,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF31TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF31TEST.CBL",
+    "content_sha256": "21d4c84c51577ddca3cdad9de4c4b27f0da57e7d052750531cea76fe54e2cafd",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 56,
+      "bytes": 1649,
+      "paragraphs": 3,
+      "data_items": 4,
+      "level_01_items": 4,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF31TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "CALL",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "RETURN",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 1,
+    "oracle_compile_note": "exit Some(1): DF31TEST.CBL:27: warning: optional period used [-Wdialect] |    25 |        01  WS-RETURN-PARM-2            PIC X(08)  VALUE 'RETURN 2'",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "compile failed; no run",
+    "candidate_phases": [],
+    "candidate_first_failure": null,
+    "classification": "INVALID_EXPECTED_REJECT"
+  },
+  {
+    "program_id": "opencbs/DF34TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF34TEST.CBL",
+    "content_sha256": "1971313e2e172c63b862220e56e3efd319258945f051e39dcb4d195d03156b08",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 82,
+      "bytes": 2416,
+      "paragraphs": 2,
+      "data_items": 12,
+      "level_01_items": 4,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF34TEST"
+      ],
+      "approx_scope_depth": 1,
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 1,
+    "oracle_compile_note": "exit Some(1): DF34TEST.CBL:26: error: syntax error, unexpected Literal |    24 |        01  WS-CONSTANT-1",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "compile failed; no run",
+    "candidate_phases": [],
+    "candidate_first_failure": null,
+    "classification": "INVALID_EXPECTED_REJECT"
+  },
+  {
+    "program_id": "opencbs/DF35TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF35TEST.CBL",
+    "content_sha256": "fcf563018d4db9451627194bfee8ed106ce257f0f251ce8a4642c46731049b1e",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 74,
+      "bytes": 2463,
+      "paragraphs": 4,
+      "data_items": 8,
+      "level_01_items": 2,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF35TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "INITIALIZE",
+        "MOVE",
+        "START",
+        "STRING",
+        "UNSTRING"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 1,
+    "oracle_compile_note": "exit Some(1): DF35TEST.CBL:39: error: syntax error, unexpected Identifier |    37 | ",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "compile failed; no run",
+    "candidate_phases": [],
+    "candidate_first_failure": null,
+    "classification": "INVALID_EXPECTED_REJECT"
+  },
+  {
+    "program_id": "opencbs/DF36TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF36TEST.CBL",
+    "content_sha256": "709a24d95080150cdb5c283b3e296def08d2d3d4a2b61ee3cab5ebd33497c446",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 57,
+      "bytes": 1721,
+      "paragraphs": 4,
+      "data_items": 3,
+      "level_01_items": 3,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF36TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "COMPUTE",
+        "DISPLAY",
+        "DIVIDE",
+        "GOBACK",
+        "IF",
+        "MULTIPLY",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF39TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF39TEST.CBL",
+    "content_sha256": "102b7963402858ef7e5c0b43eec80066588c6d25ac10994943aad00569d31c78",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 64,
+      "bytes": 2236,
+      "paragraphs": 6,
+      "data_items": 6,
+      "level_01_items": 2,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF39TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "prepare",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "run",
+        "ok": true,
+        "diagnostic": "exit 0"
+      }
+    ],
+    "candidate_first_failure": null,
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF40TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF40TEST.CBL",
+    "content_sha256": "615fe10d74ab2724d1d96a99a26f754674912b55533bf059a10b0d5ae8a01e66",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 117,
+      "bytes": 3575,
+      "paragraphs": 12,
+      "data_items": 2,
+      "level_01_items": 2,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF40TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "CLOSE",
+        "CONTINUE",
+        "DISPLAY",
+        "EVALUATE",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "INITIALIZE",
+        "MOVE",
+        "OPEN",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [
+      "DB2_REQUIRED"
+    ],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 1,
+    "oracle_compile_note": "exit Some(1): DF40TEST.CBL:27: error: syntax error, unexpected Word or Literal, expecting . |    25 |        01  WS-DEPARTMENT               PIC X(10)   VALUE 'COMPUTER'.",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "platform services: DB2_REQUIRED",
+    "candidate_phases": [],
+    "candidate_first_failure": null,
+    "classification": "QUARANTINED"
+  },
+  {
+    "program_id": "opencbs/DF41TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF41TEST.CBL",
+    "content_sha256": "d9d7e59fec45ad6f501e13a8bc94625cacf44d374d2b8f0a0620ea0e5be05631",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 53,
+      "bytes": 1543,
+      "paragraphs": 4,
+      "data_items": 2,
+      "level_01_items": 2,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF41TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "COMPUTE",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 1,
+    "oracle_compile_note": "exit Some(1): DF41TEST.CBL:25: error: syntax error, unexpected Identifier |    23 | ",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "compile failed; no run",
+    "candidate_phases": [],
+    "candidate_first_failure": null,
+    "classification": "INVALID_EXPECTED_REJECT"
+  },
+  {
+    "program_id": "opencbs/DF42TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF42TEST.CBL",
+    "content_sha256": "2ac0fb15e128a5040d9d26c2191998e91d2552e3e23708195dc5df3ba6c5b6ae",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 196,
+      "bytes": 6307,
+      "paragraphs": 21,
+      "data_items": 2,
+      "level_01_items": 2,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF42TEST"
+      ],
+      "approx_scope_depth": 1,
+      "verbs": [
+        "CLOSE",
+        "CONTINUE",
+        "DISPLAY",
+        "EVALUATE",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "INITIALIZE",
+        "MOVE",
+        "OPEN",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [
+      "DB2_REQUIRED"
+    ],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 1,
+    "oracle_compile_note": "exit Some(1): DF42TEST.CBL:27: error: syntax error, unexpected Word or Literal, expecting . |    25 |        01  WS-DEPARTMENT               PIC X(10)   VALUE 'COMPUTER'.",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "platform services: DB2_REQUIRED",
+    "candidate_phases": [],
+    "candidate_first_failure": null,
+    "classification": "QUARANTINED"
+  },
+  {
+    "program_id": "opencbs/DF44TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF44TEST.CBL",
+    "content_sha256": "c506863149837b4f8bd8dfff8c2b7188ab61ec0d8faaf766c9fc9461834397a7",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 65,
+      "bytes": 1970,
+      "paragraphs": 6,
+      "data_items": 4,
+      "level_01_items": 2,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF44TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "ADD",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF45CALL.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF45CALL.CBL",
+    "content_sha256": "c892032a6b971b58acdde6fa75b6d54912405ccfe0f29755b3562cd629dc86ee",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 52,
+      "bytes": 1417,
+      "paragraphs": 7,
+      "data_items": 2,
+      "level_01_items": 2,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF45CALL"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "CALL",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "RETURN",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 1,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF45TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF45TEST.CBL",
+    "content_sha256": "6fbe2717c7d6692de9f2b09bfc8f177a1121ff3b54c0cea89b53ca1526fa7579",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 56,
+      "bytes": 1635,
+      "paragraphs": 3,
+      "data_items": 4,
+      "level_01_items": 4,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF45TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "CALL",
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "RETURN",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 1,
+    "oracle_compile_note": "exit Some(1): DF45TEST.CBL:28: warning: optional period used [-Wdialect] |    26 |        01  WS-RETURN-PARM-2            PIC X(08)  VALUE 'RETURN 2'",
+    "oracle_run_exit": null,
+    "run_attempted": false,
+    "run_note": "compile failed; no run",
+    "candidate_phases": [],
+    "candidate_first_failure": null,
+    "classification": "INVALID_EXPECTED_REJECT"
+  },
+  {
+    "program_id": "opencbs/DF46DATA.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF46DATA.CBL",
+    "content_sha256": "d0f3447ab228530aa2623f192ae3b4e0aebbb576a9eb3408b1c150d567486e0c",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 76,
+      "bytes": 1818,
+      "paragraphs": 2,
+      "data_items": 3,
+      "level_01_items": 3,
+      "copy_refs": [],
+      "file_descriptions": 1,
+      "program_ids": [
+        "DF46DATA"
+      ],
+      "approx_scope_depth": 2,
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "OPEN",
+        "START",
+        "WRITE"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF46TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF46TEST.CBL",
+    "content_sha256": "8c73d0452395213769d1641b02f67a794c824f08cd9e755a613c3b52f29a3c52",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 113,
+      "bytes": 3259,
+      "paragraphs": 4,
+      "data_items": 5,
+      "level_01_items": 3,
+      "copy_refs": [],
+      "file_descriptions": 1,
+      "program_ids": [
+        "DF46TEST"
+      ],
+      "approx_scope_depth": 2,
+      "verbs": [
+        "CLOSE",
+        "DISPLAY",
+        "GO TO",
+        "GOBACK",
+        "IF",
+        "MOVE",
+        "OPEN",
+        "READ",
+        "REWRITE",
+        "START",
+        "WRITE"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  },
+  {
+    "program_id": "opencbs/DF47TEST.CBL",
+    "collection": "opencbs",
+    "source_rel": "COBOL_Programs/DF47TEST.CBL",
+    "content_sha256": "42691fd6459879d452e8e6125b7fbfd8431d8c75eed3e2977e3a68d2b8fedc69",
+    "source_format": "fixed",
+    "dialect": "default",
+    "licence": "MIT",
+    "metrics": {
+      "lines": 59,
+      "bytes": 1752,
+      "paragraphs": 3,
+      "data_items": 1,
+      "level_01_items": 1,
+      "copy_refs": [],
+      "file_descriptions": 0,
+      "program_ids": [
+        "DF47TEST"
+      ],
+      "approx_scope_depth": 0,
+      "verbs": [
+        "DISPLAY",
+        "GOBACK",
+        "IF",
+        "SET",
+        "START"
+      ]
+    },
+    "copybook_dependencies": [],
+    "data_file_dependencies": [],
+    "platform_services": [],
+    "adaptation": "none (original bytes preserved)",
+    "oracle_compile_exit": 0,
+    "oracle_compile_note": "",
+    "oracle_run_exit": 0,
+    "run_attempted": true,
+    "run_note": "",
+    "candidate_phases": [
+      {
+        "phase": "preprocess",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "lex",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "parse",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "resolution",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "layout",
+        "ok": true,
+        "diagnostic": ""
+      },
+      {
+        "phase": "check",
+        "ok": false,
+        "diagnostic": "unsupported: verb \u001a"
+      }
+    ],
+    "candidate_first_failure": [
+      "check",
+      "unsupported: verb \u001a"
+    ],
+    "classification": "VALID_EXECUTABLE_PROGRAM"
+  }
+]

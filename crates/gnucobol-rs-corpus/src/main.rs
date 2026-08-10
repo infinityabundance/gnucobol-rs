@@ -215,6 +215,21 @@ fn run(cmd: Command) -> Result<(), String> {
                 Err(format!("{} gate failure(s)", fails.len()))
             }
         }
+        Command::ExtractExtras { candidate, json } => {
+            let counts = cli::cmd_extract_extras(candidate)?;
+            if !json {
+                println!(
+                    "extract-extras: {} programs classified",
+                    counts.get("total").copied().unwrap_or(0)
+                );
+                for (k, v) in &counts {
+                    if k != "total" {
+                        println!("  {k}: {v}");
+                    }
+                }
+            }
+            emit(&counts, json)
+        }
         Command::ExtractManual {
             lane,
             candidate,

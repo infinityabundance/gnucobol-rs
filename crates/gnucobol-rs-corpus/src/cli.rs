@@ -75,6 +75,10 @@ pub enum Command {
         candidate: bool,
         json: bool,
     },
+    ExtractExtras {
+        candidate: bool,
+        json: bool,
+    },
 }
 
 #[derive(Debug, Clone, PartialEq, Default)]
@@ -234,6 +238,10 @@ pub fn parse(args: &[String]) -> Result<Command, String> {
                 candidate,
                 json,
             })
+        }
+        "extract-extras" => {
+            let candidate = !args.iter().any(|a| a == "--no-candidate");
+            Ok(Command::ExtractExtras { candidate, json })
         }
         "probe-step" => Ok(Command::ProbeStep {
             manifest: args
@@ -1270,6 +1278,15 @@ pub fn cmd_extract_manual(
         }
     }
     Ok(merged)
+}
+
+/// `extract-extras`: Phase 5 -- GnuCOBOL-shipped programs + official contribution collections.
+pub fn cmd_extract_extras(candidate: bool) -> Result<BTreeMap<String, usize>, String> {
+    let root = crate::extract::workspace_root()?;
+    let (store, _ms) = stores()?;
+    let packages_root = store.root().join("packages");
+    let out_dir = root.join("reports").join("valid-corpus").join("extras");
+    crate::extract::extras::extract_extras(&root, &packages_root, &out_dir, candidate)
 }
 
 /// `check-updates`: load every fetch spec under `specs_dir` and produce drift reports (no
