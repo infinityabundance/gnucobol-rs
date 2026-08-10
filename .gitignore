@@ -56,3 +56,12 @@ lab/corpus/opencbs/
 # GnuCOBOL testsuite: private per-machine replay override (host docker root + base-image artifact
 # paths are machine facts, never committed; only symbolic aliases appear in committed evidence)
 /lab/gnucobol-testsuite/.env.local
+
+# Sweep/profiling artifacts regenerated on every corpus run (never committed)
+/p[0-9]*.out
+/lab/oracle/p[0-9]*.dat
+/lab/oracle/l[0-9]*.txt
+/lab/oracle/rpt.txt
+/tf1
+/tf2
+/crates/*/cob-prof-*.csv

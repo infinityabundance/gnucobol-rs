@@ -25,16 +25,17 @@ abstractions wherever technically coherent; never create a disconnected second e
 
 Public crate + installed binary `gnucobol-rs-corpus`. Pure Rust (no shell-only implementation).
 
-Modules:
+Modules (implemented):
 
 - `store.rs` — content-addressed store under `GNURUST_COBOL_CORPUS_ROOT` (XDG fallback):
   `blobs/<sha256>`, `manifests/`, `origins/`, `licences/`, `packages/`, `expected/`, `evidence/`,
   `raw/`. Addresses archives, git bundles, files, copybooks, inputs, oracle/candidate binaries,
-  expected outputs by hash. Rejects hash mismatches.
+  expected outputs by hash. Rejects hash mismatches. `open_at` allows embedders/tests to avoid
+  process-wide environment state.
 - `schema.rs` — versioned admission schema `gnurust-valid-cobol-program-v1` (the task's
   equivalent JSON: program_id, corpus_class, source_family, origin, licence, source, validity
   profile, oracle, candidate, classification, admission_state) + the classification enum
-  (15 valid classes + typed rejections; no `UNKNOWN` remains at completion).
+  (all valid classes + typed rejections; no `UNKNOWN` remains at completion).
 - `state.rs` — the admission state machine
   `DISCOVERED → CUSTODY_VERIFIED → LICENCE_VERIFIED → DEPENDENCIES_RESOLVED →
   ORACLE_COMPILE_VERIFIED → ORACLE_RUN_VERIFIED → DETERMINISM_VERIFIED → ADMITTED`
@@ -43,15 +44,15 @@ Modules:
   encoding, BOM, line endings, sequence/indicator/text/identification areas, tab positions
   recorded).
 - `dedup.rs` — exact hash, normalized-source hash, whitespace-insensitive hash, structural
-  (identifier-normalized) hash, near-duplicate similarity, repository-level grouping.
+  (identifier-normalized) hash, near-duplicate token-set similarity, repository-level grouping.
 - `origin.rs` — fetch specifications (git revision, archive hash, extraction rules) and the
   `check-updates` drift reporter.
-- `classify.rs` — the phase-attribution vocabulary reused by every source family.
-- `oracle.rs` / `candidate.rs` / `compare.rs` — thin adapters over the existing
-  `gnucobol-rs-testsuite` oracle/candidate invocation patterns (compile+run with pinned env,
-  sha256 outputs, generated-file capture) — no second oracle implementation.
-- `cli.rs` — commands `discover fetch admit verify list classify run-oracle run-candidate
-  compare report gate check-updates`, every command with `--json`.
+- `cli.rs` — the phase-attribution vocabulary and the command engine: `discover fetch admit
+  verify list classify run-oracle run-candidate compare report gate check-updates`, every
+  command with `--json`. The oracle/candidate invocation pattern (compile+run with pinned env,
+  sha256 outputs) is fed by the existing `gnucobol-rs-testsuite`/`cobc-oracle-rs` machinery —
+  no second oracle implementation.
+- `main.rs` — the installed binary `gnucobol-rs-corpus`.
 
 ### 2.2 `crates/gnucobol-rs-bench/` — the performance corpus (Phase 8)
 
