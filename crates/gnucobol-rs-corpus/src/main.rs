@@ -215,6 +215,21 @@ fn run(cmd: Command) -> Result<(), String> {
                 Err(format!("{} gate failure(s)", fails.len()))
             }
         }
+        Command::ExtractCcvs85 { json } => {
+            let counts = cli::cmd_extract_ccvs85()?;
+            if !json {
+                println!(
+                    "extract-ccvs85: {} units classified",
+                    counts.get("total").copied().unwrap_or(0)
+                );
+                for (k, v) in &counts {
+                    if k != "total" {
+                        println!("  {k}: {v}");
+                    }
+                }
+            }
+            emit(&counts, json)
+        }
         Command::ProbeStep {
             manifest,
             out,

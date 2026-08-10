@@ -67,6 +67,9 @@ pub enum Command {
         out: PathBuf,
         json: bool,
     },
+    ExtractCcvs85 {
+        json: bool,
+    },
 }
 
 #[derive(Debug, Clone, PartialEq, Default)]
@@ -213,6 +216,7 @@ pub fn parse(args: &[String]) -> Result<Command, String> {
         "report" => Ok(Command::Report { json }),
         "gate" => Ok(Command::Gate { json }),
         "check-updates" => Ok(Command::CheckUpdates { json }),
+        "extract-ccvs85" => Ok(Command::ExtractCcvs85 { json }),
         "probe-step" => Ok(Command::ProbeStep {
             manifest: args
                 .iter()
@@ -1176,6 +1180,14 @@ pub fn cmd_probe_step(
     let json = serde_json::to_string_pretty(&probes).map_err(|e| e.to_string())?;
     std::fs::write(out_path, json).map_err(|e| e.to_string())?;
     Ok(probes)
+}
+
+/// `extract-ccvs85`: Phase 3 -- classify every CCVS85 unit and write the Phase-3 reports from
+/// the single committed GNURUST.CCVS85 evidence (no second materialization).
+pub fn cmd_extract_ccvs85() -> Result<BTreeMap<String, usize>, String> {
+    let root = crate::extract::workspace_root()?;
+    let out_dir = root.join("reports").join("valid-corpus").join("ccvs85");
+    crate::extract::ccvs85::write_reports(&root, &out_dir)
 }
 
 /// `check-updates`: load every fetch spec under `specs_dir` and produce drift reports (no
