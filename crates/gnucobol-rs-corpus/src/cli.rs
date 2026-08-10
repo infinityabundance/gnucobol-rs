@@ -14,7 +14,7 @@ use crate::schema::{
 };
 use crate::state::{transition, AdmissionState};
 use crate::store::{sha256_hex, CorpusStore};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 
@@ -54,6 +54,17 @@ pub enum Command {
         json: bool,
     },
     CheckUpdates {
+        json: bool,
+    },
+    ExtractTestsuite {
+        lane: String,
+        replay: bool,
+        candidate: bool,
+        json: bool,
+    },
+    ProbeStep {
+        manifest: PathBuf,
+        out: PathBuf,
         json: bool,
     },
 }
@@ -202,6 +213,47 @@ pub fn parse(args: &[String]) -> Result<Command, String> {
         "report" => Ok(Command::Report { json }),
         "gate" => Ok(Command::Gate { json }),
         "check-updates" => Ok(Command::CheckUpdates { json }),
+        "probe-step" => Ok(Command::ProbeStep {
+            manifest: args
+                .iter()
+                .skip(1)
+                .find(|a| !a.starts_with('-'))
+                .map(PathBuf::from)
+                .ok_or_else(|| "probe-step: missing step-manifest path".to_string())?,
+            out: {
+                let eq = args
+                    .iter()
+                    .find_map(|a| a.strip_prefix("--out=").map(PathBuf::from));
+                match eq {
+                    Some(p) => p,
+                    None => {
+                        let i = args
+                            .iter()
+                            .position(|a| a == "--out")
+                            .ok_or_else(|| "probe-step: missing --out path".to_string())?;
+                        args.get(i + 1)
+                            .map(PathBuf::from)
+                            .ok_or_else(|| "probe-step: missing --out path".to_string())?
+                    }
+                }
+            },
+            json,
+        }),
+        "extract-testsuite" => {
+            let lane = args
+                .iter()
+                .skip(1)
+                .find_map(|a| a.strip_prefix("--lane=").map(|v| v.to_string()))
+                .unwrap_or_else(|| "both".to_string());
+            let replay = !args.iter().any(|a| a == "--no-replay");
+            let candidate = !args.iter().any(|a| a == "--no-candidate");
+            Ok(Command::ExtractTestsuite {
+                lane,
+                replay,
+                candidate,
+                json,
+            })
+        }
         other => Err(format!("unknown command: {other}\n{}", usage())),
     }
 }
@@ -976,6 +1028,154 @@ pub fn cmd_gate(ms: &ManifestStore) -> Result<Vec<String>, String> {
         }
     }
     Ok(fails)
+}
+
+/// `extract-testsuite`: Phase 2 -- classify the GnuCOBOL Autotest suite at AT_CHECK-step level,
+/// materialize program packages, replay against the host oracle, probe the candidate phase by
+/// phase, and write the Phase-2 reports.
+#[derive(Debug, Clone, Serialize)]
+pub struct ExtractSummary {
+    pub lanes: Vec<String>,
+    pub discovered_steps: usize,
+    pub valid_programs: usize,
+    pub invalid_programs: usize,
+    pub oracle_contract_drift: usize,
+    pub skipped_under_profile: usize,
+    pub reports: Vec<String>,
+    pub oracle: String,
+    pub replay: bool,
+    pub candidate: bool,
+}
+
+pub fn cmd_extract_testsuite(
+    lane_arg: &str,
+    replay: bool,
+    candidate: bool,
+) -> Result<ExtractSummary, String> {
+    let root = crate::extract::workspace_root()?;
+    let oracle = crate::extract::oracle::OracleEnv::host_default()?;
+    let (store, _ms) = stores()?;
+    let packages_root = store.root().join("packages");
+    let out_dir = root
+        .join("reports")
+        .join("valid-corpus")
+        .join("gnucobol-testsuite");
+
+    let lanes: Vec<crate::extract::SuiteLane> = match lane_arg {
+        "stable-3.2" => vec![crate::extract::STABLE_3_2],
+        "current" => vec![crate::extract::CURRENT],
+        "both" => vec![crate::extract::STABLE_3_2, crate::extract::CURRENT],
+        other => {
+            return Err(format!(
+                "unknown lane {other:?} (stable-3.2 | current | both)"
+            ))
+        }
+    };
+    let mut stable_results = Vec::new();
+    let mut current_results = Vec::new();
+    let mut groups_map: std::collections::BTreeMap<String, Vec<crate::extract::at::AtGroup>> =
+        std::collections::BTreeMap::new();
+    let mut discovered = 0usize;
+    let mut valid = 0usize;
+    let mut invalid = 0usize;
+    let mut drift = 0usize;
+    let mut skipped = 0usize;
+    for lane in &lanes {
+        let (groups, errors) = crate::extract::load_suite_groups(*lane)?;
+        if !errors.is_empty() {
+            return Err(format!(
+                "{} suite parse errors (fail closed): {}",
+                lane.label,
+                errors.join("; ")
+            ));
+        }
+        for g in &groups {
+            groups_map
+                .entry(g.source_file.clone())
+                .or_default()
+                .push(g.clone());
+        }
+        let (results, _stats) =
+            crate::extract::extract_lane(*lane, &oracle, &packages_root, replay, candidate)?;
+        discovered += results.len();
+        valid += results
+            .iter()
+            .filter(|r| r.classification.starts_with("VALID_"))
+            .count();
+        invalid += results
+            .iter()
+            .filter(|r| r.classification.contains("INVALID_EXPECTED_REJECT"))
+            .count();
+        drift += results
+            .iter()
+            .filter(|r| r.classification.contains("ORACLE_CONTRACT_DRIFT"))
+            .count();
+        skipped += results.iter().filter(|r| !r.skip_reason.is_empty()).count();
+        match lane.label {
+            "stable-3.2" => stable_results = results,
+            _ => current_results = results,
+        }
+    }
+    let counts = crate::extract::report::write_reports(
+        &out_dir,
+        &stable_results,
+        &current_results,
+        &groups_map,
+    )?;
+    let mut report_files = Vec::new();
+    for name in [
+        "discovered-steps.json",
+        "valid-programs.json",
+        "invalid-programs.json",
+        "mixed-groups.json",
+        "dependency-graph.json",
+        "stable-current-drift.json",
+        "summary.md",
+    ] {
+        if out_dir.join(name).exists() {
+            report_files.push(format!("reports/valid-corpus/gnucobol-testsuite/{name}"));
+        }
+    }
+    let _ = counts;
+    Ok(ExtractSummary {
+        lanes: lanes.iter().map(|l| l.label.to_string()).collect(),
+        discovered_steps: discovered,
+        valid_programs: valid,
+        invalid_programs: invalid,
+        oracle_contract_drift: drift,
+        skipped_under_profile: skipped,
+        reports: report_files,
+        oracle: oracle.label.clone(),
+        replay,
+        candidate,
+    })
+}
+
+/// `probe-step`: bounded candidate phase probe for one materialized suite step. Reads the step
+/// manifest (group dir + main file), probes the phases (run phases only for run-shaped steps),
+/// and writes the PhaseOutcome JSON to `--out`. Invoked as a subprocess by `extract-testsuite`
+/// with a hard `timeout` so no suite program can hang the corpus run.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct StepManifest {
+    pub program_id: String,
+    pub group_dir: String,
+    pub main_file: String,
+    pub expanded_command: String,
+}
+
+pub fn cmd_probe_step(
+    manifest_path: &Path,
+    out_path: &Path,
+) -> Result<Vec<crate::extract::candidate::PhaseOutcome>, String> {
+    let bytes = std::fs::read(manifest_path)
+        .map_err(|e| format!("cannot read {}: {e}", manifest_path.display()))?;
+    let m: StepManifest =
+        serde_json::from_slice(&bytes).map_err(|e| format!("step manifest: {e}"))?;
+    let run = crate::extract::candidate::run_shape(&m.expanded_command);
+    let probes = crate::extract::candidate::probe_dir(Path::new(&m.group_dir), &m.main_file, run);
+    let json = serde_json::to_string_pretty(&probes).map_err(|e| e.to_string())?;
+    std::fs::write(out_path, json).map_err(|e| e.to_string())?;
+    Ok(probes)
 }
 
 /// `check-updates`: load every fetch spec under `specs_dir` and produce drift reports (no

@@ -12,6 +12,7 @@
 pub mod bytes;
 pub mod cli;
 pub mod dedup;
+pub mod extract;
 pub mod origin;
 pub mod schema;
 pub mod state;

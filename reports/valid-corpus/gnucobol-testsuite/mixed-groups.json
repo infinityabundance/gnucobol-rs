@@ -1,0 +1,1148 @@
+[
+  {
+    "group": "testsuite.src/configuration.at/cobc configuration: ebcdic-table",
+    "steps": 24,
+    "valid_steps": 14,
+    "invalid_steps": 10
+  },
+  {
+    "group": "testsuite.src/configuration.at/cobc configuration: entries",
+    "steps": 12,
+    "valid_steps": 2,
+    "invalid_steps": 10
+  },
+  {
+    "group": "testsuite.src/configuration.at/cobc configuration: source format",
+    "steps": 14,
+    "valid_steps": 8,
+    "invalid_steps": 6
+  },
+  {
+    "group": "testsuite.src/configuration.at/cobc dialect features for all -std",
+    "steps": 42,
+    "valid_steps": 36,
+    "invalid_steps": 6
+  },
+  {
+    "group": "testsuite.src/configuration.at/tabstop tab-width",
+    "steps": 5,
+    "valid_steps": 2,
+    "invalid_steps": 3
+  },
+  {
+    "group": "testsuite.src/configuration.at/validation of COB_CONFIG_DIR",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/listings.at/Error/Warning messages",
+    "steps": 12,
+    "valid_steps": 2,
+    "invalid_steps": 10
+  },
+  {
+    "group": "testsuite.src/listings.at/Invalid PICTURE strings",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/listings.at/Multiple programs in one file",
+    "steps": 28,
+    "valid_steps": 24,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_extensions.at/CALL own PROGRAM-ID and RECURSIVE attribute",
+    "steps": 14,
+    "valid_steps": 10,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_extensions.at/GOBACK/EXIT PROGRAM RETURNING/GIVING",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_extensions.at/INITIALIZE OCCURS UNBOUNDED",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_extensions.at/NUMBER-OF-CALL-PARAMETERS",
+    "steps": 21,
+    "valid_steps": 19,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_extensions.at/Obsolete 2002 keywords with COBOL2014",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_extensions.at/PICTURE L (under/over shoot)",
+    "steps": 16,
+    "valid_steps": 8,
+    "invalid_steps": 8
+  },
+  {
+    "group": "testsuite.src/run_extensions.at/PROCEDURE DIVISION CHAINING",
+    "steps": 26,
+    "valid_steps": 24,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_extensions.at/Redefining TALLY",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_extensions.at/STOP RUN RETURNING/GIVING",
+    "steps": 16,
+    "valid_steps": 8,
+    "invalid_steps": 8
+  },
+  {
+    "group": "testsuite.src/run_extensions.at/System routine C$CALLEDBY",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_extensions.at/System routine CBL_ERROR_PROC (1)",
+    "steps": 8,
+    "valid_steps": 4,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_extensions.at/System routine CBL_ERROR_PROC (2)",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_extensions.at/System routine CBL_GC_GETOPT",
+    "steps": 20,
+    "valid_steps": 18,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_extensions.at/System routine CBL_GC_HOSTED",
+    "steps": 8,
+    "valid_steps": 6,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_extensions.at/System routine with wrong number of parameters",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_extensions.at/System routine x'91' function NN",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_extensions.at/TALLY register",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_extensions.at/TERMINAL format",
+    "steps": 18,
+    "valid_steps": 16,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_file.at/ASSIGN DYNAMIC with BASED data item",
+    "steps": 14,
+    "valid_steps": 10,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_file.at/ASSIGN DYNAMIC with data item in LINKAGE",
+    "steps": 8,
+    "valid_steps": 6,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_file.at/ASSIGN DYNAMIC with empty data item",
+    "steps": 6,
+    "valid_steps": 2,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_file.at/ASSIGN DYNAMIC with unset implicit data item",
+    "steps": 6,
+    "valid_steps": 2,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_file.at/ASSIGN filename mapping",
+    "steps": 62,
+    "valid_steps": 58,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_file.at/ASSIGN with COB_FILE_PATH",
+    "steps": 16,
+    "valid_steps": 14,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_file.at/INDEXED undeclared keys",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_file.at/System routines for directories (1)",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_file.at/TURN EC-I-O",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_fundamental.at/CANCEL test (1)",
+    "steps": 6,
+    "valid_steps": 2,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_fundamental.at/CANCEL test (2)",
+    "steps": 8,
+    "valid_steps": 4,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_fundamental.at/Contained program visibility (1)",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_fundamental.at/Contained program visibility (2)",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_fundamental.at/Entry point visibility (2)",
+    "steps": 10,
+    "valid_steps": 6,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_fundamental.at/abbreviated conditions with multiple words operators",
+    "steps": 3,
+    "valid_steps": 2,
+    "invalid_steps": 1
+  },
+  {
+    "group": "testsuite.src/run_misc.at/CALL in from C with init missing / implicit",
+    "steps": 8,
+    "valid_steps": 6,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_misc.at/ENTRY FOR GO TO / GO TO ENTRY",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_misc.at/EXIT SECTION",
+    "steps": 8,
+    "valid_steps": 6,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_misc.at/EXTERNAL data item size mismatch",
+    "steps": 14,
+    "valid_steps": 10,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_misc.at/Lookup ENTRY from main executable",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_misc.at/Non-numeric data in numeric items",
+    "steps": 16,
+    "valid_steps": 12,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_misc.at/OCCURS on level 01",
+    "steps": 20,
+    "valid_steps": 16,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_misc.at/PERFORM VARYING BY phrase omitted",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_misc.at/Recursive CALL of INITIAL program",
+    "steps": 8,
+    "valid_steps": 6,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_misc.at/Recursive CALL with ON EXCEPTION",
+    "steps": 8,
+    "valid_steps": 6,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_misc.at/STOP ERROR",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_misc.at/STOP RUN WITH ERROR STATUS",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_misc.at/TURN directive",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_misc.at/ZERO unsigned and negative binary subscript",
+    "steps": 8,
+    "valid_steps": 6,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_misc.at/access to BASED item without allocation",
+    "steps": 8,
+    "valid_steps": 4,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_misc.at/access to OPTIONAL LINKAGE item not passed",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_misc.at/direct CALL in from C w/wo error",
+    "steps": 10,
+    "valid_steps": 6,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_misc.at/dump feature with NULL address",
+    "steps": 12,
+    "valid_steps": 10,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_misc.at/implicit GOBACK at end of PROCEDURE DIVISION",
+    "steps": 8,
+    "valid_steps": 6,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_misc.at/libcob version check",
+    "steps": 34,
+    "valid_steps": 24,
+    "invalid_steps": 10
+  },
+  {
+    "group": "testsuite.src/run_misc.at/runtime check: write to internal storage (1)",
+    "steps": 18,
+    "valid_steps": 10,
+    "invalid_steps": 8
+  },
+  {
+    "group": "testsuite.src/run_misc.at/runtime check: write to internal storage (2)",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_misc.at/runtime checks within conditions",
+    "steps": 20,
+    "valid_steps": 16,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_misc.at/stack and dump feature",
+    "steps": 53,
+    "valid_steps": 37,
+    "invalid_steps": 16
+  },
+  {
+    "group": "testsuite.src/run_misc.at/void PROCEDURE, NOTHING return",
+    "steps": 10,
+    "valid_steps": 6,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_refmod.at/Length overflow",
+    "steps": 8,
+    "valid_steps": 4,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_refmod.at/Length overflow with offset (1)",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_refmod.at/Length overflow with offset (2)",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_refmod.at/Length overflow with offset (3)",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_refmod.at/Length underflow",
+    "steps": 8,
+    "valid_steps": 4,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_refmod.at/MF SSRANGE and NOSSRANGE directives",
+    "steps": 20,
+    "valid_steps": 12,
+    "invalid_steps": 8
+  },
+  {
+    "group": "testsuite.src/run_refmod.at/Offset overflow",
+    "steps": 8,
+    "valid_steps": 6,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_refmod.at/Offset underflow",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_refmod.at/enable / disable ref-mod check",
+    "steps": 24,
+    "valid_steps": 18,
+    "invalid_steps": 6
+  },
+  {
+    "group": "testsuite.src/run_reportwriter.at/Missing INITIATE and GENERATE",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_reportwriter.at/Missing INITIATE and TERMINATE",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_reportwriter.at/Sample REPORT with RIGHT/CENTER",
+    "steps": 8,
+    "valid_steps": 6,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_returncode.at/RETURN-CODE moving",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_subscripts.at/BOUND and NOBOUND directives",
+    "steps": 12,
+    "valid_steps": 10,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_subscripts.at/SSRANGE and NOSSRANGE directives",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_subscripts.at/Subscript bounds with OCCURS DEPENDING ON (1)",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_subscripts.at/Subscript bounds with OCCURS DEPENDING ON (2)",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_subscripts.at/Subscript bounds with OCCURS DEPENDING ON (3)",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/run_subscripts.at/Subscript out of bounds",
+    "steps": 8,
+    "valid_steps": 4,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_subscripts.at/Value of DEPENDING ON N out of bounds",
+    "steps": 8,
+    "valid_steps": 4,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_subscripts.at/enable / disable subscript check",
+    "steps": 20,
+    "valid_steps": 16,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/run_subscripts.at/enable / disable subscript check with ODO",
+    "steps": 16,
+    "valid_steps": 12,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/syn_copy.at/COPY: partial replacement BY literal",
+    "steps": 12,
+    "valid_steps": 4,
+    "invalid_steps": 8
+  },
+  {
+    "group": "testsuite.src/syn_copy.at/Option --copy COPYBOOK",
+    "steps": 4,
+    "valid_steps": 1,
+    "invalid_steps": 3
+  },
+  {
+    "group": "testsuite.src/syn_copy.at/REPLACE: partial replacement BY SPACE",
+    "steps": 14,
+    "valid_steps": 6,
+    "invalid_steps": 8
+  },
+  {
+    "group": "testsuite.src/syn_definition.at/GO TO sections and foreign paragraphs",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_definition.at/Invalid PROGRAM-ID",
+    "steps": 8,
+    "valid_steps": 2,
+    "invalid_steps": 6
+  },
+  {
+    "group": "testsuite.src/syn_definition.at/LIKE clause",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_definition.at/Non-matching level numbers (extension)",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_definition.at/PROCEDURE DIVISION RETURNING OMITTED: main",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_definition.at/PROCEDURE DIVISION RETURNING item",
+    "steps": 10,
+    "valid_steps": 2,
+    "invalid_steps": 8
+  },
+  {
+    "group": "testsuite.src/syn_definition.at/PROGRAM COLLATING SEQUENCE",
+    "steps": 7,
+    "valid_steps": 2,
+    "invalid_steps": 5
+  },
+  {
+    "group": "testsuite.src/syn_definition.at/RENAMES of 01-, 66- and 77-level items",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_definition.at/RETURNING in STOP RUN / GOBACK / EXIT PROGRAM",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_definition.at/Redefinition of 01 items",
+    "steps": 10,
+    "valid_steps": 6,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/syn_definition.at/Redefinition of label and variable names",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_definition.at/SAME AS clause",
+    "steps": 6,
+    "valid_steps": 2,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/syn_definition.at/Same paragraphs in different sections",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_definition.at/TYPEDEF clause",
+    "steps": 20,
+    "valid_steps": 14,
+    "invalid_steps": 6
+  },
+  {
+    "group": "testsuite.src/syn_file.at/ALTERNATE RECORD definition WITH NO DUPLICATES",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_file.at/ALTERNATE RECORD definition omitting RECORD",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_file.at/ASSIGN to variable",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_file.at/DECLARATIVES invalid procedure reference (1)",
+    "steps": 10,
+    "valid_steps": 8,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_file.at/FILE ... FROM literal",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_file.at/INDEXED file without database",
+    "steps": 2,
+    "valid_steps": 1,
+    "invalid_steps": 1
+  },
+  {
+    "group": "testsuite.src/syn_file.at/OPEN SEQUENTIAL file REVERSED",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_file.at/SELECT/OPEN syntax extensions",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_file.at/VSAM status",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_file.at/variable record length",
+    "steps": 10,
+    "valid_steps": 4,
+    "invalid_steps": 6
+  },
+  {
+    "group": "testsuite.src/syn_functions.at/Intrinsic functions: dialect",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_functions.at/Intrinsic functions: replaced",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_literals.at/GCOS literals with EBCDIC symbols (syntax)",
+    "steps": 8,
+    "valid_steps": 4,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/syn_literals.at/national literals",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_literals.at/numeric literals",
+    "steps": 6,
+    "valid_steps": 2,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/ACUCOBOL USAGE FLOAT / DOUBLE",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/ANY LENGTH item as formal parameter",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/AREACHECK",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/AREACHECK / NOAREACHECK directives",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/CONF. SECTION paragraphs in wrong order",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/CONTROL DIVISION",
+    "steps": 12,
+    "valid_steps": 10,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/CONTROL: default section",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/CONTROL: empty default section",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/CRT STATUS",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/CURRENCY SIGN",
+    "steps": 14,
+    "valid_steps": 4,
+    "invalid_steps": 10
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/Constant Expressions (3)",
+    "steps": 10,
+    "valid_steps": 2,
+    "invalid_steps": 8
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/Constant Expressions (5)",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/ENTRY statements in areas A and B",
+    "steps": 4,
+    "valid_steps": 3,
+    "invalid_steps": 1
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/IMP INCLUDE directive",
+    "steps": 3,
+    "valid_steps": 2,
+    "invalid_steps": 1
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/IMP INCLUDE directive multiple files",
+    "steps": 10,
+    "valid_steps": 6,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/LIN / COL register",
+    "steps": 8,
+    "valid_steps": 2,
+    "invalid_steps": 6
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/Missing imperative statements",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/NOT ON EXCEPTION phrases before ON EXCEPTION",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/PICTURE L",
+    "steps": 10,
+    "valid_steps": 2,
+    "invalid_steps": 8
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/SET CONSTANT directive",
+    "steps": 8,
+    "valid_steps": 6,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/SET SOURCEFORMAT syntax checks",
+    "steps": 5,
+    "valid_steps": 2,
+    "invalid_steps": 3
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/SPECIAL-NAMES clause",
+    "steps": 12,
+    "valid_steps": 6,
+    "invalid_steps": 6
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/SYMBOLIC CONSTANT",
+    "steps": 6,
+    "valid_steps": 2,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/USE FOR DEBUGGING syntax-checks (1)",
+    "steps": 12,
+    "valid_steps": 6,
+    "invalid_steps": 6
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/VALIDATE parsing",
+    "steps": 3,
+    "valid_steps": 2,
+    "invalid_steps": 1
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/WHEN-COMPILED register in dialect",
+    "steps": 12,
+    "valid_steps": 10,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/adding aliases",
+    "steps": 8,
+    "valid_steps": 6,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/adding/removing reserved words",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/autodetect format",
+    "steps": 20,
+    "valid_steps": 16,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/complete specified word list",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/conflicting entry conventions",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/empty program",
+    "steps": 14,
+    "valid_steps": 12,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/line and floating comments",
+    "steps": 30,
+    "valid_steps": 16,
+    "invalid_steps": 14
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/line overflow in fixed-form / free-form",
+    "steps": 9,
+    "valid_steps": 3,
+    "invalid_steps": 6
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/maximum data size",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/missing headers",
+    "steps": 8,
+    "valid_steps": 3,
+    "invalid_steps": 5
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/missing periods",
+    "steps": 8,
+    "valid_steps": 4,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/missing periods with COPYs",
+    "steps": 8,
+    "valid_steps": 4,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/one line program",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/optional dots before PROCEDURE DIVISION",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/overriding default words",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/pseudotext replacement with text in area A",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/statement in Area A",
+    "steps": 8,
+    "valid_steps": 6,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/unknown device in dialect",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_misc.at/word length",
+    "steps": 14,
+    "valid_steps": 6,
+    "invalid_steps": 8
+  },
+  {
+    "group": "testsuite.src/syn_occurs.at/OCCURS DEPENDING followed by another field",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_occurs.at/OCCURS INDEXED before KEY",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_occurs.at/OCCURS UNBOUNDED",
+    "steps": 14,
+    "valid_steps": 6,
+    "invalid_steps": 8
+  },
+  {
+    "group": "testsuite.src/syn_occurs.at/OCCURS size check",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_occurs.at/OCCURS with level 01 and 77",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_occurs.at/OCCURS with variable-occurrence data item",
+    "steps": 16,
+    "valid_steps": 4,
+    "invalid_steps": 12
+  },
+  {
+    "group": "testsuite.src/syn_redefines.at/REDEFINES: multiple redefinition",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_redefines.at/REDEFINES: not following entry-name",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_redefines.at/REDEFINES: size exceeds",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_refmod.at/constant-folding out of bounds",
+    "steps": 4,
+    "valid_steps": 3,
+    "invalid_steps": 1
+  },
+  {
+    "group": "testsuite.src/syn_screen.at/Compiler-specific SCREEN SECTION clause rules",
+    "steps": 12,
+    "valid_steps": 2,
+    "invalid_steps": 10
+  },
+  {
+    "group": "testsuite.src/syn_screen.at/MS-COBOL position-spec",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_screen.at/Screen item OCCURS w-/wo relative LINE/COL",
+    "steps": 6,
+    "valid_steps": 2,
+    "invalid_steps": 4
+  },
+  {
+    "group": "testsuite.src/syn_screen.at/VALUE clause missing",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_subscripts.at/Subscript range check",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/syn_value.at/Numeric-edited item",
+    "steps": 6,
+    "valid_steps": 4,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/used_binaries.at/EBCDIC /ASCII table generation",
+    "steps": 4,
+    "valid_steps": 2,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/used_binaries.at/check include header file",
+    "steps": 8,
+    "valid_steps": 7,
+    "invalid_steps": 1
+  },
+  {
+    "group": "testsuite.src/used_binaries.at/cobc diagnostics show caret",
+    "steps": 12,
+    "valid_steps": 3,
+    "invalid_steps": 9
+  },
+  {
+    "group": "testsuite.src/used_binaries.at/cobcrun --config",
+    "steps": 4,
+    "valid_steps": 3,
+    "invalid_steps": 1
+  },
+  {
+    "group": "testsuite.src/used_binaries.at/cobcrun -M DSO entry argument",
+    "steps": 12,
+    "valid_steps": 10,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/used_binaries.at/compiler outputs (file specified)",
+    "steps": 50,
+    "valid_steps": 48,
+    "invalid_steps": 2
+  },
+  {
+    "group": "testsuite.src/used_binaries.at/compiler warnings",
+    "steps": 39,
+    "valid_steps": 22,
+    "invalid_steps": 17
+  },
+  {
+    "group": "testsuite.src/used_binaries.at/output dependencies",
+    "steps": 33,
+    "valid_steps": 28,
+    "invalid_steps": 5
+  },
+  {
+    "group": "testsuite.src/used_binaries.at/save-temps in sub-directory",
+    "steps": 37,
+    "valid_steps": 30,
+    "invalid_steps": 7
+  }
+]

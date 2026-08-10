@@ -215,6 +215,26 @@ fn run(cmd: Command) -> Result<(), String> {
                 Err(format!("{} gate failure(s)", fails.len()))
             }
         }
+        Command::ProbeStep {
+            manifest,
+            out,
+            json,
+        } => {
+            let probes = cli::cmd_probe_step(&manifest, &out)?;
+            if !json {
+                let first = probes.iter().find(|p| !p.ok);
+                match first {
+                    Some(p) => println!(
+                        "probe-step {}: first failure at {} ({})",
+                        manifest.display(),
+                        p.phase,
+                        p.diagnostic
+                    ),
+                    None => println!("probe-step {}: all phases ok", manifest.display()),
+                }
+            }
+            emit(&probes, json)
+        }
         Command::CheckUpdates { json } => {
             let specs_dir = cwd.join("corpus").join("specs");
             let reports = cli::cmd_check_updates(&specs_dir)?;
@@ -236,6 +256,29 @@ fn run(cmd: Command) -> Result<(), String> {
                 }
             }
             emit(&reports, json)
+        }
+        Command::ExtractTestsuite {
+            lane,
+            replay,
+            candidate,
+            json,
+        } => {
+            let sum = cli::cmd_extract_testsuite(&lane, replay, candidate)?;
+            if !json {
+                println!(
+                    "extract-testsuite: {} steps, {} valid, {} invalid, {} drift, {} skipped (lanes {})",
+                    sum.discovered_steps,
+                    sum.valid_programs,
+                    sum.invalid_programs,
+                    sum.oracle_contract_drift,
+                    sum.skipped_under_profile,
+                    sum.lanes.join(",")
+                );
+                for r in &sum.reports {
+                    println!("wrote {r}");
+                }
+            }
+            emit(&sum, json)
         }
     }
 }

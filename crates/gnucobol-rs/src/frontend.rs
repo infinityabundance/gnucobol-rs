@@ -868,6 +868,243 @@ pub fn check_program(source: &str, dialect: crate::dialect::Dialect) -> Result<(
     Ok(())
 }
 
+/// The candidate front-end phases -- the phase-attribution vocabulary of the corpus subsystem.
+/// Exactly one first failure per program profile; phases after the first failure are not probed.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+pub enum ProbePhase {
+    Preprocess,
+    Lex,
+    Parse,
+    Resolution,
+    Layout,
+    Check,
+    Prepare,
+    Execute,
+}
+
+impl ProbePhase {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            ProbePhase::Preprocess => "preprocess",
+            ProbePhase::Lex => "lex",
+            ProbePhase::Parse => "parse",
+            ProbePhase::Resolution => "resolution",
+            ProbePhase::Layout => "layout",
+            ProbePhase::Check => "check",
+            ProbePhase::Prepare => "prepare",
+            ProbePhase::Execute => "execute",
+        }
+    }
+
+    /// The corpus first-failure vocabulary (spec 9.4): parse/resolution/layout/check/prepare/run
+    /// are separate; `run` is the corpus name for the execute probe.
+    pub fn corpus_phase(self) -> &'static str {
+        match self {
+            ProbePhase::Execute => "run",
+            other => other.as_str(),
+        }
+    }
+}
+
+/// One probed phase outcome. `ok == false` marks the first failing phase.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct PhaseProbe {
+    pub phase: String,
+    pub ok: bool,
+    pub diagnostic: String,
+}
+
+/// Probe the front-end phases separately and stop at the first failure.
+///
+/// Mirrors [`check_program`] (same private phase functions, same order, same typed [`RunError`]s)
+/// and, when `run` is set, continues into the execution path exactly as
+/// [`run_program_redirected`] does (prepare + execute). The corpus records the FIRST failing
+/// phase per valid program package; the probe never guesses a phase from diagnostic text.
+///
+/// Consistency with the two existing entry points is guarded by tests (a probe that says a
+/// source checks clean must agree with `check_program`, and a run probe must agree with
+/// `run_program_redirected` on exit code / error).
+pub fn probe_phases(source: &str, dialect: crate::dialect::Dialect, run: bool) -> Vec<PhaseProbe> {
+    let mut out = Vec::new();
+    let mut stopped = false;
+    let mut push = |phase: ProbePhase, ok: bool, diagnostic: String| {
+        if !stopped {
+            out.push(PhaseProbe {
+                phase: phase.as_str().to_string(),
+                ok,
+                diagnostic,
+            });
+            if !ok {
+                stopped = true;
+            }
+        }
+    };
+
+    // Phase 1: preprocess (conditional compilation). Best-effort, cannot fail.
+    let pre = preprocess(source);
+    push(ProbePhase::Preprocess, true, String::new());
+
+    // Phase 2: lex (uppercase outside quotes, tokenize).
+    let up = uppercase_outside_quotes(&pre);
+    let mut toks = lex(&up);
+    push(ProbePhase::Lex, true, String::new());
+
+    // Phase 3: parse (currency/decimal handling, program split).
+    let first_proc = match find_seq(&toks, &["PROCEDURE", "DIVISION"]) {
+        Some(i) => i,
+        None => {
+            push(
+                ProbePhase::Parse,
+                false,
+                RunError::Unsupported("no PROCEDURE DIVISION".into()).to_string(),
+            );
+            return out;
+        }
+    };
+    let currency = parse_currency_sign(&toks, first_proc);
+    let decimal_comma = parse_decimal_comma(&toks, first_proc);
+    if decimal_comma {
+        for t in toks.iter_mut() {
+            if let Tok::Word(w) = t {
+                if is_comma_decimal_literal(w) {
+                    *w = w.replace(',', ".");
+                }
+            }
+        }
+    }
+    let (main_name, program_map) = match parse_programs(&toks) {
+        Ok(p) => p,
+        Err(e) => {
+            push(ProbePhase::Parse, false, e.to_string());
+            return out;
+        }
+    };
+    push(ProbePhase::Parse, true, String::new());
+
+    // Phase 4: resolution (switches, collation, FD record -> file ownership).
+    let switches = parse_switches(&toks, first_proc);
+    let collation = parse_collation(&toks, first_proc);
+    set_collation(collation);
+    let file_defs: HashMap<String, FileDef> = program_map
+        .get(&main_name)
+        .map(|p| {
+            p.files
+                .iter()
+                .map(|f| (f.name.clone(), f.clone()))
+                .collect()
+        })
+        .unwrap_or_default();
+    let mut record_files: HashMap<String, String> = HashMap::new();
+    if let Some(p) = program_map.get(&main_name) {
+        for f in &p.files {
+            for r in &f.records {
+                record_files
+                    .entry(r.clone())
+                    .or_insert_with(|| f.name.clone());
+            }
+        }
+    }
+    let reports: HashMap<String, ReportDef> = program_map
+        .get(&main_name)
+        .map(|p| p.reports.clone())
+        .unwrap_or_default();
+    push(ProbePhase::Resolution, true, String::new());
+
+    let ctx = Ctx {
+        programs: &program_map,
+        dialect,
+        currency,
+        decimal_comma,
+        collation,
+        switches,
+        print_redirect: false,
+        printer: RefCell::new(Vec::new()),
+        stop_run: Cell::new(false),
+        exit_perform: Cell::new(false),
+        exit_cycle: Cell::new(false),
+        next_sentence: Cell::new(false),
+        call_state: RefCell::new(HashMap::new()),
+        goto: RefCell::new(None),
+        file_defs,
+        record_files,
+        files: RefCell::new(HashMap::new()),
+        reports,
+    };
+    let main = ctx
+        .programs
+        .get(&main_name)
+        .expect("main program is registered");
+
+    // Phase 5: layout (WORKING-STORAGE / FD / REPORT model construction).
+    let fields = match build_program_fields(main, &ctx) {
+        Ok(f) => f,
+        Err(e) => {
+            push(ProbePhase::Layout, false, e.to_string());
+            return out;
+        }
+    };
+    push(ProbePhase::Layout, true, String::new());
+
+    // Phase 6: semantic check (skip-mode body walk, exactly as check_program).
+    CHECK_MODE.with(|c| c.set(true));
+    let body_check: Result<(), RunError> = (|| {
+        let names: Vec<String> = ctx.programs.keys().cloned().collect();
+        for name in names {
+            let prog = &ctx.programs[&name];
+            let mut fields = if name == main_name {
+                fields.clone()
+            } else {
+                build_program_fields(prog, &ctx)?
+            };
+            let mut p = 0usize;
+            while p < prog.proc_toks.len() {
+                let before = p;
+                if run_block(
+                    &prog.proc_toks,
+                    &mut p,
+                    &mut fields,
+                    &mut Vec::new(),
+                    false,
+                    &ctx,
+                )? {
+                    break;
+                }
+                if p == before {
+                    p += 1;
+                }
+                if matches!(prog.proc_toks.get(p), Some(Tok::Dot)) {
+                    p += 1;
+                }
+            }
+        }
+        Ok(())
+    })();
+    CHECK_MODE.with(|c| c.set(false));
+    match body_check {
+        Ok(()) => push(ProbePhase::Check, true, String::new()),
+        Err(e) => {
+            push(ProbePhase::Check, false, e.to_string());
+            return out;
+        }
+    }
+
+    if run {
+        // Phases 7-8: prepare + execute -- exactly the run path of run_program_redirected. The
+        // static phases above already passed, so a run-mode error is the execution boundary.
+        match run_program_redirected(source, dialect, false) {
+            Ok((_out, _printer, rc)) => {
+                push(ProbePhase::Prepare, true, String::new());
+                push(ProbePhase::Execute, true, format!("exit {rc}"));
+            }
+            Err(e) => {
+                push(ProbePhase::Prepare, true, String::new());
+                push(ProbePhase::Execute, false, e.to_string());
+            }
+        }
+    }
+    out
+}
+
 /// Read the program's final `RETURN-CODE` register as the process exit code (`MOVE n TO RETURN-CODE` /
 /// `STOP RUN n`). Defaults to 0.
 fn read_return_code(fields: &HashMap<String, Field>) -> i32 {
@@ -16178,27 +16415,71 @@ mod tests {
 }
 
 #[cfg(test)]
-mod probe_tmp {
-    use crate::dialect::Dialect;
-    use crate::frontend::run_program_dialect_with_rc;
-    fn run(s: &str) -> Result<Vec<u8>, String> {
-        run_program_dialect_with_rc(s, Dialect::DEFAULT)
-            .map(|(o, _)| o)
-            .map_err(|e| format!("{e:?}"))
-    }
+mod probe_phase_tests {
+    use super::*;
+
+    const GOOD: &str = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 W PIC X(6) VALUE \"ABCDEF\".\n       PROCEDURE DIVISION.\n           DISPLAY W(2:3).\n           STOP RUN.\n";
+    const BAD_SYNTAX: &str = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n           BOGUS-STATEMENT X.\n           STOP RUN.\n";
+
     #[test]
-    fn probe_refmod() {
-        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 W PIC X(6) VALUE \"ABCDEF\".\n       PROCEDURE DIVISION.\n           DISPLAY W(2:3).\n           STOP RUN.\n";
-        eprintln!("REFMOD => {:?}", run(src));
+    fn probe_all_phases_ok_on_good_source() {
+        let probes = probe_phases(GOOD, crate::dialect::Dialect::DEFAULT, true);
+        let phases: Vec<&str> = probes.iter().map(|p| p.phase.as_str()).collect();
+        assert_eq!(
+            phases,
+            vec![
+                "preprocess",
+                "lex",
+                "parse",
+                "resolution",
+                "layout",
+                "check",
+                "prepare",
+                "execute"
+            ]
+        );
+        assert!(probes.iter().all(|p| p.ok), "{probes:?}");
+        // probe agreement with the canonical entry points
+        assert!(check_program(GOOD, crate::dialect::Dialect::DEFAULT).is_ok());
+        assert_eq!(
+            run_program_dialect_with_rc(GOOD, crate::dialect::Dialect::DEFAULT)
+                .unwrap()
+                .1,
+            0
+        );
     }
+
     #[test]
-    fn probe_length_table() {
-        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 E PIC 99 OCCURS 3 TIMES.\n       PROCEDURE DIVISION.\n           DISPLAY FUNCTION LENGTH(E).\n           DISPLAY FUNCTION LENGTH(E(1)).\n           STOP RUN.\n";
-        eprintln!("LENGTH-TABLE => {:?}", run(src));
+    fn probe_stops_at_first_static_failure() {
+        let probes = probe_phases(BAD_SYNTAX, crate::dialect::Dialect::DEFAULT, false);
+        // first failure is a check-phase diagnostic (the unknown statement verb), never a guess
+        let first_bad = probes.iter().find(|p| !p.ok).expect("a failure");
+        assert_eq!(first_bad.phase, "check");
+        assert!(!first_bad.diagnostic.is_empty());
+        assert_eq!(probes.len(), 6); // five ok probes (preprocess..layout) + the failing check
+        assert_eq!(probes[0].phase, "preprocess");
+        // agreement: check_program also rejects it
+        assert!(check_program(BAD_SYNTAX, crate::dialect::Dialect::DEFAULT).is_err());
     }
+
     #[test]
-    fn probe_group_occurs() {
-        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 TBL.\n         05 ENT OCCURS 3 TIMES.\n           10 EK PIC 9(3).\n           10 EV PIC XX.\n       PROCEDURE DIVISION.\n           DISPLAY \"X\".\n           STOP RUN.\n";
-        eprintln!("GROUP-OCCURS => {:?}", run(src));
+    fn probe_missing_procedure_division_is_parse_failure() {
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n";
+        let probes = probe_phases(src, crate::dialect::Dialect::DEFAULT, false);
+        let first_bad = probes.iter().find(|p| !p.ok).expect("a failure");
+        assert_eq!(first_bad.phase, "parse");
+        assert!(first_bad.diagnostic.contains("no PROCEDURE DIVISION"));
+    }
+
+    #[test]
+    fn probe_run_failure_is_execute_phase() {
+        // statically fine; runtime fatal (CANCEL of the active program, exit 1)
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. prog.\n       PROCEDURE DIVISION.\n           CANCEL \"prog\".\n           DISPLAY \"NG\" NO ADVANCING END-DISPLAY.\n           STOP RUN.\n";
+        set_source_file("prog.cob");
+        let probes = probe_phases(src, crate::dialect::Dialect::DEFAULT, true);
+        let execute = probes.last().expect("execute probe");
+        assert_eq!(execute.phase, "execute");
+        assert!(!execute.ok, "{execute:?}");
+        assert!(execute.diagnostic.contains("CANCEL active program"));
     }
 }
