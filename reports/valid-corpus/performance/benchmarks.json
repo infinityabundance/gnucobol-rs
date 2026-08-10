@@ -1,0 +1,502 @@
+{
+  "float": [
+    {
+      "workload": "float",
+      "scale": "small",
+      "records": 500,
+      "input_sha256": "668e3a10ebc105a09f9223cf671ed6b6f4d0ff91b5c5f0aba4cfaeb17d4fc7cc",
+      "expected_sha256": "8abc95d4408a0515ebda500fbf5b1f6b74b1d559baaff07ba56dc190a0b54e78",
+      "oracle_compile_ms": 60,
+      "oracle_run_ms": 1,
+      "output_sha256": "8abc95d4408a0515ebda500fbf5b1f6b74b1d559baaff07ba56dc190a0b54e78",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "float",
+      "scale": "medium",
+      "records": 5000,
+      "input_sha256": "8dd46c2ca4c3c8e244179e54d9e53b4ef6638511f9c575f0275e796c35938068",
+      "expected_sha256": "e8c2ced43810dff96f8a78d33b85f635593f82547f11e41236ef07093fdfcc0b",
+      "oracle_compile_ms": 60,
+      "oracle_run_ms": 5,
+      "output_sha256": "e8c2ced43810dff96f8a78d33b85f635593f82547f11e41236ef07093fdfcc0b",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "float",
+      "scale": "large",
+      "records": 50000,
+      "input_sha256": "c049878ad1f1a9140d8eaa9708760fbd8e8bb9d2d082f08b2b039d0fcf458c73",
+      "expected_sha256": "19c2ef785549fc29ed6643312056cba69e0f44dd1cab9ef6bf4a7fbaf2d48502",
+      "oracle_compile_ms": 61,
+      "oracle_run_ms": 38,
+      "output_sha256": "19c2ef785549fc29ed6643312056cba69e0f44dd1cab9ef6bf4a7fbaf2d48502",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "float",
+      "scale": "stress",
+      "records": 500000,
+      "input_sha256": "7a4de8132ffe69f4a852902542dd1444a5fa10247eb2e556fe7542ceacd8f4d6",
+      "expected_sha256": "bee13662fed65424b671173536d12cef46fe9dd226508522002a59d4f9d653e2",
+      "oracle_compile_ms": 61,
+      "oracle_run_ms": 365,
+      "output_sha256": "bee13662fed65424b671173536d12cef46fe9dd226508522002a59d4f9d653e2",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    }
+  ],
+  "invoice": [
+    {
+      "workload": "invoice",
+      "scale": "small",
+      "records": 500,
+      "input_sha256": "2173ca6a4b4c2dce2f9f331691d00075f1c6dbcdf2b70e9462cb12afa865e619",
+      "expected_sha256": "0d93ad77a77478c2c7c54d908c3b3313fc4de3053026aefb6fed993e2c6d2ba9",
+      "oracle_compile_ms": 65,
+      "oracle_run_ms": 2,
+      "output_sha256": "0d93ad77a77478c2c7c54d908c3b3313fc4de3053026aefb6fed993e2c6d2ba9",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "invoice",
+      "scale": "medium",
+      "records": 5000,
+      "input_sha256": "173c5be2511cf61ce58e91ceb8531308e2a52a45cc2d768aaa0c75e34fe5d770",
+      "expected_sha256": "de7b2c5645b114103743a07ee520ffc1ebb60e2ba7a4a9f9d807cd23259f5761",
+      "oracle_compile_ms": 65,
+      "oracle_run_ms": 5,
+      "output_sha256": "de7b2c5645b114103743a07ee520ffc1ebb60e2ba7a4a9f9d807cd23259f5761",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "invoice",
+      "scale": "large",
+      "records": 50000,
+      "input_sha256": "aedad0dddfaf9e2df8eabf1ccf3dbe996460a2493048bb1e622c4e724eafeb2c",
+      "expected_sha256": "87d1b44d49e4caa0dd88721ef7078518d0703b3d2cd7fabe9bccf6c3c3773ddd",
+      "oracle_compile_ms": 64,
+      "oracle_run_ms": 37,
+      "output_sha256": "87d1b44d49e4caa0dd88721ef7078518d0703b3d2cd7fabe9bccf6c3c3773ddd",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "invoice",
+      "scale": "stress",
+      "records": 500000,
+      "input_sha256": "4dd2902d7a4178fb4f8420e8427402a06c359cc62784219366242e42dd5035c0",
+      "expected_sha256": "75bc57f46ca32c921b214e23e4cfa04989b02ee3d7ec5094617ab45ae5085f24",
+      "oracle_compile_ms": 66,
+      "oracle_run_ms": 354,
+      "output_sha256": "75bc57f46ca32c921b214e23e4cfa04989b02ee3d7ec5094617ab45ae5085f24",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    }
+  ],
+  "mixed": [
+    {
+      "workload": "mixed",
+      "scale": "small",
+      "records": 500,
+      "input_sha256": "c4bb9ef20c4739f3e88eb2a7a893d06df61f1a93776de986047229e8dc0dd644",
+      "expected_sha256": "47b7a1d59211f6345a574db9cec1218c65513f38e12233f9ab26b93f28fe98d0",
+      "oracle_compile_ms": 99,
+      "oracle_run_ms": 2,
+      "output_sha256": "47b7a1d59211f6345a574db9cec1218c65513f38e12233f9ab26b93f28fe98d0",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "mixed",
+      "scale": "medium",
+      "records": 5000,
+      "input_sha256": "72ab556d5c8b3ac29aba7682218962039e7aa2e00224b02c5c702fd62e9b0ad7",
+      "expected_sha256": "8142a0a72fc5c84810963bbe8adab7c9a867caef676947b2f426c581b1e5fbc8",
+      "oracle_compile_ms": 95,
+      "oracle_run_ms": 5,
+      "output_sha256": "8142a0a72fc5c84810963bbe8adab7c9a867caef676947b2f426c581b1e5fbc8",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "mixed",
+      "scale": "large",
+      "records": 50000,
+      "input_sha256": "999208e2fd4a6d245f45d18d17d92c4e222005837df3aa528fdd9af831ba3269",
+      "expected_sha256": "cf7edbc0a83485cb5a606ea79de9821554c4b633ac08dbaa99f3ca16f3a29f49",
+      "oracle_compile_ms": 103,
+      "oracle_run_ms": 39,
+      "output_sha256": "cf7edbc0a83485cb5a606ea79de9821554c4b633ac08dbaa99f3ca16f3a29f49",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "mixed",
+      "scale": "stress",
+      "records": 500000,
+      "input_sha256": "d242f33f4ade170ae5da504947250095d504f3010130df4b1410a01e56cf97e5",
+      "expected_sha256": "e0f274dc47fb886a7ff60cbcd1328aa5bbf44ed08ff02096218bdebe462e1684",
+      "oracle_compile_ms": 100,
+      "oracle_run_ms": 372,
+      "output_sha256": "e0f274dc47fb886a7ff60cbcd1328aa5bbf44ed08ff02096218bdebe462e1684",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    }
+  ],
+  "modules": [
+    {
+      "workload": "modules",
+      "scale": "small",
+      "records": 500,
+      "input_sha256": "68071fd96698f5b8fe2390d2faba3cba2df3de19aad0a0b43e8c6100675970fb",
+      "expected_sha256": "99e31a8a815c4e28e4a2d4a590ade90847b15709ca658164f4bcaa208eb42e19",
+      "oracle_compile_ms": 82,
+      "oracle_run_ms": 1,
+      "output_sha256": "99e31a8a815c4e28e4a2d4a590ade90847b15709ca658164f4bcaa208eb42e19",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "modules",
+      "scale": "medium",
+      "records": 5000,
+      "input_sha256": "6fa16afe6ed4f5e52c70d54b5e9e53860609c54c186617414c629f77bd02d946",
+      "expected_sha256": "bd2b8cadc59fe03b01cf49a3c209ff6235b493d78335705691e14d28fff3608b",
+      "oracle_compile_ms": 78,
+      "oracle_run_ms": 3,
+      "output_sha256": "bd2b8cadc59fe03b01cf49a3c209ff6235b493d78335705691e14d28fff3608b",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "modules",
+      "scale": "large",
+      "records": 50000,
+      "input_sha256": "87e4241a45f25d74b2a7924bcf5907d154f14f0121c4cc55339289da9f3a4cca",
+      "expected_sha256": "103388cf14b4f8d6df3417d38a7668a058251d1ffcc6c7521b2e4e0bb05d044c",
+      "oracle_compile_ms": 81,
+      "oracle_run_ms": 17,
+      "output_sha256": "103388cf14b4f8d6df3417d38a7668a058251d1ffcc6c7521b2e4e0bb05d044c",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "modules",
+      "scale": "stress",
+      "records": 500000,
+      "input_sha256": "24a5cf6da506e179c71b98a667786c981b042fbee5e0541286ec755752901abd",
+      "expected_sha256": "1d9a782a73f919a2998a7ab3b012132b244a1f5982c9dad3f520de3a9c0e4ec6",
+      "oracle_compile_ms": 81,
+      "oracle_run_ms": 162,
+      "output_sha256": "1d9a782a73f919a2998a7ab3b012132b244a1f5982c9dad3f520de3a9c0e4ec6",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    }
+  ],
+  "payroll": [
+    {
+      "workload": "payroll",
+      "scale": "small",
+      "records": 500,
+      "input_sha256": "864f26da0238b1c0e7d77fadd397b35abd8f48af790012b966663ec14a8666bb",
+      "expected_sha256": "b82d347d646a5fc8825a1312f1b02ebcf93af0a88b6b8b4154648a91974fab91",
+      "oracle_compile_ms": 79,
+      "oracle_run_ms": 2,
+      "output_sha256": "b82d347d646a5fc8825a1312f1b02ebcf93af0a88b6b8b4154648a91974fab91",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "payroll",
+      "scale": "medium",
+      "records": 5000,
+      "input_sha256": "717670e767d860423e09455dbe294f3a99c416ebe2f91c3a459eb6977b0a9c47",
+      "expected_sha256": "2659880edc16551051444c5b6c9045d507ce5b89bc82d91636f5b0ac149eb563",
+      "oracle_compile_ms": 76,
+      "oracle_run_ms": 5,
+      "output_sha256": "2659880edc16551051444c5b6c9045d507ce5b89bc82d91636f5b0ac149eb563",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "payroll",
+      "scale": "large",
+      "records": 50000,
+      "input_sha256": "9c0cd52cb2872b7701a1034e24d15ebb2cffb71d389710755d97ad53230a00c8",
+      "expected_sha256": "d64395ed330c6ccd10e45ce78620a9a0dfb157a44f1006e337596311b1af1874",
+      "oracle_compile_ms": 78,
+      "oracle_run_ms": 41,
+      "output_sha256": "d64395ed330c6ccd10e45ce78620a9a0dfb157a44f1006e337596311b1af1874",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "payroll",
+      "scale": "stress",
+      "records": 500000,
+      "input_sha256": "838a9d55102b64af0dee72dc387f0b4a3763ead63179c8e8248d5448c9fc59d0",
+      "expected_sha256": "0b69d581999c98f8ae168836ccf86fbbc546ba4420c49180013cd5cd1ff93de9",
+      "oracle_compile_ms": 77,
+      "oracle_run_ms": 398,
+      "output_sha256": "0b69d581999c98f8ae168836ccf86fbbc546ba4420c49180013cd5cd1ff93de9",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    }
+  ],
+  "relative": [
+    {
+      "workload": "relative",
+      "scale": "small",
+      "records": 500,
+      "input_sha256": "f282006764db40fa3af476ab7df2ec1fd41c77278efbcc1046665c71988a5c70",
+      "expected_sha256": "ea40320e9ee9d3a55be041bbb3e6c938964bdc055da60c2e291e7a9a463b3b3f",
+      "oracle_compile_ms": 71,
+      "oracle_run_ms": 2,
+      "output_sha256": "ea40320e9ee9d3a55be041bbb3e6c938964bdc055da60c2e291e7a9a463b3b3f",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "relative",
+      "scale": "medium",
+      "records": 5000,
+      "input_sha256": "06ac2f87c0686feea8e8cbf02a3d390faf0f445cc8a7a092a11f8b62378bbd92",
+      "expected_sha256": "ab046254404d91df2e4d1ed951aada887af660feed3ae57d73f385a303a0d2f7",
+      "oracle_compile_ms": 69,
+      "oracle_run_ms": 7,
+      "output_sha256": "ab046254404d91df2e4d1ed951aada887af660feed3ae57d73f385a303a0d2f7",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "relative",
+      "scale": "large",
+      "records": 50000,
+      "input_sha256": "a0b5b8ef234540a431de5d4ca883ffa3c6293818b63d6515cbfb6d4dd7975d47",
+      "expected_sha256": "86d85a2ad15e24524ef19687616ab64d55a2ced17c2fe41c542e6cdbc78c0a83",
+      "oracle_compile_ms": 70,
+      "oracle_run_ms": 56,
+      "output_sha256": "86d85a2ad15e24524ef19687616ab64d55a2ced17c2fe41c542e6cdbc78c0a83",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "relative",
+      "scale": "stress",
+      "records": 500000,
+      "input_sha256": "4b2a5750800434d713d7cff0879ccc5170627d8737e54f07451ccce9ba50647f",
+      "expected_sha256": "c2721925065d85e596d9fd456b568fbd25ccec5a70858e20be967d6916389e47",
+      "oracle_compile_ms": 72,
+      "oracle_run_ms": 541,
+      "output_sha256": "c2721925065d85e596d9fd456b568fbd25ccec5a70858e20be967d6916389e47",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    }
+  ],
+  "report": [
+    {
+      "workload": "report",
+      "scale": "small",
+      "records": 500,
+      "input_sha256": "8bd77a464037bd30fefb225e2cede62d2a8398ea8f224a265026a0f52196eef5",
+      "expected_sha256": "ca03e7574398eedb0c4dfcb89a94ffd7840c644420303514db67301b41e527d9",
+      "oracle_compile_ms": 63,
+      "oracle_run_ms": 1,
+      "output_sha256": "ca03e7574398eedb0c4dfcb89a94ffd7840c644420303514db67301b41e527d9",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "report",
+      "scale": "medium",
+      "records": 5000,
+      "input_sha256": "3d238642e5d3dd4b422ab516d1c05750e303eccc5b4223a43204378a5ff71d3b",
+      "expected_sha256": "b837608709aa29c0065e7f23c23cd4bd2a75d54f3a0d1cdb42f0047983487bce",
+      "oracle_compile_ms": 62,
+      "oracle_run_ms": 2,
+      "output_sha256": "b837608709aa29c0065e7f23c23cd4bd2a75d54f3a0d1cdb42f0047983487bce",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "report",
+      "scale": "large",
+      "records": 50000,
+      "input_sha256": "b2d7d4812a66630a5a79879f4d8b816776ef61eb6d0a84710c9729a5ffaf204a",
+      "expected_sha256": "a030cc1e9322e52c9f37749e0dcc771de1a72a78cbf600cbeaa001f8a3f09214",
+      "oracle_compile_ms": 63,
+      "oracle_run_ms": 13,
+      "output_sha256": "a030cc1e9322e52c9f37749e0dcc771de1a72a78cbf600cbeaa001f8a3f09214",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "report",
+      "scale": "stress",
+      "records": 500000,
+      "input_sha256": "8ddff417ca8887b02c4289ecd90f431d10b56f674b2dde017675398810944922",
+      "expected_sha256": "327d8bcf60e700caacf2adf27cde7974223b8acadb1176d9a56eef8f0824760c",
+      "oracle_compile_ms": 65,
+      "oracle_run_ms": 124,
+      "output_sha256": "327d8bcf60e700caacf2adf27cde7974223b8acadb1176d9a56eef8f0824760c",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    }
+  ],
+  "seqfile": [
+    {
+      "workload": "seqfile",
+      "scale": "small",
+      "records": 500,
+      "input_sha256": "a86a4a7aa1f18c758d73f3eb07bb72c21fdd1807711df23647d8c93465d901fc",
+      "expected_sha256": "71f22937ad4031670fd3185b5e8756adad24787d35c356f438af9442bc244b77",
+      "oracle_compile_ms": 66,
+      "oracle_run_ms": 1,
+      "output_sha256": "71f22937ad4031670fd3185b5e8756adad24787d35c356f438af9442bc244b77",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "seqfile",
+      "scale": "medium",
+      "records": 5000,
+      "input_sha256": "49fda53a2c968cda85071757bffce14c13c5b67a4c2e5a0f98cff453755c1bd7",
+      "expected_sha256": "b5c4b2c9b08085bbba5dd32c15f82d3c9c1189fa2cc351f5a3c1d1890f87c326",
+      "oracle_compile_ms": 63,
+      "oracle_run_ms": 2,
+      "output_sha256": "b5c4b2c9b08085bbba5dd32c15f82d3c9c1189fa2cc351f5a3c1d1890f87c326",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "seqfile",
+      "scale": "large",
+      "records": 50000,
+      "input_sha256": "992db927978e4678ef8ff043480aa8dbaf558c96f8ab216cf6490371ff3314a6",
+      "expected_sha256": "1c4b53ad871e62b784f63e8ee39ab458fca414acfd7ec32f520de93720b629ae",
+      "oracle_compile_ms": 66,
+      "oracle_run_ms": 14,
+      "output_sha256": "1c4b53ad871e62b784f63e8ee39ab458fca414acfd7ec32f520de93720b629ae",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "seqfile",
+      "scale": "stress",
+      "records": 500000,
+      "input_sha256": "b4d68c203cb568825158ef42fa7429129f3e03969e7a998efc0c2d8d20db0e70",
+      "expected_sha256": "661180c7360dc0f505548bd045ed27955729ed01119b166a5e92eb3029d342d8",
+      "oracle_compile_ms": 67,
+      "oracle_run_ms": 133,
+      "output_sha256": "661180c7360dc0f505548bd045ed27955729ed01119b166a5e92eb3029d342d8",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    }
+  ],
+  "strings": [
+    {
+      "workload": "strings",
+      "scale": "small",
+      "records": 500,
+      "input_sha256": "108e3ad4df2d8863026917e826a83f932c72d766514b170a0a609fa83944d567",
+      "expected_sha256": "5c640a12a1ea3c9b8c797e673505fb2564ee6733e9c14784b93c900370c68dea",
+      "oracle_compile_ms": 60,
+      "oracle_run_ms": 1,
+      "output_sha256": "5c640a12a1ea3c9b8c797e673505fb2564ee6733e9c14784b93c900370c68dea",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "strings",
+      "scale": "medium",
+      "records": 5000,
+      "input_sha256": "a2c90a2ee47aea1eb156b03619a2cc04a81fb4375c90f8cd710084b6726b0e99",
+      "expected_sha256": "0a69c71e1eb87705849537e5ecde14bbcb408b3faa67cc8bfe5646bda5a920c1",
+      "oracle_compile_ms": 59,
+      "oracle_run_ms": 3,
+      "output_sha256": "0a69c71e1eb87705849537e5ecde14bbcb408b3faa67cc8bfe5646bda5a920c1",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "strings",
+      "scale": "large",
+      "records": 50000,
+      "input_sha256": "3c057d40853e3fd8e96fbd353953aa221aab28ac7aa3d871d77928d8beb41f79",
+      "expected_sha256": "9ca4f84a46c88f1e6c5b0e21d6bbdc1ff837ce68f875a5ba61a88a49c8450e4d",
+      "oracle_compile_ms": 61,
+      "oracle_run_ms": 20,
+      "output_sha256": "9ca4f84a46c88f1e6c5b0e21d6bbdc1ff837ce68f875a5ba61a88a49c8450e4d",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "strings",
+      "scale": "stress",
+      "records": 500000,
+      "input_sha256": "9041d6a0adb4398831f55289d7ec8e392d2f4a85e4db44c2f527285a86e12a43",
+      "expected_sha256": "70d4653efa83a24d6f835f11ed6bde386c74edb5a3d0f520eeef7fa52314f797",
+      "oracle_compile_ms": 61,
+      "oracle_run_ms": 181,
+      "output_sha256": "70d4653efa83a24d6f835f11ed6bde386c74edb5a3d0f520eeef7fa52314f797",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    }
+  ],
+  "tables": [
+    {
+      "workload": "tables",
+      "scale": "small",
+      "records": 500,
+      "input_sha256": "00d3c874e27da8999bf433bbba77ad72cb24f7b45fc3f7c63ca8fdb123f5a323",
+      "expected_sha256": "d29d4204c8e9a1955ddf503317120264ba2503be63cfac59061b6035b5103a22",
+      "oracle_compile_ms": 84,
+      "oracle_run_ms": 2,
+      "output_sha256": "d29d4204c8e9a1955ddf503317120264ba2503be63cfac59061b6035b5103a22",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "tables",
+      "scale": "medium",
+      "records": 5000,
+      "input_sha256": "3188360e39521d291c18a94c9ede2ea825c919331c4c50ea5c860aaf21296ccd",
+      "expected_sha256": "08ae85446b0058a6b221bbc02348299f913f23e00589616fb73d772c203bb949",
+      "oracle_compile_ms": 83,
+      "oracle_run_ms": 4,
+      "output_sha256": "08ae85446b0058a6b221bbc02348299f913f23e00589616fb73d772c203bb949",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "tables",
+      "scale": "large",
+      "records": 50000,
+      "input_sha256": "a7db2fc8494982dc03506c50584757e71f5b97ae8a992b9550f6c2d624c8120b",
+      "expected_sha256": "dae4782a7e354dfe210ed6a77d7f65b4f5755ee085cf17127800761801737688",
+      "oracle_compile_ms": 85,
+      "oracle_run_ms": 32,
+      "output_sha256": "dae4782a7e354dfe210ed6a77d7f65b4f5755ee085cf17127800761801737688",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    },
+    {
+      "workload": "tables",
+      "scale": "stress",
+      "records": 500000,
+      "input_sha256": "cc115d5c1514425e440725fa2a5d0c8a703b8fa19c86fa7dbe15a4b71279c793",
+      "expected_sha256": "47d9520e597617ae713f24407bfb3758dde56fad3d3a1212a10d57af0ee371b6",
+      "oracle_compile_ms": 84,
+      "oracle_run_ms": 335,
+      "output_sha256": "47d9520e597617ae713f24407bfb3758dde56fad3d3a1212a10d57af0ee371b6",
+      "byte_exact": true,
+      "note": "byte-exact match"
+    }
+  ]
+}

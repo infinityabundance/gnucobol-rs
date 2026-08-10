@@ -1,0 +1,23 @@
+[package]
+name = "gnucobol-rs-bench"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+description = "Purpose-designed scalable COBOL performance corpus for gnucobol-rs: deterministic data generators, independently validated expected outputs, and correctness-gated measurement."
+license = "LGPL-3.0-or-later"
+repository.workspace = true
+homepage.workspace = true
+
+[[bin]]
+name = "gnucobol-rs-bench"
+path = "src/main.rs"
+
+[dependencies]
+gnucobol-rs = { path = "../gnucobol-rs" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+
+[lints]
+workspace = true
