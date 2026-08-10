@@ -215,6 +215,21 @@ fn run(cmd: Command) -> Result<(), String> {
                 Err(format!("{} gate failure(s)", fails.len()))
             }
         }
+        Command::ExtractOmp { candidate, json } => {
+            let counts = cli::cmd_extract_omp(candidate)?;
+            if !json {
+                println!(
+                    "extract-omp: {} programs",
+                    counts.get("total_programs").copied().unwrap_or(0)
+                );
+                for (k, v) in &counts {
+                    if k != "total_programs" && !k.starts_with("inventory:") {
+                        println!("  {k}: {v}");
+                    }
+                }
+            }
+            emit(&counts, json)
+        }
         Command::ExtractExtras { candidate, json } => {
             let counts = cli::cmd_extract_extras(candidate)?;
             if !json {

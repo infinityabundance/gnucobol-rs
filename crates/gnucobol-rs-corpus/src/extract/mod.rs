@@ -15,6 +15,7 @@ pub mod ccvs85;
 pub mod extras;
 pub mod m4;
 pub mod manual;
+pub mod omp;
 pub mod oracle;
 pub mod package;
 pub mod report;
