@@ -3291,10 +3291,10 @@
    "action": "Improve SD (sort description) syntax checks and error recovery",
    "behavior": "Better SD syntax validation and recovery",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
-   "residual": "Completed by 277a07c2e (tests + runtime)",
+   "residual": "cobc-only diagnostic-position detail (finalize_file ORGANIZATION INDEXED warning anchor) not modeled; a broken SD/FD reference fails closed with a typed error, never hanging (bugs:#1151 shape pinned)",
    "superseded_by": null,
-   "evidence": null,
-   "integrated": false,
+   "evidence": "f17fba6b03",
+   "integrated": true,
    "lane_adoption": false
   },
   {
@@ -3361,10 +3361,10 @@
    "action": "Port the SD syntax-check behavior plus its tests; ensure no hang on malformed SD",
    "behavior": "SD syntax checks + testsuite coverage",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
-   "residual": "",
+   "residual": "SORT USING implicitly opens disk inputs (status 35 on missing); RELEASE of a record under a broken (unSELECTed) SD and KEY-not-a-field-of-the-sort-record remain documented subset boundaries",
    "superseded_by": null,
-   "evidence": null,
-   "integrated": false,
+   "evidence": "f17fba6b03",
+   "integrated": true,
    "lane_adoption": false
   },
   {
@@ -3456,10 +3456,10 @@
    "action": "Parser cleanup + better handling of incomplete code: bounded recovery, no hangs, deterministic diagnostics",
    "behavior": "Better recovery on incomplete source",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
-   "residual": "",
+   "residual": "SPECIAL-NAMES mnemonic surface and relaxed data-copybook parsing (missing headers) remain checker boundaries; the candidate fails closed on missing headers with typed errors, never hanging",
    "superseded_by": null,
-   "evidence": null,
-   "integrated": false,
+   "evidence": "f17fba6b03",
+   "integrated": true,
    "lane_adoption": false
   },
   {

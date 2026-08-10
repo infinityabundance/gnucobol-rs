@@ -100,15 +100,21 @@ E("13963e15a2da604b7a0392a06f9a8ec81db9bf04", "WRAPPER_INTEGRATED",
   evidence="ac4526a787e7393976788f2a097beb8afbda7375")
 E("23f8503529f02002876d1cc9c99ae0f4cc017355", "FRONTEND_REIMPLEMENTED",
   "Improve SD (sort description) syntax checks and error recovery",
-  "Better SD syntax validation and recovery", "Completed by 277a07c2e (tests + runtime)")
+  "Better SD syntax validation and recovery",
+  "cobc-only diagnostic-position detail (finalize_file ORGANIZATION INDEXED warning anchor) not modeled; a broken SD/FD reference fails closed with a typed error, never hanging (bugs:#1151 shape pinned)",
+  evidence="f17fba6b03")
 
 E("277a07c2ee9c9a5302fe9a07c249ed55cfdfd5bc", "FRONTEND_REIMPLEMENTED",
   "Port the SD syntax-check behavior plus its tests; ensure no hang on malformed SD",
-  "SD syntax checks + testsuite coverage", "")
+  "SD syntax checks + testsuite coverage",
+  "SORT USING implicitly opens disk inputs (status 35 on missing); RELEASE of a record under a broken (unSELECTed) SD and KEY-not-a-field-of-the-sort-record remain documented subset boundaries",
+  evidence="f17fba6b03")
 
 E("7b324f50ebbb05f4c56838e21112a0f8544c6488", "FRONTEND_REIMPLEMENTED",
   "Parser cleanup + better handling of incomplete code: bounded recovery, no hangs, deterministic diagnostics",
-  "Better recovery on incomplete source", "")
+  "Better recovery on incomplete source",
+  "SPECIAL-NAMES mnemonic surface and relaxed data-copybook parsing (missing headers) remain checker boundaries; the candidate fails closed on missing headers with typed errors, never hanging",
+  evidence="f17fba6b03")
 
 E("f4ffd50ecd2497ee1d4f45a6e5d6ab42b8c9e573", "FRONTEND_REIMPLEMENTED",
   "Reserved-word handling update + trace update: adopt the changed reserved-word set and trace output",
