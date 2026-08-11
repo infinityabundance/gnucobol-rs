@@ -1,0 +1,15 @@
+{
+  "family": "opencbs-defects-suite",
+  "url": "https://github.com/OpenCobolIDE/OpenCobolIDE (original) -- custody spine committed under lab/corpus/opencbs",
+  "revision": "2021-10-27 (DEFNOTES_20211027.TXT, committed custody spine)",
+  "archive_sha256": "custody spine committed in-repo (lab/corpus/opencbs/repo); per-file hashes in the custody report",
+  "extraction_rules": [
+    "COBOL_Programs/*.cbl",
+    "COBOL_Copybooks/*.cpy",
+    "Test_Files/**",
+    "DEFNOTES_20211027.TXT"
+  ],
+  "licence": "MIT",
+  "licence_decision": "MIT licence in the admitted repo root; per-file copyrights preserved in the custody report; redistribution allowed.",
+  "newer_revisions_seen": []
+}

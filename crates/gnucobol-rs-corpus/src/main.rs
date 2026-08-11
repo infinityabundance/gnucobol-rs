@@ -9,6 +9,7 @@
 
 use gnucobol_rs_corpus::cli::{self, Command};
 use gnucobol_rs_corpus::dedup::DedupIndex;
+use std::path::PathBuf;
 use std::process::ExitCode;
 
 fn main() -> ExitCode {
@@ -336,8 +337,18 @@ fn run(cmd: Command) -> Result<(), String> {
             emit(&probes, json)
         }
         Command::CheckUpdates { json } => {
-            let specs_dir = cwd.join("corpus").join("specs");
+            // fetch specs ship with the crate (crates/gnucobol-rs-corpus/specs); fall back to
+            // a repo-root `corpus/specs` when the crate dir is unavailable (embedded installs).
+            let crate_specs = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("specs");
+            let specs_dir = if crate_specs.is_dir() {
+                crate_specs
+            } else {
+                cwd.join("corpus").join("specs")
+            };
             let reports = cli::cmd_check_updates(&specs_dir)?;
+            // persist the upstream-freshness + corpus-drift report (spec 11.3) alongside the
+            // other valid-corpus reports; never mutates the admitted corpus.
+            cli::write_upstream_drift(&reports)?;
             if !json {
                 if reports.is_empty() {
                     println!("no fetch specs under {}", specs_dir.display());

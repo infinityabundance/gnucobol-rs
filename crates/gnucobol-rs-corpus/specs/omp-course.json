@@ -1,0 +1,15 @@
+{
+  "family": "omp-course",
+  "url": "https://github.com/openmainframeproject/cobol-programming-course.git",
+  "revision": "61c573dd13688f25e615e7cc4f9595cee38cd6a0",
+  "archive_sha256": "git-revision-pinned (no archive; immutable git revision + extraction rules)",
+  "extraction_rules": [
+    "**/*.cbl",
+    "**/*.cpy",
+    "**/*.jcl",
+    "**/*.txt"
+  ],
+  "licence": "CC-BY-4.0 (Open Mainframe Project course materials)",
+  "licence_decision": "Course materials admitted read-only; programs classified, platform-typed, not redistributed by gnucobol-rs.",
+  "newer_revisions_seen": []
+}

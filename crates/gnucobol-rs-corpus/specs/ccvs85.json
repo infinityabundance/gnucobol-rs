@@ -1,0 +1,15 @@
+{
+  "family": "ccvs85",
+  "url": "https://www.itl.nist.gov/div897/ctg/soe/ccvs85/",
+  "revision": "newcob.val.Z (NIST CCVS85 v4.0)",
+  "archive_sha256": "sha256 of the admitted newcob.val.Z recorded in the GNURUST.CCVS85.1 custody receipt",
+  "extraction_rules": [
+    "*.cob",
+    "*.cbl",
+    "CLBRY/**",
+    "DATA*"
+  ],
+  "licence": "public-domain (NIST test suite, US Government work)",
+  "licence_decision": "NIST CCVS85 is public-domain; admitted under lab/corpus/ccvs85/newcob.val.Z custody.",
+  "newer_revisions_seen": []
+}

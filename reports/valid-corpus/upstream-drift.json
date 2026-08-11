@@ -1,0 +1,47 @@
+{
+  "families": [
+    {
+      "family": "ccvs85",
+      "has_newer": false,
+      "latest_revision": "newcob.val.Z (NIST CCVS85 v4.0)",
+      "note": "network check unavailable for https://www.itl.nist.gov/div897/ctg/soe/ccvs85/ (offline or unreachable); pin unchanged",
+      "pinned_revision": "newcob.val.Z (NIST CCVS85 v4.0)"
+    },
+    {
+      "family": "gnucobol-upstream-current",
+      "has_newer": false,
+      "latest_revision": "5568b8fc770ff310e5017300d561d8f3deec257c",
+      "note": "upstream HEAD 5568b8fc770ff310e5017300d561d8f3deec257c == admitted pin (fresh)",
+      "pinned_revision": "5568b8fc770ff310e5017300d561d8f3deec257c"
+    },
+    {
+      "family": "omp-course",
+      "has_newer": false,
+      "latest_revision": "61c573dd13688f25e615e7cc4f9595cee38cd6a0",
+      "note": "upstream HEAD 61c573dd13688f25e615e7cc4f9595cee38cd6a0 == admitted pin (fresh)",
+      "pinned_revision": "61c573dd13688f25e615e7cc4f9595cee38cd6a0"
+    },
+    {
+      "family": "opencbs-defects-suite",
+      "has_newer": false,
+      "latest_revision": "2021-10-27 (DEFNOTES_20211027.TXT, committed custody spine)",
+      "note": "network check unavailable for https://github.com/OpenCobolIDE/OpenCobolIDE (original) -- custody spine committed under lab/corpus/opencbs (offline or unreachable); pin unchanged",
+      "pinned_revision": "2021-10-27 (DEFNOTES_20211027.TXT, committed custody spine)"
+    },
+    {
+      "family": "xcobol-zenodo",
+      "has_newer": false,
+      "latest_revision": "10.5281/zenodo.7968845 (2023-06-02 upload)",
+      "note": "network check unavailable for https://zenodo.org/records/7968845 (offline or unreachable); pin unchanged",
+      "pinned_revision": "10.5281/zenodo.7968845 (2023-06-02 upload)"
+    }
+  ],
+  "generated_at_utc": "2026-08-11T16:41:48Z",
+  "policy": "recorded, never auto-adopted (spec 11.2): a corpus campaign stays reproducible against its exact revision; adopting a newer revision requires an explicit admission command",
+  "schema": "gnurust-upstream-drift-v1",
+  "summary": {
+    "current": 5,
+    "families_checked": 5,
+    "newer_available": 0
+  }
+}

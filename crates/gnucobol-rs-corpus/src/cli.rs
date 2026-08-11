@@ -1496,7 +1496,10 @@ fn append_summary_phase10(out_dir: &Path) -> Result<(), String> {
 }
 
 /// `check-updates`: load every fetch spec under `specs_dir` and produce drift reports (no
-/// mutation of the admitted corpus).
+/// mutation of the admitted corpus). For git-origin specs the latest upstream HEAD is resolved
+/// with `git ls-remote` (network); for archive specs the recorded immutable revision is the
+/// latest known (no silent move). A newer revision is RECORDED, never auto-adopted (spec 11.2:
+/// a campaign stays reproducible against its exact revision).
 pub fn cmd_check_updates(specs_dir: &Path) -> Result<Vec<UpdateReport>, String> {
     let mut specs = Vec::new();
     if specs_dir.is_dir() {
@@ -1512,17 +1515,158 @@ pub fn cmd_check_updates(specs_dir: &Path) -> Result<Vec<UpdateReport>, String> 
         }
     }
     specs.sort_by(|a, b| a.family.cmp(&b.family));
-    Ok(specs
-        .iter()
-        .map(|s| UpdateReport {
-            family: s.family.clone(),
-            pinned_revision: s.revision.clone(),
-            latest_revision: s.revision.clone(),
-            has_newer: false,
-            note: "admission pin unchanged; network check runs at the family extractor level"
-                .to_string(),
-        })
-        .collect())
+    let mut out = Vec::new();
+    for s in &specs {
+        let report = if s.url.starts_with("git@")
+            || s.url.starts_with("https://")
+            || s.url.starts_with("http://")
+        {
+            // git or https origin: resolve the upstream default-branch HEAD (bounded).
+            match resolve_git_head(&s.url) {
+                Some(head) => {
+                    let has_newer = head != s.revision;
+                    UpdateReport {
+                        family: s.family.clone(),
+                        pinned_revision: s.revision.clone(),
+                        latest_revision: head.clone(),
+                        has_newer,
+                        note: if has_newer {
+                            format!(
+                                "upstream HEAD {head} differs from the admitted pin {} -- recorded, \
+                                 NOT auto-adopted (spec 11.2: reproducibility against the exact \
+                                 revision; adopt via an explicit admission command)",
+                                s.revision
+                            )
+                        } else {
+                            format!("upstream HEAD {head} == admitted pin (fresh)")
+                        },
+                    }
+                }
+                None => UpdateReport {
+                    family: s.family.clone(),
+                    pinned_revision: s.revision.clone(),
+                    latest_revision: s.revision.clone(),
+                    has_newer: false,
+                    note: format!(
+                        "network check unavailable for {} (offline or unreachable); pin unchanged",
+                        s.url
+                    ),
+                },
+            }
+        } else {
+            // immutable archive (zip/tar/DOI): the recorded revision IS the latest known.
+            UpdateReport {
+                family: s.family.clone(),
+                pinned_revision: s.revision.clone(),
+                latest_revision: s.revision.clone(),
+                has_newer: false,
+                note: "immutable archive origin; recorded revision is the admitted revision".into(),
+            }
+        };
+        out.push(report);
+    }
+    Ok(out)
+}
+
+/// Resolve the default-branch HEAD of a git origin with `git ls-remote` (bounded to ~20 s).
+/// Returns `None` when the network or the command is unavailable.
+fn resolve_git_head(url: &str) -> Option<String> {
+    let url_owned = url.to_string();
+    let t = std::thread::spawn(move || {
+        let out = std::process::Command::new("git")
+            .args(["ls-remote", &url_owned, "HEAD"])
+            .output()
+            .ok()?;
+        if !out.status.success() {
+            return None;
+        }
+        let text = String::from_utf8(out.stdout).ok()?;
+        text.split_whitespace().next().map(str::to_string)
+    });
+    match t.join() {
+        Ok(Some(head)) => Some(head),
+        _ => None,
+    }
+}
+
+/// Write `reports/valid-corpus/upstream-drift.json` + `.md` (spec 11.3 corpus-drift report):
+/// every admitted family's pinned revision, the latest upstream revision seen, whether a newer
+/// one exists, and the note. The admitted corpus is never mutated here -- adoption requires an
+/// explicit admission command.
+pub fn write_upstream_drift(reports: &[UpdateReport]) -> Result<(), String> {
+    let root = crate::extract::workspace_root()?;
+    let out_dir = root.join("reports").join("valid-corpus");
+    std::fs::create_dir_all(&out_dir).map_err(|e| e.to_string())?;
+    let doc = serde_json::json!({
+        "schema": "gnurust-upstream-drift-v1",
+        "generated_at_utc": now_utc_string(),
+        "policy": "recorded, never auto-adopted (spec 11.2): a corpus campaign stays reproducible \
+                   against its exact revision; adopting a newer revision requires an explicit \
+                   admission command",
+        "families": reports,
+        "summary": {
+            "families_checked": reports.len(),
+            "newer_available": reports.iter().filter(|r| r.has_newer).count(),
+            "current": reports.iter().filter(|r| !r.has_newer).count(),
+        },
+    });
+    let json = serde_json::to_string_pretty(&doc).map_err(|e| e.to_string())?;
+    std::fs::write(out_dir.join("upstream-drift.json"), json).map_err(|e| e.to_string())?;
+    let mut md = String::new();
+    md.push_str("# Upstream freshness + corpus drift (spec 11.3)\n\n");
+    md.push_str(
+        "Policy: **recorded, never auto-adopted** (spec 11.2). A campaign stays reproducible\n",
+    );
+    md.push_str(
+        "against its exact admitted revision; adopting a newer revision requires an explicit\n",
+    );
+    md.push_str("admission command.\n\n");
+    md.push_str("| family | pinned revision | latest seen | status |\n|---|---|---|---|\n");
+    for r in reports {
+        md.push_str(&format!(
+            "| {} | `{}` | `{}` | {} |\n",
+            r.family,
+            r.pinned_revision,
+            r.latest_revision,
+            if r.has_newer {
+                "NEWER AVAILABLE"
+            } else {
+                "current"
+            }
+        ));
+    }
+    md.push('\n');
+    for r in reports {
+        if r.has_newer {
+            md.push_str(&format!("- **{}**: {}\n", r.family, r.note));
+        }
+    }
+    md.push('\n');
+    std::fs::write(out_dir.join("upstream-drift.md"), md).map_err(|e| e.to_string())
+}
+
+/// UTC timestamp (ISO 8601) without external crates.
+fn now_utc_string() -> String {
+    use std::time::{SystemTime, UNIX_EPOCH};
+    let secs = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|d| d.as_secs() as i64)
+        .unwrap_or(0);
+    let days = secs.div_euclid(86_400);
+    let rem = secs.rem_euclid(86_400);
+    // Howard Hinnant's civil-from-days
+    let z = days + 719_468;
+    let era = if z >= 0 { z } else { z - 146_096 } / 146_097;
+    let doe = z - era * 146_097;
+    let yoe = (doe - doe / 1460 + doe / 36_524 - doe / 146_096) / 365;
+    let y = yoe + era * 400;
+    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
+    let mp = (5 * doy + 2) / 153;
+    let day = (doy - (153 * mp + 2) / 5 + 1) as i64;
+    let month = if mp < 10 { mp + 3 } else { mp - 9 } as i64;
+    let year = if month <= 2 { y + 1 } else { y };
+    let (h, mi, s) = (rem / 3600, (rem % 3600) / 60, rem % 60);
+    format!("{year:04}-{month:02}-{day:02}T{h:02}:{mi:02}:{s:02}Z")
 }
 
 #[cfg(test)]

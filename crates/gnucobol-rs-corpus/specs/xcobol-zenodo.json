@@ -1,0 +1,14 @@
+{
+  "family": "xcobol-zenodo",
+  "url": "https://zenodo.org/records/7968845",
+  "revision": "10.5281/zenodo.7968845 (2023-06-02 upload)",
+  "archive_sha256": "zip md5 1a05a95e5320bde93fadcecea4c1926a (recorded custody; sha256 of the zip recorded in the custody report)",
+  "extraction_rules": [
+    "X-COBOL/COBOL_Files/**",
+    "X-COBOL/*.json",
+    "a.json"
+  ],
+  "licence": "CC-BY-4.0 (dataset) / per-repository licences vary (quarantined when unknown)",
+  "licence_decision": "Dataset admitted under immutable DOI + md5 custody; repository-level licence quarantine (REFERENCE_ONLY for unknown/conflicting licences; never published).",
+  "newer_revisions_seen": []
+}
