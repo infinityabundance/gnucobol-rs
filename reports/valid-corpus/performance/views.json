@@ -1,0 +1,1641 @@
+{
+  "control": {
+    "candidate_compat": "prepared-v1",
+    "cobc_version": "cobc (GnuCOBOL) 3.2.0",
+    "compiler_flags": "cobc -x -O2 -o <artifact> <sources...>",
+    "generated_at_utc": "2026-08-11T16:05:41Z",
+    "host_cpu": "AMD Ryzen 7 9800X3D 8-Core Processor",
+    "iters": 5,
+    "outlier_policy": "min = best-case, median = typical, no samples discarded",
+    "peak_memory_kb": 175428,
+    "warmup": 1
+  },
+  "view_a": [
+    {
+      "candidate_total_ms": {
+        "iqr_ms": 0.44807699999999784,
+        "median_ms": 71.473636,
+        "min_ms": 71.340988,
+        "p95_ms": 71.995109,
+        "samples_ms": [
+          71.340988,
+          71.438901,
+          71.473636,
+          71.886978,
+          71.995109
+        ]
+      },
+      "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
+      "note": "byte-exact match",
+      "oracle_total_ms": {
+        "iqr_ms": 0.3545119999999997,
+        "median_ms": 72.19391999999999,
+        "min_ms": 71.871258,
+        "p95_ms": 72.612862,
+        "samples_ms": [
+          71.871258,
+          71.922003,
+          72.19391999999999,
+          72.276515,
+          72.612862
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "payroll"
+    },
+    {
+      "candidate_total_ms": {
+        "iqr_ms": 0.20626400000000444,
+        "median_ms": 59.639785,
+        "min_ms": 59.309127000000004,
+        "p95_ms": 59.939754,
+        "samples_ms": [
+          59.309127000000004,
+          59.513538999999994,
+          59.639785,
+          59.719803,
+          59.939754
+        ]
+      },
+      "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
+      "note": "byte-exact match",
+      "oracle_total_ms": {
+        "iqr_ms": 0.7847349999999977,
+        "median_ms": 61.101503,
+        "min_ms": 59.821023000000004,
+        "p95_ms": 61.134304,
+        "samples_ms": [
+          59.821023000000004,
+          60.332287,
+          61.101503,
+          61.117022,
+          61.134304
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "invoice"
+    },
+    {
+      "candidate_total_ms": {
+        "iqr_ms": 0.22113199999999722,
+        "median_ms": 32.979214999999996,
+        "min_ms": 32.738014,
+        "p95_ms": 33.085293,
+        "samples_ms": [
+          32.738014,
+          32.783079,
+          32.979214999999996,
+          33.004211,
+          33.085293
+        ]
+      },
+      "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
+      "note": "byte-exact match",
+      "oracle_total_ms": {
+        "iqr_ms": 0.6247959999999964,
+        "median_ms": 59.821864000000005,
+        "min_ms": 58.905494000000004,
+        "p95_ms": 61.081154999999995,
+        "samples_ms": [
+          58.905494000000004,
+          59.477953,
+          59.821864000000005,
+          60.102748999999996,
+          61.081154999999995
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "seqfile"
+    },
+    {
+      "candidate_total_ms": {
+        "iqr_ms": 4.668908999999985,
+        "median_ms": 2154.026264,
+        "min_ms": 2127.0923869999997,
+        "p95_ms": 2154.988663,
+        "samples_ms": [
+          2127.0923869999997,
+          2149.547708,
+          2154.026264,
+          2154.216617,
+          2154.988663
+        ]
+      },
+      "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
+      "note": "byte-exact match",
+      "oracle_total_ms": {
+        "iqr_ms": 1.0278570000000116,
+        "median_ms": 83.653431,
+        "min_ms": 78.558722,
+        "p95_ms": 83.895691,
+        "samples_ms": [
+          78.558722,
+          82.70284699999999,
+          83.653431,
+          83.730704,
+          83.895691
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "tables"
+    },
+    {
+      "candidate_total_ms": {
+        "iqr_ms": 0.15974700000000297,
+        "median_ms": 48.331893,
+        "min_ms": 48.227498,
+        "p95_ms": 48.479758,
+        "samples_ms": [
+          48.227498,
+          48.294101999999995,
+          48.331893,
+          48.453849,
+          48.479758
+        ]
+      },
+      "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
+      "note": "byte-exact match",
+      "oracle_total_ms": {
+        "iqr_ms": 0.5028170000000074,
+        "median_ms": 56.401596999999995,
+        "min_ms": 55.418712,
+        "p95_ms": 57.07346,
+        "samples_ms": [
+          55.418712,
+          55.939705,
+          56.401596999999995,
+          56.442522000000004,
+          57.07346
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "strings"
+    },
+    {
+      "candidate_total_ms": {
+        "iqr_ms": 0.26699799999999385,
+        "median_ms": 41.38256,
+        "min_ms": 40.950463,
+        "p95_ms": 41.545574,
+        "samples_ms": [
+          40.950463,
+          41.179411,
+          41.38256,
+          41.446408999999996,
+          41.545574
+        ]
+      },
+      "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
+      "note": "byte-exact match",
+      "oracle_total_ms": {
+        "iqr_ms": 0.5274850000000058,
+        "median_ms": 57.120137,
+        "min_ms": 56.479081,
+        "p95_ms": 57.795919,
+        "samples_ms": [
+          56.479081,
+          56.604944999999994,
+          57.120137,
+          57.13243,
+          57.795919
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "float"
+    },
+    {
+      "candidate_total_ms": {
+        "iqr_ms": 1.9958460000000002,
+        "median_ms": 36.998256,
+        "min_ms": 36.846984,
+        "p95_ms": 39.078849,
+        "samples_ms": [
+          36.846984,
+          36.879083,
+          36.998256,
+          38.874929,
+          39.078849
+        ]
+      },
+      "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
+      "note": "byte-exact match",
+      "oracle_total_ms": {
+        "iqr_ms": 0.11793100000000578,
+        "median_ms": 60.051239,
+        "min_ms": 58.700347,
+        "p95_ms": 60.236664000000005,
+        "samples_ms": [
+          58.700347,
+          60.008728999999995,
+          60.051239,
+          60.12666,
+          60.236664000000005
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "report"
+    },
+    {
+      "candidate_total_ms": {
+        "iqr_ms": 0.2907729999999873,
+        "median_ms": 88.511506,
+        "min_ms": 88.220172,
+        "p95_ms": 89.39285199999999,
+        "samples_ms": [
+          88.220172,
+          88.28056400000001,
+          88.511506,
+          88.571337,
+          89.39285199999999
+        ]
+      },
+      "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
+      "note": "byte-exact match",
+      "oracle_total_ms": {
+        "iqr_ms": 1.1021169999999927,
+        "median_ms": 66.665826,
+        "min_ms": 65.42771499999999,
+        "p95_ms": 68.646995,
+        "samples_ms": [
+          65.42771499999999,
+          66.656499,
+          66.665826,
+          67.75861599999999,
+          68.646995
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "relative"
+    },
+    {
+      "candidate_total_ms": {
+        "iqr_ms": 0.7615809999999925,
+        "median_ms": 54.358291,
+        "min_ms": 54.199234,
+        "p95_ms": 57.025931,
+        "samples_ms": [
+          54.199234,
+          54.20759,
+          54.358291,
+          54.969170999999996,
+          57.025931
+        ]
+      },
+      "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
+      "note": "byte-exact match",
+      "oracle_total_ms": {
+        "iqr_ms": 1.3539870000000036,
+        "median_ms": 75.395021,
+        "min_ms": 74.404262,
+        "p95_ms": 76.29473,
+        "samples_ms": [
+          74.404262,
+          74.580781,
+          75.395021,
+          75.934768,
+          76.29473
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "modules"
+    },
+    {
+      "candidate_total_ms": {
+        "iqr_ms": 0.8805440000000004,
+        "median_ms": 98.264411,
+        "min_ms": 97.543305,
+        "p95_ms": 102.648365,
+        "samples_ms": [
+          97.543305,
+          97.893288,
+          98.264411,
+          98.773832,
+          102.648365
+        ]
+      },
+      "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
+      "note": "byte-exact match",
+      "oracle_total_ms": {
+        "iqr_ms": 0.8805440000000146,
+        "median_ms": 93.431579,
+        "min_ms": 91.641218,
+        "p95_ms": 94.581876,
+        "samples_ms": [
+          91.641218,
+          93.023237,
+          93.431579,
+          93.90378100000001,
+          94.581876
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "mixed"
+    }
+  ],
+  "view_b": [
+    {
+      "candidate": {
+        "bytes_per_sec": 4987449.346217577,
+        "check_ms": 0.104635,
+        "layout_ms": 0.09097000000000001,
+        "lex_ms": 0.324856,
+        "lines_per_sec": 128724.65417869254,
+        "parse_ms": 0.200685,
+        "prepare_ms": 0.792389,
+        "preprocess_ms": 0.038672,
+        "resolution_ms": 0.012273,
+        "source_bytes": 3952,
+        "source_lines": 102
+      },
+      "note": "byte-exact match",
+      "oracle_compile_ms": {
+        "iqr_ms": 1.25709599999999,
+        "median_ms": 69.428262,
+        "min_ms": 69.059363,
+        "p95_ms": 70.615358,
+        "samples_ms": [
+          69.059363,
+          69.19497700000001,
+          69.428262,
+          70.452073,
+          70.615358
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "payroll"
+    },
+    {
+      "candidate": {
+        "bytes_per_sec": 4897072.270846011,
+        "check_ms": 0.073187,
+        "layout_ms": 0.081592,
+        "lex_ms": 0.246701,
+        "lines_per_sec": 119479.64226202044,
+        "parse_ms": 0.165319,
+        "prepare_ms": 0.627722,
+        "preprocess_ms": 0.030647,
+        "resolution_ms": 0.01103,
+        "source_bytes": 3074,
+        "source_lines": 75
+      },
+      "note": "byte-exact match",
+      "oracle_compile_ms": {
+        "iqr_ms": 0.29145400000000166,
+        "median_ms": 57.997223,
+        "min_ms": 57.208842000000004,
+        "p95_ms": 58.183882,
+        "samples_ms": [
+          57.208842000000004,
+          57.827757,
+          57.997223,
+          58.119211,
+          58.183882
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "invoice"
+    },
+    {
+      "candidate": {
+        "bytes_per_sec": 4754065.790594045,
+        "check_ms": 0.079007,
+        "layout_ms": 0.07551100000000001,
+        "lex_ms": 0.247823,
+        "lines_per_sec": 124567.56134558194,
+        "parse_ms": 0.168434,
+        "prepare_ms": 0.634194,
+        "preprocess_ms": 0.03226,
+        "resolution_ms": 0.011392000000000001,
+        "source_bytes": 3015,
+        "source_lines": 79
+      },
+      "note": "byte-exact match",
+      "oracle_compile_ms": {
+        "iqr_ms": 0.5126769999999965,
+        "median_ms": 58.747585,
+        "min_ms": 58.676811,
+        "p95_ms": 59.255914,
+        "samples_ms": [
+          58.676811,
+          58.693964,
+          58.747585,
+          59.206641,
+          59.255914
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "seqfile"
+    },
+    {
+      "candidate": {
+        "bytes_per_sec": 2438316.4005805515,
+        "check_ms": 0.587216,
+        "layout_ms": 0.362567,
+        "lex_ms": 0.307765,
+        "lines_per_sec": 63746.83400210593,
+        "parse_ms": 0.26261999999999996,
+        "prepare_ms": 1.75695,
+        "preprocess_ms": 0.04299,
+        "resolution_ms": 0.013105,
+        "source_bytes": 4284,
+        "source_lines": 112
+      },
+      "note": "byte-exact match",
+      "oracle_compile_ms": {
+        "iqr_ms": 0.9041579999999954,
+        "median_ms": 78.18498799999999,
+        "min_ms": 77.396085,
+        "p95_ms": 79.243383,
+        "samples_ms": [
+          77.396085,
+          77.407206,
+          78.18498799999999,
+          78.311364,
+          79.243383
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "tables"
+    },
+    {
+      "candidate": {
+        "bytes_per_sec": 4375831.281786954,
+        "check_ms": 0.071283,
+        "layout_ms": 0.049701999999999996,
+        "lex_ms": 0.20746699999999998,
+        "lines_per_sec": 106331.9792526484,
+        "parse_ms": 0.170939,
+        "prepare_ms": 0.554866,
+        "preprocess_ms": 0.025488,
+        "resolution_ms": 0.010059,
+        "source_bytes": 2428,
+        "source_lines": 59
+      },
+      "note": "byte-exact match",
+      "oracle_compile_ms": {
+        "iqr_ms": 0.17380500000000154,
+        "median_ms": 54.381423999999996,
+        "min_ms": 53.632947,
+        "p95_ms": 54.727489999999996,
+        "samples_ms": [
+          53.632947,
+          54.26169,
+          54.381423999999996,
+          54.435495,
+          54.727489999999996
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "strings"
+    },
+    {
+      "candidate": {
+        "bytes_per_sec": 4090260.239376304,
+        "check_ms": 0.052548,
+        "layout_ms": 0.059662,
+        "lex_ms": 0.166741,
+        "lines_per_sec": 109805.64401010211,
+        "parse_ms": 0.140382,
+        "prepare_ms": 0.473564,
+        "preprocess_ms": 0.023504,
+        "resolution_ms": 0.010499000000000001,
+        "source_bytes": 1937,
+        "source_lines": 52
+      },
+      "note": "byte-exact match",
+      "oracle_compile_ms": {
+        "iqr_ms": 0.5643729999999962,
+        "median_ms": 55.366102,
+        "min_ms": 54.80295,
+        "p95_ms": 55.903395,
+        "samples_ms": [
+          54.80295,
+          54.802991000000006,
+          55.366102,
+          55.367364,
+          55.903395
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "float"
+    },
+    {
+      "candidate": {
+        "bytes_per_sec": 4813213.084149806,
+        "check_ms": 0.076984,
+        "layout_ms": 0.06975,
+        "lex_ms": 0.200565,
+        "lines_per_sec": 122554.78030796505,
+        "parse_ms": 0.18743,
+        "prepare_ms": 0.595652,
+        "preprocess_ms": 0.030196,
+        "resolution_ms": 0.010679999999999999,
+        "source_bytes": 2867,
+        "source_lines": 73
+      },
+      "note": "byte-exact match",
+      "oracle_compile_ms": {
+        "iqr_ms": 0.34044500000000255,
+        "median_ms": 57.508461,
+        "min_ms": 56.969314,
+        "p95_ms": 58.160598,
+        "samples_ms": [
+          56.969314,
+          57.318495999999996,
+          57.508461,
+          57.658941,
+          58.160598
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "report"
+    },
+    {
+      "candidate": {
+        "bytes_per_sec": 5514178.767500294,
+        "check_ms": 0.114204,
+        "layout_ms": 0.07443899999999999,
+        "lex_ms": 0.395408,
+        "lines_per_sec": 143924.5703412111,
+        "parse_ms": 0.243024,
+        "prepare_ms": 0.910199,
+        "preprocess_ms": 0.051755999999999996,
+        "resolution_ms": 0.011441999999999999,
+        "source_bytes": 5019,
+        "source_lines": 131
+      },
+      "note": "byte-exact match",
+      "oracle_compile_ms": {
+        "iqr_ms": 0.6342339999999922,
+        "median_ms": 65.331423,
+        "min_ms": 64.666252,
+        "p95_ms": 65.539762,
+        "samples_ms": [
+          64.666252,
+          64.772871,
+          65.331423,
+          65.40710499999999,
+          65.539762
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "relative"
+    },
+    {
+      "candidate": {
+        "bytes_per_sec": 4301369.419243138,
+        "check_ms": 0.07272500000000001,
+        "layout_ms": 0.055544,
+        "lex_ms": 0.202167,
+        "lines_per_sec": 115183.11415546479,
+        "parse_ms": 0.166962,
+        "prepare_ms": 0.555637,
+        "preprocess_ms": 0.025949,
+        "resolution_ms": 0.011151000000000001,
+        "source_bytes": 2390,
+        "source_lines": 64
+      },
+      "note": "byte-exact match",
+      "oracle_compile_ms": {
+        "iqr_ms": 1.3233800000000002,
+        "median_ms": 73.34223700000001,
+        "min_ms": 72.693597,
+        "p95_ms": 74.69377,
+        "samples_ms": [
+          72.693597,
+          73.13309699999999,
+          73.34223700000001,
+          74.45647699999999,
+          74.69377
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "modules"
+    },
+    {
+      "candidate": {
+        "bytes_per_sec": 4742104.3800739115,
+        "check_ms": 0.116839,
+        "layout_ms": 0.09147999999999999,
+        "lex_ms": 0.388004,
+        "lines_per_sec": 122612.81454489134,
+        "parse_ms": 0.257581,
+        "prepare_ms": 0.929756,
+        "preprocess_ms": 0.043050000000000005,
+        "resolution_ms": 0.012443,
+        "source_bytes": 4409,
+        "source_lines": 114
+      },
+      "note": "byte-exact match",
+      "oracle_compile_ms": {
+        "iqr_ms": 0.4904559999999947,
+        "median_ms": 90.157376,
+        "min_ms": 89.46925,
+        "p95_ms": 90.70665,
+        "samples_ms": [
+          89.46925,
+          90.137889,
+          90.157376,
+          90.628345,
+          90.70665
+        ]
+      },
+      "records": 500,
+      "scale": "small",
+      "workload": "mixed"
+    }
+  ],
+  "view_c": [
+    {
+      "candidate": {
+        "iqr_ms": 0.11945299999999293,
+        "median_ms": 70.093413,
+        "min_ms": 69.845139,
+        "p95_ms": 73.27427,
+        "samples_ms": [
+          69.845139,
+          69.976805,
+          70.093413,
+          70.09625799999999,
+          73.27427
+        ]
+      },
+      "candidate_output_sha256": "b82d347d646a5fc8825a1312f1b02ebcf93af0a88b6b8b4154648a91974fab91",
+      "candidate_prepare_ms": 1,
+      "native": {
+        "iqr_ms": 0.06154499999999996,
+        "median_ms": 1.520929,
+        "min_ms": 1.453924,
+        "p95_ms": 1.588535,
+        "samples_ms": [
+          1.453924,
+          1.496053,
+          1.520929,
+          1.557598,
+          1.588535
+        ]
+      },
+      "note": "byte-exact match",
+      "oracle_output_sha256": "b82d347d646a5fc8825a1312f1b02ebcf93af0a88b6b8b4154648a91974fab91",
+      "outputs_agree": true,
+      "records": 500,
+      "scale": "small",
+      "workload": "payroll"
+    },
+    {
+      "candidate": {
+        "iqr_ms": 0.04183800000000559,
+        "median_ms": 58.386328,
+        "min_ms": 58.329963,
+        "p95_ms": 61.11391,
+        "samples_ms": [
+          58.329963,
+          58.344921,
+          58.386328,
+          58.386759000000005,
+          61.11391
+        ]
+      },
+      "candidate_output_sha256": "0d93ad77a77478c2c7c54d908c3b3313fc4de3053026aefb6fed993e2c6d2ba9",
+      "candidate_prepare_ms": 1,
+      "native": {
+        "iqr_ms": 0.01601000000000008,
+        "median_ms": 1.433065,
+        "min_ms": 1.427374,
+        "p95_ms": 1.479632,
+        "samples_ms": [
+          1.427374,
+          1.43018,
+          1.433065,
+          1.44619,
+          1.479632
+        ]
+      },
+      "note": "byte-exact match",
+      "oracle_output_sha256": "0d93ad77a77478c2c7c54d908c3b3313fc4de3053026aefb6fed993e2c6d2ba9",
+      "outputs_agree": true,
+      "records": 500,
+      "scale": "small",
+      "workload": "invoice"
+    },
+    {
+      "candidate": {
+        "iqr_ms": 0.3773139999999984,
+        "median_ms": 31.585039000000002,
+        "min_ms": 31.540005000000004,
+        "p95_ms": 33.672706,
+        "samples_ms": [
+          31.540005000000004,
+          31.544423000000002,
+          31.585039000000002,
+          31.921737,
+          33.672706
+        ]
+      },
+      "candidate_output_sha256": "71f22937ad4031670fd3185b5e8756adad24787d35c356f438af9442bc244b77",
+      "candidate_prepare_ms": 1,
+      "native": {
+        "iqr_ms": 0.057246999999999826,
+        "median_ms": 1.198326,
+        "min_ms": 1.177719,
+        "p95_ms": 1.343268,
+        "samples_ms": [
+          1.177719,
+          1.184581,
+          1.198326,
+          1.241828,
+          1.343268
+        ]
+      },
+      "note": "byte-exact match",
+      "oracle_output_sha256": "71f22937ad4031670fd3185b5e8756adad24787d35c356f438af9442bc244b77",
+      "outputs_agree": true,
+      "records": 500,
+      "scale": "small",
+      "workload": "seqfile"
+    },
+    {
+      "candidate": {
+        "iqr_ms": 0.9482179999999971,
+        "median_ms": 2150.4827560000003,
+        "min_ms": 2149.544005,
+        "p95_ms": 2155.222503,
+        "samples_ms": [
+          2149.544005,
+          2149.80847,
+          2150.4827560000003,
+          2150.756688,
+          2155.222503
+        ]
+      },
+      "candidate_output_sha256": "d29d4204c8e9a1955ddf503317120264ba2503be63cfac59061b6035b5103a22",
+      "candidate_prepare_ms": 3,
+      "native": {
+        "iqr_ms": 0.065523,
+        "median_ms": 1.7648640000000002,
+        "min_ms": 1.6484670000000001,
+        "p95_ms": 1.776667,
+        "samples_ms": [
+          1.6484670000000001,
+          1.702868,
+          1.7648640000000002,
+          1.768391,
+          1.776667
+        ]
+      },
+      "note": "byte-exact match",
+      "oracle_output_sha256": "d29d4204c8e9a1955ddf503317120264ba2503be63cfac59061b6035b5103a22",
+      "outputs_agree": true,
+      "records": 500,
+      "scale": "small",
+      "workload": "tables"
+    },
+    {
+      "candidate": {
+        "iqr_ms": 0.11433300000000202,
+        "median_ms": 47.03113,
+        "min_ms": 46.969645,
+        "p95_ms": 47.140243,
+        "samples_ms": [
+          46.969645,
+          47.02059,
+          47.03113,
+          47.134923,
+          47.140243
+        ]
+      },
+      "candidate_output_sha256": "5c640a12a1ea3c9b8c797e673505fb2564ee6733e9c14784b93c900370c68dea",
+      "candidate_prepare_ms": 0,
+      "native": {
+        "iqr_ms": 0.020578000000000207,
+        "median_ms": 1.263238,
+        "min_ms": 1.239494,
+        "p95_ms": 1.313291,
+        "samples_ms": [
+          1.239494,
+          1.2520369999999998,
+          1.263238,
+          1.272615,
+          1.313291
+        ]
+      },
+      "note": "byte-exact match",
+      "oracle_output_sha256": "5c640a12a1ea3c9b8c797e673505fb2564ee6733e9c14784b93c900370c68dea",
+      "outputs_agree": true,
+      "records": 500,
+      "scale": "small",
+      "workload": "strings"
+    },
+    {
+      "candidate": {
+        "iqr_ms": 0.10291199999999634,
+        "median_ms": 39.950072000000006,
+        "min_ms": 39.895931000000004,
+        "p95_ms": 40.157379,
+        "samples_ms": [
+          39.895931000000004,
+          39.90695100000001,
+          39.950072000000006,
+          40.009863,
+          40.157379
+        ]
+      },
+      "candidate_output_sha256": "8abc95d4408a0515ebda500fbf5b1f6b74b1d559baaff07ba56dc190a0b54e78",
+      "candidate_prepare_ms": 0,
+      "native": {
+        "iqr_ms": 0.04910199999999998,
+        "median_ms": 1.453603,
+        "min_ms": 1.436662,
+        "p95_ms": 1.518545,
+        "samples_ms": [
+          1.436662,
+          1.443214,
+          1.453603,
+          1.492316,
+          1.518545
+        ]
+      },
+      "note": "byte-exact match",
+      "oracle_output_sha256": "8abc95d4408a0515ebda500fbf5b1f6b74b1d559baaff07ba56dc190a0b54e78",
+      "outputs_agree": true,
+      "records": 500,
+      "scale": "small",
+      "workload": "float"
+    },
+    {
+      "candidate": {
+        "iqr_ms": 0.0264489999999995,
+        "median_ms": 35.640738,
+        "min_ms": 35.603238000000005,
+        "p95_ms": 35.653642,
+        "samples_ms": [
+          35.603238000000005,
+          35.619318,
+          35.640738,
+          35.645767,
+          35.653642
+        ]
+      },
+      "candidate_output_sha256": "ca03e7574398eedb0c4dfcb89a94ffd7840c644420303514db67301b41e527d9",
+      "candidate_prepare_ms": 0,
+      "native": {
+        "iqr_ms": 0.050173000000000245,
+        "median_ms": 1.211371,
+        "min_ms": 1.172609,
+        "p95_ms": 1.243922,
+        "samples_ms": [
+          1.172609,
+          1.185844,
+          1.211371,
+          1.2360170000000001,
+          1.243922
+        ]
+      },
+      "note": "byte-exact match",
+      "oracle_output_sha256": "ca03e7574398eedb0c4dfcb89a94ffd7840c644420303514db67301b41e527d9",
+      "outputs_agree": true,
+      "records": 500,
+      "scale": "small",
+      "workload": "report"
+    },
+    {
+      "candidate": {
+        "iqr_ms": 0.06486100000000761,
+        "median_ms": 86.44971799999999,
+        "min_ms": 86.341246,
+        "p95_ms": 86.591603,
+        "samples_ms": [
+          86.341246,
+          86.40009599999999,
+          86.44971799999999,
+          86.464957,
+          86.591603
+        ]
+      },
+      "candidate_output_sha256": "ea40320e9ee9d3a55be041bbb3e6c938964bdc055da60c2e291e7a9a463b3b3f",
+      "candidate_prepare_ms": 1,
+      "native": {
+        "iqr_ms": 0.04698899999999995,
+        "median_ms": 1.645141,
+        "min_ms": 1.636986,
+        "p95_ms": 1.801824,
+        "samples_ms": [
+          1.636986,
+          1.643277,
+          1.645141,
+          1.690266,
+          1.801824
+        ]
+      },
+      "note": "byte-exact match",
+      "oracle_output_sha256": "ea40320e9ee9d3a55be041bbb3e6c938964bdc055da60c2e291e7a9a463b3b3f",
+      "outputs_agree": true,
+      "records": 500,
+      "scale": "small",
+      "workload": "relative"
+    },
+    {
+      "candidate": {
+        "iqr_ms": 0.2612179999999924,
+        "median_ms": 53.15504,
+        "min_ms": 52.950017,
+        "p95_ms": 53.503341000000006,
+        "samples_ms": [
+          52.950017,
+          53.049783000000005,
+          53.15504,
+          53.311001,
+          53.503341000000006
+        ]
+      },
+      "candidate_output_sha256": "99e31a8a815c4e28e4a2d4a590ade90847b15709ca658164f4bcaa208eb42e19",
+      "candidate_prepare_ms": 0,
+      "native": {
+        "iqr_ms": 0.046135999999999955,
+        "median_ms": 1.234734,
+        "min_ms": 1.2150480000000001,
+        "p95_ms": 1.310857,
+        "samples_ms": [
+          1.2150480000000001,
+          1.2292239999999999,
+          1.234734,
+          1.2753599999999998,
+          1.310857
+        ]
+      },
+      "note": "byte-exact match",
+      "oracle_output_sha256": "99e31a8a815c4e28e4a2d4a590ade90847b15709ca658164f4bcaa208eb42e19",
+      "outputs_agree": true,
+      "records": 500,
+      "scale": "small",
+      "workload": "modules"
+    },
+    {
+      "candidate": {
+        "iqr_ms": 0.1177589999999924,
+        "median_ms": 96.054938,
+        "min_ms": 95.932749,
+        "p95_ms": 96.205979,
+        "samples_ms": [
+          95.932749,
+          95.943149,
+          96.054938,
+          96.060908,
+          96.205979
+        ]
+      },
+      "candidate_output_sha256": "47b7a1d59211f6345a574db9cec1218c65513f38e12233f9ab26b93f28fe98d0",
+      "candidate_prepare_ms": 1,
+      "native": {
+        "iqr_ms": 0.051206000000000085,
+        "median_ms": 1.469112,
+        "min_ms": 1.422696,
+        "p95_ms": 1.4998690000000001,
+        "samples_ms": [
+          1.422696,
+          1.4397769999999999,
+          1.469112,
+          1.490983,
+          1.4998690000000001
+        ]
+      },
+      "note": "byte-exact match",
+      "oracle_output_sha256": "47b7a1d59211f6345a574db9cec1218c65513f38e12233f9ab26b93f28fe98d0",
+      "outputs_agree": true,
+      "records": 500,
+      "scale": "small",
+      "workload": "mixed"
+    }
+  ],
+  "view_d": [
+    {
+      "candidate": {
+        "iqr_ms": 1.7042330000000447,
+        "median_ms": 610.835889,
+        "min_ms": 609.696888,
+        "p95_ms": 612.729242,
+        "samples_ms": [
+          609.696888,
+          609.891881,
+          610.835889,
+          611.5961140000001,
+          612.729242
+        ]
+      },
+      "candidate_output_sha256": "5d7c7edfc91aaf3d10bbd6f5fc2b41db79efc59e08c780ad8195b49a3c154faf",
+      "candidate_prepare_ms": 0,
+      "description": "decimal MOVE (display -> display)",
+      "expected_sha256": "5d7c7edfc91aaf3d10bbd6f5fc2b41db79efc59e08c780ad8195b49a3c154faf",
+      "iters": 50000,
+      "name": "move",
+      "native": {
+        "iqr_ms": 0.027592000000000283,
+        "median_ms": 3.271106,
+        "min_ms": 3.240879,
+        "p95_ms": 3.294199,
+        "samples_ms": [
+          3.240879,
+          3.248744,
+          3.271106,
+          3.276336,
+          3.294199
+        ]
+      },
+      "native_output_sha256": "5d7c7edfc91aaf3d10bbd6f5fc2b41db79efc59e08c780ad8195b49a3c154faf",
+      "note": "correctness-gated: oracle stdout byte-exact before timing",
+      "outputs_agree": true
+    },
+    {
+      "candidate": {
+        "iqr_ms": 0.3016010000001188,
+        "median_ms": 645.618232,
+        "min_ms": 644.736691,
+        "p95_ms": 647.9693920000001,
+        "samples_ms": [
+          644.736691,
+          645.380997,
+          645.618232,
+          645.6825980000001,
+          647.9693920000001
+        ]
+      },
+      "candidate_output_sha256": "cc1621a137a30f9c59b1a7d2a90446871db2516271b434dce7ef5e97fad90e63",
+      "candidate_prepare_ms": 0,
+      "description": "packed-decimal ADD (COMP-3 accumulator)",
+      "expected_sha256": "cc1621a137a30f9c59b1a7d2a90446871db2516271b434dce7ef5e97fad90e63",
+      "iters": 50000,
+      "name": "packed_add",
+      "native": {
+        "iqr_ms": 0.036286999999999736,
+        "median_ms": 3.4691549999999998,
+        "min_ms": 3.363128,
+        "p95_ms": 3.5557969999999997,
+        "samples_ms": [
+          3.363128,
+          3.433119,
+          3.4691549999999998,
+          3.4694059999999998,
+          3.5557969999999997
+        ]
+      },
+      "native_output_sha256": "cc1621a137a30f9c59b1a7d2a90446871db2516271b434dce7ef5e97fad90e63",
+      "note": "correctness-gated: oracle stdout byte-exact before timing",
+      "outputs_agree": true
+    },
+    {
+      "candidate": {
+        "iqr_ms": 0.5269119999999248,
+        "median_ms": 631.941778,
+        "min_ms": 631.782601,
+        "p95_ms": 633.0654519999999,
+        "samples_ms": [
+          631.782601,
+          631.9406,
+          631.941778,
+          632.4675119999999,
+          633.0654519999999
+        ]
+      },
+      "candidate_output_sha256": "e87e2eb6dead652e3a89779ebcc679aa70f11bfde7d47fd811dfc92d46ee46ee",
+      "candidate_prepare_ms": 0,
+      "description": "binary ADD (COMP accumulator)",
+      "expected_sha256": "e87e2eb6dead652e3a89779ebcc679aa70f11bfde7d47fd811dfc92d46ee46ee",
+      "iters": 50000,
+      "name": "binary_add",
+      "native": {
+        "iqr_ms": 0.039924999999999766,
+        "median_ms": 3.899419,
+        "min_ms": 3.882286,
+        "p95_ms": 4.386336999999999,
+        "samples_ms": [
+          3.882286,
+          3.895,
+          3.899419,
+          3.934925,
+          4.386336999999999
+        ]
+      },
+      "native_output_sha256": "e87e2eb6dead652e3a89779ebcc679aa70f11bfde7d47fd811dfc92d46ee46ee",
+      "note": "correctness-gated: oracle stdout byte-exact before timing",
+      "outputs_agree": true
+    },
+    {
+      "candidate": {
+        "iqr_ms": 9.389998999999989,
+        "median_ms": 6041.273613,
+        "min_ms": 6031.581319,
+        "p95_ms": 6054.715638000001,
+        "samples_ms": [
+          6031.581319,
+          6034.314569,
+          6041.273613,
+          6043.704568,
+          6054.715638000001
+        ]
+      },
+      "candidate_output_sha256": "548352c17d9c8d5def266889d14ea496c712c4d4399d32b212201e1fe4d89350",
+      "candidate_prepare_ms": 0,
+      "description": "float ADD (COMP-1 f32 + COMP-2 f64)",
+      "expected_sha256": "548352c17d9c8d5def266889d14ea496c712c4d4399d32b212201e1fe4d89350",
+      "iters": 50000,
+      "name": "float_add",
+      "native": {
+        "iqr_ms": 0.3491909999999976,
+        "median_ms": 25.059003999999998,
+        "min_ms": 24.216901999999997,
+        "p95_ms": 25.352151,
+        "samples_ms": [
+          24.216901999999997,
+          24.771067000000002,
+          25.059003999999998,
+          25.120258,
+          25.352151
+        ]
+      },
+      "native_output_sha256": "548352c17d9c8d5def266889d14ea496c712c4d4399d32b212201e1fe4d89350",
+      "note": "correctness-gated: oracle stdout byte-exact before timing",
+      "outputs_agree": true
+    },
+    {
+      "candidate": {
+        "iqr_ms": 4.651718999999957,
+        "median_ms": 1249.834828,
+        "min_ms": 1244.795737,
+        "p95_ms": 1250.2371329999999,
+        "samples_ms": [
+          1244.795737,
+          1245.396594,
+          1249.834828,
+          1250.048313,
+          1250.2371329999999
+        ]
+      },
+      "candidate_output_sha256": "69cf8aa13b34130b89ccbbba75414cace50798d90a35961dc109aec8973446a3",
+      "candidate_prepare_ms": 0,
+      "description": "alphanumeric comparison (IF A = B)",
+      "expected_sha256": "69cf8aa13b34130b89ccbbba75414cace50798d90a35961dc109aec8973446a3",
+      "iters": 50000,
+      "name": "compare",
+      "native": {
+        "iqr_ms": 0.08704299999999954,
+        "median_ms": 3.624735,
+        "min_ms": 3.568701,
+        "p95_ms": 3.832573,
+        "samples_ms": [
+          3.568701,
+          3.609306,
+          3.624735,
+          3.6963489999999997,
+          3.832573
+        ]
+      },
+      "native_output_sha256": "69cf8aa13b34130b89ccbbba75414cace50798d90a35961dc109aec8973446a3",
+      "note": "correctness-gated: oracle stdout byte-exact before timing",
+      "outputs_agree": true
+    },
+    {
+      "candidate": {
+        "iqr_ms": 3.126719000000321,
+        "median_ms": 1723.8991050000002,
+        "min_ms": 1716.46367,
+        "p95_ms": 1727.622681,
+        "samples_ms": [
+          1716.46367,
+          1720.9779809999998,
+          1723.8991050000002,
+          1724.1047,
+          1727.622681
+        ]
+      },
+      "candidate_output_sha256": "58b35f24dc2cc5fffcb790534eca104bbad5114afb7220b2d3582fe14851627d",
+      "candidate_prepare_ms": 0,
+      "description": "FUNCTION intrinsic dispatch (NUMVAL + INTEGER)",
+      "expected_sha256": "58b35f24dc2cc5fffcb790534eca104bbad5114afb7220b2d3582fe14851627d",
+      "iters": 50000,
+      "name": "intrinsic",
+      "native": {
+        "iqr_ms": 0.11991399999999963,
+        "median_ms": 12.486224,
+        "min_ms": 12.370518,
+        "p95_ms": 12.642966,
+        "samples_ms": [
+          12.370518,
+          12.407867,
+          12.486224,
+          12.527781,
+          12.642966
+        ]
+      },
+      "native_output_sha256": "58b35f24dc2cc5fffcb790534eca104bbad5114afb7220b2d3582fe14851627d",
+      "note": "correctness-gated: oracle stdout byte-exact before timing",
+      "outputs_agree": true
+    },
+    {
+      "candidate": {
+        "iqr_ms": 4.701326999999765,
+        "median_ms": 1461.0554310000002,
+        "min_ms": 1449.856166,
+        "p95_ms": 1463.4792089999999,
+        "samples_ms": [
+          1449.856166,
+          1456.9186300000001,
+          1461.0554310000002,
+          1461.6199569999999,
+          1463.4792089999999
+        ]
+      },
+      "candidate_output_sha256": "abbc3a23884ffdf0758d886b7a63339fedb5fe2f286834c7da18316ec7661d04",
+      "candidate_prepare_ms": 0,
+      "description": "module CALL dispatch (contained subprogram)",
+      "expected_sha256": "abbc3a23884ffdf0758d886b7a63339fedb5fe2f286834c7da18316ec7661d04",
+      "iters": 50000,
+      "name": "call",
+      "native": {
+        "iqr_ms": 0.11716800000000038,
+        "median_ms": 6.953778,
+        "min_ms": 6.941644999999999,
+        "p95_ms": 7.108958,
+        "samples_ms": [
+          6.941644999999999,
+          6.948018,
+          6.953778,
+          7.065186000000001,
+          7.108958
+        ]
+      },
+      "native_output_sha256": "abbc3a23884ffdf0758d886b7a63339fedb5fe2f286834c7da18316ec7661d04",
+      "note": "correctness-gated: oracle stdout byte-exact before timing",
+      "outputs_agree": true
+    },
+    {
+      "candidate": {
+        "iqr_ms": 3.7421809999996185,
+        "median_ms": 1905.9976889999998,
+        "min_ms": 1902.035366,
+        "p95_ms": 1910.2426480000001,
+        "samples_ms": [
+          1902.035366,
+          1902.8053570000002,
+          1905.9976889999998,
+          1906.5475379999998,
+          1910.2426480000001
+        ]
+      },
+      "candidate_output_sha256": "8df7666328e4a9ae8d68efbbe6209efcdf5cb6010209671ec3ec90f1da959e9a",
+      "candidate_prepare_ms": 0,
+      "description": "sequential-file read/write (50_000 fixed records)",
+      "expected_sha256": "8df7666328e4a9ae8d68efbbe6209efcdf5cb6010209671ec3ec90f1da959e9a",
+      "iters": 50000,
+      "name": "seqfile",
+      "native": {
+        "iqr_ms": 0.4949130000000004,
+        "median_ms": 20.734517,
+        "min_ms": 20.524365,
+        "p95_ms": 21.236794,
+        "samples_ms": [
+          20.524365,
+          20.691036,
+          20.734517,
+          21.185949,
+          21.236794
+        ]
+      },
+      "native_output_sha256": "8df7666328e4a9ae8d68efbbe6209efcdf5cb6010209671ec3ec90f1da959e9a",
+      "note": "correctness-gated: oracle stdout byte-exact before timing",
+      "outputs_agree": true
+    }
+  ],
+  "view_e": {
+    "candidate_per_workload_ms": {
+      "float": 44068.856518,
+      "invoice": 64141.835193,
+      "mixed": 111123.791839,
+      "modules": 60931.80501,
+      "payroll": 77179.566207,
+      "relative": 99935.76855900002,
+      "report": 39588.19889,
+      "seqfile": 34689.283446,
+      "strings": 51731.03733199999,
+      "tables": 813335.000124
+    },
+    "candidate_total_ms": 1396725.1431180001,
+    "entries": [
+      {
+        "candidate_ms": 71.70900400000001,
+        "oracle_ms": 75.492555,
+        "records": 500,
+        "scale": "small",
+        "workload": "payroll"
+      },
+      {
+        "candidate_ms": 700.4636079999999,
+        "oracle_ms": 76.617755,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "payroll"
+      },
+      {
+        "candidate_ms": 6943.229676,
+        "oracle_ms": 115.160623,
+        "records": 50000,
+        "scale": "large",
+        "workload": "payroll"
+      },
+      {
+        "candidate_ms": 69464.163919,
+        "oracle_ms": 467.653705,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "payroll"
+      },
+      {
+        "candidate_ms": 62.216142000000005,
+        "oracle_ms": 64.789323,
+        "records": 500,
+        "scale": "small",
+        "workload": "invoice"
+      },
+      {
+        "candidate_ms": 580.808336,
+        "oracle_ms": 64.973847,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "invoice"
+      },
+      {
+        "candidate_ms": 5777.4320259999995,
+        "oracle_ms": 97.565512,
+        "records": 50000,
+        "scale": "large",
+        "workload": "invoice"
+      },
+      {
+        "candidate_ms": 57721.378689,
+        "oracle_ms": 412.282889,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "invoice"
+      },
+      {
+        "candidate_ms": 34.423185000000004,
+        "oracle_ms": 64.08309299999999,
+        "records": 500,
+        "scale": "small",
+        "workload": "seqfile"
+      },
+      {
+        "candidate_ms": 321.042457,
+        "oracle_ms": 63.60793700000001,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "seqfile"
+      },
+      {
+        "candidate_ms": 3119.8847060000003,
+        "oracle_ms": 76.573718,
+        "records": 50000,
+        "scale": "large",
+        "workload": "seqfile"
+      },
+      {
+        "candidate_ms": 31213.933097999998,
+        "oracle_ms": 199.601996,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "seqfile"
+      },
+      {
+        "candidate_ms": 658.026435,
+        "oracle_ms": 83.18070700000001,
+        "records": 500,
+        "scale": "small",
+        "workload": "tables"
+      },
+      {
+        "candidate_ms": 6536.536185,
+        "oracle_ms": 85.811405,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "tables"
+      },
+      {
+        "candidate_ms": 66054.973831,
+        "oracle_ms": 114.749081,
+        "records": 50000,
+        "scale": "large",
+        "workload": "tables"
+      },
+      {
+        "candidate_ms": 740085.463673,
+        "oracle_ms": 414.95342,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "tables"
+      },
+      {
+        "candidate_ms": 48.79267,
+        "oracle_ms": 60.731201,
+        "records": 500,
+        "scale": "small",
+        "workload": "strings"
+      },
+      {
+        "candidate_ms": 467.657305,
+        "oracle_ms": 60.302592000000004,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "strings"
+      },
+      {
+        "candidate_ms": 4674.533103,
+        "oracle_ms": 79.395222,
+        "records": 50000,
+        "scale": "large",
+        "workload": "strings"
+      },
+      {
+        "candidate_ms": 46540.054253999995,
+        "oracle_ms": 237.765433,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "strings"
+      },
+      {
+        "candidate_ms": 42.893439,
+        "oracle_ms": 61.939352,
+        "records": 500,
+        "scale": "small",
+        "workload": "float"
+      },
+      {
+        "candidate_ms": 400.25849200000005,
+        "oracle_ms": 62.261693,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "float"
+      },
+      {
+        "candidate_ms": 3963.588358,
+        "oracle_ms": 96.904909,
+        "records": 50000,
+        "scale": "large",
+        "workload": "float"
+      },
+      {
+        "candidate_ms": 39662.116229,
+        "oracle_ms": 426.30859399999997,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "float"
+      },
+      {
+        "candidate_ms": 36.997064,
+        "oracle_ms": 66.49498600000001,
+        "records": 500,
+        "scale": "small",
+        "workload": "report"
+      },
+      {
+        "candidate_ms": 354.93548499999997,
+        "oracle_ms": 64.044847,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "report"
+      },
+      {
+        "candidate_ms": 3561.197128,
+        "oracle_ms": 72.85830999999999,
+        "records": 50000,
+        "scale": "large",
+        "workload": "report"
+      },
+      {
+        "candidate_ms": 35635.069213,
+        "oracle_ms": 192.422606,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "report"
+      },
+      {
+        "candidate_ms": 90.96516100000001,
+        "oracle_ms": 76.55941,
+        "records": 500,
+        "scale": "small",
+        "workload": "relative"
+      },
+      {
+        "candidate_ms": 891.600294,
+        "oracle_ms": 81.36362799999999,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "relative"
+      },
+      {
+        "candidate_ms": 8888.973574,
+        "oracle_ms": 130.91933699999998,
+        "records": 50000,
+        "scale": "large",
+        "workload": "relative"
+      },
+      {
+        "candidate_ms": 90064.22953000001,
+        "oracle_ms": 618.109562,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "relative"
+      },
+      {
+        "candidate_ms": 56.661286,
+        "oracle_ms": 81.18512199999999,
+        "records": 500,
+        "scale": "small",
+        "workload": "modules"
+      },
+      {
+        "candidate_ms": 538.6939179999999,
+        "oracle_ms": 82.364641,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "modules"
+      },
+      {
+        "candidate_ms": 5442.317376,
+        "oracle_ms": 97.07887699999999,
+        "records": 50000,
+        "scale": "large",
+        "workload": "modules"
+      },
+      {
+        "candidate_ms": 54894.13243,
+        "oracle_ms": 240.973471,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "modules"
+      },
+      {
+        "candidate_ms": 100.93244899999999,
+        "oracle_ms": 98.07674399999999,
+        "records": 500,
+        "scale": "small",
+        "workload": "mixed"
+      },
+      {
+        "candidate_ms": 994.3859590000001,
+        "oracle_ms": 99.677719,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "mixed"
+      },
+      {
+        "candidate_ms": 9903.806439,
+        "oracle_ms": 133.87687400000002,
+        "records": 50000,
+        "scale": "large",
+        "workload": "mixed"
+      },
+      {
+        "candidate_ms": 100124.666992,
+        "oracle_ms": 477.07018,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "mixed"
+      }
+    ],
+    "memory_note": "VmHWM of the bench process (candidate runs in-process; oracle cobc/run are child processes, not included)",
+    "note": "one full pass over the corpus: 10 workloads x 4 scales, compile+run (oracle) vs prepare+run (candidate), correctness-gated",
+    "oracle_per_workload_ms": {
+      "float": 647.414548,
+      "invoice": 639.611571,
+      "mixed": 808.701517,
+      "modules": 501.6021109999999,
+      "payroll": 734.924638,
+      "relative": 906.9519369999999,
+      "report": 395.820749,
+      "seqfile": 403.86674400000004,
+      "strings": 438.19444799999997,
+      "tables": 698.694613
+    },
+    "oracle_total_ms": 6175.782875999999,
+    "passes": 1,
+    "peak_memory_kb": 175428
+  }
+}

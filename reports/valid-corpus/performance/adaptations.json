@@ -1,0 +1,158 @@
+{
+  "adaptations": [
+    {
+      "note": "candidate lane only; oracle compiles the original sources unchanged",
+      "oracle_compile_exit": 0,
+      "oracle_proved_preserving": true,
+      "original_sha256": "31ba9d38111cc9212972136f28b5cea10d6633b4627096fe5148ce62128aa3dd",
+      "rewrites": [
+        "open-split-per-mode",
+        "perform-until-exit->1=2"
+      ],
+      "source_files": [
+        "payroll.cob"
+      ],
+      "transformed_sha256": "178c1fd6adfe93df375afccd4d47957d38697fd2691cda77baa767e0ca580d55",
+      "workload": "payroll"
+    },
+    {
+      "note": "candidate lane only; oracle compiles the original sources unchanged",
+      "oracle_compile_exit": 0,
+      "oracle_proved_preserving": true,
+      "original_sha256": "2dbb6d56511d7534dabc14881696a2b9fc1758446f7b2da0fb0dea2aced5f5f2",
+      "rewrites": [
+        "open-split-per-mode",
+        "perform-until-exit->1=2"
+      ],
+      "source_files": [
+        "invoice.cob"
+      ],
+      "transformed_sha256": "b7b324d1c7c60c202b1e53b150e54d4b4483d8b59331297cb99afca51fa8d167",
+      "workload": "invoice"
+    },
+    {
+      "note": "candidate lane only; oracle compiles the original sources unchanged",
+      "oracle_compile_exit": 0,
+      "oracle_proved_preserving": true,
+      "original_sha256": "b714e53add820e5bdf466630473b26157f1b90b15c06aec43457fedcad921207",
+      "rewrites": [
+        "open-split-per-mode",
+        "perform-until-exit->1=2"
+      ],
+      "source_files": [
+        "seqfile.cob"
+      ],
+      "transformed_sha256": "f0de64a53b7985e7308781a4bca30ac9a19b501f7ad0803af92320dc62d5e87d",
+      "workload": "seqfile"
+    },
+    {
+      "note": "candidate lane only; oracle compiles the original sources unchanged",
+      "oracle_compile_exit": 0,
+      "oracle_proved_preserving": true,
+      "original_sha256": "2f00287b4cd3404c2df6cef2527ca0d7ca9a2150c6050ed5ff09367c002a057f",
+      "rewrites": [
+        "open-split-per-mode",
+        "perform-until-exit->1=2"
+      ],
+      "source_files": [
+        "tables.cob"
+      ],
+      "transformed_sha256": "1441dc98aa3535b5ac0dfdefcd455c11c227e3a622e92c03749d69d7ecbab4fb",
+      "workload": "tables"
+    },
+    {
+      "note": "candidate lane only; oracle compiles the original sources unchanged",
+      "oracle_compile_exit": 0,
+      "oracle_proved_preserving": true,
+      "original_sha256": "e2fca25dd5cf1ec910f1f66e3fbbc40658a76c2c4cd510f9cca877e9d7c86338",
+      "rewrites": [
+        "open-split-per-mode",
+        "perform-until-exit->1=2",
+        "inspect-split-per-pattern"
+      ],
+      "source_files": [
+        "strings.cob"
+      ],
+      "transformed_sha256": "39621b7758b3cafb6ceb4abf5cd144c9cec074d49ea8846d570ed57068a04d51",
+      "workload": "strings"
+    },
+    {
+      "note": "candidate lane only; oracle compiles the original sources unchanged",
+      "oracle_compile_exit": 0,
+      "oracle_proved_preserving": true,
+      "original_sha256": "34e568e0a7cbc776492f64e252c1a88c19b19ab5e9466eb5dc1f3b3a6f80e615",
+      "rewrites": [
+        "open-split-per-mode",
+        "perform-until-exit->1=2"
+      ],
+      "source_files": [
+        "floatwork.cob"
+      ],
+      "transformed_sha256": "083114944f8491aa5f887b9547077964c054ea0ba9008a691367b1e6f12fca89",
+      "workload": "float"
+    },
+    {
+      "note": "candidate lane only; oracle compiles the original sources unchanged",
+      "oracle_compile_exit": 0,
+      "oracle_proved_preserving": true,
+      "original_sha256": "1f6b7c6b736b4558002f728254ad3bb342c065f65f77921acd0397fa3618e120",
+      "rewrites": [
+        "open-split-per-mode",
+        "perform-until-exit->1=2"
+      ],
+      "source_files": [
+        "report.cob"
+      ],
+      "transformed_sha256": "b3c3997fb2c2694de29f3f3bde53496cfba5d5a88131ececf49baaadd68ffefc",
+      "workload": "report"
+    },
+    {
+      "note": "candidate lane only; oracle compiles the original sources unchanged",
+      "oracle_compile_exit": 0,
+      "oracle_proved_preserving": true,
+      "original_sha256": "6bbb7c5bbf6574475238816a3bab9815317b2652dd5e5aa20bb942ff1ece1d78",
+      "rewrites": [
+        "open-split-per-mode",
+        "perform-until-exit->1=2"
+      ],
+      "source_files": [
+        "relative.cob"
+      ],
+      "transformed_sha256": "e242fe6c69ccabd895289968527ce09ec205e21eb62c4d4757d0a25e494dd173",
+      "workload": "relative"
+    },
+    {
+      "note": "candidate lane only; oracle compiles the original sources unchanged",
+      "oracle_compile_exit": 1,
+      "oracle_proved_preserving": false,
+      "original_sha256": "1f60184a3fa1c3a5f4467c31a3b94eb4910fe5c289d328adf64ef981bdfd2ca0",
+      "rewrites": [
+        "open-split-per-mode",
+        "perform-until-exit->1=2"
+      ],
+      "source_files": [
+        "modcall.cob",
+        "calcm.cob"
+      ],
+      "transformed_sha256": "df4f7c5de832632d6ff107c7fe0b14f938068ad59c2e6f6556dbf1cdd5430417",
+      "workload": "modules"
+    },
+    {
+      "note": "candidate lane only; oracle compiles the original sources unchanged",
+      "oracle_compile_exit": 1,
+      "oracle_proved_preserving": false,
+      "original_sha256": "f3a27f2e0250190edad563283eeaac8f6a2019772cd815cb9a892fec2905e414",
+      "rewrites": [
+        "open-split-per-mode",
+        "perform-until-exit->1=2"
+      ],
+      "source_files": [
+        "mixed.cob",
+        "mixmod.cob"
+      ],
+      "transformed_sha256": "eb09e81cbdcb22046d37b113726ba8b73d22fb4b1f6ba87e4aebf60d16fe994a",
+      "workload": "mixed"
+    }
+  ],
+  "note": "candidate-lane adaptations (spec 5.3): the oracle ALWAYS compiles the original corpus sources unchanged; the candidate lane prepares an adapted copy whose output is gated byte-exact against the independent expectation before any timing is reported. No pristine-parity claim is made for transformed lanes."
+}

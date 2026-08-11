@@ -1,0 +1,328 @@
+{
+  "control": {
+    "candidate_compat": "prepared-v1",
+    "cobc_version": "cobc (GnuCOBOL) 3.2.0",
+    "compiler_flags": "cobc -x -O2 -o <artifact> <sources...>",
+    "generated_at_utc": "2026-08-11T16:05:41Z",
+    "host_cpu": "AMD Ryzen 7 9800X3D 8-Core Processor",
+    "iters": 5,
+    "outlier_policy": "min = best-case, median = typical, no samples discarded",
+    "peak_memory_kb": 175428,
+    "warmup": 1
+  },
+  "entries": {
+    "candidate_per_workload_ms": {
+      "float": 44068.856518,
+      "invoice": 64141.835193,
+      "mixed": 111123.791839,
+      "modules": 60931.80501,
+      "payroll": 77179.566207,
+      "relative": 99935.76855900002,
+      "report": 39588.19889,
+      "seqfile": 34689.283446,
+      "strings": 51731.03733199999,
+      "tables": 813335.000124
+    },
+    "candidate_total_ms": 1396725.1431180001,
+    "entries": [
+      {
+        "candidate_ms": 71.70900400000001,
+        "oracle_ms": 75.492555,
+        "records": 500,
+        "scale": "small",
+        "workload": "payroll"
+      },
+      {
+        "candidate_ms": 700.4636079999999,
+        "oracle_ms": 76.617755,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "payroll"
+      },
+      {
+        "candidate_ms": 6943.229676,
+        "oracle_ms": 115.160623,
+        "records": 50000,
+        "scale": "large",
+        "workload": "payroll"
+      },
+      {
+        "candidate_ms": 69464.163919,
+        "oracle_ms": 467.653705,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "payroll"
+      },
+      {
+        "candidate_ms": 62.216142000000005,
+        "oracle_ms": 64.789323,
+        "records": 500,
+        "scale": "small",
+        "workload": "invoice"
+      },
+      {
+        "candidate_ms": 580.808336,
+        "oracle_ms": 64.973847,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "invoice"
+      },
+      {
+        "candidate_ms": 5777.4320259999995,
+        "oracle_ms": 97.565512,
+        "records": 50000,
+        "scale": "large",
+        "workload": "invoice"
+      },
+      {
+        "candidate_ms": 57721.378689,
+        "oracle_ms": 412.282889,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "invoice"
+      },
+      {
+        "candidate_ms": 34.423185000000004,
+        "oracle_ms": 64.08309299999999,
+        "records": 500,
+        "scale": "small",
+        "workload": "seqfile"
+      },
+      {
+        "candidate_ms": 321.042457,
+        "oracle_ms": 63.60793700000001,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "seqfile"
+      },
+      {
+        "candidate_ms": 3119.8847060000003,
+        "oracle_ms": 76.573718,
+        "records": 50000,
+        "scale": "large",
+        "workload": "seqfile"
+      },
+      {
+        "candidate_ms": 31213.933097999998,
+        "oracle_ms": 199.601996,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "seqfile"
+      },
+      {
+        "candidate_ms": 658.026435,
+        "oracle_ms": 83.18070700000001,
+        "records": 500,
+        "scale": "small",
+        "workload": "tables"
+      },
+      {
+        "candidate_ms": 6536.536185,
+        "oracle_ms": 85.811405,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "tables"
+      },
+      {
+        "candidate_ms": 66054.973831,
+        "oracle_ms": 114.749081,
+        "records": 50000,
+        "scale": "large",
+        "workload": "tables"
+      },
+      {
+        "candidate_ms": 740085.463673,
+        "oracle_ms": 414.95342,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "tables"
+      },
+      {
+        "candidate_ms": 48.79267,
+        "oracle_ms": 60.731201,
+        "records": 500,
+        "scale": "small",
+        "workload": "strings"
+      },
+      {
+        "candidate_ms": 467.657305,
+        "oracle_ms": 60.302592000000004,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "strings"
+      },
+      {
+        "candidate_ms": 4674.533103,
+        "oracle_ms": 79.395222,
+        "records": 50000,
+        "scale": "large",
+        "workload": "strings"
+      },
+      {
+        "candidate_ms": 46540.054253999995,
+        "oracle_ms": 237.765433,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "strings"
+      },
+      {
+        "candidate_ms": 42.893439,
+        "oracle_ms": 61.939352,
+        "records": 500,
+        "scale": "small",
+        "workload": "float"
+      },
+      {
+        "candidate_ms": 400.25849200000005,
+        "oracle_ms": 62.261693,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "float"
+      },
+      {
+        "candidate_ms": 3963.588358,
+        "oracle_ms": 96.904909,
+        "records": 50000,
+        "scale": "large",
+        "workload": "float"
+      },
+      {
+        "candidate_ms": 39662.116229,
+        "oracle_ms": 426.30859399999997,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "float"
+      },
+      {
+        "candidate_ms": 36.997064,
+        "oracle_ms": 66.49498600000001,
+        "records": 500,
+        "scale": "small",
+        "workload": "report"
+      },
+      {
+        "candidate_ms": 354.93548499999997,
+        "oracle_ms": 64.044847,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "report"
+      },
+      {
+        "candidate_ms": 3561.197128,
+        "oracle_ms": 72.85830999999999,
+        "records": 50000,
+        "scale": "large",
+        "workload": "report"
+      },
+      {
+        "candidate_ms": 35635.069213,
+        "oracle_ms": 192.422606,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "report"
+      },
+      {
+        "candidate_ms": 90.96516100000001,
+        "oracle_ms": 76.55941,
+        "records": 500,
+        "scale": "small",
+        "workload": "relative"
+      },
+      {
+        "candidate_ms": 891.600294,
+        "oracle_ms": 81.36362799999999,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "relative"
+      },
+      {
+        "candidate_ms": 8888.973574,
+        "oracle_ms": 130.91933699999998,
+        "records": 50000,
+        "scale": "large",
+        "workload": "relative"
+      },
+      {
+        "candidate_ms": 90064.22953000001,
+        "oracle_ms": 618.109562,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "relative"
+      },
+      {
+        "candidate_ms": 56.661286,
+        "oracle_ms": 81.18512199999999,
+        "records": 500,
+        "scale": "small",
+        "workload": "modules"
+      },
+      {
+        "candidate_ms": 538.6939179999999,
+        "oracle_ms": 82.364641,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "modules"
+      },
+      {
+        "candidate_ms": 5442.317376,
+        "oracle_ms": 97.07887699999999,
+        "records": 50000,
+        "scale": "large",
+        "workload": "modules"
+      },
+      {
+        "candidate_ms": 54894.13243,
+        "oracle_ms": 240.973471,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "modules"
+      },
+      {
+        "candidate_ms": 100.93244899999999,
+        "oracle_ms": 98.07674399999999,
+        "records": 500,
+        "scale": "small",
+        "workload": "mixed"
+      },
+      {
+        "candidate_ms": 994.3859590000001,
+        "oracle_ms": 99.677719,
+        "records": 5000,
+        "scale": "medium",
+        "workload": "mixed"
+      },
+      {
+        "candidate_ms": 9903.806439,
+        "oracle_ms": 133.87687400000002,
+        "records": 50000,
+        "scale": "large",
+        "workload": "mixed"
+      },
+      {
+        "candidate_ms": 100124.666992,
+        "oracle_ms": 477.07018,
+        "records": 500000,
+        "scale": "stress",
+        "workload": "mixed"
+      }
+    ],
+    "memory_note": "VmHWM of the bench process (candidate runs in-process; oracle cobc/run are child processes, not included)",
+    "note": "one full pass over the corpus: 10 workloads x 4 scales, compile+run (oracle) vs prepare+run (candidate), correctness-gated",
+    "oracle_per_workload_ms": {
+      "float": 647.414548,
+      "invoice": 639.611571,
+      "mixed": 808.701517,
+      "modules": 501.6021109999999,
+      "payroll": 734.924638,
+      "relative": 906.9519369999999,
+      "report": 395.820749,
+      "seqfile": 403.86674400000004,
+      "strings": 438.19444799999997,
+      "tables": 698.694613
+    },
+    "oracle_total_ms": 6175.782875999999,
+    "passes": 1,
+    "peak_memory_kb": 175428
+  },
+  "view": "view_e"
+}
