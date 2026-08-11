@@ -1,0 +1,53 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "committed corpus evidence files (presence + freeze)"
+  ],
+  "case_id": "GNURUST.CORPUS.CUSTODY.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.56",
+  "damage_if_overclaimed": "presenting custody as validity would certify programs this court never checked",
+  "hash_chain": {
+    "inputs_sha256": "543cbe3773df40487a81f7d37b7a203926e77419e6a8089511d500ebd70706e9"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "c4da7756bd5f659cdad823f61daaa57f11cd8d0abb1b0ede08fab9b551305058",
+    "receipt_sha256": "e5a26e75a1871c61fa60e3a1e2801e3e94fb9d37ab9480deeccf57f682aab22e"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-VALIDITY-CLAIM-CUSTODY-PROVES-THE-EVI"
+  ],
+  "negative_claims": [
+    "no validity claim: custody proves the evidence tree exists and was frozen, not that any program is valid",
+    "lie prevented: every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "oracle": {
+    "detail": "GnuCOBOL 3.2.0 (admitted lab/oracle build) + the committed corpus evidence under reports/valid-corpus/",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.CORPUS.CUSTODY.1"
+  },
+  "positive_claims": [
+    "the pre-change repository state is frozen (preflight-repository-state.json + before-state.json + integration-design.md) and every family report directory exists under reports/valid-corpus/"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh custody",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 1,
+    "total": 1,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.MODULE.REGISTRY.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.56",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "7477179cb58e8aeda1603072abd659357e4ff045235b72d873d8cfe3aa068bf6",
+      "receipt_sha256": "684915507af0a7733683ef736f73455d095f9d180b1c401e7302ade042e9ae21"
+    },
+    "negative_claim_count": 4,
+    "positive_claim_count": 3,
+    "replay": {
+      "command": "bash lab/oracle/gnucobol-testsuite/run-docker.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "e41e3dc371db51f8480eb772cf5aaf06c2cbb0f08f47b098bf49ddbed5dc2a54"
+      },
+      "name": "reports/casefiles/GNURUST.MODULE.REGISTRY.1/casefile.json"
+    }
+  ]
+}

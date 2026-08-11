@@ -1,0 +1,55 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "reports/valid-corpus/gnucobol-testsuite/*"
+  ],
+  "case_id": "GNURUST.VALID-PROGRAMS.GNUCOBOL-TESTSUITE.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.56",
+  "damage_if_overclaimed": "claiming the candidate generalizes because the upstream suite passes would overstate evidence from the candidate's own development source",
+  "hash_chain": {
+    "inputs_sha256": "06c0e4934fe7095c9bb2cf195573ad1c405cb350c565044376c4d19f764d4bbb"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "497ff1df35858921e4b9a7924cf2fed7ed6b13fcbde4d031485b6a1819a2629d",
+    "receipt_sha256": "7b2829a662e10616cbfe10f5cafb627a4a15c880ef75ec212de27b474ad3e333"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-REAL-WORLD-GENERALIZATION-CLAIM-FROM",
+    "NEG.SCREEN-CURSES-STEPS-ARE-SKIPPED-UNDER-TH"
+  ],
+  "negative_claims": [
+    "no real-world generalization claim from upstream tests alone",
+    "screen/curses steps are skipped under the no-terminal oracle profile",
+    "lie prevented: every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "oracle": {
+    "detail": "GnuCOBOL 3.2.0 (admitted lab/oracle build) + the committed corpus evidence under reports/valid-corpus/",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.VALID-PROGRAMS.GNUCOBOL-TESTSUITE.1"
+  },
+  "positive_claims": [
+    "the GnuCOBOL Autotest suite is classified at AT_CHECK-step level (valid-programs.json, discovered-steps.json, invalid-programs.json, mixed-groups.json, dependency-graph.json, stable-current-drift.json, summary.md)"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh valid-testsuite",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 1,
+    "total": 1,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

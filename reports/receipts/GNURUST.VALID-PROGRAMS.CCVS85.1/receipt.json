@@ -1,0 +1,28 @@
+{
+  "byte_domain": "ccvs85 programs.json (512 units)",
+  "campaign": "GNURUST.VALID-PROGRAMS.CCVS85.1",
+  "command": {
+    "replay": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh valid-ccvs85"
+  },
+  "court": "valid-program corpus -- every CCVS85 unit is classified and the 512 units reconcile (programs.json)",
+  "crate_version": "0.8.56",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "no NIST certification; no COBOL-85 conformance claim"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=1 FAIL=0 valid-ccvs85"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

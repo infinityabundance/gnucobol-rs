@@ -1,0 +1,10 @@
+{
+  "by_family": {
+    "xcobol": {
+      "exact_duplicate_files": 16,
+      "near_duplicate_families": 15,
+      "note": "grouping is repository-level; the partitions never split a repo"
+    }
+  },
+  "policy": "exact byte hash, normalized hash, whitespace-insensitive hash, structural hash, near-duplicate similarity; grouping is repository-level so partitions never split a repo (spec 1.8)"
+}

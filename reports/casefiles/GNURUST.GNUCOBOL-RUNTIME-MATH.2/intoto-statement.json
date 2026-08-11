@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.GNUCOBOL-RUNTIME-MATH.2",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.56",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "012dcacde9b0379b02fe6762f38de6e792cc51996cbc5d804e67a171b9117970",
+      "receipt_sha256": "684915507af0a7733683ef736f73455d095f9d180b1c401e7302ade042e9ae21"
+    },
+    "negative_claim_count": 5,
+    "positive_claim_count": 4,
+    "replay": {
+      "command": "bash lab/oracle/gnucobol-testsuite/run-docker.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "3b8fb7dd727f3b1d4250154ac3c13be9d8b2d46e12aaad1afab5c95145117b01"
+      },
+      "name": "reports/casefiles/GNURUST.GNUCOBOL-RUNTIME-MATH.2/casefile.json"
+    }
+  ]
+}

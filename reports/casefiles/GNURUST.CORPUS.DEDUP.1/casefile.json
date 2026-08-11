@@ -1,0 +1,56 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "deduplication.json + xcobol/dedup.json"
+  ],
+  "case_id": "GNURUST.CORPUS.DEDUP.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.56",
+  "damage_if_overclaimed": "counting duplicate programs as independent evidence would inflate generalization claims",
+  "hash_chain": {
+    "inputs_sha256": "b2a316949de39066a4c22687f872634de75b39370a05f7c6efcaa06385a46cdd"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "5568ef1587d2b936824be24d79e49dc3bc9f316d34e0de9890c80679a6054110",
+    "receipt_sha256": "1675ddaaaa9e33db73530f3bb03e497f941ded19df77dba2b669dd9a68cfd700"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-INDEPENDENT-PROGRAM-COUNT-THAT-INCLUD",
+    "NEG.NEAR-DUPLICATE-THRESHOLDS-ARE-RECORDED-N"
+  ],
+  "negative_claims": [
+    "no independent-program count that includes duplicates",
+    "near-duplicate thresholds are recorded, not universal",
+    "lie prevented: every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "oracle": {
+    "detail": "GnuCOBOL 3.2.0 (admitted lab/oracle build) + the committed corpus evidence under reports/valid-corpus/",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.CORPUS.DEDUP.1"
+  },
+  "positive_claims": [
+    "deduplication.json records exact + near-duplicate evidence",
+    "grouping is repository-level so the development/validation/held-out partitions never split a repository"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh dedup",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 1,
+    "total": 1,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

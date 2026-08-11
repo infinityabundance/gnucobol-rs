@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.CORPUS.LICENCE.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.56",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "bd25f13bdadbd4fb44407f89e69a34a34b5bbd79f49dfdb58288d4f3deb73d8c",
+      "receipt_sha256": "7ea09228bbc6bf97f836f4c0f2fe646fa9074ac67d4b21aaa858938b829f272b"
+    },
+    "negative_claim_count": 3,
+    "positive_claim_count": 2,
+    "replay": {
+      "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh licence",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "2f6262428e1974c8ada66f91cafd62745549cea5e0818a3c890999fd8e9a28b0"
+      },
+      "name": "reports/casefiles/GNURUST.CORPUS.LICENCE.1/casefile.json"
+    }
+  ]
+}

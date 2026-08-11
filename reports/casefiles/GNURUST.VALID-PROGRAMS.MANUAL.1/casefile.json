@@ -1,0 +1,56 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "reports/valid-corpus/gnucobol-manual/{stable-3.2,current}/*"
+  ],
+  "case_id": "GNURUST.VALID-PROGRAMS.MANUAL.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.56",
+  "damage_if_overclaimed": "counting snippets as executable programs would fabricate runnable evidence",
+  "hash_chain": {
+    "inputs_sha256": "e0082e0b3299e444169e53ef559f60749c034658a6037242c75c1b12197c5e1e"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "b466f2673ee51bc5fafa17e7c8c2666ee9bfa9b8b1e64b68e3b69847148f1a81",
+    "receipt_sha256": "c9396a5df3830942a4cedb5df7e7f38c34b69af7cd9def765fe51305ecf5b423"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "negative_capability_ids": [
+    "NEG.PARTIAL-SNIPPETS-PSEUDOCODE-AND-COMMAND",
+    "NEG.INCOMPLETE-OBSOLETE-COMMANDS-ARE-RECORDE"
+  ],
+  "negative_claims": [
+    "partial snippets, pseudocode and command examples are not executable programs",
+    "incomplete/obsolete commands are recorded, never silently repaired",
+    "lie prevented: every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "oracle": {
+    "detail": "GnuCOBOL 3.2.0 (admitted lab/oracle build) + the committed corpus evidence under reports/valid-corpus/",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.VALID-PROGRAMS.MANUAL.1"
+  },
+  "positive_claims": [
+    "every manual code block is classified in both lanes (stable-3.2 + current examples.json + snippets.json)",
+    "complete examples are replay-verified"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh valid-manual",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 1,
+    "total": 1,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

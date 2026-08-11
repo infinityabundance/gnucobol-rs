@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.GNUCOBOL-TESTSUITE.2",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.55",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "75c3d745a250f512afff900d902dbad8fa3886bf2495c9181a49833df0729254",
+      "receipt_sha256": "30a00f29f63a321f87f10f703baea01e529b03c39c8bd98aab60ec6f12f4d378"
+    },
+    "negative_claim_count": 4,
+    "positive_claim_count": 2,
+    "replay": {
+      "command": "bash lab/gnucobol-testsuite/run-docker.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "e955fb2ac30dc74ef86b040a2a76d06e37a610c78332c163754d6c6c28bf6f1c"
+      },
+      "name": "reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.2/casefile.json"
+    }
+  ]
+}

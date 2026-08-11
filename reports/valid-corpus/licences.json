@@ -1,0 +1,36 @@
+{
+  "by_family": {
+    "ccvs85": {
+      "decision": "NIST CCVS85 is a US Government work in the public domain",
+      "redistribution_allowed": true,
+      "spdx": "public-domain"
+    },
+    "extras": {
+      "decision": "OpenCBS COBOL Defects Benchmark Suite is MIT; per-file copyrights preserved in the custody report",
+      "redistribution_allowed": true,
+      "spdx": "MIT"
+    },
+    "gnucobol-manual": {
+      "decision": "GnuCOBOL manual examples: admitted read-only from the texinfo source",
+      "redistribution_allowed": false,
+      "spdx": "GFDL-1.3"
+    },
+    "gnucobol-testsuite": {
+      "decision": "admitted read-only for differential testing; never redistributed by gnucobol-rs",
+      "redistribution_allowed": false,
+      "spdx": "GPL-3.0-or-later (suite) / GFDL-1.3 (manual)"
+    },
+    "omp": {
+      "decision": "Open Mainframe Project course materials: admitted read-only, not redistributed",
+      "redistribution_allowed": false,
+      "spdx": "CC-BY-4.0"
+    },
+    "xcobol": {
+      "decision": "per-repository licence from the dataset metadata; UNKNOWN => REFERENCE_ONLY (quarantined, never published)",
+      "redistribution_allowed": false,
+      "repos_checked": 84,
+      "spdx": "per-repository (CC-BY-4.0 dataset; repositories vary)"
+    }
+  },
+  "policy": "unknown-licence source is quarantined (REFERENCE_ONLY) and never published; every admitted family has a recorded licence decision"
+}

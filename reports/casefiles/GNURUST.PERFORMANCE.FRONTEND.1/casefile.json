@@ -1,0 +1,55 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "reports/valid-corpus/performance/phase-metrics.json + views.json (View B)"
+  ],
+  "case_id": "GNURUST.PERFORMANCE.FRONTEND.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.56",
+  "damage_if_overclaimed": "conflating compile+run with parse/check+interpret would misrepresent what is being timed",
+  "hash_chain": {
+    "inputs_sha256": "733d166e48ed6e60efa55e3172254dbd376adfb90bacfdd2ccdff7a440af16b5"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "1564565c0bb5f61b9c190f5f49f65bb7e6375ca410bbac9b7ba4f75a38ebe6b4",
+    "receipt_sha256": "71e4405584fd7c514b39c11b4376ccdd70be8a413ef8fe40ff703ebb27251d96"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-NATIVE-CODE-PERFORMANCE-CLAIM-WITHOUT",
+    "NEG.VIEW-A-IS-LABELLED-UNLIKE-WORKFLOWS-COMP"
+  ],
+  "negative_claims": [
+    "no native-code performance claim without a native candidate path",
+    "View A is labelled 'unlike workflows' (compiled vs interpreted) and is never described as equivalent runtime work",
+    "lie prevented: every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "oracle": {
+    "detail": "GnuCOBOL 3.2.0 (admitted lab/oracle build) + the committed corpus evidence under reports/valid-corpus/",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.PERFORMANCE.FRONTEND.1"
+  },
+  "positive_claims": [
+    "candidate per-phase timings (preprocess/lex/parse/resolution/layout/check/prepare) are measured separately from oracle compile (phase-metrics.json + views.json View B)"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh performance",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 1,
+    "total": 1,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

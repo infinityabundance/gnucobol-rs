@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.VALID-PROGRAMS.OMP.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.56",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "11261207f5aad7e346e0b461d7f2161bb927836855b5ebc6694862d4836cf9ec",
+      "receipt_sha256": "82865d2e223e830c705fa6214d63384c96f69f8e3d7ec2e5f36183dc58a114b6"
+    },
+    "negative_claim_count": 3,
+    "positive_claim_count": 1,
+    "replay": {
+      "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh valid-omp",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "c351265c3476894cc041f47a78c822cab4804251975dae85bb93420d864f2eaa"
+      },
+      "name": "reports/casefiles/GNURUST.VALID-PROGRAMS.OMP.1/casefile.json"
+    }
+  ]
+}

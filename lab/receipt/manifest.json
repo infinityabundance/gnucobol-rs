@@ -1,17 +1,134 @@
 {
  "schema": "gnurust-receipt-manifest-v1",
- "note": "Authored prose per court (court name, sweep command, byte domain, non-claims). The RESULTS are NOT here \u2014 they are produced by live replay in lab/receipt/run.py. Receipts of record live in reports/receipts/<CAMPAIGN>/{receipt.json,receipt.md}; the .md is GENERATED from the .json.",
+ "note": "Authored prose per court (court name, sweep command, byte domain, non-claims). The RESULTS are NOT here — they are produced by live replay in lab/receipt/run.py. Receipts of record live in reports/receipts/<CAMPAIGN>/{receipt.json,receipt.md}; the .md is GENERATED from the .json.",
  "campaigns": {
-  "GNURUST.ELITE-REPLAY.1": {
-   "court": "opencbs real-program replay -- run the public third-party opencbs COBOL programs through cobc AND cobrun; observable behaviour (stdout bytes + process exit status + stderr-clean) must agree",
-   "sweep": "opencbs_sweep.sh",
-   "min_match": 39,
-   "byte_domain": "a real third-party COBOL program -> its exact stdout bytes + process exit status, byte-identical to cobc, for every in-scope program; a ratchet floors the MATCH count so it can only rise",
+  "GNURUST.10": {
+   "court": "OCCURS DEPENDING ON physical-max layout",
+   "sweep": "odo_sweep.sh",
+   "byte_domain": "generated-C storage size b_REC[size]",
    "non_claims": [
-    "MATCH 39/39 cobc-runnable programs (byte-identical stdout + exit + stderr-clean): every opencbs program cobc can run, cobrun reproduces. NOTYET and BOUNDARY are EMPTY.",
-    "the 3 external-CALL programs (DF18/31/45CALL) match via REAL separate-file CALL: cobrun resolves the called sibling .CBL as another program unit and runs it (USING args by reference), mirroring cobc compiling the callees as modules; the callees (DF18/31/45TEST) are subprograms compiled as cobc -m",
-    "writing programs (REWRITE / OPEN OUTPUT) run with per-program data-file snapshot/restore so the differential is sound (cobc persists disk writes; cobrun is read-only) and the committed corpus is never mutated",
-    "out of scope: 11 deliberately-broken DEFECT-DEMONSTRATION snippets (missing PROGRAM-ID / syntax errors / undefined names) that cobc ITSELF rejects -- making them compile would mean editing the third-party fixtures to fix the bugs they exist to demonstrate"
+    "active/logical occurrence count",
+    "sliding",
+    "runtime validation",
+    "multiple/nested ODO"
+   ]
+  },
+  "GNURUST.11": {
+   "court": "LEVEL-88 condition-name truth",
+   "sweep": "cond_sweep.sh",
+   "byte_domain": "parent field-storage bytes -> boolean",
+   "non_claims": [
+    "SET",
+    "condition expressions",
+    "collating-sensitive ranges",
+    "Procedure Division execution"
+   ]
+  },
+  "GNURUST.12": {
+   "court": "SET condition-name TO TRUE",
+   "sweep": "set_sweep.sh",
+   "byte_domain": "parent field-storage bytes",
+   "non_claims": [
+    "SET TO FALSE",
+    "FALSE clause",
+    "expressions",
+    "execution"
+   ]
+  },
+  "GNURUST.12B": {
+   "court": "SET 88 condition-name TO FALSE",
+   "sweep": "set_false_sweep.sh",
+   "byte_domain": "parent field-storage bytes",
+   "non_claims": [
+    "condition-name expressions",
+    "collating-sensitive ranges",
+    "Procedure Division execution"
+   ]
+  },
+  "GNURUST.14": {
+   "court": "binary COMP/COMP-5/COMP-X storage + MOVE",
+   "sweep": "binary_sweep.sh",
+   "byte_domain": "field-storage + move-result bytes (binary)",
+   "non_claims": [
+    "binary arithmetic",
+    "SYNCHRONIZED",
+    "host-portable endian",
+    "COMP-6",
+    "float",
+    "IBM/MVS 2-4-8 + MF 1--8 dialect sizes"
+   ]
+  },
+  "GNURUST.15": {
+   "court": "cp500 EBCDIC DISPLAY decode",
+   "sweep": "ebcdic_sweep.sh",
+   "byte_domain": "raw EBCDIC field bytes -> decoded text",
+   "non_claims": [
+    "cp037 / other code pages",
+    "numeric EBCDIC zoned sign",
+    "national/DBCS",
+    "collation",
+    "mixed/auto-detect encoding"
+   ]
+  },
+  "GNURUST.16": {
+   "court": "edited-picture decode (16a + 16b)",
+   "sweep": "edited_sweep.sh",
+   "byte_domain": "edited DISPLAY field bytes -> value + presentation text",
+   "non_claims": [
+    "numeric->edited formatting (16c)",
+    "report writer",
+    "locale/currency",
+    "EBCDIC edited",
+    "edited arithmetic/VALUE"
+   ]
+  },
+  "GNURUST.16C": {
+   "court": "edited-picture encode (numeric->edited 16c)",
+   "sweep": "edited_encode_sweep.sh",
+   "byte_domain": "numeric value -> edited DISPLAY field bytes",
+   "non_claims": [
+    "report writer",
+    "locale/currency CURRENCY SIGN",
+    "EBCDIC edited",
+    "edited arithmetic/VALUE"
+   ]
+  },
+  "GNURUST.17": {
+   "court": "cp500 EBCDIC zoned-decimal numeric DISPLAY decode",
+   "sweep": "ebcdic_num_sweep.sh",
+   "byte_domain": "raw EBCDIC zoned field bytes -> value",
+   "non_claims": [
+    "cp037 / other code pages",
+    "edited-numeric under cp500",
+    "binary/packed via this path",
+    "mixed/auto-detect encoding",
+    "national/DBCS"
+   ]
+  },
+  "GNURUST.18": {
+   "court": "COMP-6 unsigned packed storage + MOVE",
+   "sweep": "comp6_sweep.sh",
+   "byte_domain": "field-storage + move-result bytes (COMP-6, unsigned packed)",
+   "non_claims": [
+    "signed COMP-6 (GnuCOBOL converts to COMP-3)",
+    "COMP-6 arithmetic",
+    "malformed packed bytes",
+    "dialect portability (cobol85/2002 reject it)",
+    "pre-3.2 behavior"
+   ]
+  },
+  "GNURUST.19": {
+   "court": "DIVIDE receiving-field bytes",
+   "sweep": "divide_sweep.sh",
+   "byte_domain": "DIVIDE GIVING receiver field bytes (DISPLAY/COMP-3)",
+   "non_claims": [
+    "divide-by-zero / ON SIZE ERROR",
+    "REMAINDER",
+    "COMPUTE / expression evaluation",
+    "procedure control flow",
+    "float",
+    "binary/edited receivers",
+    "business correctness"
    ]
   },
   "GNURUST.2": {
@@ -81,243 +198,6 @@
     "edited PIC VALUE"
    ]
   },
-  "GNURUST.10": {
-   "court": "OCCURS DEPENDING ON physical-max layout",
-   "sweep": "odo_sweep.sh",
-   "byte_domain": "generated-C storage size b_REC[size]",
-   "non_claims": [
-    "active/logical occurrence count",
-    "sliding",
-    "runtime validation",
-    "multiple/nested ODO"
-   ]
-  },
-  "GNURUST.11": {
-   "court": "LEVEL-88 condition-name truth",
-   "sweep": "cond_sweep.sh",
-   "byte_domain": "parent field-storage bytes -> boolean",
-   "non_claims": [
-    "SET",
-    "condition expressions",
-    "collating-sensitive ranges",
-    "Procedure Division execution"
-   ]
-  },
-  "GNURUST.12": {
-   "court": "SET condition-name TO TRUE",
-   "sweep": "set_sweep.sh",
-   "byte_domain": "parent field-storage bytes",
-   "non_claims": [
-    "SET TO FALSE",
-    "FALSE clause",
-    "expressions",
-    "execution"
-   ]
-  },
-  "GNURUST.14": {
-   "court": "binary COMP/COMP-5/COMP-X storage + MOVE",
-   "sweep": "binary_sweep.sh",
-   "byte_domain": "field-storage + move-result bytes (binary)",
-   "non_claims": [
-    "binary arithmetic",
-    "SYNCHRONIZED",
-    "host-portable endian",
-    "COMP-6",
-    "float",
-    "IBM/MVS 2-4-8 + MF 1--8 dialect sizes"
-   ]
-  },
-  "GNURUST.15": {
-   "court": "cp500 EBCDIC DISPLAY decode",
-   "sweep": "ebcdic_sweep.sh",
-   "byte_domain": "raw EBCDIC field bytes -> decoded text",
-   "non_claims": [
-    "cp037 / other code pages",
-    "numeric EBCDIC zoned sign",
-    "national/DBCS",
-    "collation",
-    "mixed/auto-detect encoding"
-   ]
-  },
-  "GNURUST.16": {
-   "court": "edited-picture decode (16a + 16b)",
-   "sweep": "edited_sweep.sh",
-   "byte_domain": "edited DISPLAY field bytes -> value + presentation text",
-   "non_claims": [
-    "numeric->edited formatting (16c)",
-    "report writer",
-    "locale/currency",
-    "EBCDIC edited",
-    "edited arithmetic/VALUE"
-   ]
-  },
-  "GNURUST.17": {
-   "court": "cp500 EBCDIC zoned-decimal numeric DISPLAY decode",
-   "sweep": "ebcdic_num_sweep.sh",
-   "byte_domain": "raw EBCDIC zoned field bytes -> value",
-   "non_claims": [
-    "cp037 / other code pages",
-    "edited-numeric under cp500",
-    "binary/packed via this path",
-    "mixed/auto-detect encoding",
-    "national/DBCS"
-   ]
-  },
-  "GNURUST.18": {
-   "court": "COMP-6 unsigned packed storage + MOVE",
-   "sweep": "comp6_sweep.sh",
-   "byte_domain": "field-storage + move-result bytes (COMP-6, unsigned packed)",
-   "non_claims": [
-    "signed COMP-6 (GnuCOBOL converts to COMP-3)",
-    "COMP-6 arithmetic",
-    "malformed packed bytes",
-    "dialect portability (cobol85/2002 reject it)",
-    "pre-3.2 behavior"
-   ]
-  },
-  "GNURUST.19": {
-   "court": "DIVIDE receiving-field bytes",
-   "sweep": "divide_sweep.sh",
-   "byte_domain": "DIVIDE GIVING receiver field bytes (DISPLAY/COMP-3)",
-   "non_claims": [
-    "divide-by-zero / ON SIZE ERROR",
-    "REMAINDER",
-    "COMPUTE / expression evaluation",
-    "procedure control flow",
-    "float",
-    "binary/edited receivers",
-    "business correctness"
-   ]
-  },
-  "SIZE.ERROR.ATLAS.1": {
-   "court": "arithmetic size-error behavior atlas",
-   "sweep": "size_error_atlas_sweep.sh",
-   "byte_domain": "observed receiver-written vs preserved + size_error_signaled for ADD/SUB/MUL/DIVIDE overflow + divide-by-zero (DISPLAY/COMP-3)",
-   "non_claims": [
-    "ON SIZE ERROR / NOT ON SIZE ERROR control flow (not implemented)",
-    "Procedure Division execution",
-    "receiver-write inference (observed, not inferred)",
-    "branch execution",
-    "business arithmetic correctness"
-   ]
-  },
-  "GNURUST.REMAINDER.1": {
-   "court": "DIVIDE REMAINDER receiving-field bytes",
-   "sweep": "remainder_sweep.sh",
-   "byte_domain": "DIVIDE GIVING quotient + REMAINDER receiver field bytes (DISPLAY/COMP-3)",
-   "non_claims": [
-    "ON SIZE ERROR / NOT ON SIZE ERROR control flow",
-    "divide-by-zero (fail-closed)",
-    "COMPUTE / expression evaluation",
-    "procedure control flow",
-    "float",
-    "binary/edited receivers",
-    "business correctness"
-   ]
-  },
-  "GNURUST.FILE.SEQUENTIAL.1": {
-   "court": "sequential file READ record bytes + file status",
-   "sweep": "seqfile_sweep.sh",
-   "byte_domain": "OPEN INPUT / READ NEXT / AT END record bytes + status for RECORD/LINE SEQUENTIAL",
-   "non_claims": [
-    "indexed / relative / VSAM",
-    "WRITE / REWRITE / START / DELETE",
-    "OPEN I-O / EXTEND",
-    "file-status codes beyond 00/06/10",
-    "record locking",
-    "Procedure Division control flow"
-   ]
-  },
-  "GNURUST.FILE.STATUS.1": {
-   "court": "observed FILE STATUS bytes for declared file-operation fixtures",
-   "sweep": "file_status_sweep.sh",
-   "byte_domain": "declared OPEN/READ/CLOSE condition -> observed FILE STATUS byte (00/06/10/35/42/46)",
-   "non_claims": [
-    "full file I/O parity",
-    "indexed/relative/VSAM",
-    "locking/sharing",
-    "host I/O error (30) generalization",
-    "attribute conflict (39)",
-    "Procedure Division control flow",
-    "business completeness"
-   ]
-  },
-  "GNURUST.INITIALIZE.1": {
-   "court": "INITIALIZE receiver byte effects",
-   "sweep": "initialize_sweep.sh",
-   "byte_domain": "INITIALIZE record -> changed/preserved receiver bytes (elementary/group/FILLER/REDEFINES/OCCURS/VALUE)",
-   "non_claims": [
-    "full Procedure Division execution",
-    "INITIALIZE REPLACING/TO VALUE/WITH FILLER",
-    "numeric-edited/JUSTIFIED/BLANK WHEN ZERO",
-    "ODO runtime active count",
-    "active REDEFINES view",
-    "all dialects"
-   ]
-  },
-  "GNURUST.INSPECT.1": {
-   "court": "INSPECT byte effects + tally bytes",
-   "sweep": "inspect_sweep.sh",
-   "byte_domain": "INSPECT TALLYING/REPLACING/CONVERTING target bytes + tally receiver bytes",
-   "non_claims": [
-    "full Procedure Division execution",
-    "locale/case-folding",
-    "regex/pattern semantics",
-    "national/UTF-8 multibyte",
-    "unadmitted multi-clause ordering",
-    "business validation",
-    "all dialects"
-   ]
-  },
-  "GNURUST.STRING.UNSTRING.1": {
-   "court": "STRING/UNSTRING byte effects",
-   "sweep": "string_unstring_sweep.sh",
-   "byte_domain": "STRING target+pointer+overflow; UNSTRING field+count+delimiter+tally+pointer+overflow bytes",
-   "non_claims": [
-    "full Procedure Division execution",
-    "national/UTF-8 multibyte",
-    "multi-delimiter/ALL generalization",
-    "locale/collation",
-    "business parsing correctness",
-    "all dialects"
-   ]
-  },
-  "GNURUST.INTRINSIC.ATLAS.1": {
-   "court": "observed intrinsic-function atlas",
-   "sweep": "intrinsic_atlas_sweep.sh",
-   "byte_domain": "declared intrinsic + input -> observed result (deterministic) or shape (env-sensitive)",
-   "non_claims": [
-    "not all intrinsics",
-    "environment-sensitive values (CURRENT-DATE/WHEN-COMPILED)",
-    "locale/collation",
-    "national/UTF-8",
-    "status is not an implementation",
-    "all dialects"
-   ]
-  },
-  "GNURUST.INTRINSIC.LENGTH.1": {
-   "court": "FUNCTION LENGTH storage byte length",
-   "sweep": "length_sweep.sh",
-   "byte_domain": "FUNCTION LENGTH(elementary field) -> storage byte length",
-   "non_claims": [
-    "LENGTH of group/table/reference-modified",
-    "LENGTH OF variant",
-    "national/UTF-8 character length",
-    "all dialects"
-   ]
-  },
-  "GNURUST.INTRINSIC.NUMVAL.1": {
-   "court": "FUNCTION NUMVAL numeric parse",
-   "sweep": "numval_sweep.sh",
-   "byte_domain": "FUNCTION NUMVAL(narrow numeric string) -> parsed value",
-   "non_claims": [
-    "NUMVAL-C (currency/thousands)",
-    "locale decimal/comma swap",
-    "national/UTF-8",
-    "malformed-input error semantics",
-    "all dialects"
-   ]
-  },
   "GNURUST.ACCEPT.DISPLAY.1": {
    "court": "DISPLAY emitted text + ACCEPT field bytes",
    "sweep": "accept_display_sweep.sh",
@@ -327,75 +207,6 @@
     "DISPLAY UPON / WITH NO ADVANCING",
     "ACCEPT FROM DATE/TIME/environment/screen",
     "device/console specifics",
-    "all dialects"
-   ]
-  },
-  "GNURUST.PROCEDURE.FLOW.ATLAS.1": {
-   "court": "observed control-flow atlas",
-   "sweep": "procedure_flow_atlas_sweep.sh",
-   "byte_domain": "control-flow statement class -> observed behavior (IF/EVALUATE/PERFORM/GO TO)",
-   "non_claims": [
-    "Procedure Division execution",
-    "control-flow execution",
-    "branch coverage",
-    "termination analysis",
-    "general condition evaluation",
-    "status is not implementation",
-    "all dialects"
-   ]
-  },
-  "GNURUST.INTRINSIC.MOD-REM.1": {
-   "court": "FUNCTION MOD/REM integer modulo/remainder",
-   "sweep": "modrem_sweep.sh",
-   "byte_domain": "FUNCTION MOD(a,b) (divisor sign) / REM(a,b) (dividend sign) for integers",
-   "non_claims": [
-    "non-integer operands",
-    "MOD/REM by zero",
-    "MOD and REM interchangeable",
-    "all dialects"
-   ]
-  },
-  "GNURUST.INTRINSIC.INTEGER.1": {
-   "court": "FUNCTION INTEGER (floor) / INTEGER-PART (truncate)",
-   "sweep": "integer_sweep.sh",
-   "byte_domain": "FUNCTION INTEGER(x)=floor / INTEGER-PART(x)=trunc-toward-zero",
-   "non_claims": [
-    "non-numeric argument",
-    "i128 out-of-range magnitudes",
-    "INTEGER and INTEGER-PART interchangeable",
-    "all dialects"
-   ]
-  },
-  "GNURUST.INTRINSIC.CASE.1": {
-   "court": "FUNCTION UPPER-CASE/LOWER-CASE/REVERSE",
-   "sweep": "case_sweep.sh",
-   "byte_domain": "ASCII case fold + byte reversal",
-   "non_claims": [
-    "locale/national case folding",
-    "non-ASCII bytes folded",
-    "multibyte REVERSE",
-    "all dialects"
-   ]
-  },
-  "GNURUST.INTRINSIC.ORD-CHAR.1": {
-   "court": "FUNCTION ORD/CHAR 1-based ordinal/char",
-   "sweep": "ordchar_sweep.sh",
-   "byte_domain": "ORD(c)=byte+1 (1-based) / CHAR(n)=byte(n-1)",
-   "non_claims": [
-    "non-default collating sequence",
-    "national/UTF-8",
-    "CHAR(n) out of 1..256",
-    "all dialects"
-   ]
-  },
-  "GNURUST.INTRINSIC.NUMVAL-C.1": {
-   "court": "FUNCTION NUMVAL-C currency parse",
-   "sweep": "numvalc_sweep.sh",
-   "byte_domain": "FUNCTION NUMVAL-C(currency string) -> value (strip $ + thousands commas)",
-   "non_claims": [
-    "non-default currency symbol (2-arg form)",
-    "DECIMAL-POINT IS COMMA / locale comma-decimal",
-    "national/UTF-8",
     "all dialects"
    ]
   },
@@ -410,144 +221,15 @@
     "all dialects"
    ]
   },
-  "GNURUST.SIZE.ERROR.1": {
-   "court": "arithmetic SIZE ERROR truncation + condition",
-   "sweep": "size_error_sweep.sh",
-   "byte_domain": "overflow -> low-order truncated store (no ON SIZE ERROR) + size-error condition",
+  "GNURUST.BIGNUM.1": {
+   "court": "MULTIPLY beyond i128 (exact 256-bit product)",
+   "sweep": "bignum_sweep.sh",
+   "byte_domain": "overflowing i128 product -> receiver bytes (low-digit truncation + ROUNDED)",
    "non_claims": [
-    "the arithmetic itself (GNURUST.7/13/19)",
-    "ROUNDED",
-    "intermediate-result precision",
-    "SIZE ERROR on MOVE",
-    "floating-point receivers",
-    "all dialects"
-   ]
-  },
-  "GNURUST.FILE.WRITE.1": {
-   "court": "sequential WRITE byte effects",
-   "sweep": "write_seq_sweep.sh",
-   "byte_domain": "OPEN OUTPUT + WRITE -> file bytes (RECORD SEQ full padded / LINE SEQ trailing-space-stripped + LF)",
-   "non_claims": [
-    "variable-length records",
-    "WRITE ADVANCING/BEFORE/AFTER",
-    "REWRITE",
-    "indexed/relative organizations",
-    "all dialects"
-   ]
-  },
-  "GNURUST.FILE.REWRITE.1": {
-   "court": "sequential REWRITE in-place update",
-   "sweep": "rewrite_sweep.sh",
-   "byte_domain": "OPEN I-O + REWRITE -> record overwritten in place (same length), others unchanged",
-   "non_claims": [
-    "LINE SEQUENTIAL REWRITE",
-    "length-changing rewrites",
-    "DELETE",
-    "indexed/relative",
-    "read-before-rewrite sequencing",
-    "all dialects"
-   ]
-  },
-  "GNURUST.INTRINSIC.DATE.1": {
-   "court": "date-conversion intrinsics",
-   "sweep": "date_sweep.sh",
-   "byte_domain": "INTEGER-OF-DATE/DATE-OF-INTEGER/INTEGER-OF-DAY/DAY-OF-INTEGER (proleptic Gregorian, 1601-01-01=1)",
-   "non_claims": [
-    "invalid-date validation",
-    "environment-sensitive CURRENT-DATE/WHEN-COMPILED",
-    "business date arithmetic/Y2K windowing",
-    "non-Gregorian calendars",
-    "all dialects"
-   ]
-  },
-  "GNURUST.IF.EVALUATE.SLICE.1": {
-   "court": "IF/EVALUATE execution slice (alphanumeric)",
-   "sweep": "if_eval_sweep.sh",
-   "byte_domain": "execute IF/EVALUATE fragment over alphanumeric fields -> resulting storage bytes",
-   "non_claims": [
-    "numeric/packed comparison + numeric MOVE",
-    "compound conditions (AND/OR/NOT)",
-    "class conditions",
-    "88-level (GNURUST.11)",
-    "non-MOVE branches",
-    "nested IF/PERFORM/GO TO",
-    "THRU/range WHEN",
-    "all dialects"
-   ]
-  },
-  "GNURUST.PERFORM.SLICE.1": {
-   "court": "PERFORM execution slice (TIMES/UNTIL/VARYING)",
-   "sweep": "perform_sweep.sh",
-   "byte_domain": "execute PERFORM loop over numeric counters -> resulting storage bytes",
-   "non_claims": [
-    "signed/packed/binary counters",
-    "numeric SIZE ERROR on the body",
-    "non-ADD body statements",
-    "compound/class conditions",
-    "PERFORM THRU / out-of-line paragraph",
-    "WITH TEST AFTER",
-    "nested PERFORM / GO TO",
-    "all dialects"
-   ]
-  },
-  "GNURUST.FILE.FLOW.SLICE.1": {
-   "court": "read-loop execution slice (file x control flow)",
-   "sweep": "file_flow_sweep.sh",
-   "byte_domain": "OPEN INPUT + PERFORM UNTIL EOF READ + accumulate -> resulting WORKING-STORAGE",
-   "non_claims": [
-    "indexed/relative organizations",
-    "signed/packed accumulators",
-    "numeric SIZE ERROR on accumulators",
-    "per-record IF/MOVE/general statements",
-    "WRITE/REWRITE in the loop",
-    "multi-file loops",
-    "file-status beyond AT END",
-    "READ INTO",
-    "all dialects"
-   ]
-  },
-  "GNURUST.FILE.FILTER.SLICE.1": {
-   "court": "filter (conditional) read-loop",
-   "sweep": "file_filter_sweep.sh",
-   "byte_domain": "read-loop with a per-record IF gating the accumulation -> resulting WORKING-STORAGE",
-   "non_claims": [
-    "compound conditions (AND/OR)",
-    "signed/packed numeric filter",
-    "per-record mutation/transform (only accumulate)",
-    "multi-branch EVALUATE filter",
-    "indexed/relative",
-    "all dialects"
-   ]
-  },
-  "GNURUST.IF.NUMERIC.SLICE.1": {
-   "court": "numeric IF/EVALUATE execution slice",
-   "sweep": "if_numeric_sweep.sh",
-   "byte_domain": "execute numeric IF/EVALUATE over 9(n) fields -> resulting storage bytes",
-   "non_claims": [
-    "signed/packed/V-scaled numerics",
-    "MOVE field TO field (literals only)",
-    "numeric SIZE ERROR",
-    "compound/class conditions",
-    "88-level (GNURUST.11)",
-    "range/THRU WHEN",
-    "non-MOVE branches",
-    "nested flow",
-    "all dialects"
-   ]
-  },
-  "GNURUST.TABLE.PERFORM.SLICE.1": {
-   "court": "table (OCCURS) PERFORM VARYING slice",
-   "sweep": "table_sweep.sh",
-   "byte_domain": "PERFORM VARYING I over a 1-based OCCURS table accumulating TABLE(I)",
-   "non_claims": [
-    "multi-dimensional/nested OCCURS",
-    "OCCURS DEPENDING ON",
-    "subscript out-of-bounds",
-    "INDEXED BY / SEARCH / SET",
-    "signed/packed/V elements",
-    "numeric SIZE ERROR",
-    "non-sum per-element bodies",
-    "all dialects"
+    "ADD/SUBTRACT upscale overflow",
+    "DIVIDE overflow",
+    "chained-COMPUTE single-expression GMP precision",
+    "a single operand exceeding 38 digits"
    ]
   },
   "GNURUST.BUILD.PROFILE.1": {
@@ -576,102 +258,6 @@
     "all dialects"
    ]
   },
-  "GNURUST.INDEXED.FILE.ATLAS.1": {
-   "court": "observed indexed-file atlas",
-   "sweep": "indexed_file_atlas_sweep.sh",
-   "byte_domain": "INDEXED keyed access: random READ by key, key-order retrieval, dup/not-found status, START, DELETE",
-   "non_claims": [
-    "ISAM/BDB/VBISAM on-disk format",
-    "page checksum / atomicity",
-    "alternate keys",
-    "concurrent access/locking",
-    "indexed file execution",
-    "relative files",
-    "all dialects"
-   ]
-  },
-  "GNURUST.SEARCH.TABLE.1": {
-   "court": "SEARCH / SEARCH ALL table lookup",
-   "sweep": "search_sweep.sh",
-   "byte_domain": "the 1-based landing index of SEARCH (serial, forward-from-index) / SEARCH ALL (binary on ascending key)",
-   "non_claims": [
-    "multi-key/DESCENDING keys",
-    "alphanumeric/signed/V keys",
-    "VARYING/AT END/WHEN control flow (only the landing index)",
-    "SEARCH ALL on an unsorted table",
-    "OCCURS DEPENDING ON",
-    "all dialects"
-   ]
-  },
-  "GNURUST.SORT.MERGE.ATLAS.1": {
-   "court": "observed SORT/MERGE atlas",
-   "sweep": "sort_merge_atlas_sweep.sh",
-   "byte_domain": "SORT reordering byte-effect: ASCENDING/DESCENDING KEY, USING/GIVING over an SD work file",
-   "non_claims": [
-    "SORT execution",
-    "INPUT/OUTPUT PROCEDURE (RELEASE/RETURN)",
-    "MERGE",
-    "multiple keys",
-    "sort stability",
-    "custom collating sequence",
-    "all dialects"
-   ]
-  },
-  "GNURUST.RELATIVE.FILE.ATLAS.1": {
-   "court": "observed relative-file atlas",
-   "sweep": "relative_file_atlas_sweep.sh",
-   "byte_domain": "RELATIVE random access by record number + status (23 empty slot)",
-   "non_claims": [
-    "relative file execution",
-    "on-disk slotted format",
-    "sequential/dynamic access modes",
-    "REWRITE/DELETE/START",
-    "indexed files",
-    "all dialects"
-   ]
-  },
-  "GNURUST.DIALECT.RUNTIME.ATLAS.1": {
-   "court": "observed dialect-runtime divergence atlas",
-   "sweep": "dialect_runtime_atlas_sweep.sh",
-   "byte_domain": "cross-dialect divergence: stored zoned-sign bytes (invariant) vs DISPLAY presentation sign placement (leading/trailing camps) vs compile-acceptance of extensions",
-   "non_claims": [
-    "non-default dialect implementation",
-    "vendor-compiler parity (IBM/MF/MVS/BS2000/RM/GCOS)",
-    "a -std mode being the vendor dialect itself",
-    "complete enumeration of every cross-dialect divergence",
-    "decoding the DISPLAY presentation form back to a value",
-    "screen-routed dialects (acu/realia)",
-    "runtime portability across platforms"
-   ]
-  },
-  "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1": {
-   "court": "observed compiler-directive byte-variance atlas",
-   "sweep": "directive_variance_atlas_sweep.sh",
-   "byte_domain": "compiler-directive byte delta from the default profile: -fbinary-size (layout), -fbinary-byteorder (endianness), -fbinary-truncate (MOVE result)",
-   "non_claims": [
-    "implementation of non-default directives",
-    "auto-detection of a binary's build profile",
-    "complete enumeration of every cobc directive",
-    "dialect-selection (-std) flags",
-    "code-generation/optimization directives",
-    "runtime environment variables (COB_*)",
-    "vendor-specific directives"
-   ]
-  },
-  "GNURUST.DECLARATIVES.ATLAS.1": {
-   "court": "observed DECLARATIVES / USE error-handler atlas",
-   "sweep": "declaratives_atlas_sweep.sh",
-   "byte_domain": "DECLARATIVES/USE runtime control: which op fires the handler, per-file binding, FILE STATUS visibility inside, resume-after-handler",
-   "non_claims": [
-    "executing a declarative",
-    "USE FOR DEBUGGING",
-    "non-file (arithmetic) exceptions",
-    "GLOBAL declaratives across nested programs",
-    "multi-declarative precedence ordering",
-    "resume-vs-terminate for non-file exceptions",
-    "all dialects"
-   ]
-  },
   "GNURUST.CALL.LAYOUT.ATLAS.1": {
    "court": "observed CALL parameter byte-layout atlas",
    "sweep": "call_layout_atlas_sweep.sh",
@@ -684,525 +270,6 @@
     "OPTIONAL / OMITTED parameters",
     "the RETURNING phrase",
     "all dialects"
-   ]
-  },
-  "GNURUST.LINEAGE.CORPUS.20M.0": {
-   "court": "deterministic COBOL lineage corpus ENGINE (self-test)",
-   "sweep": "lineage_engine_sweep.sh",
-   "byte_domain": "meta-engine: deterministic gen + Merkle + replay + isolation + findings path (no burn)",
-   "non_claims": [
-    "full GnuCOBOL parity / standard conformance",
-    "all dialects / public-corpus execution parity",
-    "business correctness / compiler replacement",
-    "automatic build-profile detection",
-    "the full 20M run (engine + 200K pilot sealed; full 20M detached as .20M.1)",
-    "the negative-zero finding being fixed (filed as GNURUST.VALUE.NEGZERO.EDGE.1 candidate)",
-    "families not yet emitting (v0 emits storage + directive of 15 planned)"
-   ]
-  },
-  "GNURUST.LINEAGE.CORPUS.20M.SMOKE": {
-   "court": "200K real-cobc COBOL-witness lineage burn (pilot)",
-   "sweep": "lineage_corpus_sweep.sh",
-   "byte_domain": "200K real-cobc witnesses: storage differential + directive variant; gate=Merkle+replay+isolation+findings",
-   "non_claims": [
-    "the full 20M run (200K pilot; full 20M is .20M.1 detached)",
-    "full parity / conformance",
-    "all dialects / public-corpus parity",
-    "business correctness",
-    "the negative-zero finding being fixed",
-    "families not yet emitting (storage + directive only)"
-   ]
-  },
-  "GNURUST.LINEAGE.CORPUS.20M.1": {
-   "court": "full 20M real-cobc COBOL-witness lineage run (complete)",
-   "sweep": "lineage_fullrun_sweep.sh",
-   "byte_domain": "completed 4M real-cobc witness run; evidence-of-record reports/lineage20m/full-run-seal.json (root-of-roots binds the regenerable shards)",
-   "non_claims": [
-    "full GnuCOBOL parity / standard conformance",
-    "all dialects / public-corpus parity",
-    "business correctness / compiler replacement",
-    "the negative-zero finding being fixed",
-    "the not-yet-emitting families (4M of 20M = storage+directive only; 13 families dropped, not covered)",
-    "the 16M dropped indices being witnesses"
-   ]
-  },
-  "GNURUST.VALUE.NEGZERO.EDGE.1": {
-   "court": "negative-zero VALUE sign edge (oracle-characterized)",
-   "sweep": "edge_negzero_sweep.sh",
-   "byte_domain": "VALUE-image negative-zero sign matrix; oracle rule + locked gnucobol-rs divergence (COMP-3 integer-form)",
-   "non_claims": [
-    "the fix (characterizes + locks; patch is separate, not applied)",
-    "arithmetic/MOVE negative-zero (GNURUST.13)",
-    "figurative ZERO",
-    "other usages/dialects",
-    "broader signed-zero space"
-   ]
-  },
-  "GNURUST.16C": {
-   "court": "edited-picture encode (numeric->edited 16c)",
-   "sweep": "edited_encode_sweep.sh",
-   "byte_domain": "numeric value -> edited DISPLAY field bytes",
-   "non_claims": [
-    "report writer",
-    "locale/currency CURRENCY SIGN",
-    "EBCDIC edited",
-    "edited arithmetic/VALUE"
-   ]
-  },
-  "GNURUST.12B": {
-   "court": "SET 88 condition-name TO FALSE",
-   "sweep": "set_false_sweep.sh",
-   "byte_domain": "parent field-storage bytes",
-   "non_claims": [
-    "condition-name expressions",
-    "collating-sensitive ranges",
-    "Procedure Division execution"
-   ]
-  },
-  "GNURUST.CLASS.1": {
-   "court": "class conditions IS NUMERIC/ALPHABETIC",
-   "sweep": "class_sweep.sh",
-   "byte_domain": "alphanumeric field bytes -> class-condition truth",
-   "non_claims": [
-    "user-defined CLASS names",
-    "national/UTF-8/DBCS classes",
-    "locale collating sequence"
-   ]
-  },
-  "GNURUST.REFMOD.1": {
-   "court": "reference modification field(start:length)",
-   "sweep": "refmod_sweep.sh",
-   "byte_domain": "field bytes + (start,length) -> substring / overwritten field",
-   "non_claims": [
-    "out-of-bounds refmod (fail-closed)",
-    "subscripted/table refmod",
-    "numeric-edited/national operands",
-    "refmod inside arithmetic"
-   ]
-  },
-  "GNURUST.SUBSCRIPT.1": {
-   "court": "table subscript TABLE(i[,j])",
-   "sweep": "subscript_sweep.sh",
-   "byte_domain": "OCCURS table bytes + subscripts -> element bytes",
-   "non_claims": [
-    "out-of-bounds subscript (fail-closed)",
-    "OCCURS DEPENDING ON",
-    "INDEXED BY index-names",
-    "subscript arithmetic expressions"
-   ]
-  },
-  "GNURUST.ODO.1": {
-   "court": "OCCURS DEPENDING ON used length + bounded access",
-   "sweep": "odo_sweep.sh",
-   "byte_domain": "controlling value + table -> used length / active element bytes",
-   "non_claims": [
-    "access beyond active count (fail-closed)",
-    "nested/2-D ODO",
-    "SET controlling mid-access",
-    "signed/packed elements"
-   ]
-  },
-  "GNURUST.COMMON.BOUNDCHECK.1": {
-   "court": "Runtime bounds-check diagnostics (subscript / reference-mod / OCCURS DEPENDING ON)",
-   "sweep": "bounds_check_sweep.sh",
-   "byte_domain": "a bounds-check input -> the exact runtime EC-BOUND diagnostic message + hint bytes (verified vs both oracles 3.1.2 + 3.2)",
-   "non_claims": [
-    "the libcob: <file>:<line>: error: / note: prefix framing (the runtime wrapper, not the check)",
-    "the not-numeric message is sealed separately (GNURUST.COMMON.NUMCHECK.1)",
-    "the cob_hard_failure abort + exit code + EC numeric ids",
-    "the 2.0-ABI cannot_check_subscript state path beyond the zero-subscript case"
-   ]
-  },
-  "GNURUST.COMMON.NUMCHECK.1": {
-   "court": "Not-numeric runtime diagnostic + field-type explanation",
-   "sweep": "numeric_check_sweep.sh",
-   "byte_domain": "a non-numeric value reaching arithmetic -> the exact not-numeric diagnostic message bytes (verified vs both oracles 3.1.2 + 3.2)",
-   "non_claims": [
-    "the cob_is_numeric validity decision itself (this court reproduces the MESSAGE, taking the verdict as input)",
-    "the libcob: prefix framing + the abort/exit",
-    "NATIONAL/UTF-16 byte widths in the escaping"
-   ]
-  },
-  "GNURUST.COMMON.CBL.1": {
-   "court": "CBL_ logic / bit / case builtins (CBL_AND/OR/XOR/NOR/IMP/NIMP/EQ/NOT/TOUPPER/TOLOWER)",
-   "sweep": "cbl_logic_sweep.sh",
-   "byte_domain": "CALL USING buffer(s) + length -> the in-place transformed destination bytes (verified vs both oracles 3.1.2 + 3.2)",
-   "non_claims": [
-    "the COB_CHK_PARMS parameter-count diagnostic",
-    "CBL_GC_PRINTABLE locale + custom dot-char; cob_sys_x91 multiplexer",
-    "the OS/process CBL routines (getpid/system/fork/nanosleep)"
-   ]
-  },
-  "GNURUST.INDEX.1": {
-   "court": "USAGE INDEX storage + SET arithmetic",
-   "sweep": "index_sweep.sh",
-   "byte_domain": "occurrence value + SET op -> 4 native-endian index bytes",
-   "non_claims": [
-    "8-byte LP64 index width",
-    "SEARCH / SEARCH ALL execution",
-    "index used as a subscript (stride multiply lives in GNURUST.SUBSCRIPT.1)",
-    "big-endian host",
-    "SET index TO pointer/address"
-   ]
-  },
-  "GNURUST.ROUND.1": {
-   "court": "ROUNDED MODE IS (all eight rounding modes, cob_decimal + packed BCD paths)",
-   "sweep": "round_sweep.sh",
-   "byte_domain": "value + target scale + ROUNDED mode + receiver path -> stored field bytes",
-   "non_claims": [
-    "bignum values beyond i128 (38-digit intermediates)",
-    "floating-point COMP-1/COMP-2 rounding",
-    "PROHIBITED size error returns a typed error, not bytes"
-   ]
-  },
-  "GNURUST.BIGNUM.1": {
-   "court": "MULTIPLY beyond i128 (exact 256-bit product)",
-   "sweep": "bignum_sweep.sh",
-   "byte_domain": "overflowing i128 product -> receiver bytes (low-digit truncation + ROUNDED)",
-   "non_claims": [
-    "ADD/SUBTRACT upscale overflow",
-    "DIVIDE overflow",
-    "chained-COMPUTE single-expression GMP precision",
-    "a single operand exceeding 38 digits"
-   ]
-  },
-  "GNURUST.INTPOW.1": {
-   "court": "integer exponentiation cob_s32_pow/cob_s64_pow",
-   "sweep": "pow_sweep.sh",
-   "byte_domain": "(base, power, width) -> integer result (wrapping)",
-   "non_claims": [
-    "decimal ** (cob_decimal_pow is intrinsic.c)",
-    "fractional exponents",
-    "0 ** negative (fails closed instead of SIGFPE)"
-   ]
-  },
-  "GNURUST.LOGICAL.1": {
-   "court": "bit-logical B-AND/B-OR/B-XOR/B-NOT + shifts",
-   "sweep": "logical_sweep.sh",
-   "byte_domain": "(value0, value1) -> u64 bitwise via |value| mod 2^64",
-   "non_claims": [
-    "fractional operands (scale dropped)",
-    "operands beyond 64 bits (truncated)",
-    "cob_logical_left_c/right_c size-bounded variants"
-   ]
-  },
-  "GNURUST.FLOAT.1": {
-   "court": "float fields COMP-1/COMP-2 + FLOAT-DECIMAL-16/34, both directions",
-   "sweep": "float_sweep.sh",
-   "byte_domain": "decimal value <-> COMP-1/COMP-2/FLOAT-DECIMAL field bytes (truncate-toward-zero)",
-   "non_claims": [
-    "float arithmetic (composition; separate)",
-    "cob_cmp_float epsilon comparison",
-    "long double / FP_BIN32/64/128 usages",
-    "Inf/NaN beyond decode-refusal"
-   ]
-  },
-  "GNURUST.NUMCMP.1": {
-   "court": "numeric comparison cob_numeric_cmp (on the Mpz/cob_decimal 1:1 layer)",
-   "sweep": "numcmp_sweep.sh",
-   "byte_domain": "two numeric field byte images -> -1/0/1 ordering verdict",
-   "non_claims": [
-    "float-vs-float epsilon edges",
-    "optimized cmp_packed/uint/llint fast-path code (verdict only)",
-    "negative-scale packed compare",
-    "National/DBCS comparison"
-   ]
-  },
-  "GNURUST.FILEIO.LINESEQ.1": {
-   "court": "line-sequential WRITE config matrix",
-   "sweep": "lineseq_write_sweep.sh",
-   "byte_domain": "OPEN OUTPUT + WRITE (LINE SEQUENTIAL) under COB_LS_FIXED/NULLS/VALIDATE -> appended bytes + FILE STATUS (00/71)",
-   "non_claims": [
-    "WRITE ADVANCING / LINAGE (opt != 0)",
-    "Windows CR/LF text-mode (cob_ls_uses_cr)",
-    "COB_LS_VALIDATE>1 printable check (COB_EXPERIMENTAL)",
-    "CODE-SET conversion",
-    "variable-length records",
-    "lineseq_read / lineseq_rewrite",
-    "record/relative/indexed organizations",
-    "the fd/FILE* syscalls (declared OS boundary)"
-   ]
-  },
-  "GNURUST.FILEIO.LINESEQ.2": {
-   "court": "line-sequential READ config matrix",
-   "sweep": "lineseq_read_sweep.sh",
-   "byte_domain": "OPEN INPUT + READ NEXT (LINE SEQUENTIAL) under COB_LS_VALIDATE/NULLS/SPLIT -> record bytes + FILE STATUS (00/04/06/09/10)",
-   "non_claims": [
-    "multi-file open_next chain",
-    "CODE-SET conversion (sort_collating)",
-    "COB_LS_VALIDATE>1 printable check (COB_EXPERIMENTAL)",
-    "COB_LS_NULLS error-recovery after status 71",
-    "lineseq_rewrite",
-    "record/relative/indexed organizations",
-    "the fd/FILE* reads (declared OS boundary)"
-   ]
-  },
-  "GNURUST.FILEIO.SEQ.1": {
-   "court": "RECORD SEQUENTIAL read/write incl. variable-length",
-   "sweep": "seqrec_sweep.sh",
-   "byte_domain": "OPEN + WRITE/READ (RECORD SEQUENTIAL) -> fixed full record / variable cob_varseq_type prefix + data + FILE STATUS",
-   "non_claims": [
-    "WRITE ADVANCING (cob_seq_write_opt)",
-    "CODE-SET conversion",
-    "over-long record bytes_to_skip seek-past",
-    "multi-file concatenation",
-    "relative/indexed organizations",
-    "the fd read/write/lseek syscalls (declared OS boundary)"
-   ]
-  },
-  "GNURUST.FILEIO.RELATIVE.1": {
-   "court": "RELATIVE organization keyed + sequential access",
-   "sweep": "relative_sweep.sh",
-   "byte_domain": "OPEN + WRITE/READ/REWRITE/DELETE/START (RELATIVE) -> 8-byte LE header + record_max slots + FILE STATUS (00/22/23/24/10)",
-   "non_claims": [
-    "variable-length relative records",
-    "READ FIRST/LAST/PREVIOUS directions",
-    "COB_READ_MASK option bits",
-    "SEQUENTIAL-access RELATIVE KEY write-back on append",
-    "OPEN EXTEND / file-sharing and record locking",
-    "the EXTFH external file handler path",
-    "the fd lseek/read/write syscalls (declared OS boundary)"
-   ]
-  },
-  "GNURUST.FILEIO.VERB.1": {
-   "court": "file verb open/access-mode preconditions",
-   "sweep": "verb_sweep.sh",
-   "byte_domain": "cob_write/read/read_next/rewrite/delete/start preconditions -> FILE STATUS (43/44/46/47/48/49/23)",
-   "non_claims": [
-    "the organization dispatch (sealed by LINESEQ/SEQ/RELATIVE)",
-    "the compile-time START-on-RANDOM rejection",
-    "LINE SEQUENTIAL validate-71 at the verb layer",
-    "CODE-SET conversion",
-    "the variable_record size resolution",
-    "EOP / exception side effects",
-    "the indexed suppressed-key skip",
-    "the fd read/write syscalls (declared OS boundary)"
-   ]
-  },
-  "GNURUST.FILEIO.SORT.1": {
-   "court": "SORT/MERGE record comparison",
-   "sweep": "sort_sweep.sh",
-   "byte_domain": "SORT keys (offset/size/direction) over records -> the sorted record order (GIVING file bytes)",
-   "non_claims": [
-    "numeric keys (composition with GNURUST.NUMCMP.1)",
-    "the SORT engine tempfile merge / queues / chunking",
-    "INPUT/OUTPUT PROCEDURE (RELEASE/RETURN)",
-    "MERGE of multiple files",
-    "DUPLICATES IN ORDER beyond the stable tiebreak",
-    "the EXTFH sort path",
-    "the fd tempfile syscalls (declared OS boundary)"
-   ]
-  },
-  "GNURUST.FILEIO.SYS.1": {
-   "court": "CBL_* system file/directory routines",
-   "sweep": "cob_sys_sweep.sh",
-   "byte_domain": "CBL_DELETE_FILE/COPY_FILE/RENAME_FILE/CREATE_DIR/DELETE_DIR/CHANGE_DIR/GET_CURRENT_DIR -> RETURN-CODE (0/35/128/129/-1)",
-   "non_claims": [
-    "CBL_CHECK_FILE_EXIST / cob_sys_file_info localtime date formatting",
-    "the file-lock / file_dev open parameters",
-    "the ACUCOBOL hyphen / filename-mapping path",
-    "non-UTF-8 path bytes",
-    "the exact errno->status mapping beyond 35/128",
-    "concurrent filesystem races",
-    "the handle value matching libcob's raw fd (a safe registry index is used)",
-    "the underlying syscalls (declared OS boundary)"
-   ]
-  },
-  "GNURUST.FILEIO.OPEN.1": {
-   "court": "file runtime OPEN/CLOSE + lifecycle",
-   "sweep": "open_sweep.sh",
-   "byte_domain": "OPEN/WRITE/READ NEXT/CLOSE over a CobFile -> on-disk file image bytes + open/close FILE STATUS (00/05/31/35/38/41/42)",
-   "non_claims": [
-    "indexed/BDB and SORT open/close (substrate boundary)",
-    "record/file locking beyond no-op success",
-    "OPEN EXTEND positioning details",
-    "file-sharing modes",
-    "concat (multi-file) input",
-    "the EXTFH open path",
-    "cob_cache_file / file_cache list management",
-    "the actual fd open/close syscalls (declared OS boundary)"
-   ]
-  },
-  "GNURUST.FILEIO.INDEXED.1": {
-   "court": "INDEXED organization (keyed store + record locking)",
-   "sweep": "indexed_sweep.sh",
-   "byte_domain": "INDEXED operations (WRITE/READ/READ NEXT/START/REWRITE/DELETE + record/file locks) over a primary key -> FILE STATUS + record bytes + key order",
-   "non_claims": [
-    "the on-disk index file format (BDB/VBISAM/EXTFH -- the declared OS boundary)",
-    "ALTERNATE RECORD KEYs and WITH DUPLICATES (only the primary key is the court)",
-    "READ PREVIOUS / descending traversal",
-    "the actual cross-process BDB lock environment (52 deadlock / 30 permanent-error)",
-    "variable-length indexed records",
-    "the bdb_*/EXTFH substrate functions"
-   ]
-  },
-  "GNURUST.MLIO.GENERATE.1": {
-   "court": "XML / JSON GENERATE (native serializer)",
-   "sweep": "ml_generate_sweep.sh",
-   "byte_domain": "a cob_ml_tree -> the XML / JSON GENERATE output bytes",
-   "non_claims": [
-    "XML/JSON PARSE is sealed separately (GNURUST.MLIO.PARSE.1)",
-    "NATIONAL/UTF-16 content + non-ASCII multibyte escaping",
-    "pretty-print / indentation options",
-    "namespaces / complex attributes"
-   ]
-  },
-  "GNURUST.MLIO.PARSE.1": {
-   "court": "XML PARSE (native state machine)",
-   "sweep": "ml_parse_sweep.sh",
-   "byte_domain": "an XML PARSE input field + cross-call state -> the XML-EVENT / XML-CODE / XML-TEXT register sequence",
-   "non_claims": [
-    "an actual XML tree/content parse (GnuCOBOL 3.2 XML PARSE is an unimplemented stub; the port reproduces its observable START-OF-DOCUMENT->END-OF-INPUT->END-OF-DOCUMENT event walk, not a real parser)",
-    "JSON PARSE (no such statement in GnuCOBOL 3.2 mlio.c)",
-    "COMPAT (non-XMLNSS) full-document XML-TEXT delivery beyond the modelled path",
-    "multi-chunk streaming + schema VALIDATING"
-   ]
-  },
-  "GNURUST.SCREENIO.INIT.1": {
-   "court": "SCREEN SECTION init/teardown framing + positioned DISPLAY (native terminal bytes)",
-   "sweep": "screenio_sweep.sh",
-   "byte_domain": "a positioned SCREEN SECTION DISPLAY -> the exact ncurses terminal byte stream, on the admitted terminal",
-   "non_claims": [
-    "the ncurses mvcur cursor-cost model is sealed separately (GNURUST.SCREENIO.DISPLAY.2)",
-    "multi-field layout, color/attribute SGR, numeric-edited/JUSTIFIED display",
-    "ACCEPT input / key handling / cursor navigation",
-    "any terminal other than TERM=xterm or any ncurses build other than the admitted 6.6 (the byte stream is terminfo-dependent)"
-   ]
-  },
-  "GNURUST.SCREENIO.DISPLAY.2": {
-   "court": "SCREEN SECTION positioned DISPLAY -- the ncurses mvcur cursor-cost model (native terminal bytes)",
-   "sweep": "screenio_grid_sweep.sh",
-   "byte_domain": "a positioned DISPLAY (LINE/COLUMN) -> the exact ncurses cursor-movement + field byte stream, across the swept position grid",
-   "non_claims": [
-    "positions outside the swept LINE x COLUMN grid",
-    "multi-field DISPLAY is sealed separately (GNURUST.SCREENIO.DISPLAY.3)",
-    "color/attribute SGR, numeric-edited/JUSTIFIED display, ACCEPT input",
-    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
-   ]
-  },
-  "GNURUST.SCREENIO.DISPLAY.3": {
-   "court": "SCREEN SECTION multi-field DISPLAY -- the general ncurses mvcur (inter-field moves), native terminal bytes",
-   "sweep": "screenio_multi_sweep.sh",
-   "byte_domain": "a multi-field DISPLAY -> the exact ncurses inter-field cursor-movement + field byte stream, for non-overlapping layouts",
-   "non_claims": [
-    "overlapping same-row layouts (later field left of an earlier one) -- those need the curses refresh line-diff (clr_eol erase), a follow-on court",
-    "3+ field interactions beyond the swept pairs",
-    "colour/attribute SGR (monochrome attributes are sealed in GNURUST.SCREENIO.ATTR.1), numeric-edited/JUSTIFIED display, ACCEPT input",
-    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
-   ]
-  },
-  "GNURUST.SCREENIO.ATTR.1": {
-   "court": "SCREEN SECTION monochrome display attributes (HIGHLIGHT/LOWLIGHT/UNDERLINE/BLINK/REVERSE) -- native terminal bytes",
-   "sweep": "screenio_attr_sweep.sh",
-   "byte_domain": "an attributed positioned DISPLAY -> the exact ncurses SGR-wrapped field byte stream, on the admitted terminal",
-   "non_claims": [
-    "COLOUR attributes (FOREGROUND-COLOR/BACKGROUND-COLOR) -- the whole-screen colour repaint, sealed in GNURUST.SCREENIO.COLOR.1",
-    "combined attributes, attributes on multi-field/numeric-edited displays, ACCEPT-side attributes",
-    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
-   ]
-  },
-  "GNURUST.SCREENIO.LINEDIFF.1": {
-   "court": "multi-DISPLAY same-row refresh line-diff (ncurses doupdate/TransformLine) -- native terminal bytes",
-   "sweep": "screenio_linediff_sweep.sh",
-   "byte_domain": "two same-row DISPLAY statements -> the exact ncurses doupdate/TransformLine refresh byte stream (reposition + changed run + clr_eol trailing-erase), on the admitted terminal",
-   "non_claims": [
-    "THREE or more same-row DISPLAYs (clear-to-EOL batches differently across 3+ refreshes)",
-    "distant isolated survivors needing a jump + single space; the MULTI-ROW diff (vertical mvcur between changed rows)",
-    "attributes/colour on the diffed text",
-    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
-   ]
-  },
-  "GNURUST.SCREENIO.ACCEPT.2": {
-   "court": "SCREEN SECTION ACCEPT overflow input (typing past the field width: BEL + overwrite) -- native terminal bytes",
-   "sweep": "screenio_accept2_sweep.sh",
-   "byte_domain": "a SCREEN SECTION ACCEPT of a width-1..6 field + printable input LONGER than the field -> the exact ncurses BEL/overwrite overflow byte stream, on the admitted terminal",
-   "non_claims": [
-    "width >= 7 fields (the `rep`-painted prompt + terminfo-internal reposition)",
-    "field editing keys (arrows / backspace-during-input / function keys), numeric/USING-validation fields, multi-field ACCEPT, ACCEPT colour/attributes",
-    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
-   ]
-  },
-  "GNURUST.SCREENIO.ACCEPT.1": {
-   "court": "SCREEN SECTION ACCEPT of an alphanumeric input field (prompt / reposition / echo / field-full) -- native terminal bytes",
-   "sweep": "screenio_accept_sweep.sh",
-   "byte_domain": "a SCREEN SECTION ACCEPT of a width-1..6 alphanumeric field + the printable input (<= width) -> the exact ncurses prompt/reposition/echo/field-full byte stream, on the admitted terminal",
-   "non_claims": [
-    "width >= 7 fields (the `rep`-painted prompt + terminfo-internal post-rep reposition)",
-    "OVERFLOW input (typing past the field width -- BEL + overwrite, a separate input-editing state machine)",
-    "field editing keys (arrows / backspace-during-input / function keys), numeric/USING-validation fields, multi-field ACCEPT, ACCEPT colour/attributes",
-    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
-   ]
-  },
-  "GNURUST.SCREENIO.NUMEDIT.1": {
-   "court": "SCREEN SECTION numeric-edited field DISPLAY (zero-suppression / sign / CR-DB positioning) -- native terminal bytes",
-   "sweep": "screenio_numedit_sweep.sh",
-   "byte_domain": "a numeric-edited positioned single-field DISPLAY (edited PIC FROM a numeric source) -> the exact ncurses byte stream that skips leading blanks + writes the edited run, on the admitted terminal",
-   "non_claims": [
-    "the numeric editing itself (the move.c court; this proves the screen POSITIONING of an already-edited image)",
-    "the `*` check-protection zero-fill rule (a separate edited.rs follow-on)",
-    "a long (5+) trailing/interior blank run that ncurses cursor-skips rather than space-fills",
-    "MULTIPLE edited fields in one DISPLAY (the general multi-field line-diff); numeric-edited colour/attributes; ACCEPT-side numeric-edited input",
-    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6"
-   ]
-  },
-  "GNURUST.SCREENIO.COLOR.1": {
-   "court": "SCREEN SECTION colour DISPLAY (FOREGROUND-COLOR/BACKGROUND-COLOR) -- the whole-screen ncurses repaint, native terminal bytes",
-   "sweep": "screenio_color_sweep.sh",
-   "byte_domain": "a colour-attributed positioned single-field DISPLAY (LINE>=2) -> the exact ncurses whole-screen colour-repaint byte stream, on the admitted terminal",
-   "non_claims": [
-    "the LINE==1 single-row-screen colour case (a different positioning edge)",
-    "MULTIPLE colour fields in one DISPLAY -- the general doupdate/TransformLine line-diff across an arbitrary screen delta (overlapping same-row clr_eol)",
-    "combined colour+monochrome attributes, colour on numeric-edited displays, ACCEPT-side colour",
-    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
-   ]
-  },
-  "GNURUST.FILEIO.SORTENGINE.1": {
-   "court": "SORT/MERGE in-memory engine (4-queue natural merge)",
-   "sweep": "sortengine_sweep.sh",
-   "byte_domain": "a sequence of submitted records + SORT keys -> the retrieved (sorted) record sequence",
-   "non_claims": [
-    "the temp-file spill path (switch_to_file/files_used, above COB_SORT_MEMORY -- declared OS boundary)",
-    "the EXTFH variants (cob_file_sort_using_extfh/giving_extfh)",
-    "numeric-key ordering (a declared composition with GNURUST.NUMCMP.1)",
-    "INPUT/OUTPUT PROCEDURE (RELEASE/RETURN)",
-    "MERGE-sequence checking",
-    "the actual fd tempfile syscalls"
-   ]
-  },
-  "GNURUST.FILEIO.MAPPING.1": {
-   "court": "COBOL filename mapping (env resolution)",
-   "sweep": "map_sweep.sh",
-   "byte_domain": "a COBOL ASSIGN name + environment (DD_*/COB_FILE_PATH) -> the resolved filesystem path",
-   "non_claims": [
-    "the complex multi-element path mapping (per-slash $/DD_ resolution)",
-    "COB_ENV_MANGLE non-default",
-    "the ACU repeated-resolution recursion",
-    "the flag_filename_mapping=off dialect case",
-    "concatenated (multi-file) input names",
-    "getenv ordering beyond the three prefixes"
-   ]
-  },
-  "GNURUST.FRONTEND.1": {
-   "court": "independently written COBOL front-end -- parse + EXECUTE a program subset to cobc-identical stdout",
-   "sweep": "cobol_frontend_sweep.sh",
-   "byte_domain": "a COBOL program (sealed subset) -> the exact stdout bytes it writes, byte-identical to cobc",
-   "non_claims": [
-    "an INTERPRETER over the runtime, NOT a native-code compiler (no machine-code/.o/.so emission)",
-    "group items / OCCURS / REDEFINES / non-01 levels; COMPUTE + arithmetic expressions",
-    "control flow (IF/PERFORM/EVALUATE/GO TO -- separate execution-slice courts); ACCEPT; file I/O; CALL; multiple programs",
-    "the full PICTURE + statement grammar; any verb/clause outside the listed subset; all dialects"
-   ]
-  },
-  "GNURUST.ELITE-REPLAY.2": {
-   "court": "broad public-corpus replay -- the GCC-COBOL testsuite + the hand-authored front-end corpus run through cobc 3.2 AND cobrun; observable behaviour (stdout bytes + process exit) must agree, with cobrun failing CLOSED (never wrong) wherever it cannot run a program",
-   "sweep": "elite_replay2_sweep.sh",
-   "min_match": 329,
-   "byte_domain": "a real public COBOL program -> its exact stdout bytes + process exit status, byte-identical to cobc; the GREEN invariant is that cobrun is byte-identical wherever it runs and fails-closed everywhere else (never a silent wrong answer)",
-   "non_claims": [
-    "MATCH 281/718: programs cobrun runs byte-identical to cobc. The rest are categorized, never silently wrong: ~233 no-oracle (cobc 3.2 itself cannot compile / the GCC-COBOL-built oracle crashes -> no baseline), ~182 boundary (cobrun fails CLOSED with a typed cobrun: error -- a construct outside the sealed subset).",
-    "22 KNOWN silent divergences are committed + tracked in lab/oracle/elite_replay2_known.txt (each a real cobrun bug/gap with a reason) and driven down to empty -- the ratchet; an UN-tracked divergence FAILs the sweep, so a regression can never hide.",
-    "this is the BROAD public differential; the focused opencbs real-program court is GNURUST.ELITE-REPLAY.1 (39/39). NIST CCVS-85 (524 programs) is held under a separate custody gate and is the path to a 1000+ program corpus (CCVS-format extraction is a follow-on).",
-    "no file/DB-state differential yet (stdout + exit only); programs requiring external data files run from their own directory"
    ]
   },
   "GNURUST.CCVS85.2": {
@@ -1242,6 +309,300 @@
     "no conversion of blocked units into passes"
    ]
   },
+  "GNURUST.CLASS.1": {
+   "court": "class conditions IS NUMERIC/ALPHABETIC",
+   "sweep": "class_sweep.sh",
+   "byte_domain": "alphanumeric field bytes -> class-condition truth",
+   "non_claims": [
+    "user-defined CLASS names",
+    "national/UTF-8/DBCS classes",
+    "locale collating sequence"
+   ]
+  },
+  "GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1": {
+   "court": "native-code modes (-C/-S/-c) remain an honest typed boundary; adapter-compatible cases map truthfully",
+   "sweep": "gnucobol-testsuite/run-docker.sh",
+   "byte_domain": "see the claim-ladder entry; the receipts are generated by the gnucobol-rs-testsuite harness receipts-finalize (Docker court), not by the xtask sweep runner",
+   "non_claims": [
+    "no GnuCOBOL test-suite parity claim; no COBOL conformance certification",
+    "OBSERVABLE_MATCH is scoped to this environment and the test's own assertions",
+    "the launcher artifact is an interpreter launch manifest, never a native COBOL executable",
+    "candidate execution never invokes cobc/cobcrun and never links libcob (mechanically enforced)",
+    "no performance claim from end-to-end interpreter-vs-native timing"
+   ]
+  },
+  "GNURUST.COBC-RS.POLICY-COMPLETE.1": {
+   "court": "wrapper option-policy registry completeness (every observed option has an explicit policy)",
+   "sweep": "gnucobol-testsuite/run-docker.sh",
+   "byte_domain": "see the claim-ladder entry; the receipts are generated by the gnucobol-rs-testsuite harness receipts-finalize (Docker court), not by the xtask sweep runner",
+   "non_claims": [
+    "no GnuCOBOL test-suite parity claim; no COBOL conformance certification",
+    "OBSERVABLE_MATCH is scoped to this environment and the test's own assertions",
+    "the launcher artifact is an interpreter launch manifest, never a native COBOL executable",
+    "candidate execution never invokes cobc/cobcrun and never links libcob (mechanically enforced)",
+    "no performance claim from end-to-end interpreter-vs-native timing"
+   ]
+  },
+  "GNURUST.COMMON.BOUNDCHECK.1": {
+   "court": "Runtime bounds-check diagnostics (subscript / reference-mod / OCCURS DEPENDING ON)",
+   "sweep": "bounds_check_sweep.sh",
+   "byte_domain": "a bounds-check input -> the exact runtime EC-BOUND diagnostic message + hint bytes (verified vs both oracles 3.1.2 + 3.2)",
+   "non_claims": [
+    "the libcob: <file>:<line>: error: / note: prefix framing (the runtime wrapper, not the check)",
+    "the not-numeric message is sealed separately (GNURUST.COMMON.NUMCHECK.1)",
+    "the cob_hard_failure abort + exit code + EC numeric ids",
+    "the 2.0-ABI cannot_check_subscript state path beyond the zero-subscript case"
+   ]
+  },
+  "GNURUST.COMMON.CBL.1": {
+   "court": "CBL_ logic / bit / case builtins (CBL_AND/OR/XOR/NOR/IMP/NIMP/EQ/NOT/TOUPPER/TOLOWER)",
+   "sweep": "cbl_logic_sweep.sh",
+   "byte_domain": "CALL USING buffer(s) + length -> the in-place transformed destination bytes (verified vs both oracles 3.1.2 + 3.2)",
+   "non_claims": [
+    "the COB_CHK_PARMS parameter-count diagnostic",
+    "CBL_GC_PRINTABLE locale + custom dot-char; cob_sys_x91 multiplexer",
+    "the OS/process CBL routines (getpid/system/fork/nanosleep)"
+   ]
+  },
+  "GNURUST.COMMON.NUMCHECK.1": {
+   "court": "Not-numeric runtime diagnostic + field-type explanation",
+   "sweep": "numeric_check_sweep.sh",
+   "byte_domain": "a non-numeric value reaching arithmetic -> the exact not-numeric diagnostic message bytes (verified vs both oracles 3.1.2 + 3.2)",
+   "non_claims": [
+    "the cob_is_numeric validity decision itself (this court reproduces the MESSAGE, taking the verdict as input)",
+    "the libcob: prefix framing + the abort/exit",
+    "NATIONAL/UTF-16 byte widths in the escaping"
+   ]
+  },
+  "GNURUST.CORPUS.CUSTODY.1": {
+   "court": "valid-COBOL corpus custody -- every family report directory exists and the pre-change repository state was frozen (preflight-repository-state.json + before-state.json + integration-design.md)",
+   "sweep": "../valid-corpus/corpus_court_sweep.sh",
+   "arg": "custody",
+   "byte_domain": "committed corpus evidence files under reports/valid-corpus/",
+   "non_claims": [
+    "no validity claim: custody only proves the evidence tree exists and was frozen"
+   ]
+  },
+  "GNURUST.CORPUS.DEDUP.1": {
+   "court": "valid-COBOL corpus deduplication -- deduplication.json records exact + near-duplicate evidence; grouping is repository-level so partitions never split a repo",
+   "sweep": "../valid-corpus/corpus_court_sweep.sh",
+   "arg": "dedup",
+   "byte_domain": "deduplication.json + the xcobol dedup report",
+   "non_claims": [
+    "no independent-program count that includes duplicates"
+   ]
+  },
+  "GNURUST.CORPUS.LICENCE.1": {
+   "court": "valid-COBOL corpus licence decisions -- licences.json records a decision for every family; unknown-licence source is quarantined, never published",
+   "sweep": "../valid-corpus/corpus_court_sweep.sh",
+   "arg": "licence",
+   "byte_domain": "licences.json decisions + the xcobol licence-quarantine report",
+   "non_claims": [
+    "no redistribution claim for quarantined (REFERENCE_ONLY) source"
+   ]
+  },
+  "GNURUST.DECLARATIVES.ATLAS.1": {
+   "court": "observed DECLARATIVES / USE error-handler atlas",
+   "sweep": "declaratives_atlas_sweep.sh",
+   "byte_domain": "DECLARATIVES/USE runtime control: which op fires the handler, per-file binding, FILE STATUS visibility inside, resume-after-handler",
+   "non_claims": [
+    "executing a declarative",
+    "USE FOR DEBUGGING",
+    "non-file (arithmetic) exceptions",
+    "GLOBAL declaratives across nested programs",
+    "multi-declarative precedence ordering",
+    "resume-vs-terminate for non-file exceptions",
+    "all dialects"
+   ]
+  },
+  "GNURUST.DIALECT.RUNTIME.ATLAS.1": {
+   "court": "observed dialect-runtime divergence atlas",
+   "sweep": "dialect_runtime_atlas_sweep.sh",
+   "byte_domain": "cross-dialect divergence: stored zoned-sign bytes (invariant) vs DISPLAY presentation sign placement (leading/trailing camps) vs compile-acceptance of extensions",
+   "non_claims": [
+    "non-default dialect implementation",
+    "vendor-compiler parity (IBM/MF/MVS/BS2000/RM/GCOS)",
+    "a -std mode being the vendor dialect itself",
+    "complete enumeration of every cross-dialect divergence",
+    "decoding the DISPLAY presentation form back to a value",
+    "screen-routed dialects (acu/realia)",
+    "runtime portability across platforms"
+   ]
+  },
+  "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1": {
+   "court": "observed compiler-directive byte-variance atlas",
+   "sweep": "directive_variance_atlas_sweep.sh",
+   "byte_domain": "compiler-directive byte delta from the default profile: -fbinary-size (layout), -fbinary-byteorder (endianness), -fbinary-truncate (MOVE result)",
+   "non_claims": [
+    "implementation of non-default directives",
+    "auto-detection of a binary's build profile",
+    "complete enumeration of every cobc directive",
+    "dialect-selection (-std) flags",
+    "code-generation/optimization directives",
+    "runtime environment variables (COB_*)",
+    "vendor-specific directives"
+   ]
+  },
+  "GNURUST.ELITE-REPLAY.1": {
+   "court": "opencbs real-program replay -- run the public third-party opencbs COBOL programs through cobc AND cobrun; observable behaviour (stdout bytes + process exit status + stderr-clean) must agree",
+   "sweep": "opencbs_sweep.sh",
+   "min_match": 39,
+   "byte_domain": "a real third-party COBOL program -> its exact stdout bytes + process exit status, byte-identical to cobc, for every in-scope program; a ratchet floors the MATCH count so it can only rise",
+   "non_claims": [
+    "MATCH 39/39 cobc-runnable programs (byte-identical stdout + exit + stderr-clean): every opencbs program cobc can run, cobrun reproduces. NOTYET and BOUNDARY are EMPTY.",
+    "the 3 external-CALL programs (DF18/31/45CALL) match via REAL separate-file CALL: cobrun resolves the called sibling .CBL as another program unit and runs it (USING args by reference), mirroring cobc compiling the callees as modules; the callees (DF18/31/45TEST) are subprograms compiled as cobc -m",
+    "writing programs (REWRITE / OPEN OUTPUT) run with per-program data-file snapshot/restore so the differential is sound (cobc persists disk writes; cobrun is read-only) and the committed corpus is never mutated",
+    "out of scope: 11 deliberately-broken DEFECT-DEMONSTRATION snippets (missing PROGRAM-ID / syntax errors / undefined names) that cobc ITSELF rejects -- making them compile would mean editing the third-party fixtures to fix the bugs they exist to demonstrate"
+   ]
+  },
+  "GNURUST.ELITE-REPLAY.2": {
+   "court": "broad public-corpus replay -- the GCC-COBOL testsuite + the hand-authored front-end corpus run through cobc 3.2 AND cobrun; observable behaviour (stdout bytes + process exit) must agree, with cobrun failing CLOSED (never wrong) wherever it cannot run a program",
+   "sweep": "elite_replay2_sweep.sh",
+   "min_match": 329,
+   "byte_domain": "a real public COBOL program -> its exact stdout bytes + process exit status, byte-identical to cobc; the GREEN invariant is that cobrun is byte-identical wherever it runs and fails-closed everywhere else (never a silent wrong answer)",
+   "non_claims": [
+    "MATCH 281/718: programs cobrun runs byte-identical to cobc. The rest are categorized, never silently wrong: ~233 no-oracle (cobc 3.2 itself cannot compile / the GCC-COBOL-built oracle crashes -> no baseline), ~182 boundary (cobrun fails CLOSED with a typed cobrun: error -- a construct outside the sealed subset).",
+    "22 KNOWN silent divergences are committed + tracked in lab/oracle/elite_replay2_known.txt (each a real cobrun bug/gap with a reason) and driven down to empty -- the ratchet; an UN-tracked divergence FAILs the sweep, so a regression can never hide.",
+    "this is the BROAD public differential; the focused opencbs real-program court is GNURUST.ELITE-REPLAY.1 (39/39). NIST CCVS-85 (524 programs) is held under a separate custody gate and is the path to a 1000+ program corpus (CCVS-format extraction is a follow-on).",
+    "no file/DB-state differential yet (stdout + exit only); programs requiring external data files run from their own directory"
+   ]
+  },
+  "GNURUST.FILE.FILTER.SLICE.1": {
+   "court": "filter (conditional) read-loop",
+   "sweep": "file_filter_sweep.sh",
+   "byte_domain": "read-loop with a per-record IF gating the accumulation -> resulting WORKING-STORAGE",
+   "non_claims": [
+    "compound conditions (AND/OR)",
+    "signed/packed numeric filter",
+    "per-record mutation/transform (only accumulate)",
+    "multi-branch EVALUATE filter",
+    "indexed/relative",
+    "all dialects"
+   ]
+  },
+  "GNURUST.FILE.FLOW.SLICE.1": {
+   "court": "read-loop execution slice (file x control flow)",
+   "sweep": "file_flow_sweep.sh",
+   "byte_domain": "OPEN INPUT + PERFORM UNTIL EOF READ + accumulate -> resulting WORKING-STORAGE",
+   "non_claims": [
+    "indexed/relative organizations",
+    "signed/packed accumulators",
+    "numeric SIZE ERROR on accumulators",
+    "per-record IF/MOVE/general statements",
+    "WRITE/REWRITE in the loop",
+    "multi-file loops",
+    "file-status beyond AT END",
+    "READ INTO",
+    "all dialects"
+   ]
+  },
+  "GNURUST.FILE.REWRITE.1": {
+   "court": "sequential REWRITE in-place update",
+   "sweep": "rewrite_sweep.sh",
+   "byte_domain": "OPEN I-O + REWRITE -> record overwritten in place (same length), others unchanged",
+   "non_claims": [
+    "LINE SEQUENTIAL REWRITE",
+    "length-changing rewrites",
+    "DELETE",
+    "indexed/relative",
+    "read-before-rewrite sequencing",
+    "all dialects"
+   ]
+  },
+  "GNURUST.FILE.SEQUENTIAL.1": {
+   "court": "sequential file READ record bytes + file status",
+   "sweep": "seqfile_sweep.sh",
+   "byte_domain": "OPEN INPUT / READ NEXT / AT END record bytes + status for RECORD/LINE SEQUENTIAL",
+   "non_claims": [
+    "indexed / relative / VSAM",
+    "WRITE / REWRITE / START / DELETE",
+    "OPEN I-O / EXTEND",
+    "file-status codes beyond 00/06/10",
+    "record locking",
+    "Procedure Division control flow"
+   ]
+  },
+  "GNURUST.FILE.STATUS.1": {
+   "court": "observed FILE STATUS bytes for declared file-operation fixtures",
+   "sweep": "file_status_sweep.sh",
+   "byte_domain": "declared OPEN/READ/CLOSE condition -> observed FILE STATUS byte (00/06/10/35/42/46)",
+   "non_claims": [
+    "full file I/O parity",
+    "indexed/relative/VSAM",
+    "locking/sharing",
+    "host I/O error (30) generalization",
+    "attribute conflict (39)",
+    "Procedure Division control flow",
+    "business completeness"
+   ]
+  },
+  "GNURUST.FILE.WRITE.1": {
+   "court": "sequential WRITE byte effects",
+   "sweep": "write_seq_sweep.sh",
+   "byte_domain": "OPEN OUTPUT + WRITE -> file bytes (RECORD SEQ full padded / LINE SEQ trailing-space-stripped + LF)",
+   "non_claims": [
+    "variable-length records",
+    "WRITE ADVANCING/BEFORE/AFTER",
+    "REWRITE",
+    "indexed/relative organizations",
+    "all dialects"
+   ]
+  },
+  "GNURUST.FILEIO.INDEXED.1": {
+   "court": "INDEXED organization (keyed store + record locking)",
+   "sweep": "indexed_sweep.sh",
+   "byte_domain": "INDEXED operations (WRITE/READ/READ NEXT/START/REWRITE/DELETE + record/file locks) over a primary key -> FILE STATUS + record bytes + key order",
+   "non_claims": [
+    "the on-disk index file format (BDB/VBISAM/EXTFH -- the declared OS boundary)",
+    "ALTERNATE RECORD KEYs and WITH DUPLICATES (only the primary key is the court)",
+    "READ PREVIOUS / descending traversal",
+    "the actual cross-process BDB lock environment (52 deadlock / 30 permanent-error)",
+    "variable-length indexed records",
+    "the bdb_*/EXTFH substrate functions"
+   ]
+  },
+  "GNURUST.FILEIO.LINESEQ.1": {
+   "court": "line-sequential WRITE config matrix",
+   "sweep": "lineseq_write_sweep.sh",
+   "byte_domain": "OPEN OUTPUT + WRITE (LINE SEQUENTIAL) under COB_LS_FIXED/NULLS/VALIDATE -> appended bytes + FILE STATUS (00/71)",
+   "non_claims": [
+    "WRITE ADVANCING / LINAGE (opt != 0)",
+    "Windows CR/LF text-mode (cob_ls_uses_cr)",
+    "COB_LS_VALIDATE>1 printable check (COB_EXPERIMENTAL)",
+    "CODE-SET conversion",
+    "variable-length records",
+    "lineseq_read / lineseq_rewrite",
+    "record/relative/indexed organizations",
+    "the fd/FILE* syscalls (declared OS boundary)"
+   ]
+  },
+  "GNURUST.FILEIO.LINESEQ.2": {
+   "court": "line-sequential READ config matrix",
+   "sweep": "lineseq_read_sweep.sh",
+   "byte_domain": "OPEN INPUT + READ NEXT (LINE SEQUENTIAL) under COB_LS_VALIDATE/NULLS/SPLIT -> record bytes + FILE STATUS (00/04/06/09/10)",
+   "non_claims": [
+    "multi-file open_next chain",
+    "CODE-SET conversion (sort_collating)",
+    "COB_LS_VALIDATE>1 printable check (COB_EXPERIMENTAL)",
+    "COB_LS_NULLS error-recovery after status 71",
+    "lineseq_rewrite",
+    "record/relative/indexed organizations",
+    "the fd/FILE* reads (declared OS boundary)"
+   ]
+  },
+  "GNURUST.FILEIO.MAPPING.1": {
+   "court": "COBOL filename mapping (env resolution)",
+   "sweep": "map_sweep.sh",
+   "byte_domain": "a COBOL ASSIGN name + environment (DD_*/COB_FILE_PATH) -> the resolved filesystem path",
+   "non_claims": [
+    "the complex multi-element path mapping (per-slash $/DD_ resolution)",
+    "COB_ENV_MANGLE non-default",
+    "the ACU repeated-resolution recursion",
+    "the flag_filename_mapping=off dialect case",
+    "concatenated (multi-file) input names",
+    "getenv ordering beyond the three prefixes"
+   ]
+  },
   "GNURUST.FILEIO.MULTI-RECORD-FD.1": {
    "court": "multiple 01-level record descriptions beneath one FD (shared record area)",
    "sweep": "multirecord_fd_sweep.sh",
@@ -1251,6 +612,139 @@
     "duplicate record names across files -- cobc rejects them as ambiguous (needs qualification); the front-end keeps first-declaration",
     "deeper plain sub-groups inside an alternative record -- the REDEFINES-group alias maps direct leaves only",
     "multi-record key selection for INDEXED/RELATIVE beyond the primary record"
+   ]
+  },
+  "GNURUST.FILEIO.OPEN.1": {
+   "court": "file runtime OPEN/CLOSE + lifecycle",
+   "sweep": "open_sweep.sh",
+   "byte_domain": "OPEN/WRITE/READ NEXT/CLOSE over a CobFile -> on-disk file image bytes + open/close FILE STATUS (00/05/31/35/38/41/42)",
+   "non_claims": [
+    "indexed/BDB and SORT open/close (substrate boundary)",
+    "record/file locking beyond no-op success",
+    "OPEN EXTEND positioning details",
+    "file-sharing modes",
+    "concat (multi-file) input",
+    "the EXTFH open path",
+    "cob_cache_file / file_cache list management",
+    "the actual fd open/close syscalls (declared OS boundary)"
+   ]
+  },
+  "GNURUST.FILEIO.RELATIVE.1": {
+   "court": "RELATIVE organization keyed + sequential access",
+   "sweep": "relative_sweep.sh",
+   "byte_domain": "OPEN + WRITE/READ/REWRITE/DELETE/START (RELATIVE) -> 8-byte LE header + record_max slots + FILE STATUS (00/22/23/24/10)",
+   "non_claims": [
+    "variable-length relative records",
+    "READ FIRST/LAST/PREVIOUS directions",
+    "COB_READ_MASK option bits",
+    "SEQUENTIAL-access RELATIVE KEY write-back on append",
+    "OPEN EXTEND / file-sharing and record locking",
+    "the EXTFH external file handler path",
+    "the fd lseek/read/write syscalls (declared OS boundary)"
+   ]
+  },
+  "GNURUST.FILEIO.SEQ.1": {
+   "court": "RECORD SEQUENTIAL read/write incl. variable-length",
+   "sweep": "seqrec_sweep.sh",
+   "byte_domain": "OPEN + WRITE/READ (RECORD SEQUENTIAL) -> fixed full record / variable cob_varseq_type prefix + data + FILE STATUS",
+   "non_claims": [
+    "WRITE ADVANCING (cob_seq_write_opt)",
+    "CODE-SET conversion",
+    "over-long record bytes_to_skip seek-past",
+    "multi-file concatenation",
+    "relative/indexed organizations",
+    "the fd read/write/lseek syscalls (declared OS boundary)"
+   ]
+  },
+  "GNURUST.FILEIO.SORT.1": {
+   "court": "SORT/MERGE record comparison",
+   "sweep": "sort_sweep.sh",
+   "byte_domain": "SORT keys (offset/size/direction) over records -> the sorted record order (GIVING file bytes)",
+   "non_claims": [
+    "numeric keys (composition with GNURUST.NUMCMP.1)",
+    "the SORT engine tempfile merge / queues / chunking",
+    "INPUT/OUTPUT PROCEDURE (RELEASE/RETURN)",
+    "MERGE of multiple files",
+    "DUPLICATES IN ORDER beyond the stable tiebreak",
+    "the EXTFH sort path",
+    "the fd tempfile syscalls (declared OS boundary)"
+   ]
+  },
+  "GNURUST.FILEIO.SORTENGINE.1": {
+   "court": "SORT/MERGE in-memory engine (4-queue natural merge)",
+   "sweep": "sortengine_sweep.sh",
+   "byte_domain": "a sequence of submitted records + SORT keys -> the retrieved (sorted) record sequence",
+   "non_claims": [
+    "the temp-file spill path (switch_to_file/files_used, above COB_SORT_MEMORY -- declared OS boundary)",
+    "the EXTFH variants (cob_file_sort_using_extfh/giving_extfh)",
+    "numeric-key ordering (a declared composition with GNURUST.NUMCMP.1)",
+    "INPUT/OUTPUT PROCEDURE (RELEASE/RETURN)",
+    "MERGE-sequence checking",
+    "the actual fd tempfile syscalls"
+   ]
+  },
+  "GNURUST.FILEIO.SYS.1": {
+   "court": "CBL_* system file/directory routines",
+   "sweep": "cob_sys_sweep.sh",
+   "byte_domain": "CBL_DELETE_FILE/COPY_FILE/RENAME_FILE/CREATE_DIR/DELETE_DIR/CHANGE_DIR/GET_CURRENT_DIR -> RETURN-CODE (0/35/128/129/-1)",
+   "non_claims": [
+    "CBL_CHECK_FILE_EXIST / cob_sys_file_info localtime date formatting",
+    "the file-lock / file_dev open parameters",
+    "the ACUCOBOL hyphen / filename-mapping path",
+    "non-UTF-8 path bytes",
+    "the exact errno->status mapping beyond 35/128",
+    "concurrent filesystem races",
+    "the handle value matching libcob's raw fd (a safe registry index is used)",
+    "the underlying syscalls (declared OS boundary)"
+   ]
+  },
+  "GNURUST.FILEIO.VERB.1": {
+   "court": "file verb open/access-mode preconditions",
+   "sweep": "verb_sweep.sh",
+   "byte_domain": "cob_write/read/read_next/rewrite/delete/start preconditions -> FILE STATUS (43/44/46/47/48/49/23)",
+   "non_claims": [
+    "the organization dispatch (sealed by LINESEQ/SEQ/RELATIVE)",
+    "the compile-time START-on-RANDOM rejection",
+    "LINE SEQUENTIAL validate-71 at the verb layer",
+    "CODE-SET conversion",
+    "the variable_record size resolution",
+    "EOP / exception side effects",
+    "the indexed suppressed-key skip",
+    "the fd read/write syscalls (declared OS boundary)"
+   ]
+  },
+  "GNURUST.FLOAT.1": {
+   "court": "float fields COMP-1/COMP-2 + FLOAT-DECIMAL-16/34, both directions",
+   "sweep": "float_sweep.sh",
+   "byte_domain": "decimal value <-> COMP-1/COMP-2/FLOAT-DECIMAL field bytes (truncate-toward-zero)",
+   "non_claims": [
+    "float arithmetic (composition; separate)",
+    "cob_cmp_float epsilon comparison",
+    "long double / FP_BIN32/64/128 usages",
+    "Inf/NaN beyond decode-refusal"
+   ]
+  },
+  "GNURUST.FRONTEND.1": {
+   "court": "independently written COBOL front-end -- parse + EXECUTE a program subset to cobc-identical stdout",
+   "sweep": "cobol_frontend_sweep.sh",
+   "byte_domain": "a COBOL program (sealed subset) -> the exact stdout bytes it writes, byte-identical to cobc",
+   "non_claims": [
+    "an INTERPRETER over the runtime, NOT a native-code compiler (no machine-code/.o/.so emission)",
+    "group items / OCCURS / REDEFINES / non-01 levels; COMPUTE + arithmetic expressions",
+    "control flow (IF/PERFORM/EVALUATE/GO TO -- separate execution-slice courts); ACCEPT; file I/O; CALL; multiple programs",
+    "the full PICTURE + statement grammar; any verb/clause outside the listed subset; all dialects"
+   ]
+  },
+  "GNURUST.GNUCOBOL-RUNTIME-MATH.2": {
+   "court": "runtime/mathematics campaign after the boundary-reduction work (math subset re-measured from the same full ledger)",
+   "sweep": "gnucobol-testsuite/run-docker.sh",
+   "byte_domain": "see the claim-ladder entry; the receipts are generated by the gnucobol-rs-testsuite harness receipts-finalize (Docker court), not by the xtask sweep runner",
+   "non_claims": [
+    "no GnuCOBOL test-suite parity claim; no COBOL conformance certification",
+    "OBSERVABLE_MATCH is scoped to this environment and the test's own assertions",
+    "the launcher artifact is an interpreter launch manifest, never a native COBOL executable",
+    "candidate execution never invokes cobc/cobcrun and never links libcob (mechanically enforced)",
+    "no performance claim from end-to-end interpreter-vs-native timing"
    ]
   },
   "GNURUST.GNUCOBOL-TESTSUITE.1": {
@@ -1301,8 +795,8 @@
     "no performance claim from end-to-end interpreter-vs-native timing"
    ]
   },
-  "GNURUST.MODULE.REGISTRY.1": {
-   "court": "interpreted module lifecycle -- cobcrun-rs runner + build-local module search (-M/cwd/COB_LIBRARY_PATH) + truthful -m artifacts",
+  "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1": {
+   "court": "three-boundary reduction ledger (module 407 / parser-check 439 / wrapper-option 173) -- before/after per test",
    "sweep": "gnucobol-testsuite/run-docker.sh",
    "byte_domain": "see the claim-ladder entry; the receipts are generated by the gnucobol-rs-testsuite harness receipts-finalize (Docker court), not by the xtask sweep runner",
    "non_claims": [
@@ -1311,6 +805,275 @@
     "the launcher artifact is an interpreter launch manifest, never a native COBOL executable",
     "candidate execution never invokes cobc/cobcrun and never links libcob (mechanically enforced)",
     "no performance claim from end-to-end interpreter-vs-native timing"
+   ]
+  },
+  "GNURUST.IF.EVALUATE.SLICE.1": {
+   "court": "IF/EVALUATE execution slice (alphanumeric)",
+   "sweep": "if_eval_sweep.sh",
+   "byte_domain": "execute IF/EVALUATE fragment over alphanumeric fields -> resulting storage bytes",
+   "non_claims": [
+    "numeric/packed comparison + numeric MOVE",
+    "compound conditions (AND/OR/NOT)",
+    "class conditions",
+    "88-level (GNURUST.11)",
+    "non-MOVE branches",
+    "nested IF/PERFORM/GO TO",
+    "THRU/range WHEN",
+    "all dialects"
+   ]
+  },
+  "GNURUST.IF.NUMERIC.SLICE.1": {
+   "court": "numeric IF/EVALUATE execution slice",
+   "sweep": "if_numeric_sweep.sh",
+   "byte_domain": "execute numeric IF/EVALUATE over 9(n) fields -> resulting storage bytes",
+   "non_claims": [
+    "signed/packed/V-scaled numerics",
+    "MOVE field TO field (literals only)",
+    "numeric SIZE ERROR",
+    "compound/class conditions",
+    "88-level (GNURUST.11)",
+    "range/THRU WHEN",
+    "non-MOVE branches",
+    "nested flow",
+    "all dialects"
+   ]
+  },
+  "GNURUST.INDEX.1": {
+   "court": "USAGE INDEX storage + SET arithmetic",
+   "sweep": "index_sweep.sh",
+   "byte_domain": "occurrence value + SET op -> 4 native-endian index bytes",
+   "non_claims": [
+    "8-byte LP64 index width",
+    "SEARCH / SEARCH ALL execution",
+    "index used as a subscript (stride multiply lives in GNURUST.SUBSCRIPT.1)",
+    "big-endian host",
+    "SET index TO pointer/address"
+   ]
+  },
+  "GNURUST.INDEXED.FILE.ATLAS.1": {
+   "court": "observed indexed-file atlas",
+   "sweep": "indexed_file_atlas_sweep.sh",
+   "byte_domain": "INDEXED keyed access: random READ by key, key-order retrieval, dup/not-found status, START, DELETE",
+   "non_claims": [
+    "ISAM/BDB/VBISAM on-disk format",
+    "page checksum / atomicity",
+    "alternate keys",
+    "concurrent access/locking",
+    "indexed file execution",
+    "relative files",
+    "all dialects"
+   ]
+  },
+  "GNURUST.INITIALIZE.1": {
+   "court": "INITIALIZE receiver byte effects",
+   "sweep": "initialize_sweep.sh",
+   "byte_domain": "INITIALIZE record -> changed/preserved receiver bytes (elementary/group/FILLER/REDEFINES/OCCURS/VALUE)",
+   "non_claims": [
+    "full Procedure Division execution",
+    "INITIALIZE REPLACING/TO VALUE/WITH FILLER",
+    "numeric-edited/JUSTIFIED/BLANK WHEN ZERO",
+    "ODO runtime active count",
+    "active REDEFINES view",
+    "all dialects"
+   ]
+  },
+  "GNURUST.INSPECT.1": {
+   "court": "INSPECT byte effects + tally bytes",
+   "sweep": "inspect_sweep.sh",
+   "byte_domain": "INSPECT TALLYING/REPLACING/CONVERTING target bytes + tally receiver bytes",
+   "non_claims": [
+    "full Procedure Division execution",
+    "locale/case-folding",
+    "regex/pattern semantics",
+    "national/UTF-8 multibyte",
+    "unadmitted multi-clause ordering",
+    "business validation",
+    "all dialects"
+   ]
+  },
+  "GNURUST.INTPOW.1": {
+   "court": "integer exponentiation cob_s32_pow/cob_s64_pow",
+   "sweep": "pow_sweep.sh",
+   "byte_domain": "(base, power, width) -> integer result (wrapping)",
+   "non_claims": [
+    "decimal ** (cob_decimal_pow is intrinsic.c)",
+    "fractional exponents",
+    "0 ** negative (fails closed instead of SIGFPE)"
+   ]
+  },
+  "GNURUST.INTRINSIC.ATLAS.1": {
+   "court": "observed intrinsic-function atlas",
+   "sweep": "intrinsic_atlas_sweep.sh",
+   "byte_domain": "declared intrinsic + input -> observed result (deterministic) or shape (env-sensitive)",
+   "non_claims": [
+    "not all intrinsics",
+    "environment-sensitive values (CURRENT-DATE/WHEN-COMPILED)",
+    "locale/collation",
+    "national/UTF-8",
+    "status is not an implementation",
+    "all dialects"
+   ]
+  },
+  "GNURUST.INTRINSIC.CASE.1": {
+   "court": "FUNCTION UPPER-CASE/LOWER-CASE/REVERSE",
+   "sweep": "case_sweep.sh",
+   "byte_domain": "ASCII case fold + byte reversal",
+   "non_claims": [
+    "locale/national case folding",
+    "non-ASCII bytes folded",
+    "multibyte REVERSE",
+    "all dialects"
+   ]
+  },
+  "GNURUST.INTRINSIC.DATE.1": {
+   "court": "date-conversion intrinsics",
+   "sweep": "date_sweep.sh",
+   "byte_domain": "INTEGER-OF-DATE/DATE-OF-INTEGER/INTEGER-OF-DAY/DAY-OF-INTEGER (proleptic Gregorian, 1601-01-01=1)",
+   "non_claims": [
+    "invalid-date validation",
+    "environment-sensitive CURRENT-DATE/WHEN-COMPILED",
+    "business date arithmetic/Y2K windowing",
+    "non-Gregorian calendars",
+    "all dialects"
+   ]
+  },
+  "GNURUST.INTRINSIC.INTEGER.1": {
+   "court": "FUNCTION INTEGER (floor) / INTEGER-PART (truncate)",
+   "sweep": "integer_sweep.sh",
+   "byte_domain": "FUNCTION INTEGER(x)=floor / INTEGER-PART(x)=trunc-toward-zero",
+   "non_claims": [
+    "non-numeric argument",
+    "i128 out-of-range magnitudes",
+    "INTEGER and INTEGER-PART interchangeable",
+    "all dialects"
+   ]
+  },
+  "GNURUST.INTRINSIC.LENGTH.1": {
+   "court": "FUNCTION LENGTH storage byte length",
+   "sweep": "length_sweep.sh",
+   "byte_domain": "FUNCTION LENGTH(elementary field) -> storage byte length",
+   "non_claims": [
+    "LENGTH of group/table/reference-modified",
+    "LENGTH OF variant",
+    "national/UTF-8 character length",
+    "all dialects"
+   ]
+  },
+  "GNURUST.INTRINSIC.MOD-REM.1": {
+   "court": "FUNCTION MOD/REM integer modulo/remainder",
+   "sweep": "modrem_sweep.sh",
+   "byte_domain": "FUNCTION MOD(a,b) (divisor sign) / REM(a,b) (dividend sign) for integers",
+   "non_claims": [
+    "non-integer operands",
+    "MOD/REM by zero",
+    "MOD and REM interchangeable",
+    "all dialects"
+   ]
+  },
+  "GNURUST.INTRINSIC.NUMVAL-C.1": {
+   "court": "FUNCTION NUMVAL-C currency parse",
+   "sweep": "numvalc_sweep.sh",
+   "byte_domain": "FUNCTION NUMVAL-C(currency string) -> value (strip $ + thousands commas)",
+   "non_claims": [
+    "non-default currency symbol (2-arg form)",
+    "DECIMAL-POINT IS COMMA / locale comma-decimal",
+    "national/UTF-8",
+    "all dialects"
+   ]
+  },
+  "GNURUST.INTRINSIC.NUMVAL.1": {
+   "court": "FUNCTION NUMVAL numeric parse",
+   "sweep": "numval_sweep.sh",
+   "byte_domain": "FUNCTION NUMVAL(narrow numeric string) -> parsed value",
+   "non_claims": [
+    "NUMVAL-C (currency/thousands)",
+    "locale decimal/comma swap",
+    "national/UTF-8",
+    "malformed-input error semantics",
+    "all dialects"
+   ]
+  },
+  "GNURUST.INTRINSIC.ORD-CHAR.1": {
+   "court": "FUNCTION ORD/CHAR 1-based ordinal/char",
+   "sweep": "ordchar_sweep.sh",
+   "byte_domain": "ORD(c)=byte+1 (1-based) / CHAR(n)=byte(n-1)",
+   "non_claims": [
+    "non-default collating sequence",
+    "national/UTF-8",
+    "CHAR(n) out of 1..256",
+    "all dialects"
+   ]
+  },
+  "GNURUST.LINEAGE.CORPUS.20M.0": {
+   "court": "deterministic COBOL lineage corpus ENGINE (self-test)",
+   "sweep": "lineage_engine_sweep.sh",
+   "byte_domain": "meta-engine: deterministic gen + Merkle + replay + isolation + findings path (no burn)",
+   "non_claims": [
+    "full GnuCOBOL parity / standard conformance",
+    "all dialects / public-corpus execution parity",
+    "business correctness / compiler replacement",
+    "automatic build-profile detection",
+    "the full 20M run (engine + 200K pilot sealed; full 20M detached as .20M.1)",
+    "the negative-zero finding being fixed (filed as GNURUST.VALUE.NEGZERO.EDGE.1 candidate)",
+    "families not yet emitting (v0 emits storage + directive of 15 planned)"
+   ]
+  },
+  "GNURUST.LINEAGE.CORPUS.20M.1": {
+   "court": "full 20M real-cobc COBOL-witness lineage run (complete)",
+   "sweep": "lineage_fullrun_sweep.sh",
+   "byte_domain": "completed 4M real-cobc witness run; evidence-of-record reports/lineage20m/full-run-seal.json (root-of-roots binds the regenerable shards)",
+   "non_claims": [
+    "full GnuCOBOL parity / standard conformance",
+    "all dialects / public-corpus parity",
+    "business correctness / compiler replacement",
+    "the negative-zero finding being fixed",
+    "the not-yet-emitting families (4M of 20M = storage+directive only; 13 families dropped, not covered)",
+    "the 16M dropped indices being witnesses"
+   ]
+  },
+  "GNURUST.LINEAGE.CORPUS.20M.SMOKE": {
+   "court": "200K real-cobc COBOL-witness lineage burn (pilot)",
+   "sweep": "lineage_corpus_sweep.sh",
+   "byte_domain": "200K real-cobc witnesses: storage differential + directive variant; gate=Merkle+replay+isolation+findings",
+   "non_claims": [
+    "the full 20M run (200K pilot; full 20M is .20M.1 detached)",
+    "full parity / conformance",
+    "all dialects / public-corpus parity",
+    "business correctness",
+    "the negative-zero finding being fixed",
+    "families not yet emitting (storage + directive only)"
+   ]
+  },
+  "GNURUST.LOGICAL.1": {
+   "court": "bit-logical B-AND/B-OR/B-XOR/B-NOT + shifts",
+   "sweep": "logical_sweep.sh",
+   "byte_domain": "(value0, value1) -> u64 bitwise via |value| mod 2^64",
+   "non_claims": [
+    "fractional operands (scale dropped)",
+    "operands beyond 64 bits (truncated)",
+    "cob_logical_left_c/right_c size-bounded variants"
+   ]
+  },
+  "GNURUST.MLIO.GENERATE.1": {
+   "court": "XML / JSON GENERATE (native serializer)",
+   "sweep": "ml_generate_sweep.sh",
+   "byte_domain": "a cob_ml_tree -> the XML / JSON GENERATE output bytes",
+   "non_claims": [
+    "XML/JSON PARSE is sealed separately (GNURUST.MLIO.PARSE.1)",
+    "NATIONAL/UTF-16 content + non-ASCII multibyte escaping",
+    "pretty-print / indentation options",
+    "namespaces / complex attributes"
+   ]
+  },
+  "GNURUST.MLIO.PARSE.1": {
+   "court": "XML PARSE (native state machine)",
+   "sweep": "ml_parse_sweep.sh",
+   "byte_domain": "an XML PARSE input field + cross-call state -> the XML-EVENT / XML-CODE / XML-TEXT register sequence",
+   "non_claims": [
+    "an actual XML tree/content parse (GnuCOBOL 3.2 XML PARSE is an unimplemented stub; the port reproduces its observable START-OF-DOCUMENT->END-OF-INPUT->END-OF-DOCUMENT event walk, not a real parser)",
+    "JSON PARSE (no such statement in GnuCOBOL 3.2 mlio.c)",
+    "COMPAT (non-XMLNSS) full-document XML-TEXT delivery beyond the modelled path",
+    "multi-chunk streaming + schema VALIDATING"
    ]
   },
   "GNURUST.MODULE.CALL.1": {
@@ -1337,18 +1100,6 @@
     "no performance claim from end-to-end interpreter-vs-native timing"
    ]
   },
-  "GNURUST.MODULE.SEARCH.1": {
-   "court": "cobcrun module search paths (-M dir, cwd, COB_LIBRARY_PATH) + error messages",
-   "sweep": "gnucobol-testsuite/run-docker.sh",
-   "byte_domain": "see the claim-ladder entry; the receipts are generated by the gnucobol-rs-testsuite harness receipts-finalize (Docker court), not by the xtask sweep runner",
-   "non_claims": [
-    "no GnuCOBOL test-suite parity claim; no COBOL conformance certification",
-    "OBSERVABLE_MATCH is scoped to this environment and the test's own assertions",
-    "the launcher artifact is an interpreter launch manifest, never a native COBOL executable",
-    "candidate execution never invokes cobc/cobcrun and never links libcob (mechanically enforced)",
-    "no performance claim from end-to-end interpreter-vs-native timing"
-   ]
-  },
   "GNURUST.MODULE.PARALLEL.1": {
    "court": "module lifecycle under parallel execution (same basenames in isolated directories)",
    "sweep": "gnucobol-testsuite/run-docker.sh",
@@ -1361,8 +1112,8 @@
     "no performance claim from end-to-end interpreter-vs-native timing"
    ]
   },
-  "GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1": {
-   "court": "native-code modes (-C/-S/-c) remain an honest typed boundary; adapter-compatible cases map truthfully",
+  "GNURUST.MODULE.REGISTRY.1": {
+   "court": "interpreted module lifecycle -- cobcrun-rs runner + build-local module search (-M/cwd/COB_LIBRARY_PATH) + truthful -m artifacts",
    "sweep": "gnucobol-testsuite/run-docker.sh",
    "byte_domain": "see the claim-ladder entry; the receipts are generated by the gnucobol-rs-testsuite harness receipts-finalize (Docker court), not by the xtask sweep runner",
    "non_claims": [
@@ -1373,8 +1124,8 @@
     "no performance claim from end-to-end interpreter-vs-native timing"
    ]
   },
-  "GNURUST.COBC-RS.POLICY-COMPLETE.1": {
-   "court": "wrapper option-policy registry completeness (every observed option has an explicit policy)",
+  "GNURUST.MODULE.SEARCH.1": {
+   "court": "cobcrun module search paths (-M dir, cwd, COB_LIBRARY_PATH) + error messages",
    "sweep": "gnucobol-testsuite/run-docker.sh",
    "byte_domain": "see the claim-ladder entry; the receipts are generated by the gnucobol-rs-testsuite harness receipts-finalize (Docker court), not by the xtask sweep runner",
    "non_claims": [
@@ -1385,28 +1136,412 @@
     "no performance claim from end-to-end interpreter-vs-native timing"
    ]
   },
-  "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1": {
-   "court": "three-boundary reduction ledger (module 407 / parser-check 439 / wrapper-option 173) -- before/after per test",
-   "sweep": "gnucobol-testsuite/run-docker.sh",
-   "byte_domain": "see the claim-ladder entry; the receipts are generated by the gnucobol-rs-testsuite harness receipts-finalize (Docker court), not by the xtask sweep runner",
+  "GNURUST.NUMCMP.1": {
+   "court": "numeric comparison cob_numeric_cmp (on the Mpz/cob_decimal 1:1 layer)",
+   "sweep": "numcmp_sweep.sh",
+   "byte_domain": "two numeric field byte images -> -1/0/1 ordering verdict",
    "non_claims": [
-    "no GnuCOBOL test-suite parity claim; no COBOL conformance certification",
-    "OBSERVABLE_MATCH is scoped to this environment and the test's own assertions",
-    "the launcher artifact is an interpreter launch manifest, never a native COBOL executable",
-    "candidate execution never invokes cobc/cobcrun and never links libcob (mechanically enforced)",
-    "no performance claim from end-to-end interpreter-vs-native timing"
+    "float-vs-float epsilon edges",
+    "optimized cmp_packed/uint/llint fast-path code (verdict only)",
+    "negative-scale packed compare",
+    "National/DBCS comparison"
    ]
   },
-  "GNURUST.GNUCOBOL-RUNTIME-MATH.2": {
-   "court": "runtime/mathematics campaign after the boundary-reduction work (math subset re-measured from the same full ledger)",
-   "sweep": "gnucobol-testsuite/run-docker.sh",
-   "byte_domain": "see the claim-ladder entry; the receipts are generated by the gnucobol-rs-testsuite harness receipts-finalize (Docker court), not by the xtask sweep runner",
+  "GNURUST.ODO.1": {
+   "court": "OCCURS DEPENDING ON used length + bounded access",
+   "sweep": "odo_sweep.sh",
+   "byte_domain": "controlling value + table -> used length / active element bytes",
    "non_claims": [
-    "no GnuCOBOL test-suite parity claim; no COBOL conformance certification",
-    "OBSERVABLE_MATCH is scoped to this environment and the test's own assertions",
-    "the launcher artifact is an interpreter launch manifest, never a native COBOL executable",
-    "candidate execution never invokes cobc/cobcrun and never links libcob (mechanically enforced)",
-    "no performance claim from end-to-end interpreter-vs-native timing"
+    "access beyond active count (fail-closed)",
+    "nested/2-D ODO",
+    "SET controlling mid-access",
+    "signed/packed elements"
+   ]
+  },
+  "GNURUST.PERFORM.SLICE.1": {
+   "court": "PERFORM execution slice (TIMES/UNTIL/VARYING)",
+   "sweep": "perform_sweep.sh",
+   "byte_domain": "execute PERFORM loop over numeric counters -> resulting storage bytes",
+   "non_claims": [
+    "signed/packed/binary counters",
+    "numeric SIZE ERROR on the body",
+    "non-ADD body statements",
+    "compound/class conditions",
+    "PERFORM THRU / out-of-line paragraph",
+    "WITH TEST AFTER",
+    "nested PERFORM / GO TO",
+    "all dialects"
+   ]
+  },
+  "GNURUST.PERFORMANCE.BUSINESS.1": {
+   "court": "performance corpus -- purpose-built scalable business workloads (payroll, invoice, seqfile, relative, tables, strings, modules, float, report, mixed) are correctness-gated before timing (benchmarks.json)",
+   "sweep": "../valid-corpus/corpus_court_sweep.sh",
+   "arg": "performance",
+   "byte_domain": "performance/benchmarks.json",
+   "non_claims": [
+    "workloads are project-owned; inputs are deterministic and expected outputs are independently computed"
+   ]
+  },
+  "GNURUST.PERFORMANCE.CORPUS.1": {
+   "court": "performance corpus -- corpus throughput (View E: 10 workloads x 4 scales, one pass per lane) with peak memory and raw samples retained; unfavorable results are never discarded",
+   "sweep": "../valid-corpus/corpus_court_sweep.sh",
+   "arg": "performance",
+   "byte_domain": "performance/views.json (View E) + raw/view_e.json",
+   "non_claims": [
+    "no equivalence between compiled-native and interpreted runtime work"
+   ]
+  },
+  "GNURUST.PERFORMANCE.FRONTEND.1": {
+   "court": "performance corpus -- front-end only: per-phase candidate timings (preprocess/lex/parse/resolution/layout/check/prepare) vs oracle compile, measured separately (phase-metrics.json)",
+   "sweep": "../valid-corpus/corpus_court_sweep.sh",
+   "arg": "performance",
+   "byte_domain": "performance/phase-metrics.json + views.json (View B)",
+   "non_claims": [
+    "no native-code performance claim without a native candidate path; View A is labelled 'unlike workflows'"
+   ]
+  },
+  "GNURUST.PERFORMANCE.PREPARED.1": {
+   "court": "performance corpus -- prepared-program execution (View C: already-compiled native binary vs already-prepared program, no candidate reparsing) with raw samples preserved",
+   "sweep": "../valid-corpus/corpus_court_sweep.sh",
+   "arg": "performance",
+   "byte_domain": "performance/views.json (View C) + raw/view_c.json",
+   "non_claims": [
+    "no runtime-performance claim before correctness is established"
+   ]
+  },
+  "GNURUST.PROCEDURE.FLOW.ATLAS.1": {
+   "court": "observed control-flow atlas",
+   "sweep": "procedure_flow_atlas_sweep.sh",
+   "byte_domain": "control-flow statement class -> observed behavior (IF/EVALUATE/PERFORM/GO TO)",
+   "non_claims": [
+    "Procedure Division execution",
+    "control-flow execution",
+    "branch coverage",
+    "termination analysis",
+    "general condition evaluation",
+    "status is not implementation",
+    "all dialects"
+   ]
+  },
+  "GNURUST.REFMOD.1": {
+   "court": "reference modification field(start:length)",
+   "sweep": "refmod_sweep.sh",
+   "byte_domain": "field bytes + (start,length) -> substring / overwritten field",
+   "non_claims": [
+    "out-of-bounds refmod (fail-closed)",
+    "subscripted/table refmod",
+    "numeric-edited/national operands",
+    "refmod inside arithmetic"
+   ]
+  },
+  "GNURUST.RELATIVE.FILE.ATLAS.1": {
+   "court": "observed relative-file atlas",
+   "sweep": "relative_file_atlas_sweep.sh",
+   "byte_domain": "RELATIVE random access by record number + status (23 empty slot)",
+   "non_claims": [
+    "relative file execution",
+    "on-disk slotted format",
+    "sequential/dynamic access modes",
+    "REWRITE/DELETE/START",
+    "indexed files",
+    "all dialects"
+   ]
+  },
+  "GNURUST.REMAINDER.1": {
+   "court": "DIVIDE REMAINDER receiving-field bytes",
+   "sweep": "remainder_sweep.sh",
+   "byte_domain": "DIVIDE GIVING quotient + REMAINDER receiver field bytes (DISPLAY/COMP-3)",
+   "non_claims": [
+    "ON SIZE ERROR / NOT ON SIZE ERROR control flow",
+    "divide-by-zero (fail-closed)",
+    "COMPUTE / expression evaluation",
+    "procedure control flow",
+    "float",
+    "binary/edited receivers",
+    "business correctness"
+   ]
+  },
+  "GNURUST.ROUND.1": {
+   "court": "ROUNDED MODE IS (all eight rounding modes, cob_decimal + packed BCD paths)",
+   "sweep": "round_sweep.sh",
+   "byte_domain": "value + target scale + ROUNDED mode + receiver path -> stored field bytes",
+   "non_claims": [
+    "bignum values beyond i128 (38-digit intermediates)",
+    "floating-point COMP-1/COMP-2 rounding",
+    "PROHIBITED size error returns a typed error, not bytes"
+   ]
+  },
+  "GNURUST.SCREENIO.ACCEPT.1": {
+   "court": "SCREEN SECTION ACCEPT of an alphanumeric input field (prompt / reposition / echo / field-full) -- native terminal bytes",
+   "sweep": "screenio_accept_sweep.sh",
+   "byte_domain": "a SCREEN SECTION ACCEPT of a width-1..6 alphanumeric field + the printable input (<= width) -> the exact ncurses prompt/reposition/echo/field-full byte stream, on the admitted terminal",
+   "non_claims": [
+    "width >= 7 fields (the `rep`-painted prompt + terminfo-internal post-rep reposition)",
+    "OVERFLOW input (typing past the field width -- BEL + overwrite, a separate input-editing state machine)",
+    "field editing keys (arrows / backspace-during-input / function keys), numeric/USING-validation fields, multi-field ACCEPT, ACCEPT colour/attributes",
+    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+   ]
+  },
+  "GNURUST.SCREENIO.ACCEPT.2": {
+   "court": "SCREEN SECTION ACCEPT overflow input (typing past the field width: BEL + overwrite) -- native terminal bytes",
+   "sweep": "screenio_accept2_sweep.sh",
+   "byte_domain": "a SCREEN SECTION ACCEPT of a width-1..6 field + printable input LONGER than the field -> the exact ncurses BEL/overwrite overflow byte stream, on the admitted terminal",
+   "non_claims": [
+    "width >= 7 fields (the `rep`-painted prompt + terminfo-internal reposition)",
+    "field editing keys (arrows / backspace-during-input / function keys), numeric/USING-validation fields, multi-field ACCEPT, ACCEPT colour/attributes",
+    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+   ]
+  },
+  "GNURUST.SCREENIO.ATTR.1": {
+   "court": "SCREEN SECTION monochrome display attributes (HIGHLIGHT/LOWLIGHT/UNDERLINE/BLINK/REVERSE) -- native terminal bytes",
+   "sweep": "screenio_attr_sweep.sh",
+   "byte_domain": "an attributed positioned DISPLAY -> the exact ncurses SGR-wrapped field byte stream, on the admitted terminal",
+   "non_claims": [
+    "COLOUR attributes (FOREGROUND-COLOR/BACKGROUND-COLOR) -- the whole-screen colour repaint, sealed in GNURUST.SCREENIO.COLOR.1",
+    "combined attributes, attributes on multi-field/numeric-edited displays, ACCEPT-side attributes",
+    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+   ]
+  },
+  "GNURUST.SCREENIO.COLOR.1": {
+   "court": "SCREEN SECTION colour DISPLAY (FOREGROUND-COLOR/BACKGROUND-COLOR) -- the whole-screen ncurses repaint, native terminal bytes",
+   "sweep": "screenio_color_sweep.sh",
+   "byte_domain": "a colour-attributed positioned single-field DISPLAY (LINE>=2) -> the exact ncurses whole-screen colour-repaint byte stream, on the admitted terminal",
+   "non_claims": [
+    "the LINE==1 single-row-screen colour case (a different positioning edge)",
+    "MULTIPLE colour fields in one DISPLAY -- the general doupdate/TransformLine line-diff across an arbitrary screen delta (overlapping same-row clr_eol)",
+    "combined colour+monochrome attributes, colour on numeric-edited displays, ACCEPT-side colour",
+    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+   ]
+  },
+  "GNURUST.SCREENIO.DISPLAY.2": {
+   "court": "SCREEN SECTION positioned DISPLAY -- the ncurses mvcur cursor-cost model (native terminal bytes)",
+   "sweep": "screenio_grid_sweep.sh",
+   "byte_domain": "a positioned DISPLAY (LINE/COLUMN) -> the exact ncurses cursor-movement + field byte stream, across the swept position grid",
+   "non_claims": [
+    "positions outside the swept LINE x COLUMN grid",
+    "multi-field DISPLAY is sealed separately (GNURUST.SCREENIO.DISPLAY.3)",
+    "color/attribute SGR, numeric-edited/JUSTIFIED display, ACCEPT input",
+    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+   ]
+  },
+  "GNURUST.SCREENIO.DISPLAY.3": {
+   "court": "SCREEN SECTION multi-field DISPLAY -- the general ncurses mvcur (inter-field moves), native terminal bytes",
+   "sweep": "screenio_multi_sweep.sh",
+   "byte_domain": "a multi-field DISPLAY -> the exact ncurses inter-field cursor-movement + field byte stream, for non-overlapping layouts",
+   "non_claims": [
+    "overlapping same-row layouts (later field left of an earlier one) -- those need the curses refresh line-diff (clr_eol erase), a follow-on court",
+    "3+ field interactions beyond the swept pairs",
+    "colour/attribute SGR (monochrome attributes are sealed in GNURUST.SCREENIO.ATTR.1), numeric-edited/JUSTIFIED display, ACCEPT input",
+    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+   ]
+  },
+  "GNURUST.SCREENIO.INIT.1": {
+   "court": "SCREEN SECTION init/teardown framing + positioned DISPLAY (native terminal bytes)",
+   "sweep": "screenio_sweep.sh",
+   "byte_domain": "a positioned SCREEN SECTION DISPLAY -> the exact ncurses terminal byte stream, on the admitted terminal",
+   "non_claims": [
+    "the ncurses mvcur cursor-cost model is sealed separately (GNURUST.SCREENIO.DISPLAY.2)",
+    "multi-field layout, color/attribute SGR, numeric-edited/JUSTIFIED display",
+    "ACCEPT input / key handling / cursor navigation",
+    "any terminal other than TERM=xterm or any ncurses build other than the admitted 6.6 (the byte stream is terminfo-dependent)"
+   ]
+  },
+  "GNURUST.SCREENIO.LINEDIFF.1": {
+   "court": "multi-DISPLAY same-row refresh line-diff (ncurses doupdate/TransformLine) -- native terminal bytes",
+   "sweep": "screenio_linediff_sweep.sh",
+   "byte_domain": "two same-row DISPLAY statements -> the exact ncurses doupdate/TransformLine refresh byte stream (reposition + changed run + clr_eol trailing-erase), on the admitted terminal",
+   "non_claims": [
+    "THREE or more same-row DISPLAYs (clear-to-EOL batches differently across 3+ refreshes)",
+    "distant isolated survivors needing a jump + single space; the MULTI-ROW diff (vertical mvcur between changed rows)",
+    "attributes/colour on the diffed text",
+    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+   ]
+  },
+  "GNURUST.SCREENIO.NUMEDIT.1": {
+   "court": "SCREEN SECTION numeric-edited field DISPLAY (zero-suppression / sign / CR-DB positioning) -- native terminal bytes",
+   "sweep": "screenio_numedit_sweep.sh",
+   "byte_domain": "a numeric-edited positioned single-field DISPLAY (edited PIC FROM a numeric source) -> the exact ncurses byte stream that skips leading blanks + writes the edited run, on the admitted terminal",
+   "non_claims": [
+    "the numeric editing itself (the move.c court; this proves the screen POSITIONING of an already-edited image)",
+    "the `*` check-protection zero-fill rule (a separate edited.rs follow-on)",
+    "a long (5+) trailing/interior blank run that ncurses cursor-skips rather than space-fills",
+    "MULTIPLE edited fields in one DISPLAY (the general multi-field line-diff); numeric-edited colour/attributes; ACCEPT-side numeric-edited input",
+    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6"
+   ]
+  },
+  "GNURUST.SEARCH.TABLE.1": {
+   "court": "SEARCH / SEARCH ALL table lookup",
+   "sweep": "search_sweep.sh",
+   "byte_domain": "the 1-based landing index of SEARCH (serial, forward-from-index) / SEARCH ALL (binary on ascending key)",
+   "non_claims": [
+    "multi-key/DESCENDING keys",
+    "alphanumeric/signed/V keys",
+    "VARYING/AT END/WHEN control flow (only the landing index)",
+    "SEARCH ALL on an unsorted table",
+    "OCCURS DEPENDING ON",
+    "all dialects"
+   ]
+  },
+  "GNURUST.SIZE.ERROR.1": {
+   "court": "arithmetic SIZE ERROR truncation + condition",
+   "sweep": "size_error_sweep.sh",
+   "byte_domain": "overflow -> low-order truncated store (no ON SIZE ERROR) + size-error condition",
+   "non_claims": [
+    "the arithmetic itself (GNURUST.7/13/19)",
+    "ROUNDED",
+    "intermediate-result precision",
+    "SIZE ERROR on MOVE",
+    "floating-point receivers",
+    "all dialects"
+   ]
+  },
+  "GNURUST.SORT.MERGE.ATLAS.1": {
+   "court": "observed SORT/MERGE atlas",
+   "sweep": "sort_merge_atlas_sweep.sh",
+   "byte_domain": "SORT reordering byte-effect: ASCENDING/DESCENDING KEY, USING/GIVING over an SD work file",
+   "non_claims": [
+    "SORT execution",
+    "INPUT/OUTPUT PROCEDURE (RELEASE/RETURN)",
+    "MERGE",
+    "multiple keys",
+    "sort stability",
+    "custom collating sequence",
+    "all dialects"
+   ]
+  },
+  "GNURUST.STRING.UNSTRING.1": {
+   "court": "STRING/UNSTRING byte effects",
+   "sweep": "string_unstring_sweep.sh",
+   "byte_domain": "STRING target+pointer+overflow; UNSTRING field+count+delimiter+tally+pointer+overflow bytes",
+   "non_claims": [
+    "full Procedure Division execution",
+    "national/UTF-8 multibyte",
+    "multi-delimiter/ALL generalization",
+    "locale/collation",
+    "business parsing correctness",
+    "all dialects"
+   ]
+  },
+  "GNURUST.SUBSCRIPT.1": {
+   "court": "table subscript TABLE(i[,j])",
+   "sweep": "subscript_sweep.sh",
+   "byte_domain": "OCCURS table bytes + subscripts -> element bytes",
+   "non_claims": [
+    "out-of-bounds subscript (fail-closed)",
+    "OCCURS DEPENDING ON",
+    "INDEXED BY index-names",
+    "subscript arithmetic expressions"
+   ]
+  },
+  "GNURUST.TABLE.PERFORM.SLICE.1": {
+   "court": "table (OCCURS) PERFORM VARYING slice",
+   "sweep": "table_sweep.sh",
+   "byte_domain": "PERFORM VARYING I over a 1-based OCCURS table accumulating TABLE(I)",
+   "non_claims": [
+    "multi-dimensional/nested OCCURS",
+    "OCCURS DEPENDING ON",
+    "subscript out-of-bounds",
+    "INDEXED BY / SEARCH / SET",
+    "signed/packed/V elements",
+    "numeric SIZE ERROR",
+    "non-sum per-element bodies",
+    "all dialects"
+   ]
+  },
+  "GNURUST.VALID-PROGRAMS.ACCURACY.1": {
+   "court": "valid-program corpus -- accuracy.json records the raw-byte accuracy dimensions (compile status, execution status, report bytes, raw stdout/stderr, generated files, return status)",
+   "sweep": "../valid-corpus/corpus_court_sweep.sh",
+   "arg": "accuracy",
+   "byte_domain": "accuracy.json",
+   "non_claims": [
+    "output normalization is never reported as raw-byte parity"
+   ]
+  },
+  "GNURUST.VALID-PROGRAMS.CCVS85.1": {
+   "court": "valid-program corpus -- every CCVS85 unit is classified and the 512 units reconcile (programs.json)",
+   "sweep": "../valid-corpus/corpus_court_sweep.sh",
+   "arg": "valid-ccvs85",
+   "byte_domain": "ccvs85 programs.json (512 units)",
+   "non_claims": [
+    "no NIST certification; no COBOL-85 conformance claim"
+   ]
+  },
+  "GNURUST.VALID-PROGRAMS.EXTRAS.1": {
+   "court": "valid-program corpus -- GnuCOBOL-shipped programs and official contributions are inventoried (extras programs.json)",
+   "sweep": "../valid-corpus/corpus_court_sweep.sh",
+   "arg": "valid-extras",
+   "byte_domain": "extras programs.json",
+   "non_claims": [
+    "no pristine-parity claim from adapted programs"
+   ]
+  },
+  "GNURUST.VALID-PROGRAMS.GNUCOBOL-TESTSUITE.1": {
+   "court": "valid-program corpus -- the GnuCOBOL Autotest suite is classified at AT_CHECK-step level (valid-programs.json + discovered-steps.json + summary.md exist and reconcile)",
+   "sweep": "../valid-corpus/corpus_court_sweep.sh",
+   "arg": "valid-testsuite",
+   "byte_domain": "gnucobol-testsuite reports under reports/valid-corpus/",
+   "non_claims": [
+    "no real-world generalization claim from upstream tests alone"
+   ]
+  },
+  "GNURUST.VALID-PROGRAMS.HELD-OUT.1": {
+   "court": "valid-program corpus -- the held-out evaluation exists and states it was never used for implementation tuning (held-out-results.json)",
+   "sweep": "../valid-corpus/corpus_court_sweep.sh",
+   "arg": "held-out",
+   "byte_domain": "held-out-results.json",
+   "non_claims": [
+    "no held-out claim after the set has been used for implementation tuning"
+   ]
+  },
+  "GNURUST.VALID-PROGRAMS.MANUAL.1": {
+   "court": "valid-program corpus -- every GnuCOBOL manual code block is classified in both lanes (stable-3.2 + current examples.json + snippets.json)",
+   "sweep": "../valid-corpus/corpus_court_sweep.sh",
+   "arg": "valid-manual",
+   "byte_domain": "gnucobol-manual reports",
+   "non_claims": [
+    "partial snippets and pseudocode are not counted as executable programs"
+   ]
+  },
+  "GNURUST.VALID-PROGRAMS.OMP.1": {
+   "court": "valid-program corpus -- the Open Mainframe Project course repository is fully inventoried with platform dependencies typed (omp programs.json + inventory.json)",
+   "sweep": "../valid-corpus/corpus_court_sweep.sh",
+   "arg": "valid-omp",
+   "byte_domain": "omp programs.json + inventory.json",
+   "non_claims": [
+    "platform-service dependencies (z/OS, DB2, CICS, VSAM, JCL) are typed boundaries, never parser failures"
+   ]
+  },
+  "GNURUST.VALID-PROGRAMS.XCOBOL.1": {
+   "court": "valid-program corpus -- X-COBOL is under immutable custody with structural classification, licence quarantine, frozen partitions and robustness measurement (programs.json + partitions.json + robustness.json + licence-quarantine.json)",
+   "sweep": "../valid-corpus/corpus_court_sweep.sh",
+   "arg": "valid-xcobol",
+   "byte_domain": "xcobol reports",
+   "non_claims": [
+    "unknown-licence source stays quarantined and is not published"
+   ]
+  },
+  "GNURUST.VALUE.NEGZERO.EDGE.1": {
+   "court": "negative-zero VALUE sign edge (oracle-characterized)",
+   "sweep": "edge_negzero_sweep.sh",
+   "byte_domain": "VALUE-image negative-zero sign matrix; oracle rule + locked gnucobol-rs divergence (COMP-3 integer-form)",
+   "non_claims": [
+    "the fix (characterizes + locks; patch is separate, not applied)",
+    "arithmetic/MOVE negative-zero (GNURUST.13)",
+    "figurative ZERO",
+    "other usages/dialects",
+    "broader signed-zero space"
+   ]
+  },
+  "SIZE.ERROR.ATLAS.1": {
+   "court": "arithmetic size-error behavior atlas",
+   "sweep": "size_error_atlas_sweep.sh",
+   "byte_domain": "observed receiver-written vs preserved + size_error_signaled for ADD/SUB/MUL/DIVIDE overflow + divide-by-zero (DISPLAY/COMP-3)",
+   "non_claims": [
+    "ON SIZE ERROR / NOT ON SIZE ERROR control flow (not implemented)",
+    "Procedure Division execution",
+    "receiver-write inference (observed, not inferred)",
+    "branch execution",
+    "business arithmetic correctness"
    ]
   }
  },

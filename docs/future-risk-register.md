@@ -13,6 +13,8 @@ Every row is a **separately sealed** campaign with its own oracle receipt. Listi
 point: *the strongest signal is knowing exactly what is not yet supported.* Rows are non-claims
 unless marked **sealed**.
 
+**Sealed today (Phase 12 corpus):** GNURUST.CORPUS.CUSTODY.1, GNURUST.CORPUS.LICENCE.1, GNURUST.CORPUS.DEDUP.1, GNURUST.VALID-PROGRAMS.GNUCOBOL-TESTSUITE.1, GNURUST.VALID-PROGRAMS.CCVS85.1, GNURUST.VALID-PROGRAMS.MANUAL.1, GNURUST.VALID-PROGRAMS.EXTRAS.1, GNURUST.VALID-PROGRAMS.OMP.1, GNURUST.VALID-PROGRAMS.XCOBOL.1, GNURUST.VALID-PROGRAMS.HELD-OUT.1, GNURUST.VALID-PROGRAMS.ACCURACY.1, GNURUST.PERFORMANCE.FRONTEND.1, GNURUST.PERFORMANCE.PREPARED.1, GNURUST.PERFORMANCE.BUSINESS.1, GNURUST.PERFORMANCE.CORPUS.1.
+
 **Sealed today:** `GNURUST.2` (COMP-3/zoned/display `MOVE` byte semantics, `reports/RECEIPT-GNURUST-DECIMAL-1.md`) · `GNURUST.GNUCOBOL-TESTSUITE.1` (admitted GnuCOBOL 3.2 native Autotest suite custody + real-compiler baseline + invocation census) · `GNURUST.GNUCOBOL-TESTSUITE.2` (candidate execution, no-delegation) · `GNURUST.GNUCOBOL-TESTSUITE.3` (differential classification, every test accounted) · `GNURUST.GNUCOBOL-RUNTIME-MATH.1` (math subset; performance separately labeled) · `GNURUST.METHODOLOGY.LIBCOB.1` (runtime port provenance) · `GNURUST.METHODOLOGY.PARSER.1` (parser provenance audit) · `GNURUST.COBC-RS.ARGS.1` · `GNURUST.COBC-RS.LAUNCHER.1` · `GNURUST.COBC-RS.PARALLEL.1` (cobc-rs driver courts)
 · `GNURUST.3` (PIC → field model for the `9 X A S V`/repeats/SIGN/DISPLAY-COMP-3 subset,
 `reports/RECEIPT-GNURUST-PIC-3.md`) · `GNURUST.4` (DATA DIVISION record layout — offsets, group

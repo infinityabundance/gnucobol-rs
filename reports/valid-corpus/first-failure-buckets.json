@@ -1,0 +1,51 @@
+{
+  "buckets": {
+    "GENERATED_FILE_MISMATCH": 8,
+    "HARNESS_BLOCKED": 1,
+    "NON_EXECUTABLE_DATA": 2,
+    "NON_EXECUTABLE_LIBRARY": 119,
+    "ORACLE_COMPILE_ERROR": 3,
+    "ORACLE_COMPILE_REJECT": 18,
+    "ORACLE_RUN_FAIL": 64,
+    "ORACLE_TIMEOUT": 1,
+    "OUTPUT_MISMATCH": 42,
+    "RAW_OUTPUT_MATCH": 27,
+    "RUST_REJECT_PARSE": 36,
+    "RUST_REJECT_RUNTIME_BOUNDARY": 1,
+    "RUST_REJECT_UNSUPPORTED": 190,
+    "check": 152,
+    "layout": 25,
+    "none": 4857,
+    "parse": 553,
+    "preprocess": 240
+  },
+  "by_family": {
+    "ccvs85": {
+      "GENERATED_FILE_MISMATCH": 8,
+      "HARNESS_BLOCKED": 1,
+      "NON_EXECUTABLE_DATA": 2,
+      "NON_EXECUTABLE_LIBRARY": 119,
+      "ORACLE_COMPILE_ERROR": 3,
+      "ORACLE_COMPILE_REJECT": 18,
+      "ORACLE_RUN_FAIL": 64,
+      "ORACLE_TIMEOUT": 1,
+      "OUTPUT_MISMATCH": 42,
+      "RAW_OUTPUT_MATCH": 27,
+      "RUST_REJECT_PARSE": 36,
+      "RUST_REJECT_RUNTIME_BOUNDARY": 1,
+      "RUST_REJECT_UNSUPPORTED": 190
+    },
+    "gnucobol-testsuite": {
+      "none": 4732
+    },
+    "xcobol": {
+      "check": 152,
+      "layout": 25,
+      "none": 125,
+      "parse": 553,
+      "preprocess": 240
+    }
+  },
+  "note": "first candidate failing phase per program profile (spec 9.4: preprocess/lex/parse/resolution/layout/check/prepare/run; exactly one per profile)",
+  "total": 6339
+}

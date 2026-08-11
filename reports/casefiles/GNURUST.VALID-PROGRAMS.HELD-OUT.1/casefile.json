@@ -1,0 +1,55 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "reports/valid-corpus/held-out-results.json"
+  ],
+  "case_id": "GNURUST.VALID-PROGRAMS.HELD-OUT.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.56",
+  "damage_if_overclaimed": "claiming held-out generalization after tuning on the held-out set would be circular",
+  "hash_chain": {
+    "inputs_sha256": "41adf28b23112e8d2626370d35efb4a926ff4dc38d29ca276c565e071599316d"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "4f4e47f85c14ea9d750bef44210a9d1be89fe22b58b5a4acb0db4c8d5451fc32",
+    "receipt_sha256": "b4989a5e737ae690ddd9770c9eb681ceac93b87e303f6a7171c5851e5fa5ca2a"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-HELD-OUT-CLAIM-AFTER-THE-SET-HAS-BEEN",
+    "NEG.PARSE-CHECK-RUN-SUCCESS-ON-HELD-OUT-FILE"
+  ],
+  "negative_claims": [
+    "no held-out claim after the set has been used for implementation tuning",
+    "parse/check/run success on held-out files is not language conformance",
+    "lie prevented: every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "oracle": {
+    "detail": "GnuCOBOL 3.2.0 (admitted lab/oracle build) + the committed corpus evidence under reports/valid-corpus/",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.VALID-PROGRAMS.HELD-OUT.1"
+  },
+  "positive_claims": [
+    "the held-out evaluation (101 files) ran the candidate under a hard wall bound with 0 crashes and 0 timeouts, and the report states the held-out set was never used for implementation tuning"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh held-out",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 1,
+    "total": 1,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

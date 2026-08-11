@@ -1,5 +1,5 @@
 {
-  "casefiles": 140,
+  "casefiles": 175,
   "court": "KOBOLD.ENTERPRISE.2",
   "entries": [
     {
@@ -127,6 +127,26 @@
       "signature_status": "unsigned_no_key_configured"
     },
     {
+      "court": "GNURUST.COBC-RS.ARGS.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.COBC-RS.LAUNCHER.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.COBC-RS.PARALLEL.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.COBC-RS.POLICY-COMPLETE.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
       "court": "GNURUST.COMMON.BOUNDCHECK.1",
       "signature_status": "unsigned_no_key_configured"
     },
@@ -136,6 +156,18 @@
     },
     {
       "court": "GNURUST.COMMON.NUMCHECK.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.CORPUS.CUSTODY.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.CORPUS.DEDUP.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.CORPUS.LICENCE.1",
       "signature_status": "unsigned_no_key_configured"
     },
     {
@@ -195,6 +227,10 @@
       "signature_status": "unsigned_no_key_configured"
     },
     {
+      "court": "GNURUST.FILEIO.MULTI-RECORD-FD.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
       "court": "GNURUST.FILEIO.OPEN.1",
       "signature_status": "unsigned_no_key_configured"
     },
@@ -228,6 +264,34 @@
     },
     {
       "court": "GNURUST.FRONTEND.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.GNUCOBOL-RUNTIME-MATH.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.GNUCOBOL-RUNTIME-MATH.2",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.GNUCOBOL-TESTSUITE.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.GNUCOBOL-TESTSUITE.2",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.GNUCOBOL-TESTSUITE.3",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.GNUCOBOL-TESTSUITE.4",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1",
       "signature_status": "unsigned_no_key_configured"
     },
     {
@@ -311,11 +375,39 @@
       "signature_status": "unsigned_no_key_configured"
     },
     {
+      "court": "GNURUST.METHODOLOGY.LIBCOB.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.METHODOLOGY.PARSER.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
       "court": "GNURUST.MLIO.GENERATE.1",
       "signature_status": "unsigned_no_key_configured"
     },
     {
       "court": "GNURUST.MLIO.PARSE.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.MODULE.CALL.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.MODULE.CANCEL.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.MODULE.PARALLEL.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.MODULE.REGISTRY.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.MODULE.SEARCH.1",
       "signature_status": "unsigned_no_key_configured"
     },
     {
@@ -328,6 +420,22 @@
     },
     {
       "court": "GNURUST.PERFORM.SLICE.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.PERFORMANCE.BUSINESS.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.PERFORMANCE.CORPUS.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.PERFORMANCE.FRONTEND.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.PERFORMANCE.PREPARED.1",
       "signature_status": "unsigned_no_key_configured"
     },
     {
@@ -416,6 +524,38 @@
     },
     {
       "court": "GNURUST.TABLE.PERFORM.SLICE.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.VALID-PROGRAMS.ACCURACY.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.VALID-PROGRAMS.CCVS85.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.VALID-PROGRAMS.EXTRAS.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.VALID-PROGRAMS.GNUCOBOL-TESTSUITE.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.VALID-PROGRAMS.HELD-OUT.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.VALID-PROGRAMS.MANUAL.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.VALID-PROGRAMS.OMP.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.VALID-PROGRAMS.XCOBOL.1",
       "signature_status": "unsigned_no_key_configured"
     },
     {
@@ -575,7 +715,7 @@
   "selftest_passed": true,
   "signing_mode": "unsigned",
   "summary": {
-    "unsigned_no_key_configured": 140
+    "unsigned_no_key_configured": 175
   },
   "tool": "kobold-attest (rust, ed25519-compact)",
   "tool_available": true

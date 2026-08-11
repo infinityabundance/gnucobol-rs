@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.VALID-PROGRAMS.HELD-OUT.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.56",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "4f4e47f85c14ea9d750bef44210a9d1be89fe22b58b5a4acb0db4c8d5451fc32",
+      "receipt_sha256": "b4989a5e737ae690ddd9770c9eb681ceac93b87e303f6a7171c5851e5fa5ca2a"
+    },
+    "negative_claim_count": 3,
+    "positive_claim_count": 1,
+    "replay": {
+      "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh held-out",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "b635c8f4b0a4063cd7ad2ad0eff1cc0cd690bd20c3c6a87c45019d7bf4560753"
+      },
+      "name": "reports/casefiles/GNURUST.VALID-PROGRAMS.HELD-OUT.1/casefile.json"
+    }
+  ]
+}

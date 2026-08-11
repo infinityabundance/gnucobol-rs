@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.COBC-RS.POLICY-COMPLETE.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.56",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "7acb0c00b1d1ebab00ef020a357a7ed9adcd6a207cbb7207859e484550c3729b",
+      "receipt_sha256": "684915507af0a7733683ef736f73455d095f9d180b1c401e7302ade042e9ae21"
+    },
+    "negative_claim_count": 5,
+    "positive_claim_count": 3,
+    "replay": {
+      "command": "bash lab/oracle/gnucobol-testsuite/run-docker.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "32734ffa9a69205e7518d3d6a67393205a0b714caf5437e3a00e7e52b413633a"
+      },
+      "name": "reports/casefiles/GNURUST.COBC-RS.POLICY-COMPLETE.1/casefile.json"
+    }
+  ]
+}

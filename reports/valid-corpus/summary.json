@@ -1,10 +1,60 @@
 {
-  "total": 0,
-  "by_classification": {},
-  "by_corpus_class": {},
-  "admitted": 0,
-  "unknown_classifications": 0,
-  "first_failure_by_phase": {},
-  "exact_duplicates": 0,
-  "near_duplicate_families": 0
+  "by_first_failure_phase": {
+    "check": 187,
+    "layout": 25,
+    "none": 4732,
+    "parse": 553,
+    "preprocess": 240
+  },
+  "by_source_family": {
+    "ccvs85": 512,
+    "extras": 55,
+    "gnucobol-manual": 18,
+    "gnucobol-testsuite": 4732,
+    "omp": 30,
+    "xcobol": 1095
+  },
+  "by_validity_class": {
+    "COMPLETE_PROGRAM": 691,
+    "COPYBOOK_OR_DATA": 248,
+    "CompleteCompileOnly": 2,
+    "CompleteExecutable": 16,
+    "DATA_ONLY": 2,
+    "FRAGMENT": 84,
+    "GNUCOBOL_REJECT|ZOS_DATASET_REQUIRED": 4,
+    "GnuCOBOL_PORTABLE_UNMODIFIED|VALID_EXECUTABLE_PROGRAM": 7,
+    "INVALID_EXPECTED_REJECT": 28,
+    "INVALID_EXPECTED_REJECT|COURSE_ERROR_EXERCISE": 1,
+    "PLATFORM_BOUNDED|DB2_REQUIRED": 3,
+    "PLATFORM_BOUNDED|VSAM_OR_INDEXED_REQUIRED": 2,
+    "PLATFORM_BOUNDED|ZOS_DATASET_REQUIRED": 13,
+    "PROGRAM_FRAGMENT": 72,
+    "QUARANTINED": 16,
+    "VALID_COMPILE_ONLY_PROGRAM": 50,
+    "VALID_COMPILE_ONLY_PROGRAM|CANDIDATE_ALL_PHASES_OK": 2126,
+    "VALID_COMPILE_ONLY_PROGRAM|CANDIDATE_CHECK_REJECT": 385,
+    "VALID_COMPILE_ONLY_PROGRAM|CANDIDATE_LAYOUT_REJECT": 144,
+    "VALID_COMPILE_ONLY_PROGRAM|CANDIDATE_PARSE_REJECT": 357,
+    "VALID_COMPILE_ONLY_PROGRAM|CANDIDATE_PREPROCESS_REJECT": 160,
+    "VALID_COPYBOOK": 51,
+    "VALID_EXECUTABLE_PROGRAM": 431,
+    "VALID_EXECUTABLE_PROGRAM|CANDIDATE_ALL_PHASES_OK": 654,
+    "VALID_EXECUTABLE_PROGRAM|CANDIDATE_CHECK_REJECT": 147,
+    "VALID_EXECUTABLE_PROGRAM|CANDIDATE_LAYOUT_REJECT": 103,
+    "VALID_EXECUTABLE_PROGRAM|CANDIDATE_PARSE_REJECT": 130,
+    "VALID_EXECUTABLE_PROGRAM|CANDIDATE_PREPROCESS_REJECT": 33,
+    "VALID_EXECUTABLE_PROGRAM|CANDIDATE_RUN_REJECT": 412,
+    "VALID_MODULE_PROGRAM": 70
+  },
+  "families_aggregated": [
+    "gnucobol-testsuite",
+    "ccvs85",
+    "gnucobol-manual",
+    "extras",
+    "omp",
+    "xcobol",
+    "performance"
+  ],
+  "note": "aggregated from the committed per-family reports (spec 12.2: report separately by corpus class, source family, dialect, format, validity class, first failing phase, partition)",
+  "total_units": 6442
 }

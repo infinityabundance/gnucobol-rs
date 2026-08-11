@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.PERFORMANCE.CORPUS.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.56",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "deb675a3315e8488e1fde0d24c45ed6c97c0b1b7f47d320c1eb2ed21efee8063",
+      "receipt_sha256": "71e4405584fd7c514b39c11b4376ccdd70be8a413ef8fe40ff703ebb27251d96"
+    },
+    "negative_claim_count": 3,
+    "positive_claim_count": 2,
+    "replay": {
+      "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh performance",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "d5ed8ff5a5ebbdb1d3a6dd665a174dd7243fbebd56d3c31675f895cdeab5e328"
+      },
+      "name": "reports/casefiles/GNURUST.PERFORMANCE.CORPUS.1/casefile.json"
+    }
+  ]
+}

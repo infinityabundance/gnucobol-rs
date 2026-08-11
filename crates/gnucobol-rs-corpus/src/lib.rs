@@ -21,6 +21,7 @@ pub mod overfit;
 pub mod schema;
 pub mod state;
 pub mod store;
+pub mod unify;
 
 pub use schema::{Classification, CorpusClass, ProgramRecord, SourceFamily};
 pub use state::{AdmissionState, RejectionReason};

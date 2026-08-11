@@ -1,0 +1,55 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "reports/valid-corpus/xcobol/programs.json + partitions.json + robustness.json + licence-quarantine.json"
+  ],
+  "case_id": "GNURUST.VALID-PROGRAMS.XCOBOL.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.56",
+  "damage_if_overclaimed": "claiming generalization from an unfrozen or contaminated held-out set would invalidate every downstream claim",
+  "hash_chain": {
+    "inputs_sha256": "58db4f0363560b422fa0e97ef7a91f9dab93b2f0d184b3c67810ae7b168d6a83"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "0fd89b55645d921b9a075f4541052e1f1d57195b267f0ed13c4a9af84b0992f8",
+    "receipt_sha256": "633e6e0a46bb121d9c72b6e862a8f736299779d0636fe51533dbbe15d0cac64a"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "negative_capability_ids": [
+    "NEG.UNKNOWN-LICENCE-SOURCE-STAYS-QUARANTINED",
+    "NEG.NEAR-DUPLICATE-FAMILIES-ARE-NOT-INDEPEND"
+  ],
+  "negative_claims": [
+    "unknown-licence source stays quarantined (REFERENCE_ONLY) and is not published",
+    "near-duplicate families are not independent evidence",
+    "lie prevented: every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "oracle": {
+    "detail": "GnuCOBOL 3.2.0 (admitted lab/oracle build) + the committed corpus evidence under reports/valid-corpus/",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.VALID-PROGRAMS.XCOBOL.1"
+  },
+  "positive_claims": [
+    "the X-COBOL dataset (DOI 10.5281/zenodo.7968845) is under immutable custody with structural classification, repository-level licence quarantine, frozen development/validation/held-out partitions and large-scale robustness measurement"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh valid-xcobol",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 1,
+    "total": 1,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

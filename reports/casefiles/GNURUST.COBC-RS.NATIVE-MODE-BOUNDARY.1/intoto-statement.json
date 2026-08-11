@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.56",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "30a2a8820da192eea9f144b62bc1926618e1611fbd2782a53d7aba647ad9d4d6",
+      "receipt_sha256": "684915507af0a7733683ef736f73455d095f9d180b1c401e7302ade042e9ae21"
+    },
+    "negative_claim_count": 4,
+    "positive_claim_count": 3,
+    "replay": {
+      "command": "bash lab/oracle/gnucobol-testsuite/run-docker.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "b69c5a5faf1b11f7d9d086bac504bcbf73480fd6fb4c8762d8cff4a1b89986b6"
+      },
+      "name": "reports/casefiles/GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1/casefile.json"
+    }
+  ]
+}

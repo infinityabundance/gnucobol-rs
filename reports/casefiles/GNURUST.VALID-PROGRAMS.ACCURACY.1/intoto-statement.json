@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.VALID-PROGRAMS.ACCURACY.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.56",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "1f3e541f2ae8a57b62eca9ccd2ca146e6d1fddb4f4e2f1e83403be1c37a65b82",
+      "receipt_sha256": "7925828bc7a50ff0023e8d171a5162d41f0ccda0dc7838fba692825455ea85a9"
+    },
+    "negative_claim_count": 3,
+    "positive_claim_count": 1,
+    "replay": {
+      "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh accuracy",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "0e834e79b81922c2aaab3f8021d5762bf6133779fd9ac876d084860776a2c8ac"
+      },
+      "name": "reports/casefiles/GNURUST.VALID-PROGRAMS.ACCURACY.1/casefile.json"
+    }
+  ]
+}

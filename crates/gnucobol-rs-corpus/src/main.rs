@@ -455,5 +455,27 @@ fn run(cmd: Command) -> Result<(), String> {
             }
             emit(&rep, json)
         }
+        Command::Unify { json } => {
+            let root = gnucobol_rs_corpus::extract::workspace_root()?;
+            let rep = gnucobol_rs_corpus::unify::unify(&root)?;
+            if !json {
+                println!(
+                    "unify: {} total units aggregated from {} families; wrote summary.json, \
+                     programs.csv, licences.json, dependencies.json, deduplication.json, \
+                     dialect-matrix.json, first-failure-buckets.json, accuracy.json, \
+                     performance.json, determinism.json, no-delegation.json",
+                    rep.summary
+                        .get("total_units")
+                        .and_then(|v| v.as_u64())
+                        .unwrap_or(0),
+                    rep.summary
+                        .get("families_aggregated")
+                        .and_then(|v| v.as_array())
+                        .map(|a| a.len())
+                        .unwrap_or(0)
+                );
+            }
+            emit(&rep, json)
+        }
     }
 }

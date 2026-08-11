@@ -1,0 +1,28 @@
+{
+  "byte_domain": "gnucobol-testsuite reports under reports/valid-corpus/",
+  "campaign": "GNURUST.VALID-PROGRAMS.GNUCOBOL-TESTSUITE.1",
+  "command": {
+    "replay": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh valid-testsuite"
+  },
+  "court": "valid-program corpus -- the GnuCOBOL Autotest suite is classified at AT_CHECK-step level (valid-programs.json + discovered-steps.json + summary.md exist and reconcile)",
+  "crate_version": "0.8.56",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "no real-world generalization claim from upstream tests alone"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=1 FAIL=0 valid-testsuite"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

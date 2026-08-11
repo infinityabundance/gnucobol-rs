@@ -1,0 +1,28 @@
+{
+  "byte_domain": "gnucobol-manual reports",
+  "campaign": "GNURUST.VALID-PROGRAMS.MANUAL.1",
+  "command": {
+    "replay": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh valid-manual"
+  },
+  "court": "valid-program corpus -- every GnuCOBOL manual code block is classified in both lanes (stable-3.2 + current examples.json + snippets.json)",
+  "crate_version": "0.8.56",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "partial snippets and pseudocode are not counted as executable programs"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=1 FAIL=0 valid-manual"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.COBC-RS.ARGS.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.54",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "a47299f2fd8dc3fac359bfcf6cfbfeb28a1b2b6077668895b732a34c23f7b875",
+      "receipt_sha256": null
+    },
+    "negative_claim_count": 3,
+    "positive_claim_count": 2,
+    "replay": {
+      "command": "the real cobc/cobcrun invocation census of the admitted suite (behavioral reference for accepted spellings)",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "7776edd8f718a0effd2db1f73d08b0c0003be06cefc2cefdfbef3b7d8e09dbf9"
+      },
+      "name": "reports/casefiles/GNURUST.COBC-RS.ARGS.1/casefile.json"
+    }
+  ]
+}

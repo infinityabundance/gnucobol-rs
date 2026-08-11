@@ -3,14 +3,14 @@
   "predicate": {
     "case_id": "GNURUST.FRONTEND.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.8.50",
+    "crate_version": "0.8.56",
     "kind": "court-casefile",
     "materials": {
-      "claim_ladder_entry_sha256": "1963b69fe6bead53c76b8962f4e6e3d6853ad3f28567af8a724f98d17778dfbf",
-      "receipt_sha256": "f18658b76bdab57d3f3ce82f8b39fb7fa9217ba4fb51e2a7cb6dc4b57c6ce74b"
+      "claim_ladder_entry_sha256": "2c6684f690760f65212a4a66cc0d82814a5e652b0ca773638a05080a33ed995f",
+      "receipt_sha256": "b061d25677099386a7a9a98f5a3391eefb2bdde507ee9ca32b1562c1e012760c"
     },
     "negative_claim_count": 15,
-    "positive_claim_count": 5,
+    "positive_claim_count": 6,
     "replay": {
       "command": "bash lab/oracle/cobol_frontend_sweep.sh",
       "exit_code": 0
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "5d7c0f48720f8d939ee0628443a8059ad7a563e72f4895bc53873308ca9642f9"
+        "sha256": "33fa74e96898b93661fe3863a151db8870cff4db1f7263dc7b993a34cc0de919"
       },
       "name": "reports/casefiles/GNURUST.FRONTEND.1/casefile.json"
     }

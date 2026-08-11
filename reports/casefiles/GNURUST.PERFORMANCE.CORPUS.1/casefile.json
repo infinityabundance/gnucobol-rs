@@ -1,0 +1,56 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "reports/valid-corpus/performance/views.json (View E) + raw/view_e.json"
+  ],
+  "case_id": "GNURUST.PERFORMANCE.CORPUS.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.56",
+  "damage_if_overclaimed": "discarding slow candidate results would hide genuine performance characteristics",
+  "hash_chain": {
+    "inputs_sha256": "9d1ae3f094510314f055fcb247d1ebb64729c5c3fcc7251cff109aa49fb42964"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "deb675a3315e8488e1fde0d24c45ed6c97c0b1b7f47d320c1eb2ed21efee8063",
+    "receipt_sha256": "71e4405584fd7c514b39c11b4376ccdd70be8a413ef8fe40ff703ebb27251d96"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-EQUIVALENCE-BETWEEN-COMPILED-NATIVE-A",
+    "NEG.NO-EQUIVALENCE-CLAIM-FOR-THE-UNLIKE-VIEW"
+  ],
+  "negative_claims": [
+    "no equivalence between compiled-native and interpreted runtime work",
+    "no equivalence claim for the unlike View-A lanes",
+    "lie prevented: every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "oracle": {
+    "detail": "GnuCOBOL 3.2.0 (admitted lab/oracle build) + the committed corpus evidence under reports/valid-corpus/",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.PERFORMANCE.CORPUS.1"
+  },
+  "positive_claims": [
+    "one full pass over 10 workloads x 4 scales per lane (oracle compile+run vs candidate prepare+run) with peak memory and raw samples retained",
+    "unfavorable results are never discarded"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh performance",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 1,
+    "total": 1,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

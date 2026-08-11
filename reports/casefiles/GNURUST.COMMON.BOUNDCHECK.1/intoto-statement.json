@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.COMMON.BOUNDCHECK.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.8.50",
+    "crate_version": "0.8.56",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "7d1426cf4e7e23c1a487f837bbb866751eda45981427868074183a2bbb9895e8",
-      "receipt_sha256": "878240dfbd66fcc809a1af1ba6a5e3e2d0513be1bdb17907ce121418c633fe78"
+      "receipt_sha256": "af09e27fd787daa679eda4710c3d347a0c16e75fe8fcafdb415761461ed5eeeb"
     },
     "negative_claim_count": 6,
     "positive_claim_count": 3,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "e9e64b2ba7cf971c0e7e50925252f1d710e6c6f3632f3a7e9ed646a51fa0083d"
+        "sha256": "1cc503d11f47a4115a4905cf6c10791770cad1a730bca542ca0d957a1802cba5"
       },
       "name": "reports/casefiles/GNURUST.COMMON.BOUNDCHECK.1/casefile.json"
     }

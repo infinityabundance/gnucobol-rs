@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.GNUCOBOL-RUNTIME-MATH.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.54",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "c7741599782efe55db65ccf52464fd39b3d5116c63a5d1798ac9312e58236c84",
+      "receipt_sha256": null
+    },
+    "negative_claim_count": 3,
+    "positive_claim_count": 2,
+    "replay": {
+      "command": "the TESTSUITE.1 baseline",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "7a56ce5fc6a82143eca679766da3d853bc5e9fe003526d37acf0d50aa2b97efd"
+      },
+      "name": "reports/casefiles/GNURUST.GNUCOBOL-RUNTIME-MATH.1/casefile.json"
+    }
+  ]
+}

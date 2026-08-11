@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.COMMON.NUMCHECK.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.8.50",
+    "crate_version": "0.8.56",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "7a13e5d62305671839240e571a0f942deca95d82e2dbfd5081cb0158737854ba",
-      "receipt_sha256": "7741e89a11e34a32c966069c327655d3d3e2779b33b7203fcd9c328bdd897ef0"
+      "receipt_sha256": "d5ce957301535be3e678ef45544e288129775309933d6a3a4b11e2a86b2b50d7"
     },
     "negative_claim_count": 6,
     "positive_claim_count": 2,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "55419423c70d8e359debe435e9a9114b61d66bcf4369dd487362e9eccf769e50"
+        "sha256": "31496eb590496323f0ebe16832ddac89bd94183ad3fbcb050dcecd847755908f"
       },
       "name": "reports/casefiles/GNURUST.COMMON.NUMCHECK.1/casefile.json"
     }

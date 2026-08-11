@@ -1,0 +1,18 @@
+{
+  "note": "performance is reported only for correctness-proven workloads (spec 8.3); views A-E stay separate (spec 9.5); raw samples preserved under raw/",
+  "phase8_correctness": {
+    "evidence": "reports/valid-corpus/performance/benchmarks.json",
+    "scales_per_workload": 4,
+    "workloads": 10
+  },
+  "phase9_views": {
+    "evidence": "reports/valid-corpus/performance/views.json",
+    "raw_samples": "reports/valid-corpus/performance/raw/",
+    "view_e_candidate_total_ms": 1396725.143118,
+    "view_e_oracle_total_ms": 6175.782875999999
+  },
+  "phase_metrics": {
+    "evidence": "reports/valid-corpus/performance/phase-metrics.json",
+    "present": true
+  }
+}

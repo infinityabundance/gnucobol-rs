@@ -1,0 +1,55 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "reports/valid-corpus/accuracy.json + per-family accuracy reports"
+  ],
+  "case_id": "GNURUST.VALID-PROGRAMS.ACCURACY.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.56",
+  "damage_if_overclaimed": "reporting normalized output as byte parity would misstate the comparison",
+  "hash_chain": {
+    "inputs_sha256": "00306b5bd9c40251486607425d0a14a737c3b9946131ccba782b208776725271"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "1f3e541f2ae8a57b62eca9ccd2ca146e6d1fddb4f4e2f1e83403be1c37a65b82",
+    "receipt_sha256": "7925828bc7a50ff0023e8d171a5162d41f0ccda0dc7838fba692825455ea85a9"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "negative_capability_ids": [
+    "NEG.OUTPUT-NORMALIZATION-IS-NEVER-REPORTED-A",
+    "NEG.WARNING-TEXT-PARITY-IS-NOT-SEMANTIC-CORR"
+  ],
+  "negative_claims": [
+    "output normalization is never reported as raw-byte parity",
+    "warning-text parity is not semantic correctness",
+    "lie prevented: every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "oracle": {
+    "detail": "GnuCOBOL 3.2.0 (admitted lab/oracle build) + the committed corpus evidence under reports/valid-corpus/",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.VALID-PROGRAMS.ACCURACY.1"
+  },
+  "positive_claims": [
+    "accuracy.json records the raw-byte accuracy dimensions per family (compile status, execution status, report bytes sha256, raw stdout/stderr, generated files, return status)"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh accuracy",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 1,
+    "total": 1,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

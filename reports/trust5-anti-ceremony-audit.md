@@ -5,7 +5,7 @@
 > [!IMPORTANT]
 > A court is **real** if corrupting/dropping/drifting/hand-editing its evidence can make a gate fail; **ceremonial** if it only restates that other evidence exists. This audit proves every court can fail.
 
-- **A** hard (oracle/byte): 113  ·  **B** composed: 41  ·  **C** view: 6  ·  **D** staged: 0  ·  **F** ceremonial: **0**
+- **A** hard (oracle/byte): 128  ·  **B** composed: 41  ·  **C** view: 6  ·  **D** staged: 0  ·  **F** ceremonial: **0**
 
 ## Classification
 
@@ -50,6 +50,9 @@
 | `GNURUST.COMMON.BOUNDCHECK.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.COMMON.CBL.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.COMMON.NUMCHECK.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.CORPUS.CUSTODY.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.CORPUS.DEDUP.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.CORPUS.LICENCE.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.COVERAGE.1` | B | ✅ | ✅ | ✅ no |
 | `GNURUST.DECLARATIVES.ATLAS.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.DIALECT.RUNTIME.ATLAS.1` | A | ✅ | ✅ | ✅ no |
@@ -113,6 +116,10 @@
 | `GNURUST.NUMCMP.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.ODO.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.PERFORM.SLICE.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.PERFORMANCE.BUSINESS.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.PERFORMANCE.CORPUS.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.PERFORMANCE.FRONTEND.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.PERFORMANCE.PREPARED.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.PROCEDURE.FLOW.ATLAS.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.PUBLIC.CORPUS.1` | B | ✅ | ✅ | ✅ no |
 | `GNURUST.PUBLIC.GAP.1` | B | ✅ | ✅ | ✅ no |
@@ -135,6 +142,14 @@
 | `GNURUST.STRING.UNSTRING.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.SUBSCRIPT.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.TABLE.PERFORM.SLICE.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.VALID-PROGRAMS.ACCURACY.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.VALID-PROGRAMS.CCVS85.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.VALID-PROGRAMS.EXTRAS.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.VALID-PROGRAMS.GNUCOBOL-TESTSUITE.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.VALID-PROGRAMS.HELD-OUT.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.VALID-PROGRAMS.MANUAL.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.VALID-PROGRAMS.OMP.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.VALID-PROGRAMS.XCOBOL.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.VALUE.NEGZERO.EDGE.1` | A | ✅ | ✅ | ✅ no |
 | `KOBOLD.BANK.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.BANK.2` | B | ✅ | ✅ | ✅ no |

@@ -1,0 +1,15 @@
+{
+  "by_family": {
+    "ccvs85": {
+      "evidence": "reports/ccvs85/determinism.json",
+      "pass": null,
+      "summary": "summary counts + classifications + reason buckets must be identical across two fresh full runs (timestamps deliberately excluded); per-unit oracle REPORT hashes are compared separately and any drift is recorded + explicitly classified"
+    },
+    "gnucobol-testsuite": {
+      "evidence": "reports/gnucobol-testsuite/determinism.json",
+      "pass": null,
+      "summary": "stable summary counts + per-test classifications must be identical across two fresh full runs (timestamps deliberately excluded)"
+    }
+  },
+  "note": "two-pass determinism: summary counts + per-test classifications identical across fresh runs (timestamps excluded); governed by the determinism courts"
+}

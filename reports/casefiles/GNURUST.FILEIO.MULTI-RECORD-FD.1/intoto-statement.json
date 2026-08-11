@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.FILEIO.MULTI-RECORD-FD.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.56",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "1e0bd4e275299a30e5d6fbc5665593f0bacba3f1938a7657f6a6c214cba16947",
+      "receipt_sha256": "338abfa96ee791c0844e15c809e03d5e3c3da583cec4ecf3d91cf63a2fc06e7e"
+    },
+    "negative_claim_count": 8,
+    "positive_claim_count": 8,
+    "replay": {
+      "command": "bash lab/oracle/multirecord_fd_sweep.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "41698656fef7a4f16eaa69e36996ac8127c048297b8ddd984b10d049ced111f2"
+      },
+      "name": "reports/casefiles/GNURUST.FILEIO.MULTI-RECORD-FD.1/casefile.json"
+    }
+  ]
+}

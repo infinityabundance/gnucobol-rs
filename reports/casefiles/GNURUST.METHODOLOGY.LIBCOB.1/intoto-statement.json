@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.METHODOLOGY.LIBCOB.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.54",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "983459e87791ea40dd5d2e3244bc6ed202cf0818436033bb2235ab1948127db6",
+      "receipt_sha256": null
+    },
+    "negative_claim_count": 3,
+    "positive_claim_count": 2,
+    "replay": {
+      "command": "n/a (documentation + machine records, cross-checked against the parity tooling)",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "513bb29c3696844e0ab27622fcd3272b3cb10dd6ff8b7da1e941369508e2ca51"
+      },
+      "name": "reports/casefiles/GNURUST.METHODOLOGY.LIBCOB.1/casefile.json"
+    }
+  ]
+}

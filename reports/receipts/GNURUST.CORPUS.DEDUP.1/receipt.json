@@ -1,0 +1,28 @@
+{
+  "byte_domain": "deduplication.json + the xcobol dedup report",
+  "campaign": "GNURUST.CORPUS.DEDUP.1",
+  "command": {
+    "replay": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh dedup"
+  },
+  "court": "valid-COBOL corpus deduplication -- deduplication.json records exact + near-duplicate evidence; grouping is repository-level so partitions never split a repo",
+  "crate_version": "0.8.56",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "no independent-program count that includes duplicates"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=1 FAIL=0 dedup"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

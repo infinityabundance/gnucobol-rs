@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.COBC-RS.LAUNCHER.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.54",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "5882ac37c062135337210043bef689a71c4dd1ed2e6747a6bbad1d708d4e12f7",
+      "receipt_sha256": null
+    },
+    "negative_claim_count": 7,
+    "positive_claim_count": 5,
+    "replay": {
+      "command": "n/a (artifact-model contract; cross-checked by the suite's executable lifecycle expectations)",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "7e42c48035ece852efee46a95fe585379e41d0582a48d1ea872221f952746015"
+      },
+      "name": "reports/casefiles/GNURUST.COBC-RS.LAUNCHER.1/casefile.json"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.PERFORMANCE.FRONTEND.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.56",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "1564565c0bb5f61b9c190f5f49f65bb7e6375ca410bbac9b7ba4f75a38ebe6b4",
+      "receipt_sha256": "71e4405584fd7c514b39c11b4376ccdd70be8a413ef8fe40ff703ebb27251d96"
+    },
+    "negative_claim_count": 3,
+    "positive_claim_count": 1,
+    "replay": {
+      "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh performance",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "0f87ac719e562f66fc0edc2c836fe1166b7ec312e0d5924f7151a11cb8260e71"
+      },
+      "name": "reports/casefiles/GNURUST.PERFORMANCE.FRONTEND.1/casefile.json"
+    }
+  ]
+}

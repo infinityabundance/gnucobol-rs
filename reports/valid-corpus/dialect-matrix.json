@@ -1,0 +1,29 @@
+{
+  "note": "validity is profile-relative (VALID_FOR oracle/dialect/format/options/copybooks/runtime/platform); a source may be valid under one dialect and invalid under another (spec core validity definition)",
+  "rows": [
+    {
+      "counts": {
+        "cobol2002": 3,
+        "cobol85": 1,
+        "default": 389,
+        "ibm": 19,
+        "mf": 2,
+        "none": 681
+      },
+      "dimension": "oracle admission dialect (default/cobol85/cobol2002/cobol2014/ibm/mf/acu; first success)",
+      "family": "xcobol"
+    },
+    {
+      "counts": {
+        "default": 4732
+      },
+      "dimension": "recorded step dialect + source format",
+      "family": "gnucobol-testsuite",
+      "source_formats": {
+        "fixed": 12,
+        "free": 4639,
+        "unknown": 81
+      }
+    }
+  ]
+}

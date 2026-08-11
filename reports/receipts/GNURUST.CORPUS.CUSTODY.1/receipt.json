@@ -1,0 +1,28 @@
+{
+  "byte_domain": "committed corpus evidence files under reports/valid-corpus/",
+  "campaign": "GNURUST.CORPUS.CUSTODY.1",
+  "command": {
+    "replay": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh custody"
+  },
+  "court": "valid-COBOL corpus custody -- every family report directory exists and the pre-change repository state was frozen (preflight-repository-state.json + before-state.json + integration-design.md)",
+  "crate_version": "0.8.56",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "no validity claim: custody only proves the evidence tree exists and was frozen"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=1 FAIL=0 custody"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

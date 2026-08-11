@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.MODULE.CANCEL.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.56",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "fc52bf15f8a92c9a856c334da912fede451f12ecf60f23a96f24da2698c9139c",
+      "receipt_sha256": "684915507af0a7733683ef736f73455d095f9d180b1c401e7302ade042e9ae21"
+    },
+    "negative_claim_count": 3,
+    "positive_claim_count": 2,
+    "replay": {
+      "command": "bash lab/oracle/gnucobol-testsuite/run-docker.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "87b02033ff5a48f3aa39e5d02fc6c9acbe408d4825858ae7d2f2bec33f9f9ae7"
+      },
+      "name": "reports/casefiles/GNURUST.MODULE.CANCEL.1/casefile.json"
+    }
+  ]
+}

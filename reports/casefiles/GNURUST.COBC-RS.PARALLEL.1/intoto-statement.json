@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.COBC-RS.PARALLEL.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.54",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "4950f341702b023b7f76fece1191285734e51f0bdfe86a6905e92eeb2f234f04",
+      "receipt_sha256": null
+    },
+    "negative_claim_count": 3,
+    "positive_claim_count": 2,
+    "replay": {
+      "command": "n/a (concurrency contract of the wrapper itself)",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "d239514e491c8d75a8f691f9c0ae14d33c4087622ed2e6eefe70240e9db60759"
+      },
+      "name": "reports/casefiles/GNURUST.COBC-RS.PARALLEL.1/casefile.json"
+    }
+  ]
+}

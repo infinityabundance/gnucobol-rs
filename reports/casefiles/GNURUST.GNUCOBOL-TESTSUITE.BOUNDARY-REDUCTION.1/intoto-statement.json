@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.56",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "cf0b8ed1553295a04f3141459ebc98fe9e36c7559fa380f54096b0dbff06055d",
+      "receipt_sha256": "684915507af0a7733683ef736f73455d095f9d180b1c401e7302ade042e9ae21"
+    },
+    "negative_claim_count": 5,
+    "positive_claim_count": 4,
+    "replay": {
+      "command": "bash lab/oracle/gnucobol-testsuite/run-docker.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "3265bf9728cdaec8638ce95d0e2865d21059d6b2171f5c8348d160ee5b8eb819"
+      },
+      "name": "reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1/casefile.json"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "reports/valid-corpus/performance/benchmarks.json"
+  ],
+  "case_id": "GNURUST.PERFORMANCE.BUSINESS.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.56",
+  "damage_if_overclaimed": "benchmarking a workload whose correctness was not established would invalidate every timing",
+  "hash_chain": {
+    "inputs_sha256": "a12501121a86bc967ca3e1fc47b388d81f41f89af596bd9c2e6f758533fccd46"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "923ab96310f6a83c53280cdea3f1e06f283cbbe5d317f31015f7c4357c39bbc1",
+    "receipt_sha256": "71e4405584fd7c514b39c11b4376ccdd70be8a413ef8fe40ff703ebb27251d96"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "negative_capability_ids": [
+    "NEG.WORKLOADS-ARE-PROJECT-OWNED",
+    "NEG.INPUTS-COME-FROM-DETERMINISTIC-RUST-GENE"
+  ],
+  "negative_claims": [
+    "workloads are project-owned",
+    "inputs come from deterministic Rust generators and expected outputs are independently computed, never by the candidate",
+    "lie prevented: every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "oracle": {
+    "detail": "GnuCOBOL 3.2.0 (admitted lab/oracle build) + the committed corpus evidence under reports/valid-corpus/",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.PERFORMANCE.BUSINESS.1"
+  },
+  "positive_claims": [
+    "ten purpose-built workload families (payroll, invoice, seqfile, relative, tables, strings, modules, float, report, mixed) x four deterministic scales are correctness-gated byte-exact against the host oracle before any timing (benchmarks.json)"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh performance",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 1,
+    "total": 1,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

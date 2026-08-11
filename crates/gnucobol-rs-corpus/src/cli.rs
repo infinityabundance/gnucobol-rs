@@ -111,6 +111,12 @@ pub enum Command {
     Generalize {
         json: bool,
     },
+    /// Phase 12.1 — unified cross-family reports (summary, licences, dependencies, dedup,
+    /// dialect matrix, first-failure buckets, accuracy, performance, determinism, no-delegation)
+    /// aggregated from the per-family evidence under `reports/valid-corpus/`.
+    Unify {
+        json: bool,
+    },
 }
 
 #[derive(Debug, Clone, PartialEq, Default)]
@@ -256,6 +262,7 @@ pub fn parse(args: &[String]) -> Result<Command, String> {
         }),
         "report" => Ok(Command::Report { json }),
         "gate" => Ok(Command::Gate { json }),
+        "unify" => Ok(Command::Unify { json }),
         "check-updates" => Ok(Command::CheckUpdates { json }),
         "extract-ccvs85" => Ok(Command::ExtractCcvs85 { json }),
         "extract-manual" => {
@@ -378,9 +385,9 @@ fn usage() -> &'static str {
     "gnucobol-rs-corpus <command> [args] [--json]\n\
      commands: discover <dir> | fetch <spec.json> | admit [steps] | verify <id> | list |\n\
      classify <id> <CLASS> | run-oracle [steps] | run-candidate [steps] | compare <id> |\n\
-     report | gate | check-updates | extract-testsuite | extract-ccvs85 | extract-manual |\n\
-     extract-extras | extract-omp | extract-xcobol | probe-step | probe-file |\n\
-     held-out | mutation | overfit | generalize\n\
+     report | gate | unify | check-updates | extract-testsuite | extract-ccvs85 | extract-manual |
+     extract-extras | extract-omp | extract-xcobol | probe-step | probe-file |
+     held-out | mutation | overfit | generalize
      admit steps: --id ID --discover [--source-file F --corpus-class C --family F]\n\
        --custody-sha SHA --licence-spdx SPDX --redistribute yes|no --licence-decision T\n\
        --deps JSON --oracle-compile-exit N [--warnings]\n\
@@ -1643,6 +1650,11 @@ pub fn write_upstream_drift(reports: &[UpdateReport]) -> Result<(), String> {
     }
     md.push('\n');
     std::fs::write(out_dir.join("upstream-drift.md"), md).map_err(|e| e.to_string())
+}
+
+/// UTC timestamp (ISO 8601) without external crates.
+pub fn now_utc_string_pub() -> String {
+    now_utc_string()
 }
 
 /// UTC timestamp (ISO 8601) without external crates.

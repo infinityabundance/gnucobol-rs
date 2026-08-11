@@ -5,21 +5,21 @@
       "kind": "generated_doc",
       "path": "STATUS.md",
       "present": true,
-      "sha256": "bfe9454833fad3f914b1527ac0182696dc3c9a62e447c858ab29f210ba86ee3f"
+      "sha256": "7afe8786a38195d17e7f2784fe9c9cb39fc063119b5b30d77cc39ce7994ef6c7"
     },
     {
       "id": "changelog",
       "kind": "generated_doc",
       "path": "CHANGELOG.md",
       "present": true,
-      "sha256": "e0824c6dd83d925bfbf585ddf0c0d971b6a8ad188a641dfa86d54de5802bb7aa"
+      "sha256": "2f95cd7eb97a8e574520d952c0fc8ff51b3ad78555f1264784ee29bb10bd26a5"
     },
     {
       "id": "claim_ladder",
       "kind": "machine_spine",
       "path": "reports/claim-ladder.json",
       "present": true,
-      "sha256": "50e25430f8a79b5c5cea7cc49780ba974311d59838821d98a7f6c038c4892863"
+      "sha256": "a76179ffa8a3058047d09dfcdb237dcb4ebddda33ace20d54ca4d60cb875bede"
     },
     {
       "id": "negative_capabilities",
@@ -33,7 +33,7 @@
       "kind": "attestation_report",
       "path": "reports/signing/verification-report.json",
       "present": true,
-      "sha256": "e6ac3c5264f76a6c09fc8273cf3c52b477097fe93ad895b554ae6567854efca4"
+      "sha256": "7568845289b62a568fd95e5bc11a849202977f0aeb6252faf312bdc7d99118f5"
     },
     {
       "id": "size_error_atlas",
@@ -54,7 +54,7 @@
       "kind": "doctrine_doc",
       "path": "docs/future-risk-register.md",
       "present": true,
-      "sha256": "06091017eed14c93c124cac9f452d4d2e267c8f7408d74f077129489462e4720"
+      "sha256": "1e4dba251867d1db7fbd6c17270e476199803b6dbcb4fb8e8209292271c0bb5a"
     },
     {
       "casefiles": [
@@ -278,36 +278,36 @@
         {
           "casefile_sha256": "7776edd8f718a0effd2db1f73d08b0c0003be06cefc2cefdfbef3b7d8e09dbf9",
           "court": "GNURUST.COBC-RS.ARGS.1",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
           "casefile_sha256": "7e42c48035ece852efee46a95fe585379e41d0582a48d1ea872221f952746015",
           "court": "GNURUST.COBC-RS.LAUNCHER.1",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
           "casefile_sha256": "b69c5a5faf1b11f7d9d086bac504bcbf73480fd6fb4c8762d8cff4a1b89986b6",
           "court": "GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
           "casefile_sha256": "d239514e491c8d75a8f691f9c0ae14d33c4087622ed2e6eefe70240e9db60759",
           "court": "GNURUST.COBC-RS.PARALLEL.1",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
           "casefile_sha256": "32734ffa9a69205e7518d3d6a67393205a0b714caf5437e3a00e7e52b413633a",
           "court": "GNURUST.COBC-RS.POLICY-COMPLETE.1",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
@@ -327,6 +327,27 @@
         {
           "casefile_sha256": "31496eb590496323f0ebe16832ddac89bd94183ad3fbcb050dcecd847755908f",
           "court": "GNURUST.COMMON.NUMCHECK.1",
+          "dsse": true,
+          "intoto": true,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "6bf379f8017b22eca072474c095ad4103eeed3c280a5766a6df87d18256a1e8d",
+          "court": "GNURUST.CORPUS.CUSTODY.1",
+          "dsse": true,
+          "intoto": true,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "a401d138fbedae495b05025dd078965b9469ac379b7bbaf55713a320c20d5c0c",
+          "court": "GNURUST.CORPUS.DEDUP.1",
+          "dsse": true,
+          "intoto": true,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "2f6262428e1974c8ada66f91cafd62745549cea5e0818a3c890999fd8e9a28b0",
+          "court": "GNURUST.CORPUS.LICENCE.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
@@ -432,8 +453,8 @@
         {
           "casefile_sha256": "41698656fef7a4f16eaa69e36996ac8127c048297b8ddd984b10d049ced111f2",
           "court": "GNURUST.FILEIO.MULTI-RECORD-FD.1",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
@@ -502,50 +523,50 @@
         {
           "casefile_sha256": "7a56ce5fc6a82143eca679766da3d853bc5e9fe003526d37acf0d50aa2b97efd",
           "court": "GNURUST.GNUCOBOL-RUNTIME-MATH.1",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
           "casefile_sha256": "3b8fb7dd727f3b1d4250154ac3c13be9d8b2d46e12aaad1afab5c95145117b01",
           "court": "GNURUST.GNUCOBOL-RUNTIME-MATH.2",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
           "casefile_sha256": "baabe5154edf5f53b51879384ad533f6e251bbe284fc7459a375439c88f02aca",
           "court": "GNURUST.GNUCOBOL-TESTSUITE.1",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
           "casefile_sha256": "e955fb2ac30dc74ef86b040a2a76d06e37a610c78332c163754d6c6c28bf6f1c",
           "court": "GNURUST.GNUCOBOL-TESTSUITE.2",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
           "casefile_sha256": "d3c5faa603475de8e8cfe4b7d98d92e0cac2ee4103de719e44f0bf3e290774e3",
           "court": "GNURUST.GNUCOBOL-TESTSUITE.3",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
           "casefile_sha256": "35df366e1432d3d1825e39a220dcf1d1a89ecd104afc2d23d7877c73b476d66b",
           "court": "GNURUST.GNUCOBOL-TESTSUITE.4",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
           "casefile_sha256": "3265bf9728cdaec8638ce95d0e2865d21059d6b2171f5c8348d160ee5b8eb819",
           "court": "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
@@ -691,15 +712,15 @@
         {
           "casefile_sha256": "513bb29c3696844e0ab27622fcd3272b3cb10dd6ff8b7da1e941369508e2ca51",
           "court": "GNURUST.METHODOLOGY.LIBCOB.1",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
           "casefile_sha256": "6666b093283ec8ce397d491d488ef4697d4aa04c80947be54f94139ce57ce59e",
           "court": "GNURUST.METHODOLOGY.PARSER.1",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
@@ -719,36 +740,36 @@
         {
           "casefile_sha256": "61a18e8dbff9b6d5d328f5c82e1d7ef9ead973e952458ab582604259c9c25e51",
           "court": "GNURUST.MODULE.CALL.1",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
           "casefile_sha256": "87b02033ff5a48f3aa39e5d02fc6c9acbe408d4825858ae7d2f2bec33f9f9ae7",
           "court": "GNURUST.MODULE.CANCEL.1",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
           "casefile_sha256": "7b50b6e0c9eb98fbda5d8ec94561108bdfec2392fc997bab499c383e182a45f1",
           "court": "GNURUST.MODULE.PARALLEL.1",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
           "casefile_sha256": "e41e3dc371db51f8480eb772cf5aaf06c2cbb0f08f47b098bf49ddbed5dc2a54",
           "court": "GNURUST.MODULE.REGISTRY.1",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
           "casefile_sha256": "9536d0d807d05c309a93fc9f95208aaa74bdd7bc4bd0393453d43f1b0e6bf4c3",
           "court": "GNURUST.MODULE.SEARCH.1",
-          "dsse": false,
-          "intoto": false,
+          "dsse": true,
+          "intoto": true,
           "sarif": true
         },
         {
@@ -768,6 +789,34 @@
         {
           "casefile_sha256": "a93dfad82299a270a728a7c89ea86f6ecc37c366ff5d45a6a1f15a32534fa7db",
           "court": "GNURUST.PERFORM.SLICE.1",
+          "dsse": true,
+          "intoto": true,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "43b4267a60f8bced8ff88b62f908e41ab512fd7ecc39c0ff605854b4d43cb757",
+          "court": "GNURUST.PERFORMANCE.BUSINESS.1",
+          "dsse": true,
+          "intoto": true,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "d5ed8ff5a5ebbdb1d3a6dd665a174dd7243fbebd56d3c31675f895cdeab5e328",
+          "court": "GNURUST.PERFORMANCE.CORPUS.1",
+          "dsse": true,
+          "intoto": true,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "0f87ac719e562f66fc0edc2c836fe1166b7ec312e0d5924f7151a11cb8260e71",
+          "court": "GNURUST.PERFORMANCE.FRONTEND.1",
+          "dsse": true,
+          "intoto": true,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "07336ee2acb7e0d60ebe96619bcb67173f8923d218577c185790abba01d8f966",
+          "court": "GNURUST.PERFORMANCE.PREPARED.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
@@ -922,6 +971,62 @@
         {
           "casefile_sha256": "1228aebdd97422f2c83640d7c7b5fb998372ad8e9d90588d550c5d72efe780ca",
           "court": "GNURUST.TABLE.PERFORM.SLICE.1",
+          "dsse": true,
+          "intoto": true,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "0e834e79b81922c2aaab3f8021d5762bf6133779fd9ac876d084860776a2c8ac",
+          "court": "GNURUST.VALID-PROGRAMS.ACCURACY.1",
+          "dsse": true,
+          "intoto": true,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "8acba7ec1696e2e53dd045ed32be4b71b31f33f8943d0d115928a66d7cef62e6",
+          "court": "GNURUST.VALID-PROGRAMS.CCVS85.1",
+          "dsse": true,
+          "intoto": true,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "8841af3541e325ca56454b01c1eac83b6fceb2b9681fda487b7eeab0f86495c9",
+          "court": "GNURUST.VALID-PROGRAMS.EXTRAS.1",
+          "dsse": true,
+          "intoto": true,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "4e847add44767f4b3151eeec934a6ea5a78724c175923dad1b2fb456024b0c67",
+          "court": "GNURUST.VALID-PROGRAMS.GNUCOBOL-TESTSUITE.1",
+          "dsse": true,
+          "intoto": true,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "b635c8f4b0a4063cd7ad2ad0eff1cc0cd690bd20c3c6a87c45019d7bf4560753",
+          "court": "GNURUST.VALID-PROGRAMS.HELD-OUT.1",
+          "dsse": true,
+          "intoto": true,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "9167bfc78f477a002ff8903eea56320505dbba04c5b1ebd7e5ca28a028053ae7",
+          "court": "GNURUST.VALID-PROGRAMS.MANUAL.1",
+          "dsse": true,
+          "intoto": true,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "c351265c3476894cc041f47a78c822cab4804251975dae85bb93420d864f2eaa",
+          "court": "GNURUST.VALID-PROGRAMS.OMP.1",
+          "dsse": true,
+          "intoto": true,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "83502205fb17ec0323a64f27e4384163b34a01b70ce55697ad87d48f537d2b87",
+          "court": "GNURUST.VALID-PROGRAMS.XCOBOL.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
@@ -1179,7 +1284,7 @@
           "sarif": true
         }
       ],
-      "count": 160,
+      "count": 175,
       "id": "casefile_index",
       "kind": "casefile_index",
       "present": true

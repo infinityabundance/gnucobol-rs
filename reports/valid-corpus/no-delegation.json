@@ -1,0 +1,19 @@
+{
+  "by_family": {
+    "ccvs85": {
+      "candidate_no_oracle_delegation": true,
+      "candidate_phase_isolated": true,
+      "evidence": "reports/ccvs85/no-delegation.json",
+      "no_libcob_linkage": true,
+      "schema": "gnurust-ccvs85-no-delegation-v1"
+    },
+    "gnucobol-testsuite": {
+      "candidate_no_oracle_delegation": true,
+      "candidate_phase_isolated": true,
+      "evidence": "reports/gnucobol-testsuite/no-delegation.json",
+      "no_libcob_linkage": true,
+      "schema": "gnurust-gnucobol-testsuite-no-delegation-v2"
+    }
+  },
+  "note": "the candidate never invokes the oracle: candidate phases run with an isolated PATH and no libcob linkage (linkage scan + PATH isolation + execve trace)"
+}

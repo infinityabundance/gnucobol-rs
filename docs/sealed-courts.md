@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. No legacy source (bo
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Born generated (no legacy source)._
 
-The complete, machine-generated ledger of every sealed court — **160** total (124 `GNURUST.*` + 31 `KOBOLD.*` + framework courts). Each row links to its forensic case file (`casefile.json` + SARIF 2.1.0 + in-toto v1 + DSSE envelope). The machine-readable source is [`reports/claim-ladder.json`](../reports/claim-ladder.json); this page is generated from it and gated against drift.
+The complete, machine-generated ledger of every sealed court — **175** total (139 `GNURUST.*` + 31 `KOBOLD.*` + framework courts). Each row links to its forensic case file (`casefile.json` + SARIF 2.1.0 + in-toto v1 + DSSE envelope). The machine-readable source is [`reports/claim-ladder.json`](../reports/claim-ladder.json); this page is generated from it and gated against drift.
 
 ### Sealed courts (generated from `reports/claim-ladder.json`)
 
@@ -108,6 +108,21 @@ The complete, machine-generated ledger of every sealed court — **160** total (
 | `GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1` | native-code modes (-C/-S/-c) remain an honest typed boundary; adapter-compatible cases map truthfully | ✅ pass | [`reports/casefiles/GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1/`](reports/casefiles/GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1/) |
 | `GNURUST.COBC-RS.POLICY-COMPLETE.1` | wrapper option-policy registry completeness (every observed option has an explicit policy) | ✅ pass | [`reports/casefiles/GNURUST.COBC-RS.POLICY-COMPLETE.1/`](reports/casefiles/GNURUST.COBC-RS.POLICY-COMPLETE.1/) |
 | `GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1` | three-boundary reduction ledger (module 407 / parser-check 439 / wrapper-option 173) -- before/after per test | ✅ pass | [`reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1/`](reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1/) |
+| `GNURUST.CORPUS.CUSTODY.1` | valid-COBOL corpus custody — frozen pre-change state + complete evidence tree | ✅ pass | [`reports/casefiles/GNURUST.CORPUS.CUSTODY.1/`](reports/casefiles/GNURUST.CORPUS.CUSTODY.1/) |
+| `GNURUST.CORPUS.LICENCE.1` | valid-COBOL corpus licence decisions | ✅ pass | [`reports/casefiles/GNURUST.CORPUS.LICENCE.1/`](reports/casefiles/GNURUST.CORPUS.LICENCE.1/) |
+| `GNURUST.CORPUS.DEDUP.1` | valid-COBOL corpus deduplication | ✅ pass | [`reports/casefiles/GNURUST.CORPUS.DEDUP.1/`](reports/casefiles/GNURUST.CORPUS.DEDUP.1/) |
+| `GNURUST.VALID-PROGRAMS.GNUCOBOL-TESTSUITE.1` | valid-program corpus — GnuCOBOL Autotest suite step-level classification | ✅ pass | [`reports/casefiles/GNURUST.VALID-PROGRAMS.GNUCOBOL-TESTSUITE.1/`](reports/casefiles/GNURUST.VALID-PROGRAMS.GNUCOBOL-TESTSUITE.1/) |
+| `GNURUST.VALID-PROGRAMS.CCVS85.1` | valid-program corpus — CCVS85 classification + packages | ✅ pass | [`reports/casefiles/GNURUST.VALID-PROGRAMS.CCVS85.1/`](reports/casefiles/GNURUST.VALID-PROGRAMS.CCVS85.1/) |
+| `GNURUST.VALID-PROGRAMS.MANUAL.1` | valid-program corpus — GnuCOBOL manual examples classification | ✅ pass | [`reports/casefiles/GNURUST.VALID-PROGRAMS.MANUAL.1/`](reports/casefiles/GNURUST.VALID-PROGRAMS.MANUAL.1/) |
+| `GNURUST.VALID-PROGRAMS.EXTRAS.1` | valid-program corpus — GnuCOBOL-shipped programs + official contributions | ✅ pass | [`reports/casefiles/GNURUST.VALID-PROGRAMS.EXTRAS.1/`](reports/casefiles/GNURUST.VALID-PROGRAMS.EXTRAS.1/) |
+| `GNURUST.VALID-PROGRAMS.OMP.1` | valid-program corpus — Open Mainframe Project course inventory | ✅ pass | [`reports/casefiles/GNURUST.VALID-PROGRAMS.OMP.1/`](reports/casefiles/GNURUST.VALID-PROGRAMS.OMP.1/) |
+| `GNURUST.VALID-PROGRAMS.XCOBOL.1` | valid-program corpus — X-COBOL immutable custody + classification + partitions | ✅ pass | [`reports/casefiles/GNURUST.VALID-PROGRAMS.XCOBOL.1/`](reports/casefiles/GNURUST.VALID-PROGRAMS.XCOBOL.1/) |
+| `GNURUST.VALID-PROGRAMS.HELD-OUT.1` | valid-program corpus — held-out evaluation (pure measurement) | ✅ pass | [`reports/casefiles/GNURUST.VALID-PROGRAMS.HELD-OUT.1/`](reports/casefiles/GNURUST.VALID-PROGRAMS.HELD-OUT.1/) |
+| `GNURUST.VALID-PROGRAMS.ACCURACY.1` | valid-program corpus — raw-byte accuracy dimensions | ✅ pass | [`reports/casefiles/GNURUST.VALID-PROGRAMS.ACCURACY.1/`](reports/casefiles/GNURUST.VALID-PROGRAMS.ACCURACY.1/) |
+| `GNURUST.PERFORMANCE.FRONTEND.1` | performance corpus — front-end-only measurement (View B) | ✅ pass | [`reports/casefiles/GNURUST.PERFORMANCE.FRONTEND.1/`](reports/casefiles/GNURUST.PERFORMANCE.FRONTEND.1/) |
+| `GNURUST.PERFORMANCE.PREPARED.1` | performance corpus — prepared-program execution (View C) | ✅ pass | [`reports/casefiles/GNURUST.PERFORMANCE.PREPARED.1/`](reports/casefiles/GNURUST.PERFORMANCE.PREPARED.1/) |
+| `GNURUST.PERFORMANCE.BUSINESS.1` | performance corpus — scalable business workloads (Phase 8) | ✅ pass | [`reports/casefiles/GNURUST.PERFORMANCE.BUSINESS.1/`](reports/casefiles/GNURUST.PERFORMANCE.BUSINESS.1/) |
+| `GNURUST.PERFORMANCE.CORPUS.1` | performance corpus — corpus throughput (View E) | ✅ pass | [`reports/casefiles/GNURUST.PERFORMANCE.CORPUS.1/`](reports/casefiles/GNURUST.PERFORMANCE.CORPUS.1/) |
 | `GNURUST.2` | decimal MOVE | ✅ pass | [`reports/casefiles/GNURUST.2/`](reports/casefiles/GNURUST.2/) |
 | `GNURUST.ACCEPT.DISPLAY.2` | DISPLAY of signed and V-scaled numeric fields | ✅ pass | [`reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/`](reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/) |
 | `GNURUST.FILEIO.LINESEQ.2` | line-sequential READ config matrix | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.LINESEQ.2/`](reports/casefiles/GNURUST.FILEIO.LINESEQ.2/) |

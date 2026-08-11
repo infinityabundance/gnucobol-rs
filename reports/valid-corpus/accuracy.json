@@ -1,0 +1,26 @@
+{
+  "by_family": {
+    "ccvs85": {
+      "dimensions": [
+        "compile status",
+        "execution status",
+        "report bytes (sha256)",
+        "raw stdout",
+        "raw stderr",
+        "generated files",
+        "verdict counts",
+        "return status"
+      ],
+      "exit_status_mismatches": 0,
+      "generated_file_mismatches": 0,
+      "raw_stdout_matches": 0,
+      "raw_stdout_mismatches": 512,
+      "units": 512
+    },
+    "gnucobol-manual": {
+      "examples": 9,
+      "replay_verified": 9
+    }
+  },
+  "note": "raw-byte accuracy only; output normalization is never reported as byte parity (spec integrity rules)"
+}

@@ -1,0 +1,56 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "licences.json + xcobol/licence-quarantine.json"
+  ],
+  "case_id": "GNURUST.CORPUS.LICENCE.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.56",
+  "damage_if_overclaimed": "claiming redistribution rights for quarantined source would misrepresent third-party licensing",
+  "hash_chain": {
+    "inputs_sha256": "abfd74cc6f6fdd2fd52e75ac31227c23e67539bc300047532a530eb1ee4668fb"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "bd25f13bdadbd4fb44407f89e69a34a34b5bbd79f49dfdb58288d4f3deb73d8c",
+    "receipt_sha256": "7ea09228bbc6bf97f836f4c0f2fe646fa9074ac67d4b21aaa858938b829f272b"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-REDISTRIBUTION-CLAIM-FOR-QUARANTINED",
+    "NEG.LICENCE-REVIEW-IS-RECORDED-NOT-LEGAL-ADV"
+  ],
+  "negative_claims": [
+    "no redistribution claim for quarantined source",
+    "licence review is recorded, not legal advice",
+    "lie prevented: every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "oracle": {
+    "detail": "GnuCOBOL 3.2.0 (admitted lab/oracle build) + the committed corpus evidence under reports/valid-corpus/",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.CORPUS.LICENCE.1"
+  },
+  "positive_claims": [
+    "licences.json records a licence decision for every admitted family",
+    "unknown-licence X-COBOL repositories are quarantined (licence-quarantine.json, REFERENCE_ONLY) and never published"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh licence",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 1,
+    "total": 1,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

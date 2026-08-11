@@ -1,0 +1,16 @@
+{
+  "by_family": {
+    "ccvs85": {
+      "copy_library_uses": 46,
+      "data_inputs": 4,
+      "missing_copybooks": 0,
+      "units": 512
+    },
+    "xcobol": {
+      "copy_dependencies": 1416,
+      "files": 1095,
+      "missing_copybooks": 1233
+    }
+  },
+  "note": "copybooks, modules, data inputs and missing dependencies per family (spec 1.4 dependencies / 5.2 dependency discovery)"
+}

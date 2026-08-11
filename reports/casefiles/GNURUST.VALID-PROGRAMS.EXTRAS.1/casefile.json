@@ -1,0 +1,55 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "reports/valid-corpus/extras/*"
+  ],
+  "case_id": "GNURUST.VALID-PROGRAMS.EXTRAS.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.56",
+  "damage_if_overclaimed": "claiming shipped programs as candidate evidence before licensing/dependency resolution would misrepresent custody",
+  "hash_chain": {
+    "inputs_sha256": "c91821ad122ebc965e9d74b7857d7361c708563cd4b34efc606df04ca5b48125"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "17704e2eeccd0eeaf1dacb173293ef52646511f7d8a0b84deb038b5a89d1aa1f",
+    "receipt_sha256": "c4dcf5b4eddd8c84008bc62197c37fa4c42a7fabe0b90b9ec0b685e31e891fc3"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-PRISTINE-PARITY-CLAIM-FROM-ADAPTED-PR",
+    "NEG.ADAPTATIONS-ARE-RECORDED-WITH-ORIGINAL-T"
+  ],
+  "negative_claims": [
+    "no pristine-parity claim from adapted programs",
+    "adaptations are recorded with original/transformed hashes when any are applied",
+    "lie prevented: every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "oracle": {
+    "detail": "GnuCOBOL 3.2.0 (admitted lab/oracle build) + the committed corpus evidence under reports/valid-corpus/",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.VALID-PROGRAMS.EXTRAS.1"
+  },
+  "positive_claims": [
+    "OpenCBS COBOL Defects Benchmark Suite and other shipped/contributed programs are inventoried with licence decisions (extras programs.json + custody.json + metrics.json)"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh valid-extras",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 1,
+    "total": 1,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

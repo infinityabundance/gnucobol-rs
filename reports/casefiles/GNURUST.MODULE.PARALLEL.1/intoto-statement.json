@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.MODULE.PARALLEL.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.56",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "a36b5de6acd03b45a219478aab885325151ab99bad4d885d93ff549bcee87b8a",
+      "receipt_sha256": "684915507af0a7733683ef736f73455d095f9d180b1c401e7302ade042e9ae21"
+    },
+    "negative_claim_count": 2,
+    "positive_claim_count": 1,
+    "replay": {
+      "command": "bash lab/oracle/gnucobol-testsuite/run-docker.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "7b50b6e0c9eb98fbda5d8ec94561108bdfec2392fc997bab499c383e182a45f1"
+      },
+      "name": "reports/casefiles/GNURUST.MODULE.PARALLEL.1/casefile.json"
+    }
+  ]
+}

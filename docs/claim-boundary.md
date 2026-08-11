@@ -22,6 +22,17 @@ excludes is a lie of omission.
 - **Receipt-bearing**: each sealed slice ships an admission receipt (pinned hashes, oracle
   identity, build command, env) and a parity receipt (`PASS=n FAIL=0` + classified rows).
 
+## The valid-COBOL corpus laboratory (Phase 12)
+
+The corpus courts admit, classify and measure valid COBOL programs under explicit
+validity profiles, and they never claim more than their evidence: GNURUST.CORPUS.CUSTODY.1, GNURUST.CORPUS.LICENCE.1, GNURUST.CORPUS.DEDUP.1, GNURUST.VALID-PROGRAMS.GNUCOBOL-TESTSUITE.1, GNURUST.VALID-PROGRAMS.CCVS85.1, GNURUST.VALID-PROGRAMS.MANUAL.1, GNURUST.VALID-PROGRAMS.EXTRAS.1, GNURUST.VALID-PROGRAMS.OMP.1, GNURUST.VALID-PROGRAMS.XCOBOL.1, GNURUST.VALID-PROGRAMS.HELD-OUT.1, GNURUST.VALID-PROGRAMS.ACCURACY.1, GNURUST.PERFORMANCE.FRONTEND.1, GNURUST.PERFORMANCE.PREPARED.1, GNURUST.PERFORMANCE.BUSINESS.1, GNURUST.PERFORMANCE.CORPUS.1 -- custody freeze, licence decisions, deduplication, step-level testsuite
+classification, CCVS85 packages, manual-example classification, shipped-programs
+inventory, the Open Mainframe course lane, X-COBOL immutable custody, held-out
+evaluation (never a tuning input), raw-byte accuracy, and the five separate
+performance views (front-end / prepared / business / corpus). No number in these
+reports is re-measured or invented by the aggregation; every figure derives from the
+committed per-family evidence.
+
 ## What `gnucobol-rs` is NOT (yet, or by design)
 
 - **Not a GnuCOBOL replacement.** It reproduces isolated semantics, not the product.

@@ -1,0 +1,56 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "reports/valid-corpus/performance/views.json (View C) + raw samples"
+  ],
+  "case_id": "GNURUST.PERFORMANCE.PREPARED.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.56",
+  "damage_if_overclaimed": "reporting timing for a wrong-output lane would benchmark an incorrect program",
+  "hash_chain": {
+    "inputs_sha256": "ae2a8a86a1c33e52561c18bd046690587d98d6ea64cbbd43c5a2a246f799c8d3"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "370bf99445a72a9253883ab0e57af39655dd1c92390e7c2f84f622ea55ceb5a2",
+    "receipt_sha256": "71e4405584fd7c514b39c11b4376ccdd70be8a413ef8fe40ff703ebb27251d96"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-RUNTIME-PERFORMANCE-CLAIM-BEFORE-CORR",
+    "NEG.NO-CANDIDATE-LANE-IS-BENCHMARKED-BEFORE"
+  ],
+  "negative_claims": [
+    "no runtime-performance claim before correctness is established",
+    "no candidate lane is benchmarked before its output is byte-exact",
+    "lie prevented: every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "oracle": {
+    "detail": "GnuCOBOL 3.2.0 (admitted lab/oracle build) + the committed corpus evidence under reports/valid-corpus/",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.PERFORMANCE.PREPARED.1"
+  },
+  "positive_claims": [
+    "already-compiled native binaries are compared with already-prepared programs run repeatedly WITHOUT reparsing (views.json View C + raw/view_c.json)",
+    "prepared execution never touches the source again"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh performance",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 1,
+    "total": 1,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

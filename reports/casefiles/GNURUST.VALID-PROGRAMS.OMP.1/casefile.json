@@ -1,0 +1,55 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "reports/valid-corpus/omp/programs.json + inventory.json"
+  ],
+  "case_id": "GNURUST.VALID-PROGRAMS.OMP.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.56",
+  "damage_if_overclaimed": "describing platform-service failures as parser failures would misattribute the candidate's boundary",
+  "hash_chain": {
+    "inputs_sha256": "0cf38cbc6c01004f5a85a744954234248fb6d46012cde8cd7e0c9d97bd616bf7"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "11261207f5aad7e346e0b461d7f2161bb927836855b5ebc6694862d4836cf9ec",
+    "receipt_sha256": "82865d2e223e830c705fa6214d63384c96f69f8e3d7ec2e5f36183dc58a114b6"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "negative_capability_ids": [
+    "NEG.PLATFORM-SERVICE-DEPENDENCIES-Z-OS-DATAS",
+    "NEG.STARTER-EXERCISES-WITH-INTENTIONALLY-MIS"
+  ],
+  "negative_claims": [
+    "platform-service dependencies (z/OS datasets, JCL, DB2, CICS, VSAM, LE) are typed boundaries, never parser failures",
+    "starter exercises with intentionally missing code are not valid complete programs",
+    "lie prevented: every number in the report is aggregated from the committed per-family evidence; this court re-verifies the evidence tree, it never re-measures or invents values"
+  ],
+  "oracle": {
+    "detail": "GnuCOBOL 3.2.0 (admitted lab/oracle build) + the committed corpus evidence under reports/valid-corpus/",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.VALID-PROGRAMS.OMP.1"
+  },
+  "positive_claims": [
+    "the OMP COBOL Programming Course repository is fully inventoried (30 COBOL programs, 43 JCL, 226 images, 48 docs, 3 data, 5 support) with complete solutions separated from exercises and platform dependencies typed"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh valid-omp",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 1,
+    "total": 1,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

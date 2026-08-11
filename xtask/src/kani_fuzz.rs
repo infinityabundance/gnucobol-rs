@@ -38,11 +38,26 @@ fn na_reason(cid: &str) -> Option<&'static str> {
         "GNURUST.COBC-RS.ARGS.1" => "covered by the cobc-rs argument-policy integration tests (crates/cobc-rs/tests/cli.rs) + the generated option-compatibility gate; kani/fuzz markers live in the gnucobol-rs byte kernel, not the driver",
         "GNURUST.COBC-RS.LAUNCHER.1" => "covered by the cobc-rs launcher/manifest integration tests (tamper guard, self-hash, exit status); no kani/fuzz marker in the driver crate",
         "GNURUST.COBC-RS.PARALLEL.1" => "covered by the cobc-rs 100-way parallel integration test; no kani/fuzz marker in the driver crate",
+        "GNURUST.CORPUS.CUSTODY.1" => "meta: corpus custody gate over the committed evidence tree (presence + freeze); no single Rust byte kernel -- its own seal-grade gate is the corpus_court_sweep replay",
+        "GNURUST.CORPUS.LICENCE.1" => "meta: corpus licence-decisions gate over the committed licences.json + quarantine report; no byte kernel -- the sweep is its gate",
+        "GNURUST.CORPUS.DEDUP.1" => "meta: corpus deduplication gate over the committed dedup evidence; no single byte kernel -- the sweep + dedup reports are its gate",
+        "GNURUST.VALID-PROGRAMS.GNUCOBOL-TESTSUITE.1" => "meta: valid-program corpus classification of the Autotest suite; no byte kernel -- the committed step-level reports + sweep are its gate",
+        "GNURUST.VALID-PROGRAMS.CCVS85.1" => "meta: valid-program corpus CCVS85 classification + packages; no byte kernel -- the 512-unit reconciliation + sweep are its gate",
+        "GNURUST.VALID-PROGRAMS.MANUAL.1" => "meta: manual-examples classification court; no byte kernel -- the committed lane reports + sweep are its gate",
+        "GNURUST.VALID-PROGRAMS.EXTRAS.1" => "meta: shipped-programs + contributions inventory court; no byte kernel -- the committed custody/classification reports + sweep are its gate",
+        "GNURUST.VALID-PROGRAMS.OMP.1" => "meta: Open Mainframe course inventory + platform-typing court; no byte kernel -- the committed inventory/programs reports + sweep are its gate",
+        "GNURUST.VALID-PROGRAMS.XCOBOL.1" => "meta: X-COBOL immutable custody + classification + partition court; no byte kernel -- the committed custody/robustness/partitions reports + sweep are its gate",
+        "GNURUST.VALID-PROGRAMS.HELD-OUT.1" => "meta: held-out evaluation measurement court; no byte kernel -- the bounded candidate probe (spec 10.3) + committed report + sweep are its gate",
+        "GNURUST.VALID-PROGRAMS.ACCURACY.1" => "meta: raw-byte accuracy dimensions aggregation; no byte kernel -- the per-family accuracy evidence + sweep are its gate",
+        "GNURUST.PERFORMANCE.FRONTEND.1" => "meta: front-end-only performance views (View B); no byte kernel -- the correctness-gated phase-metrics + raw samples + sweep are its gate",
+        "GNURUST.PERFORMANCE.PREPARED.1" => "meta: prepared-program execution views (View C); no byte kernel -- the no-reparse prepared lane + raw samples + sweep are its gate",
+        "GNURUST.PERFORMANCE.BUSINESS.1" => "meta: purpose-built business workload correctness gates; no byte kernel -- the byte-exact-before-timing benchmarks.json + sweep are its gate",
+        "GNURUST.PERFORMANCE.CORPUS.1" => "meta: corpus throughput views (View E); no byte kernel -- the raw-sample-preserving throughput report + sweep are its gate",
         _ => return None,
     })
 }
 
-const IS_ATLAS_EXTRA: [&str; 31] = [
+const IS_ATLAS_EXTRA: [&str; 46] = [
     "GNURUST.COVERAGE.1",
     "GNURUST.FILE.STATUS.1",
     "GNURUST.PUBLIC.CORPUS.1",
@@ -74,6 +89,21 @@ const IS_ATLAS_EXTRA: [&str; 31] = [
     "GNURUST.COBC-RS.ARGS.1",
     "GNURUST.COBC-RS.LAUNCHER.1",
     "GNURUST.COBC-RS.PARALLEL.1",
+    "GNURUST.CORPUS.CUSTODY.1",
+    "GNURUST.CORPUS.LICENCE.1",
+    "GNURUST.CORPUS.DEDUP.1",
+    "GNURUST.VALID-PROGRAMS.GNUCOBOL-TESTSUITE.1",
+    "GNURUST.VALID-PROGRAMS.CCVS85.1",
+    "GNURUST.VALID-PROGRAMS.MANUAL.1",
+    "GNURUST.VALID-PROGRAMS.EXTRAS.1",
+    "GNURUST.VALID-PROGRAMS.OMP.1",
+    "GNURUST.VALID-PROGRAMS.XCOBOL.1",
+    "GNURUST.VALID-PROGRAMS.HELD-OUT.1",
+    "GNURUST.VALID-PROGRAMS.ACCURACY.1",
+    "GNURUST.PERFORMANCE.FRONTEND.1",
+    "GNURUST.PERFORMANCE.PREPARED.1",
+    "GNURUST.PERFORMANCE.BUSINESS.1",
+    "GNURUST.PERFORMANCE.CORPUS.1",
 ];
 
 fn read_json(p: &Path) -> Value {
