@@ -342,7 +342,6 @@ pub struct ManualExample {
 /// Extract + verify the manual examples for one lane. `packages_root` receives the materialized
 /// sources; the reports are written under `out_dir`.
 pub fn extract_manual(
-    repo_root: &Path,
     texi_path: &Path,
     lane: &str,
     revision: &str,
@@ -456,31 +455,30 @@ pub fn extract_manual(
         };
         let stdout_sha = crate::store::sha256_hex(&run_out.stdout);
         let stderr_sha = crate::store::sha256_hex(&run_out.stderr);
-        let mut verdict = String::new();
-        if let Some(e) = &compile_out.exec_error {
-            verdict = format!("compile exec error: {e}");
+        let verdict = if let Some(e) = &compile_out.exec_error {
+            format!("compile exec error: {e}")
         } else if compile_out.exit != Some(0) {
-            verdict = format!(
+            format!(
                 "compile exit {} (expected 0)",
                 compile_out.exit.unwrap_or(-1)
-            );
+            )
         } else if run_out.exit != Some(0) {
-            verdict = format!("run exit {}", run_out.exit.unwrap_or(-1));
+            format!("run exit {}", run_out.exit.unwrap_or(-1))
         } else if !expected_output.is_empty() && stdout_sha != expected_sha {
             // intent check: the manual's stated output is prose -- a terminal-newline-only
             // difference is a text match, recorded distinctly from byte parity
             let actual_text = String::from_utf8_lossy(&run_out.stdout);
             let expected_text = expected_output.trim_end_matches('\n');
             if actual_text.trim_end_matches('\n') == expected_text {
-                verdict = "stdout matches the stated output (modulo terminal newline)".to_string();
+                "stdout matches the stated output (modulo terminal newline)".to_string()
             } else {
-                verdict = "stdout differs from the manual's stated output".to_string();
+                "stdout differs from the manual's stated output".to_string()
             }
         } else if !expected_output.is_empty() {
-            verdict = "match".to_string();
+            "match".to_string()
         } else {
-            verdict = "executed (no stated output to compare)".to_string();
-        }
+            "executed (no stated output to compare)".to_string()
+        };
         *counts.entry(format!("verified:{verdict}")).or_default() += 1;
 
         // candidate probe (bounded)

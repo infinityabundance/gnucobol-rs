@@ -26,7 +26,7 @@ use crate::extract::oracle::{compare_contract, condition_holds, run_step, Oracle
 use crate::extract::package::{build_step, Expected, StepClass, StepPackage};
 use crate::store::sha256_hex;
 use package::CommandShape::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 

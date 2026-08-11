@@ -1331,7 +1331,6 @@ pub fn cmd_extract_manual(
             .join("gnucobol-manual")
             .join(&lane);
         let counts = crate::extract::manual::extract_manual(
-            &root,
             &texi,
             &lane,
             revision,

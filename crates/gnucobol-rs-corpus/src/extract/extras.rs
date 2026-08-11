@@ -293,7 +293,6 @@ fn is_verb(w: &str) -> bool {
             | "GO"
             | "END-EVALUATE"
             | "WHEN"
-            | "ELSE"
             | "END-READ"
             | "END-WRITE"
     )
@@ -429,7 +428,7 @@ pub fn extract_extras(
                 + "the custody report",
             program_count: 0,
         });
-        let mut progs_dir = opencbs_root.join("COBOL_Programs");
+        let progs_dir = opencbs_root.join("COBOL_Programs");
         let mut entries: Vec<PathBuf> = std::fs::read_dir(&progs_dir)
             .map_err(|e| e.to_string())?
             .flatten()
@@ -443,7 +442,6 @@ pub fn extract_extras(
             .collect();
         entries.sort();
         let copybook_dir = opencbs_root.join("COBOL_Copybooks");
-        let test_dir = opencbs_root.join("Test_Files");
         for p in &entries {
             let text = std::fs::read_to_string(p).unwrap_or_default();
             let sha = crate::store::sha256_hex(text.as_bytes());

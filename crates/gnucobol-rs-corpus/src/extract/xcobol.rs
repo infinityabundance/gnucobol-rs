@@ -9,10 +9,9 @@
 //! encodings, dialect/size distributions). No input may hang the candidate (bounded probes).
 
 use crate::dedup::{exact_hash, normalized_hash, structural_hash};
-use crate::extract::candidate::probe_dir;
 use crate::extract::oracle::{run_step, OracleEnv};
 use serde::Serialize;
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 
 pub const DOI: &str = "10.5281/zenodo.7968845";

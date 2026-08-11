@@ -1,11 +1,11 @@
 # Release verdict — gnucobol-rs-corpus 0.1.0
 
-_Generated 2026-08-11T01:54:21Z from the machine files in this packet. A release is an evidence packet, not merely a version number._
+_Generated 2026-08-11T02:08:35Z from the machine files in this packet. A release is an evidence packet, not merely a version number._
 
 | evidence | value |
 |----------|-------|
 | crate / version | `gnucobol-rs-corpus` 0.1.0 (gnurust) |
-| git commit | `def8077460002c696e6dd9aea4065a007a275cfb` |
+| git commit | `e74adb43f351543072e66408ab4fe4cb41684532` |
 | dependencies | 47 |
 | sealed courts in this crate | 124 |
 | TRUST.2 receipts | 114 |
