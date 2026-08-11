@@ -30,6 +30,11 @@ use crate::value::Decimal;
 use std::cell::{Cell, RefCell};
 use std::collections::{HashMap, HashSet};
 
+/// Prepared-program persistence (spec 9.6): a versioned, deterministic, corruption-safe on-disk
+/// representation. A saved prepared program loads WITHOUT reparsing (cache-off equivalence is
+/// enforced by tests).
+pub mod prepared;
+
 /// The COBOL statement verbs the front-end actually EXECUTES (not merely recognizes as a boundary).
 /// The generated parity tracker (`xtask cobol-parity`) reads this to report front-end coverage, so it
 /// stays honest as the subset grows. Keep this in sync with the dispatch in `exec_stmt` + `run_block`.
@@ -698,6 +703,48 @@ impl PreparedProgram {
         crate::profiling::prof_report(&env_get, &source_file_name());
         Ok((out, printer, rc))
     }
+
+    /// Persist the prepared program atomically (spec 9.6: atomic persistence + concurrency
+    /// safety). Writes to a temp file in the destination directory, fsyncs, then renames over the
+    /// target -- a concurrent reader sees either the old or the new file, never a torn write.
+    /// The payload carries a trailing SHA-256 (corruption detection) and the identity carries the
+    /// source/expanded hashes + compat stamp (stale detection).
+    pub fn save(&self, path: &std::path::Path) -> Result<(), String> {
+        let bytes = prepared::encode(self);
+        let dir = path
+            .parent()
+            .ok_or_else(|| "save path has no parent".to_string())?;
+        std::fs::create_dir_all(dir).map_err(|e| e.to_string())?;
+        let tmp = dir.join(format!(
+            ".{}.tmp-{}",
+            path.file_name()
+                .and_then(|n| n.to_str())
+                .unwrap_or("prepared"),
+            std::process::id()
+        ));
+        {
+            use std::io::Write;
+            let mut f = std::fs::File::create(&tmp).map_err(|e| e.to_string())?;
+            f.write_all(&bytes).map_err(|e| e.to_string())?;
+            f.sync_all().map_err(|e| e.to_string())?;
+        }
+        std::fs::rename(&tmp, path).map_err(|e| {
+            let _ = std::fs::remove_file(&tmp);
+            e.to_string()
+        })?;
+        Ok(())
+    }
+
+    /// Load a previously saved prepared program (spec 9.6). The file's trailing checksum is
+    /// verified (corruption detection) and `expected_source_hash`, when given, must match the
+    /// file's source hash (stale invalidation). Loading never reparses source.
+    pub fn load(
+        path: &std::path::Path,
+        expected_source_hash: Option<&str>,
+    ) -> Result<PreparedProgram, String> {
+        let bytes = std::fs::read(path).map_err(|e| e.to_string())?;
+        prepared::decode(&bytes, expected_source_hash)
+    }
 }
 
 /// Prepare a program: run the full front-end once and embed the parse artifacts (spec 9.6).
@@ -825,6 +872,174 @@ pub fn prepare_program(
         record_files,
         reports,
     })
+}
+
+/// Per-phase front-end timing (spec 9.1 parsing metrics + 9.2 checking metrics): each phase's
+/// wall time in milliseconds. `prepare_ms` is the total. Used by the benchmark views (View B
+/// front-end-only) and the corpus phase-attribution reports.
+#[derive(Debug, Clone)]
+pub struct PhaseTimings {
+    pub preprocess_ms: f64,
+    pub lex_ms: f64,
+    pub parse_ms: f64,
+    pub resolution_ms: f64,
+    pub layout_ms: f64,
+    pub check_ms: f64,
+    pub prepare_ms: f64,
+}
+
+/// Prepare a program and return the per-phase timings alongside it (spec 9.1/9.2). Same
+/// acceptance contract as [`prepare_program`]; only the timing probes are added.
+pub fn prepare_program_timed(
+    source: &str,
+    dialect: crate::dialect::Dialect,
+) -> Result<(PreparedProgram, PhaseTimings), RunError> {
+    let t_total = std::time::Instant::now();
+    let t = std::time::Instant::now();
+    let pre = preprocess(source);
+    let preprocess_ms = t.elapsed().as_secs_f64() * 1000.0;
+    let t = std::time::Instant::now();
+    let expanded_hash = crate::sha256::sha256_hex(pre.as_bytes());
+    let up = uppercase_outside_quotes(&pre);
+    let mut toks = lex(&up);
+    let lex_ms = t.elapsed().as_secs_f64() * 1000.0;
+    let t = std::time::Instant::now();
+    let first_proc = find_seq(&toks, &["PROCEDURE", "DIVISION"])
+        .ok_or_else(|| RunError::Unsupported("no PROCEDURE DIVISION".into()))?;
+    let currency = parse_currency_sign(&toks, first_proc);
+    let decimal_comma = parse_decimal_comma(&toks, first_proc);
+    if decimal_comma {
+        for t in toks.iter_mut() {
+            if let Tok::Word(w) = t {
+                if is_comma_decimal_literal(w) {
+                    *w = w.replace(',', ".");
+                }
+            }
+        }
+    }
+    let (main_name, program_map) = parse_programs(&toks)?;
+    let parse_ms = t.elapsed().as_secs_f64() * 1000.0;
+    let t = std::time::Instant::now();
+    let switches = parse_switches(&toks, first_proc);
+    let collation = parse_collation(&toks, first_proc);
+    let resolution_ms = t.elapsed().as_secs_f64() * 1000.0;
+    let file_defs: HashMap<String, FileDef> = program_map
+        .get(&main_name)
+        .map(|p| {
+            p.files
+                .iter()
+                .map(|f| (f.name.clone(), f.clone()))
+                .collect()
+        })
+        .unwrap_or_default();
+    let mut record_files: HashMap<String, String> = HashMap::new();
+    if let Some(p) = program_map.get(&main_name) {
+        for f in &p.files {
+            for r in &f.records {
+                record_files
+                    .entry(r.clone())
+                    .or_insert_with(|| f.name.clone());
+            }
+        }
+    }
+    let reports: HashMap<String, ReportDef> = program_map
+        .get(&main_name)
+        .map(|p| p.reports.clone())
+        .unwrap_or_default();
+    // layout + check (same typed errors as check_program)
+    let (layout_ms, check_ms) = {
+        let ctx = Ctx {
+            programs: &program_map,
+            dialect,
+            currency,
+            decimal_comma,
+            collation,
+            switches: switches.clone(),
+            print_redirect: false,
+            printer: RefCell::new(Vec::new()),
+            stop_run: Cell::new(false),
+            exit_perform: Cell::new(false),
+            exit_cycle: Cell::new(false),
+            next_sentence: Cell::new(false),
+            call_state: RefCell::new(HashMap::new()),
+            goto: RefCell::new(None),
+            file_defs: file_defs.clone(),
+            record_files: record_files.clone(),
+            files: RefCell::new(HashMap::new()),
+            reports: reports.clone(),
+        };
+        let main = ctx.programs.get(&main_name).expect("main registered");
+        let t = std::time::Instant::now();
+        let fields = build_program_fields(main, &ctx)?;
+        let layout_ms = t.elapsed().as_secs_f64() * 1000.0;
+        let t = std::time::Instant::now();
+        CHECK_MODE.with(|c| c.set(true));
+        let body_check: Result<(), RunError> = (|| {
+            let names: Vec<String> = ctx.programs.keys().cloned().collect();
+            for name in names {
+                let prog = &ctx.programs[&name];
+                let mut fields = if name == main_name {
+                    fields.clone()
+                } else {
+                    build_program_fields(prog, &ctx)?
+                };
+                let mut p = 0usize;
+                while p < prog.proc_toks.len() {
+                    let before = p;
+                    if run_block(
+                        &prog.proc_toks,
+                        &mut p,
+                        &mut fields,
+                        &mut Vec::new(),
+                        false,
+                        &ctx,
+                    )? {
+                        break;
+                    }
+                    if p == before {
+                        p += 1;
+                    }
+                    if matches!(prog.proc_toks.get(p), Some(Tok::Dot)) {
+                        p += 1;
+                    }
+                }
+            }
+            Ok(())
+        })();
+        CHECK_MODE.with(|c| c.set(false));
+        body_check?;
+        let check_ms = t.elapsed().as_secs_f64() * 1000.0;
+        (layout_ms, check_ms)
+    };
+    let prepare_ms = t_total.elapsed().as_secs_f64() * 1000.0;
+    let p = PreparedProgram {
+        source_hash: crate::sha256::sha256_hex(source.as_bytes()),
+        expanded_hash,
+        dialect,
+        compat: "prepared-v1",
+        probes: probe_phases(source, dialect, false),
+        program_map,
+        currency,
+        decimal_comma,
+        switches,
+        collation,
+        main_name,
+        file_defs,
+        record_files,
+        reports,
+    };
+    Ok((
+        p,
+        PhaseTimings {
+            preprocess_ms,
+            lex_ms,
+            parse_ms,
+            resolution_ms,
+            layout_ms,
+            check_ms,
+            prepare_ms,
+        },
+    ))
 }
 
 /// Run a program, optionally diverting `DISPLAY ... UPON PRINTER` to a separate `printer` stream (instead
@@ -16727,5 +16942,29 @@ mod probe_phase_tests {
             .err()
             .expect("prepare must reject");
         assert!(!e.to_string().is_empty());
+    }
+
+    #[test]
+    fn prepare_timed_agrees_with_plain_prepare() {
+        // the timed variant must accept exactly what the plain one accepts, with the same
+        // identity and behavior (spec 9.1/9.2: only the timing probes are added).
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 I PIC 9(2).\n       01 S PIC 9(4).\n       01 SE PIC Z(3)9.\n       PROCEDURE DIVISION.\n           PERFORM VARYING I FROM 1 BY 1 UNTIL I > 20\n               ADD I TO S\n           END-PERFORM\n           MOVE S TO SE\n           DISPLAY SE\n           STOP RUN.\n";
+        let (p, t) = prepare_program_timed(src, crate::dialect::Dialect::DEFAULT).expect("timed");
+        let plain = prepare_program(src, crate::dialect::Dialect::DEFAULT).expect("plain");
+        assert_eq!(p.source_hash, plain.source_hash);
+        assert_eq!(p.expanded_hash, plain.expanded_hash);
+        assert_eq!(p.main_name, plain.main_name);
+        let (o1, _p1, rc1) = p.run(false).expect("timed run");
+        let (o2, _p2, rc2) = plain.run(false).expect("plain run");
+        assert_eq!(o1, o2);
+        assert_eq!(rc1, rc2);
+        // every phase is measured and non-negative; the total dominates each phase
+        assert!(t.preprocess_ms >= 0.0);
+        assert!(t.lex_ms >= 0.0);
+        assert!(t.parse_ms >= 0.0);
+        assert!(t.resolution_ms >= 0.0);
+        assert!(t.layout_ms >= 0.0);
+        assert!(t.check_ms >= 0.0);
+        assert!(t.prepare_ms >= t.preprocess_ms);
     }
 }

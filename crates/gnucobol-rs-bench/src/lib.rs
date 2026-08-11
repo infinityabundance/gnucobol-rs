@@ -362,7 +362,7 @@ fn stats(samples: &[f64]) -> SampleSet {
 /// the prepared-program identity.
 pub fn candidate_prepared(
     w: &Workload,
-    scale: &str,
+    _scale: &str,
     dir: &Path,
     iters: usize,
 ) -> Result<(SampleSet, Vec<u8>, u64, String), String> {

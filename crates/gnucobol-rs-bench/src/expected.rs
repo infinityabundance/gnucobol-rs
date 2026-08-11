@@ -216,7 +216,7 @@ pub fn relative(n: usize, scale: &str) -> (String, String, String) {
     (lines.join("\n") + "\n", out, String::new())
 }
 
-pub fn modules(n: usize, scale: &str) -> (String, String, String) {
+pub fn modules(n: usize, _scale: &str) -> (String, String, String) {
     let mut lines = Vec::new();
     for i in 1..=n {
         lines.push(format!("{i:010}"));
