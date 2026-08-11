@@ -328,6 +328,108 @@ pub fn validate(w: &Workload, scale: &str, work_root: &Path) -> Result<BenchResu
     })
 }
 
+// ---- Phase 9 measurement views ----------------------------------------------------------
+
+/// Raw timing samples for one lane of one view.
+#[derive(Debug, Clone, serde::Serialize)]
+pub struct SampleSet {
+    pub samples_ms: Vec<f64>,
+    pub median_ms: f64,
+    pub min_ms: f64,
+    pub iqr_ms: f64,
+    pub p95_ms: f64,
+}
+
+fn stats(samples: &[f64]) -> SampleSet {
+    let mut s = samples.to_vec();
+    s.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
+    let med = s[s.len() / 2];
+    let min = s[0];
+    let q1 = s[s.len() / 4];
+    let q3 = s[s.len() * 3 / 4];
+    let p95 = s[(((s.len() as f64) * 0.95) as usize).min(s.len() - 1)];
+    SampleSet {
+        samples_ms: s,
+        median_ms: med,
+        min_ms: min,
+        iqr_ms: q3 - q1,
+        p95_ms: p95,
+    }
+}
+
+/// One measured run of the candidate (prepared) lane: prepare (front-end) once, then run the
+/// prepared program `iters` times without reparsing (spec 9.6). Returns per-run ms samples and
+/// the prepared-program identity.
+pub fn candidate_prepared(
+    w: &Workload,
+    scale: &str,
+    dir: &Path,
+    iters: usize,
+) -> Result<(SampleSet, Vec<u8>, u64, String), String> {
+    // the main source = first .cob source
+    let cobol_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("cobol");
+    let main = w.sources[0];
+    let source = std::fs::read_to_string(cobol_dir.join(main)).map_err(|e| e.to_string())?;
+    let t0 = Instant::now();
+    let prepared =
+        gnucobol_rs::frontend::prepare_program(&source, gnucobol_rs::dialect::Dialect::DEFAULT)
+            .map_err(|e| format!("candidate prepare failed: {e}"))?;
+    let prepare_ms = t0.elapsed().as_millis() as u64;
+    // warmup + measured runs (the input file must be in the current dir for file I/O)
+    std::env::set_current_dir(dir).map_err(|e| e.to_string())?;
+    let mut samples = Vec::with_capacity(iters);
+    let mut last_out = Vec::new();
+    for i in 0..iters + 1 {
+        let t = Instant::now();
+        let (out, _printer, _rc) = prepared
+            .run(false)
+            .map_err(|e| format!("candidate run failed: {e}"))?;
+        let ms = t.elapsed().as_secs_f64() * 1000.0;
+        last_out = out;
+        if i > 0 {
+            samples.push(ms);
+        }
+    }
+    Ok((
+        stats(&samples),
+        last_out,
+        prepare_ms,
+        prepared.compat.to_string(),
+    ))
+}
+
+/// Native lane: run the compiled binary `iters` times. Returns per-run ms samples.
+pub fn native_runs(
+    oracle: &Oracle,
+    w: &Workload,
+    dir: &Path,
+    iters: usize,
+) -> Result<(SampleSet, Vec<u8>), String> {
+    let mut samples = Vec::with_capacity(iters);
+    let mut last_out = Vec::new();
+    for i in 0..iters + 1 {
+        let t = Instant::now();
+        let (code, out, err) = run_cmd(oracle, dir, &[w.run_artifact]);
+        let ms = t.elapsed().as_secs_f64() * 1000.0;
+        if code != Some(0) {
+            return Err(format!(
+                "native run failed (exit {:?}): {}",
+                code,
+                String::from_utf8_lossy(&err)
+                    .lines()
+                    .take(2)
+                    .collect::<Vec<_>>()
+                    .join(" | ")
+            ));
+        }
+        last_out = out;
+        if i > 0 {
+            samples.push(ms);
+        }
+    }
+    Ok((stats(&samples), last_out))
+}
+
 /// Validate every workload at every scale. Returns the results keyed by workload.
 pub fn validate_all(work_root: &Path) -> Result<BTreeMap<String, Vec<BenchResult>>, String> {
     let mut out: BTreeMap<String, Vec<BenchResult>> = BTreeMap::new();

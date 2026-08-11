@@ -82,6 +82,7 @@ pub mod file_seq;
 pub mod fileio;
 pub mod float;
 pub mod frontend;
+pub mod sha256;
 pub mod gmp;
 pub mod if_eval;
 pub mod if_numeric;

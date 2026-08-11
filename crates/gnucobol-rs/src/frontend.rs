@@ -626,6 +626,207 @@ pub fn run_program_dialect_with_rc(
     Ok((out, rc))
 }
 
+/// A **prepared program** (spec 9.6): the full front-end (preprocess, lex, parse, resolution,
+/// layout, check) is executed once and its immutable artifacts are embedded here. [`Self::run`]
+/// re-executes the program WITHOUT reparsing the source -- repeated prepared execution never
+/// touches the source text again. The representation is versioned via `compat` (bump on any
+/// front-end artifact change) and carries the source/expanded hashes for corruption and stale
+/// detection.
+#[allow(missing_debug_implementations)]
+pub struct PreparedProgram {
+    /// Source + expanded hashes (cache-off equivalence and stale detection).
+    pub source_hash: String,
+    pub expanded_hash: String,
+    pub dialect: crate::dialect::Dialect,
+    /// Front-end version stamp (bump with the parser/checker).
+    pub compat: &'static str,
+    /// Phase probes of the prepare run (all ok when the program is accepted).
+    pub probes: Vec<PhaseProbe>,
+    // ---- embedded parse artifacts (never re-derived on run) ----
+    program_map: HashMap<String, ProgramDef>,
+    currency: u8,
+    decimal_comma: bool,
+    switches: SwitchEnv,
+    collation: Option<[u8; 256]>,
+    main_name: String,
+    file_defs: HashMap<String, FileDef>,
+    record_files: HashMap<String, String>,
+    reports: HashMap<String, ReportDef>,
+}
+
+impl PreparedProgram {
+    /// Re-execute the prepared program (no parse). Returns `(stdout, printer, exit_code)`.
+    pub fn run(&self, redirect_printer: bool) -> Result<(Vec<u8>, Vec<u8>, i32), RunError> {
+        let ctx = Ctx {
+            programs: &self.program_map,
+            dialect: self.dialect,
+            currency: self.currency,
+            decimal_comma: self.decimal_comma,
+            collation: self.collation,
+            switches: self.switches.clone(),
+            print_redirect: redirect_printer,
+            printer: RefCell::new(Vec::new()),
+            stop_run: Cell::new(false),
+            exit_perform: Cell::new(false),
+            exit_cycle: Cell::new(false),
+            next_sentence: Cell::new(false),
+            call_state: RefCell::new(HashMap::new()),
+            goto: RefCell::new(None),
+            file_defs: self.file_defs.clone(),
+            record_files: self.record_files.clone(),
+            files: RefCell::new(HashMap::new()),
+            reports: self.reports.clone(),
+        };
+        let main = ctx
+            .programs
+            .get(&self.main_name)
+            .expect("main program is registered");
+        let mut out = Vec::new();
+        EXTERNAL_STORE.with(|m| m.borrow_mut().clear());
+        POINTER_TARGETS.with(|m| m.borrow_mut().clear());
+        ENV_NAME_REG.with(|r| r.borrow_mut().clear());
+        ENV_OVERRIDE.with(|m| m.borrow_mut().clear());
+        ARG_NUMBER_REG.with(|r| *r.borrow_mut() = 0);
+        let mut fields = build_program_fields(main, &ctx)?;
+        reset_exception();
+        let env_get = |k: &str| std::env::var(k).ok();
+        crate::profiling::prof_start(&crate::profiling::prof_config(&env_get));
+        run_program_body(main, &self.main_name, &ctx, &mut fields, &mut out)?;
+        let rc = read_return_code(&fields);
+        let printer = ctx.printer.borrow().clone();
+        dump_file_store(&ctx, &fields);
+        crate::profiling::prof_report(&env_get, &source_file_name());
+        Ok((out, printer, rc))
+    }
+}
+
+/// Prepare a program: run the full front-end once and embed the parse artifacts (spec 9.6).
+/// Rejected programs return the first failing probe's [`RunError`] -- never a silent accept.
+pub fn prepare_program(
+    source: &str,
+    dialect: crate::dialect::Dialect,
+) -> Result<PreparedProgram, RunError> {
+    let pre = preprocess(source);
+    let expanded_hash = crate::sha256::sha256_hex(pre.as_bytes());
+    let up = uppercase_outside_quotes(&pre);
+    let mut toks = lex(&up);
+    let first_proc = find_seq(&toks, &["PROCEDURE", "DIVISION"])
+        .ok_or_else(|| RunError::Unsupported("no PROCEDURE DIVISION".into()))?;
+    let currency = parse_currency_sign(&toks, first_proc);
+    let decimal_comma = parse_decimal_comma(&toks, first_proc);
+    if decimal_comma {
+        for t in toks.iter_mut() {
+            if let Tok::Word(w) = t {
+                if is_comma_decimal_literal(w) {
+                    *w = w.replace(',', ".");
+                }
+            }
+        }
+    }
+    let (main_name, program_map) = parse_programs(&toks)?;
+    let switches = parse_switches(&toks, first_proc);
+    let collation = parse_collation(&toks, first_proc);
+    let file_defs: HashMap<String, FileDef> = program_map
+        .get(&main_name)
+        .map(|p| {
+            p.files
+                .iter()
+                .map(|f| (f.name.clone(), f.clone()))
+                .collect()
+        })
+        .unwrap_or_default();
+    let mut record_files: HashMap<String, String> = HashMap::new();
+    if let Some(p) = program_map.get(&main_name) {
+        for f in &p.files {
+            for r in &f.records {
+                record_files
+                    .entry(r.clone())
+                    .or_insert_with(|| f.name.clone());
+            }
+        }
+    }
+    let reports: HashMap<String, ReportDef> = program_map
+        .get(&main_name)
+        .map(|p| p.reports.clone())
+        .unwrap_or_default();
+    // layout + check (same typed errors as check_program)
+    {
+        let ctx = Ctx {
+            programs: &program_map,
+            dialect,
+            currency,
+            decimal_comma,
+            collation,
+            switches: switches.clone(),
+            print_redirect: false,
+            printer: RefCell::new(Vec::new()),
+            stop_run: Cell::new(false),
+            exit_perform: Cell::new(false),
+            exit_cycle: Cell::new(false),
+            next_sentence: Cell::new(false),
+            call_state: RefCell::new(HashMap::new()),
+            goto: RefCell::new(None),
+            file_defs: file_defs.clone(),
+            record_files: record_files.clone(),
+            files: RefCell::new(HashMap::new()),
+            reports: reports.clone(),
+        };
+        let main = ctx.programs.get(&main_name).expect("main registered");
+        let fields = build_program_fields(main, &ctx)?;
+        CHECK_MODE.with(|c| c.set(true));
+        let body_check: Result<(), RunError> = (|| {
+            let names: Vec<String> = ctx.programs.keys().cloned().collect();
+            for name in names {
+                let prog = &ctx.programs[&name];
+                let mut fields = if name == main_name {
+                    fields.clone()
+                } else {
+                    build_program_fields(prog, &ctx)?
+                };
+                let mut p = 0usize;
+                while p < prog.proc_toks.len() {
+                    let before = p;
+                    if run_block(
+                        &prog.proc_toks,
+                        &mut p,
+                        &mut fields,
+                        &mut Vec::new(),
+                        false,
+                        &ctx,
+                    )? {
+                        break;
+                    }
+                    if p == before {
+                        p += 1;
+                    }
+                    if matches!(prog.proc_toks.get(p), Some(Tok::Dot)) {
+                        p += 1;
+                    }
+                }
+            }
+            Ok(())
+        })();
+        CHECK_MODE.with(|c| c.set(false));
+        body_check?;
+    }
+    Ok(PreparedProgram {
+        source_hash: crate::sha256::sha256_hex(source.as_bytes()),
+        expanded_hash,
+        dialect,
+        compat: "prepared-v1",
+        probes: probe_phases(source, dialect, false),
+        program_map,
+        currency,
+        decimal_comma,
+        switches,
+        collation,
+        main_name,
+        file_defs,
+        record_files,
+        reports,
+    })
+}
+
 /// Run a program, optionally diverting `DISPLAY ... UPON PRINTER` to a separate `printer` stream (instead
 /// of interleaving it into stdout) when `redirect_printer` is set -- the host (`cobrun`) supplies this
 /// from `COB_DISPLAY_PRINT_FILE`/`_PIPE` and appends the returned printer bytes to that file, mirroring
@@ -1561,6 +1762,16 @@ impl Default for SwitchEnv {
             states: std::cell::RefCell::new([false; crate::common_misc::COB_SWITCH_COUNT]),
             conds: HashMap::new(),
             mnemonics: HashMap::new(),
+        }
+    }
+}
+
+impl Clone for SwitchEnv {
+    fn clone(&self) -> Self {
+        SwitchEnv {
+            states: std::cell::RefCell::new(*self.states.borrow()),
+            conds: self.conds.clone(),
+            mnemonics: self.mnemonics.clone(),
         }
     }
 }
@@ -16481,5 +16692,40 @@ mod probe_phase_tests {
         assert_eq!(execute.phase, "execute");
         assert!(!execute.ok, "{execute:?}");
         assert!(execute.diagnostic.contains("CANCEL active program"));
+    }
+
+    #[test]
+    fn prepared_program_run_equals_fresh_run() {
+        // a program with arithmetic, files-free output, and a loop, run once prepared and
+        // once fresh; the outputs and exit codes must agree byte-for-byte.
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 I PIC 9(2).\n       01 S PIC 9(4).\n       01 SE PIC Z(3)9.\n       PROCEDURE DIVISION.\n           PERFORM VARYING I FROM 1 BY 1 UNTIL I > 20\n               ADD I TO S\n           END-PERFORM\n           MOVE S TO SE\n           DISPLAY SE\n           STOP RUN.\n";
+        let prepared = prepare_program(src, crate::dialect::Dialect::DEFAULT).expect("prepare");
+        // the prepared program's probes are all ok
+        assert!(
+            prepared.probes.iter().all(|p| p.ok),
+            "{:?}",
+            prepared.probes
+        );
+        let (out1, _printer1, rc1) = prepared.run(false).expect("prepared run");
+        let (out2, rc2) =
+            run_program_dialect_with_rc(src, crate::dialect::Dialect::DEFAULT).expect("fresh run");
+        assert_eq!(out1, out2);
+        assert_eq!(rc1, rc2);
+        // repeated prepared runs are byte-identical (no parse between them)
+        let (out3, _printer3, _rc3) = prepared.run(false).expect("repeat run");
+        assert_eq!(out1, out3);
+        // identity is deterministic
+        assert_eq!(prepared.source_hash.len(), 64);
+        assert_eq!(prepared.expanded_hash.len(), 64);
+        assert_eq!(prepared.compat, "prepared-v1");
+    }
+
+    #[test]
+    fn prepare_rejects_bad_program() {
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n           BOGUS-STATEMENT X.\n           STOP RUN.\n";
+        let e = prepare_program(src, crate::dialect::Dialect::DEFAULT)
+            .err()
+            .expect("prepare must reject");
+        assert!(!e.to_string().is_empty());
     }
 }
