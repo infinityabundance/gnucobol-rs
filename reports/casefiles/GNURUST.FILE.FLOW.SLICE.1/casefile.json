@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILE.FLOW.SLICE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.55",
+  "crate_version": "0.8.56",
   "damage_if_overclaimed": "treating this narrow read-accumulate slice as a general batch engine would run unsealed per-record logic / writes / multi-file joins whose semantics are not oracle-bound",
   "hash_chain": {
-    "inputs_sha256": "70bdd7509b160788ff42d3f94b3880a9966f152ef61b58198d59516b551ffd75"
+    "inputs_sha256": "9a3bf10908e70aac1ca35f7d02301447f2b09e5f09aae62719b30d6af6f64384"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "93141d699417787d53a680a0c6d1fe43f89d92babfde5501bc34bcb042c1c65d",
-    "receipt_sha256": "b172f0e7a36df635cb27d350f3252bafb931ec1255fadd5594d358cd1ac63249"
+    "receipt_sha256": "34501c7f431c798494ab1849998b09aca4102c9f9f2aa61a019e7ca34cf6a6cd"
   },
   "kind": "court-casefile",
   "lie_prevented": [

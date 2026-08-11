@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.ELITE-REPLAY.1` |
 | court | opencbs real-program replay -- run the public third-party opencbs COBOL programs through cobc AND cobrun; observable behaviour (stdout bytes + process exit status + stderr-clean) must agree |
-| crate_version | `0.8.55` |
+| crate_version | `0.8.56` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a real third-party COBOL program -> its exact stdout bytes + process exit status, byte-identical to cobc, for every in-scope program; a ratchet floors the MATCH count so it can only rise |
 | replay command | `bash lab/oracle/opencbs_sweep.sh` |

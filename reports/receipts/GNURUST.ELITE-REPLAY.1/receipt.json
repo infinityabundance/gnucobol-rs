@@ -5,7 +5,7 @@
     "replay": "bash lab/oracle/opencbs_sweep.sh"
   },
   "court": "opencbs real-program replay -- run the public third-party opencbs COBOL programs through cobc AND cobrun; observable behaviour (stdout bytes + process exit status + stderr-clean) must agree",
-  "crate_version": "0.8.55",
+  "crate_version": "0.8.56",
   "current_authority": "STATUS.md",
   "generated_at": "unstamped",
   "git_commit": "unstamped",

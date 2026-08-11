@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.MULTI-RECORD-FD.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.55",
+  "crate_version": "0.8.56",
   "damage_if_overclaimed": "reporting multi-record FD support while WRITE still resolves only the first record would silently write the wrong record's bytes in the CCVS85 report-writer pattern",
   "hash_chain": {
-    "inputs_sha256": "8742061c573a840dc29bb1e4a026acb7c0ad63c2cef670545e0e5cbc8deffe01"
+    "inputs_sha256": "3c3a57ba4c10326076316379214c48e543723540c2c3d1e094d12b670b2d6a26"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "1e0bd4e275299a30e5d6fbc5665593f0bacba3f1938a7657f6a6c214cba16947",
-    "receipt_sha256": "ad7421b5dce94253af8d3040be69551fe73f49b6e8d6bf54f5a33cce148154c0"
+    "receipt_sha256": "338abfa96ee791c0844e15c809e03d5e3c3da583cec4ecf3d91cf63a2fc06e7e"
   },
   "kind": "court-casefile",
   "lie_prevented": [

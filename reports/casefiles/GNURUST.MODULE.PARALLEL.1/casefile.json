@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.MODULE.PARALLEL.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.55",
+  "crate_version": "0.8.56",
   "damage_if_overclaimed": "claiming concurrency safety without the stress court",
   "hash_chain": {
-    "inputs_sha256": "c2cab20b5bf993e618297fb422ae2a6f529da36e2cc689e5fd91615141767171"
+    "inputs_sha256": "dfa2464b928748785fe60b7918cdbd53985a890a546d812a90605b119a42c8ef"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "a36b5de6acd03b45a219478aab885325151ab99bad4d885d93ff549bcee87b8a",
-    "receipt_sha256": "f85c93799367b951203de3f4a053a73c13048706aeb8ab5c015a3ac45b5f44cf"
+    "receipt_sha256": "684915507af0a7733683ef736f73455d095f9d180b1c401e7302ade042e9ae21"
   },
   "kind": "court-casefile",
   "lie_prevented": [

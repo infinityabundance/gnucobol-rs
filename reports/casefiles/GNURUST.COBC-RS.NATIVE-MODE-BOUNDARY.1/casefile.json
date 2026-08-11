@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.55",
+  "crate_version": "0.8.56",
   "damage_if_overclaimed": "counterfeiting native artifacts would misrepresent the interpreter as a code generator",
   "hash_chain": {
-    "inputs_sha256": "2c3187e6e01aa231ebce9d549118db23b1c612916a78e2317083a1ed827bc60e"
+    "inputs_sha256": "089bcdd6c611dcff897512bfa8f5eeea3cfbd54454854f71eb3d1e5dcd079335"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "30a2a8820da192eea9f144b62bc1926618e1611fbd2782a53d7aba647ad9d4d6",
-    "receipt_sha256": "f85c93799367b951203de3f4a053a73c13048706aeb8ab5c015a3ac45b5f44cf"
+    "receipt_sha256": "684915507af0a7733683ef736f73455d095f9d180b1c401e7302ade042e9ae21"
   },
   "kind": "court-casefile",
   "lie_prevented": [

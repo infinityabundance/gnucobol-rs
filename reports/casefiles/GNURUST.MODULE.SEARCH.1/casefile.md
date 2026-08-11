@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.MODULE.SEARCH.1 (court-casefile)
 
-**Verdict: PASS** · crates/cobc-rs/tests/module_courts.rs (cobcrun_m_searches_the_module_directory, cobcrun_module_search_uses_cwd_and_library_path, cobcrun_error_messages_match_cobcrun) · crate `gnucobol-rs` 0.8.55
+**Verdict: PASS** · crates/cobc-rs/tests/module_courts.rs (cobcrun_m_searches_the_module_directory, cobcrun_module_search_uses_cwd_and_library_path, cobcrun_error_messages_match_cobcrun) · crate `gnucobol-rs` 0.8.56
 
 - **Oracle:** the admitted suite's used_binaries.at module tests (0010, 0014, 0015, 0018)
 - **Byte domain(s):** search-path resolution + diagnostic stdout/stderr/exit

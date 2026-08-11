@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.MODULE.REGISTRY.1 (court-casefile)
 
-**Verdict: PASS** · crates/cobc-rs/tests/module_courts.rs + reports/gnucobol-testsuite/module-lifecycle-census.{json,md} · crate `gnucobol-rs` 0.8.55
+**Verdict: PASS** · crates/cobc-rs/tests/module_courts.rs + reports/gnucobol-testsuite/module-lifecycle-census.{json,md} · crate `gnucobol-rs` 0.8.56
 
 - **Oracle:** GnuCOBOL 3.2 cobcrun semantics as observed in the admitted suite's own module tests
 - **Byte domain(s):** module artifacts (launcher, manifest, expanded source), cobcrun stdout/stderr/exit, module search order

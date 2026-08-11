@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — SIZE.ERROR.ATLAS.1 (court-casefile)
 
-**Verdict: PASS** · 12/12 pass, 0 fail · crate `kobold-data-shim` 0.8.55
+**Verdict: PASS** · 12/12 pass, 0 fail · crate `kobold-data-shim` 0.8.56
 
 - **Oracle:** bash lab/oracle/size_error_sweep.sh
 - **Byte domain(s):** observed receiver bytes (before/after) + size-error flag from the oracle

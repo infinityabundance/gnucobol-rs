@@ -16,7 +16,7 @@ claims go wrong. The short version: the runtime is a **faithful copyleft derivat
 (LGPL-3.0-or-later), NOT a clean-room reimplementation; the parser/front-end is documented
 separately in [`parser-front-end-provenance.md`](parser-front-end-provenance.md).
 
-> Generated document (TRUST.4.DOCS) at gnucobol-rs 0.8.55. Machine authority: the parity
+> Generated document (TRUST.4.DOCS) at gnucobol-rs 0.8.56. Machine authority: the parity
 > reports (`LIBCOB-PARITY.md`, `reports/doxygen-parity.json`), the claim-ladder, and the per-court
 > oracle receipts. Questions a reviewer should be able to answer from this document: which upstream
 > files were in scope, whether the C was read directly, whether names/control flow were retained,

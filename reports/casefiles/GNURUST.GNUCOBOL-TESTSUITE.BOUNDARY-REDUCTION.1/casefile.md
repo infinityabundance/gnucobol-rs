@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1 (court-casefile)
 
-**Verdict: PASS** · reports/gnucobol-testsuite/boundary-reduction-baseline.json + boundary-reduction.{json,md} + classification-transitions.{json,md} · crate `gnucobol-rs` 0.8.55
+**Verdict: PASS** · reports/gnucobol-testsuite/boundary-reduction-baseline.json + boundary-reduction.{json,md} + classification-transitions.{json,md} · crate `gnucobol-rs` 0.8.56
 
 - **Oracle:** the v0.8.54 baseline record (reports/gnucobol-testsuite/boundary-reduction-baseline.json)
 - **Byte domain(s):** boundary-reduction.{json,md} + classification-transitions.{json,md} + the raw rerun evidence

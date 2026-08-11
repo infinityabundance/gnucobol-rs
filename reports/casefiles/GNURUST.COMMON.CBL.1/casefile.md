@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.COMMON.CBL.1 (court-casefile)
 
-**Verdict: PASS** · 2/2 pass, 0 fail · crate `gnucobol-rs` 0.8.55
+**Verdict: PASS** · 2/2 pass, 0 fail · crate `gnucobol-rs` 0.8.56
 
 - **Oracle:** cobc CALL "CBL_AND"/.../"CBL_TOLOWER" (libcob/common.c cob_sys_*), captured from BOTH GnuCOBOL 3.1.2 and 3.2
 - **Byte domain(s):** CALL USING buffer(s) + length -> the in-place transformed bytes of the destination buffer

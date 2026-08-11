@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.MODULE.REGISTRY.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.55",
+  "crate_version": "0.8.56",
   "damage_if_overclaimed": "presenting an interpreted-module manifest as a shared object would break the no-native-artifact boundary",
   "hash_chain": {
-    "inputs_sha256": "c400cae4e0bc8d71d1223ff041993764b79c6a281a565b190ec39457aca600dc"
+    "inputs_sha256": "7dd69a80b08734f34c38b5bc1ad207df97da003811f4a4c536bc47a921cfd124"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "7477179cb58e8aeda1603072abd659357e4ff045235b72d873d8cfe3aa068bf6",
-    "receipt_sha256": "f85c93799367b951203de3f4a053a73c13048706aeb8ab5c015a3ac45b5f44cf"
+    "receipt_sha256": "684915507af0a7733683ef736f73455d095f9d180b1c401e7302ade042e9ae21"
   },
   "kind": "court-casefile",
   "lie_prevented": [

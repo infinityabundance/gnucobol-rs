@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.FILEIO.MULTI-RECORD-FD.1 (court-casefile)
 
-**Verdict: PASS** · 7/7 pass, 0 fail · crate `gnucobol-rs` 0.8.55
+**Verdict: PASS** · 7/7 pass, 0 fail · crate `gnucobol-rs` 0.8.56
 
 - **Oracle:** cobc multi-record FD WRITE/READ (libcob record area = union of the FD record descriptions; fileio.c cob_seq_write/cob_seq_read + the line-advancing write_opt family)
 - **Byte domain(s):** WRITE/REWRITE of any FD record -> the NAMED record's bytes over one shared record area, byte-identical to cobc (stdout via read-back DISPLAY); line-control file bytes asserted oracle-side

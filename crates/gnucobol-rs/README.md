@@ -13,7 +13,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 **The entire GnuCOBOL 3.2 `libcob` runtime — every admitted `.c` compilation unit — ported 1:1 to safe Rust and proven byte-identical to a pinned, locally-built GnuCOBOL 3.2 oracle, plus an independently written interpreter (`cobrun` — the author's from-scratch claim; strict clean-room provenance is not independently verifiable from the committed record, see [methodology](docs/methodology/parser-front-end-provenance.md)) that parses and *executes* COBOL programs on that runtime. No C is linked.** "Correct" never means "our reading of a spec" — it means byte-for-byte identical to the admitted oracle (`cobc` + `libcob`), built from pinned source. This crate is `#![forbid(unsafe_code)]`.
 
-This is `gnucobol-rs 0.8.55` (LGPL-3.0-or-later, MSRV 1.74). It is the open runtime + interpreter crate; the project-wide evidence, parity maps, and forensic case files live in the [repository root](https://crates.io/crates/gnucobol-rs).
+This is `gnucobol-rs 0.8.56` (LGPL-3.0-or-later, MSRV 1.74). It is the open runtime + interpreter crate; the project-wide evidence, parity maps, and forensic case files live in the [repository root](https://crates.io/crates/gnucobol-rs).
 
 ---
 
@@ -89,7 +89,7 @@ Upstream **GnuCOBOL 3.2** (`cobc` + `libcob`) is the single source of truth, bui
 
 ## License
 
-`gnucobol-rs 0.8.55` is **LGPL-3.0-or-later**: a faithful, statement-by-statement, line-cited port of `libcob` (e.g. `// move.c:477`) — **not clean-room**; the license is inherited, not freely chosen. The `cobrun` front-end *is* clean-room but ships inside this LGPL crate. A distributed binary that statically links this crate is a Combined Work under LGPL-3.0 §4. FSF copyright and original-author credits (Nishida, While, Sobisch, et al.) are retained in every ported file header. See `docs/derivation-and-license.md` and `docs/license-boundaries.md`. This crate depends on `gnucobol-rs-bdb-format` (pure-safe-Rust Berkeley DB B-tree) for INDEXED organization.
+`gnucobol-rs 0.8.56` is **LGPL-3.0-or-later**: a faithful, statement-by-statement, line-cited port of `libcob` (e.g. `// move.c:477`) — **not clean-room**; the license is inherited, not freely chosen. The `cobrun` front-end *is* clean-room but ships inside this LGPL crate. A distributed binary that statically links this crate is a Combined Work under LGPL-3.0 §4. FSF copyright and original-author credits (Nishida, While, Sobisch, et al.) are retained in every ported file header. See `docs/derivation-and-license.md` and `docs/license-boundaries.md`. This crate depends on `gnucobol-rs-bdb-format` (pure-safe-Rust Berkeley DB B-tree) for INDEXED organization.
 
 ---
 

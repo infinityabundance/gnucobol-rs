@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FILEIO.VERB.1` |
 | court | file verb open/access-mode preconditions |
-| crate_version | `0.8.55` |
+| crate_version | `0.8.56` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | cob_write/read/read_next/rewrite/delete/start preconditions -> FILE STATUS (43/44/46/47/48/49/23) |
 | replay command | `bash lab/oracle/verb_sweep.sh` |
