@@ -1,0 +1,2176 @@
+{
+  "development": {
+    "set": "DEVELOPMENT",
+    "files": 809,
+    "candidate_accepted": 91,
+    "accept_rate": 0.11248454882571075,
+    "first_failure_by_phase": {
+      "check": 72,
+      "layout": 14,
+      "none": 91,
+      "parse": 423,
+      "preprocess": 209
+    },
+    "structural_distribution": {
+      "COMPLETE_PROGRAM": 462,
+      "COPYBOOK_OR_DATA": 201,
+      "FRAGMENT": 75,
+      "PROGRAM_FRAGMENT": 71
+    }
+  },
+  "validation": {
+    "set": "VALIDATION",
+    "files": 185,
+    "candidate_accepted": 10,
+    "accept_rate": 0.05405405405405406,
+    "first_failure_by_phase": {
+      "check": 61,
+      "layout": 11,
+      "none": 10,
+      "parse": 75,
+      "preprocess": 28
+    },
+    "structural_distribution": {
+      "COMPLETE_PROGRAM": 139,
+      "COPYBOOK_OR_DATA": 37,
+      "FRAGMENT": 9
+    }
+  },
+  "held_out": {
+    "timeout_seconds": 2,
+    "disclaimer": "PURE MEASUREMENT: the held-out set was never used for implementation tuning and this report feeds nothing back into the candidate.",
+    "totals": {
+      "files": 101,
+      "parse_ok": 43,
+      "check_ok": 24,
+      "run_attempted": 24,
+      "run_ok": 16,
+      "crashed": 0,
+      "timed_out": 0,
+      "candidate_ok": 24
+    },
+    "first_failure_by_phase": {
+      "check": 19,
+      "none": 16,
+      "parse": 55,
+      "preprocess": 3,
+      "run": 8
+    },
+    "dialect_distribution": {
+      "oracle-accepted:default": 79,
+      "oracle-accepted:none": 22
+    },
+    "structural_distribution": {
+      "COMPLETE_PROGRAM": 90,
+      "COPYBOOK_OR_DATA": 10,
+      "PROGRAM_FRAGMENT": 1
+    },
+    "size_distribution": {
+      "1-10KB": 69,
+      "10-100KB": 8,
+      "<1KB": 23,
+      ">100KB": 1
+    },
+    "files": [
+      {
+        "file_id": "xcobol/Apress_cobol-VB-on-.net/Form1.cob",
+        "repo": "Apress_cobol-VB-on-.net",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 20324,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: no PROGRAM-ID"
+        ],
+        "diagnostics": [
+          "unsupported: no PROGRAM-ID"
+        ]
+      },
+      {
+        "file_id": "xcobol/Apress_cobol-VB-on-.net/Global.asax.cob",
+        "repo": "Apress_cobol-VB-on-.net",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 4014,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: no PROGRAM-ID"
+        ],
+        "diagnostics": [
+          "unsupported: no PROGRAM-ID"
+        ]
+      },
+      {
+        "file_id": "xcobol/Apress_cobol-VB-on-.net/MyFirstClass.cob",
+        "repo": "Apress_cobol-VB-on-.net",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2092,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: no PROGRAM-ID"
+        ],
+        "diagnostics": [
+          "unsupported: no PROGRAM-ID"
+        ]
+      },
+      {
+        "file_id": "xcobol/Apress_cobol-VB-on-.net/Program1.cob",
+        "repo": "Apress_cobol-VB-on-.net",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 407,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number 000051"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number 000051"
+        ]
+      },
+      {
+        "file_id": "xcobol/Apress_cobol-VB-on-.net/WebForm1.aspx.cob",
+        "repo": "Apress_cobol-VB-on-.net",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 4213,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: no PROGRAM-ID"
+        ],
+        "diagnostics": [
+          "unsupported: no PROGRAM-ID"
+        ]
+      },
+      {
+        "file_id": "xcobol/Apress_cobol-VB-on-.net/WebForm2.aspx.cob",
+        "repo": "Apress_cobol-VB-on-.net",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 6098,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: no PROGRAM-ID"
+        ],
+        "diagnostics": [
+          "unsupported: no PROGRAM-ID"
+        ]
+      },
+      {
+        "file_id": "xcobol/Apress_cobol-VB-on-.net/mybarInt.cob",
+        "repo": "Apress_cobol-VB-on-.net",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 578,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: no PROGRAM-ID"
+        ],
+        "diagnostics": [
+          "unsupported: no PROGRAM-ID"
+        ]
+      },
+      {
+        "file_id": "xcobol/Apress_cobol-VB-on-.net/mybarStr.cob",
+        "repo": "Apress_cobol-VB-on-.net",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 586,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: no PROGRAM-ID"
+        ],
+        "diagnostics": [
+          "unsupported: no PROGRAM-ID"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d01a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1249,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb 002-READ"
+        ],
+        "diagnostics": [
+          "unsupported: verb 002-READ"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d01b.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1530,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb 002-READ"
+        ],
+        "diagnostics": [
+          "unsupported: verb 002-READ"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d02a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1357,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb 002-READ"
+        ],
+        "diagnostics": [
+          "unsupported: verb 002-READ"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d02b.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1451,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb 002-READ"
+        ],
+        "diagnostics": [
+          "unsupported: verb 002-READ"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d03a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1266,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d03b.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2356,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d04a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2133,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d04b.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 5188,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d05a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1402,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d05b.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1788,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d06a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1690,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d06b.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1650,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d07a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1614,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d07b.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2222,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d08a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1519,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb 002-READ"
+        ],
+        "diagnostics": [
+          "unsupported: verb 002-READ"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d08b.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 3715,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d09a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2090,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb 002-READ"
+        ],
+        "diagnostics": [
+          "unsupported: verb 002-READ"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d09b.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2654,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d10a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2125,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb 002-READ"
+        ],
+        "diagnostics": [
+          "unsupported: verb 002-READ"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d10b.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 3205,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb 002-READ"
+        ],
+        "diagnostics": [
+          "unsupported: verb 002-READ"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d11a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 3646,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d11b.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 4057,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d12a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 3043,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb 002-READ"
+        ],
+        "diagnostics": [
+          "unsupported: verb 002-READ"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d12b.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2863,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb 002-READ"
+        ],
+        "diagnostics": [
+          "unsupported: verb 002-READ"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d13a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2362,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d13b.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2721,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d14a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2721,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d14b.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 4160,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb 002-READ"
+        ],
+        "diagnostics": [
+          "unsupported: verb 002-READ"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d15a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1839,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d15b.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1811,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "run",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: subscript 'LAST-NUM + 1' is not an integer"
+        ],
+        "diagnostics": [
+          "unsupported: subscript 'LAST-NUM + 1' is not an integer"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d16a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 3774,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d16b.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 5810,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d17a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2021,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb 002-STEP"
+        ],
+        "diagnostics": [
+          "unsupported: verb 002-STEP"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d17b.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2003,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb 002-STEP"
+        ],
+        "diagnostics": [
+          "unsupported: verb 002-STEP"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d21a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2032,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb 002-TURN"
+        ],
+        "diagnostics": [
+          "unsupported: verb 002-TURN"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d22a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2655,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb 002-READ"
+        ],
+        "diagnostics": [
+          "unsupported: verb 002-READ"
+        ]
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d23a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 453,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": true,
+        "exit_code": 0,
+        "first_failure": null,
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": []
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d23b.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 503,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": true,
+        "exit_code": 0,
+        "first_failure": null,
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": []
+      },
+      {
+        "file_id": "xcobol/GaloisGirl_Coding/d25a.cob",
+        "repo": "GaloisGirl_Coding",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 3399,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb 002-READ"
+        ],
+        "diagnostics": [
+          "unsupported: verb 002-READ"
+        ]
+      },
+      {
+        "file_id": "xcobol/IBM_datastage-standalone-workshop/copybook.cob",
+        "repo": "IBM_datastage-standalone-workshop",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2270,
+        "structural_class": "COPYBOOK_OR_DATA",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ],
+        "diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ]
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/Address.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1065,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "run",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": [
+          "undefined data name: ADDRESS"
+        ]
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/BubbleSort.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 3607,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: OCCURS count W-LEN-ARR is not an integer"
+        ],
+        "diagnostics": [
+          "unsupported: OCCURS count W-LEN-ARR is not an integer"
+        ]
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/ClassCondition.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 894,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": true,
+        "exit_code": 0,
+        "first_failure": null,
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": []
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/CombinedConditions.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 730,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": true,
+        "exit_code": 0,
+        "first_failure": null,
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": []
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/ConditionNameCondition.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 970,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": true,
+        "exit_code": 0,
+        "first_failure": null,
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": []
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/ConditionStatement.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 863,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": true,
+        "exit_code": 0,
+        "first_failure": null,
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": []
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/DateAndTime.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1147,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "run",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim)"
+        ],
+        "diagnostics": [
+          "unsupported: ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim)"
+        ]
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/EvaluteVerb.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 815,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": true,
+        "exit_code": 0,
+        "first_failure": null,
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": []
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/ForLoop.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1638,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": true,
+        "exit_code": 0,
+        "first_failure": null,
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": []
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/HelloWorld.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 775,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": true,
+        "exit_code": 0,
+        "first_failure": null,
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": []
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/Hello_SQLITE.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 12810,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unrecognized USAGE PROCEDURE-POINTER"
+        ],
+        "diagnostics": [
+          "unsupported: unrecognized USAGE PROCEDURE-POINTER"
+        ]
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/InsertSort.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 3492,
+        "structural_class": "PROGRAM_FRAGMENT",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: OCCURS count W-LEN-ARR is not an integer"
+        ],
+        "diagnostics": [
+          "unsupported: OCCURS count W-LEN-ARR is not an integer"
+        ]
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/NegatedCondition.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 683,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": true,
+        "exit_code": 0,
+        "first_failure": null,
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": []
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/OpenFileRecordKey.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1996,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb ERROR-MESSAGE"
+        ],
+        "diagnostics": [
+          "unsupported: verb ERROR-MESSAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/OpenFileSequential.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2040,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": true,
+        "exit_code": 0,
+        "first_failure": null,
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": []
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/Pointer.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1126,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "run",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": [
+          "undefined data name: ADDRESS"
+        ]
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/RandomBingo.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 3245,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: OCCURS count W-LEN-ARR is not an integer"
+        ],
+        "diagnostics": [
+          "unsupported: OCCURS count W-LEN-ARR is not an integer"
+        ]
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/RandomNumbers.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1227,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "run",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: not a numeric literal: FUNCTION"
+        ],
+        "diagnostics": [
+          "unsupported: not a numeric literal: FUNCTION"
+        ]
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/RelationCondition.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 735,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "run",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: trailing tokens in condition at EQUAL"
+        ],
+        "diagnostics": [
+          "unsupported: trailing tokens in condition at EQUAL"
+        ]
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/SelectSort.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 3358,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: OCCURS count W-LEN-ARR is not an integer"
+        ],
+        "diagnostics": [
+          "unsupported: OCCURS count W-LEN-ARR is not an integer"
+        ]
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/SequentialRead.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2218,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": true,
+        "exit_code": 0,
+        "first_failure": null,
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": []
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/SignCondition.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1291,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": true,
+        "exit_code": 0,
+        "first_failure": null,
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": []
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/StatusCode.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2128,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": true,
+        "exit_code": 0,
+        "first_failure": null,
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": []
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/String.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 854,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": true,
+        "exit_code": 0,
+        "first_failure": null,
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": []
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/Struct.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1972,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: OCCURS count W-LEN-ARR1 is not an integer"
+        ],
+        "diagnostics": [
+          "unsupported: OCCURS count W-LEN-ARR1 is not an integer"
+        ]
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/While.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 783,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": true,
+        "exit_code": 0,
+        "first_failure": null,
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": []
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/core_basic_window.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2912,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "run",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: CALL \"InitWindow\": not a contained program (external CALL is a boundary)"
+        ],
+        "diagnostics": [
+          "unsupported: CALL \"InitWindow\": not a contained program (external CALL is a boundary)"
+        ]
+      },
+      {
+        "file_id": "xcobol/Martinfx_Cobol/core_random_values.cbl",
+        "repo": "Martinfx_Cobol",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 3809,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": true,
+        "run_attempted": true,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "run",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: CALL \"InitWindow\": not a contained program (external CALL is a boundary)"
+        ],
+        "diagnostics": [
+          "unsupported: CALL \"InitWindow\": not a contained program (external CALL is a boundary)"
+        ]
+      },
+      {
+        "file_id": "xcobol/SebastianRzk_gradle-cobol-plugin-unittest-extension/ZUTZCPC.CBL",
+        "repo": "SebastianRzk_gradle-cobol-plugin-unittest-extension",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 198811,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb 8000-INITIALIZE"
+        ],
+        "diagnostics": [
+          "unsupported: verb 8000-INITIALIZE"
+        ]
+      },
+      {
+        "file_id": "xcobol/codetojoy_WarO_COBOL/knuth-shuffle.cbl",
+        "repo": "codetojoy_WarO_COBOL",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 934,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: OCCURS count TABLE-LEN is not an integer"
+        ],
+        "diagnostics": [
+          "unsupported: OCCURS count TABLE-LEN is not an integer"
+        ]
+      },
+      {
+        "file_id": "xcobol/codetojoy_WarO_COBOL/log-deck.cbl",
+        "repo": "codetojoy_WarO_COBOL",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 532,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: OCCURS count NUM-CARDS is not an integer"
+        ],
+        "diagnostics": [
+          "unsupported: OCCURS count NUM-CARDS is not an integer"
+        ]
+      },
+      {
+        "file_id": "xcobol/codetojoy_WarO_COBOL/log-kitty.cbl",
+        "repo": "codetojoy_WarO_COBOL",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 574,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: OCCURS count NUM-CARDS is not an integer"
+        ],
+        "diagnostics": [
+          "unsupported: OCCURS count NUM-CARDS is not an integer"
+        ]
+      },
+      {
+        "file_id": "xcobol/codetojoy_WarO_COBOL/log-player.cbl",
+        "repo": "codetojoy_WarO_COBOL",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 837,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: OCCURS count NUM-CARDS is not an integer"
+        ],
+        "diagnostics": [
+          "unsupported: OCCURS count NUM-CARDS is not an integer"
+        ]
+      },
+      {
+        "file_id": "xcobol/codetojoy_WarO_COBOL/player-turn.cbl",
+        "repo": "codetojoy_WarO_COBOL",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1272,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: OCCURS count NUM-CARDS is not an integer"
+        ],
+        "diagnostics": [
+          "unsupported: OCCURS count NUM-CARDS is not an integer"
+        ]
+      },
+      {
+        "file_id": "xcobol/codetojoy_WarO_COBOL/strategy-max.cbl",
+        "repo": "codetojoy_WarO_COBOL",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1071,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: OCCURS count NUM-CARDS is not an integer"
+        ],
+        "diagnostics": [
+          "unsupported: OCCURS count NUM-CARDS is not an integer"
+        ]
+      },
+      {
+        "file_id": "xcobol/codetojoy_WarO_COBOL/strategy-nearest.cbl",
+        "repo": "codetojoy_WarO_COBOL",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1454,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: OCCURS count NUM-CARDS is not an integer"
+        ],
+        "diagnostics": [
+          "unsupported: OCCURS count NUM-CARDS is not an integer"
+        ]
+      },
+      {
+        "file_id": "xcobol/codetojoy_WarO_COBOL/strategy-next.cbl",
+        "repo": "codetojoy_WarO_COBOL",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 835,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: OCCURS count NUM-CARDS is not an integer"
+        ],
+        "diagnostics": [
+          "unsupported: OCCURS count NUM-CARDS is not an integer"
+        ]
+      },
+      {
+        "file_id": "xcobol/codetojoy_WarO_COBOL/waro.cbl",
+        "repo": "codetojoy_WarO_COBOL",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 5508,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: OCCURS count NUM-CARDS-HAND is not an integer"
+        ],
+        "diagnostics": [
+          "unsupported: OCCURS count NUM-CARDS-HAND is not an integer"
+        ]
+      },
+      {
+        "file_id": "xcobol/gnaresh2328_sonarqube/Attr.cpy",
+        "repo": "gnaresh2328_sonarqube",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 2378,
+        "structural_class": "COPYBOOK_OR_DATA",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ],
+        "diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ]
+      },
+      {
+        "file_id": "xcobol/gnaresh2328_sonarqube/Custmas.cpy",
+        "repo": "gnaresh2328_sonarqube",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 400,
+        "structural_class": "COPYBOOK_OR_DATA",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ],
+        "diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ]
+      },
+      {
+        "file_id": "xcobol/gnaresh2328_sonarqube/Custmnt2.cbl",
+        "repo": "gnaresh2328_sonarqube",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 21443,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "preprocess",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": [
+          "copybook expansion failed: copybook 'CUSTMAS' not found"
+        ]
+      },
+      {
+        "file_id": "xcobol/gnaresh2328_sonarqube/Errparm.cpy",
+        "repo": "gnaresh2328_sonarqube",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 243,
+        "structural_class": "COPYBOOK_OR_DATA",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ],
+        "diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ]
+      },
+      {
+        "file_id": "xcobol/laserviking_cob-simpleinventory/cob-simpleinventory.cob",
+        "repo": "laserviking_cob-simpleinventory",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 17615,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/laserviking_cob-todo/cob-todo.cob",
+        "repo": "laserviking_cob-todo",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 12789,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ],
+        "diagnostics": [
+          "unsupported: unsupported level number LOCAL-STORAGE"
+        ]
+      },
+      {
+        "file_id": "xcobol/tylerbro93_COBOL-SALES-INVENTORY-REPORT-DEMONSTRATION/project2.cbl",
+        "repo": "tylerbro93_COBOL-SALES-INVENTORY-REPORT-DEMONSTRATION",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 11339,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": true,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "check",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: verb 125-HOUSEKEEPING"
+        ],
+        "diagnostics": [
+          "unsupported: verb 125-HOUSEKEEPING"
+        ]
+      },
+      {
+        "file_id": "xcobol/zosconnect_zosconnect-sample-cobol-apirequester/claimci0.cbl",
+        "repo": "zosconnect_zosconnect-sample-cobol-apirequester",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 25244,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "preprocess",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": [
+          "copybook expansion failed: copybook 'BAQRINFO' not found"
+        ]
+      },
+      {
+        "file_id": "xcobol/zosconnect_zosconnect-sample-cobol-apirequester/claiminf.cpy",
+        "repo": "zosconnect_zosconnect-sample-cobol-apirequester",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 541,
+        "structural_class": "COPYBOOK_OR_DATA",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ],
+        "diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ]
+      },
+      {
+        "file_id": "xcobol/zosconnect_zosconnect-sample-cobol-apirequester/claimreq.cpy",
+        "repo": "zosconnect_zosconnect-sample-cobol-apirequester",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1640,
+        "structural_class": "COPYBOOK_OR_DATA",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ],
+        "diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ]
+      },
+      {
+        "file_id": "xcobol/zosconnect_zosconnect-sample-cobol-apirequester/claimrqc.cpy",
+        "repo": "zosconnect_zosconnect-sample-cobol-apirequester",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1460,
+        "structural_class": "COPYBOOK_OR_DATA",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ],
+        "diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ]
+      },
+      {
+        "file_id": "xcobol/zosconnect_zosconnect-sample-cobol-apirequester/claimrsc.cpy",
+        "repo": "zosconnect_zosconnect-sample-cobol-apirequester",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1575,
+        "structural_class": "COPYBOOK_OR_DATA",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ],
+        "diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ]
+      },
+      {
+        "file_id": "xcobol/zosconnect_zosconnect-sample-cobol-apirequester/claimrsp.cpy",
+        "repo": "zosconnect_zosconnect-sample-cobol-apirequester",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 4559,
+        "structural_class": "COPYBOOK_OR_DATA",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ],
+        "diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ]
+      },
+      {
+        "file_id": "xcobol/zosconnect_zosconnect-sample-cobol-apirequester/imsclaic.cpy",
+        "repo": "zosconnect_zosconnect-sample-cobol-apirequester",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 1741,
+        "structural_class": "COPYBOOK_OR_DATA",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "parse",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ],
+        "diagnostics": [
+          "unsupported: no PROCEDURE DIVISION"
+        ]
+      },
+      {
+        "file_id": "xcobol/zosconnect_zosconnect-sample-cobol-apirequester/imsclaim.cbl",
+        "repo": "zosconnect_zosconnect-sample-cobol-apirequester",
+        "partition": "HELD_OUT_EVALUATION",
+        "bytes": 16411,
+        "structural_class": "COMPLETE_PROGRAM",
+        "parse_ok": false,
+        "check_ok": false,
+        "run_attempted": false,
+        "run_ok": false,
+        "exit_code": null,
+        "first_failure": "preprocess",
+        "crashed": false,
+        "timed_out": false,
+        "unsupported_diagnostics": [],
+        "diagnostics": [
+          "copybook expansion failed: copybook 'BAQRINFO' not found"
+        ]
+      }
+    ]
+  },
+  "overfitting": {
+    "gate": true,
+    "checks": [
+      {
+        "name": "hardcoded_test_names",
+        "result": "PASS",
+        "details": [
+          "scanned 84 candidate file(s) for string literals equal to any of 2202 known corpus ids; no hits"
+        ]
+      },
+      {
+        "name": "hardcoded_source_strings",
+        "result": "PASS",
+        "details": [
+          "compared 84 candidate file(s) against 34295 unique corpus source lines (40-200 chars, content-bearing); no exact or substring matches"
+        ]
+      },
+      {
+        "name": "absolute_host_paths",
+        "result": "INFO",
+        "details": [
+          "2 host-path token(s) found, all inside #[cfg(test)] modules (test fixtures with synthetic values, not source-path-dependent production behavior)",
+          "crates/gnucobol-rs/src/common_configload.rs:1175: contains host path prefix /home/",
+          "crates/gnucobol-rs/src/common_configload.rs:1183: contains host path prefix /home/"
+        ]
+      },
+      {
+        "name": "oracle_output_tables",
+        "result": "PASS",
+        "details": [
+          "scanned 84 candidate file(s); 3 64-hex token(s) found, 0 equal a known non-empty corpus expected-output hash",
+          "the empty-output hash e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 is excluded: it is the SHA-256 of zero bytes, appears as the recorded stdout of not-run corpus units and in the candidate's sha256 self-test vectors; not evidence of hardcoding",
+          "397 known non-empty corpus expected-output hash(es) were compared against",
+          "token: crates/gnucobol-rs/src/sha256.rs:98: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "token: crates/gnucobol-rs/src/sha256.rs:102: ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+          "token: crates/gnucobol-rs/src/sha256.rs:106: 248d6a61d20638b8e5c026930c3e6039a33ce45964ff2167f6ecedd419db06c1",
+          "no hardcoded oracle-output hashes"
+        ]
+      },
+      {
+        "name": "disproportionate_success",
+        "result": "INFO",
+        "details": [
+          "DEVELOPMENT accept rate 0.112 (91/809), HELD_OUT_EVALUATION accept rate 0.238 (24/101)",
+          "ratio dev/held: 0.473",
+          "no large gap between development and held-out accept rates"
+        ]
+      }
+    ],
+    "note": "The gate PASSES only when no check FAILed: no hardcoded test names, no hardcoded source strings, no absolute host paths, no oracle-output tables. Disproportionate success is INFO only. All scans are read-only over crates/gnucobol-rs/src/ and the committed reports."
+  },
+  "note": "development and validation results are roll-ups of the recorded admission-time measurements (programs.json); the held-out section is a fresh bounded re-measurement that was never used for implementation tuning."
+}

@@ -1,0 +1,51 @@
+{
+  "gate": true,
+  "checks": [
+    {
+      "name": "hardcoded_test_names",
+      "result": "PASS",
+      "details": [
+        "scanned 84 candidate file(s) for string literals equal to any of 2202 known corpus ids; no hits"
+      ]
+    },
+    {
+      "name": "hardcoded_source_strings",
+      "result": "PASS",
+      "details": [
+        "compared 84 candidate file(s) against 34295 unique corpus source lines (40-200 chars, content-bearing); no exact or substring matches"
+      ]
+    },
+    {
+      "name": "absolute_host_paths",
+      "result": "INFO",
+      "details": [
+        "2 host-path token(s) found, all inside #[cfg(test)] modules (test fixtures with synthetic values, not source-path-dependent production behavior)",
+        "crates/gnucobol-rs/src/common_configload.rs:1175: contains host path prefix /home/",
+        "crates/gnucobol-rs/src/common_configload.rs:1183: contains host path prefix /home/"
+      ]
+    },
+    {
+      "name": "oracle_output_tables",
+      "result": "PASS",
+      "details": [
+        "scanned 84 candidate file(s); 3 64-hex token(s) found, 0 equal a known non-empty corpus expected-output hash",
+        "the empty-output hash e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 is excluded: it is the SHA-256 of zero bytes, appears as the recorded stdout of not-run corpus units and in the candidate's sha256 self-test vectors; not evidence of hardcoding",
+        "397 known non-empty corpus expected-output hash(es) were compared against",
+        "token: crates/gnucobol-rs/src/sha256.rs:98: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "token: crates/gnucobol-rs/src/sha256.rs:102: ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+        "token: crates/gnucobol-rs/src/sha256.rs:106: 248d6a61d20638b8e5c026930c3e6039a33ce45964ff2167f6ecedd419db06c1",
+        "no hardcoded oracle-output hashes"
+      ]
+    },
+    {
+      "name": "disproportionate_success",
+      "result": "INFO",
+      "details": [
+        "DEVELOPMENT accept rate 0.112 (91/809), HELD_OUT_EVALUATION accept rate 0.238 (24/101)",
+        "ratio dev/held: 0.473",
+        "no large gap between development and held-out accept rates"
+      ]
+    }
+  ],
+  "note": "The gate PASSES only when no check FAILed: no hardcoded test names, no hardcoded source strings, no absolute host paths, no oracle-output tables. Disproportionate success is INFO only. All scans are read-only over crates/gnucobol-rs/src/ and the committed reports."
+}

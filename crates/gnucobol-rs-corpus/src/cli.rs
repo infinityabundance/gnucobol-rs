@@ -95,6 +95,22 @@ pub enum Command {
         oracle: bool,
         json: bool,
     },
+    /// Phase 10.3 — pure held-out measurement (never a tuning input).
+    HeldOut {
+        json: bool,
+    },
+    /// Phase 10.5 — metamorphic testing of defensible source variants.
+    Mutation {
+        json: bool,
+    },
+    /// Phase 10.4 — automated overfitting-indicator checks.
+    Overfit {
+        json: bool,
+    },
+    /// Phase 10.1/10.2/10.3 — the combined generalization report.
+    Generalize {
+        json: bool,
+    },
 }
 
 #[derive(Debug, Clone, PartialEq, Default)]
@@ -350,6 +366,10 @@ pub fn parse(args: &[String]) -> Result<Command, String> {
                 json,
             })
         }
+        "held-out" => Ok(Command::HeldOut { json }),
+        "mutation" => Ok(Command::Mutation { json }),
+        "overfit" => Ok(Command::Overfit { json }),
+        "generalize" => Ok(Command::Generalize { json }),
         other => Err(format!("unknown command: {other}\n{}", usage())),
     }
 }
@@ -358,7 +378,9 @@ fn usage() -> &'static str {
     "gnucobol-rs-corpus <command> [args] [--json]\n\
      commands: discover <dir> | fetch <spec.json> | admit [steps] | verify <id> | list |\n\
      classify <id> <CLASS> | run-oracle [steps] | run-candidate [steps] | compare <id> |\n\
-     report | gate | check-updates\n\
+     report | gate | check-updates | extract-testsuite | extract-ccvs85 | extract-manual |\n\
+     extract-extras | extract-omp | extract-xcobol | probe-step | probe-file |\n\
+     held-out | mutation | overfit | generalize\n\
      admit steps: --id ID --discover [--source-file F --corpus-class C --family F]\n\
        --custody-sha SHA --licence-spdx SPDX --redistribute yes|no --licence-decision T\n\
        --deps JSON --oracle-compile-exit N [--warnings]\n\
@@ -1077,6 +1099,15 @@ pub fn cmd_report(ms: &ManifestStore, root: &Path, dedup: &DedupIndex) -> Result
     for (k, v) in &rep.by_classification {
         md.push_str(&format!("- {k}: {v}\n"));
     }
+    // Phase-10 pointer: append the section without rewriting the summary. Content appended by
+    // `cmd_generalize` (from the same marker onward) is preserved across `report` runs.
+    let existing = std::fs::read_to_string(out.join("summary.md")).unwrap_or_default();
+    let tail = match existing.find("## Phase 10") {
+        Some(i) => existing[i..].to_string(),
+        None => crate::generalize::SUMMARY_SECTION.to_string(),
+    };
+    md.push('\n');
+    md.push_str(&tail);
     std::fs::write(out.join("summary.md"), md).map_err(|e| e.to_string())?;
     Ok(rep)
 }
@@ -1387,6 +1418,81 @@ pub fn cmd_probe_file(
     let json = serde_json::to_string_pretty(&probes).map_err(|e| e.to_string())?;
     std::fs::write(out_path, json).map_err(|e| e.to_string())?;
     Ok(probes)
+}
+
+/// `held-out`: Phase 10.3 — pure held-out measurement over every recorded
+/// `HELD_OUT_EVALUATION` file. The results are never fed back into the candidate; the report
+/// states that explicitly. Requires the admitted X-COBOL sources (clear error otherwise).
+pub fn cmd_held_out() -> Result<crate::heldout::HeldOutReport, String> {
+    let root = crate::extract::workspace_root()?;
+    let (store, _ms) = stores()?;
+    let rows = crate::heldout::load_xcobol_programs(&root)?;
+    let rep = crate::heldout::evaluate_held_out(&root, &store, &rows, true)?;
+    let out_dir = root.join("reports").join("valid-corpus");
+    std::fs::create_dir_all(&out_dir).map_err(|e| e.to_string())?;
+    let json = serde_json::to_string_pretty(&rep).map_err(|e| e.to_string())?;
+    std::fs::write(out_dir.join("held-out-results.json"), json).map_err(|e| e.to_string())?;
+    std::fs::write(out_dir.join("held-out-summary.md"), rep.summary_md())
+        .map_err(|e| e.to_string())?;
+    Ok(rep)
+}
+
+/// `mutation`: Phase 10.5 — metamorphic testing of defensible source variants over a bounded
+/// sample of admitted valid programs. Requires the admitted X-COBOL sources (clear error
+/// otherwise).
+pub fn cmd_mutation() -> Result<crate::mutation::MutationReport, String> {
+    let root = crate::extract::workspace_root()?;
+    let (store, _ms) = stores()?;
+    let rep = crate::mutation::run_mutation(&root, &store)?;
+    let out_dir = root.join("reports").join("valid-corpus");
+    std::fs::create_dir_all(&out_dir).map_err(|e| e.to_string())?;
+    let json = serde_json::to_string_pretty(&rep).map_err(|e| e.to_string())?;
+    std::fs::write(out_dir.join("mutation-results.json"), json).map_err(|e| e.to_string())?;
+    std::fs::write(out_dir.join("mutation-summary.md"), rep.summary_md())
+        .map_err(|e| e.to_string())?;
+    Ok(rep)
+}
+
+/// `overfit`: Phase 10.4 — automated overfitting-indicator checks. Read-only over the candidate
+/// source and the committed reports; works even when the X-COBOL corpus root is absent.
+pub fn cmd_overfit() -> Result<crate::overfit::OverfitReport, String> {
+    let root = crate::extract::workspace_root()?;
+    let rep = crate::overfit::run_checks(&root)?;
+    let out_dir = root.join("reports").join("valid-corpus");
+    std::fs::create_dir_all(&out_dir).map_err(|e| e.to_string())?;
+    let json = serde_json::to_string_pretty(&rep).map_err(|e| e.to_string())?;
+    std::fs::write(out_dir.join("overfitting.json"), json).map_err(|e| e.to_string())?;
+    Ok(rep)
+}
+
+/// `generalize`: Phase 10.1/10.2/10.3 — the combined generalization report
+/// (`generalization.json`) plus the Phase-10 summary.md pointer. The existing summary content is
+/// never rewritten: the pointer section is appended idempotently.
+pub fn cmd_generalize() -> Result<crate::generalize::GeneralizationReport, String> {
+    let root = crate::extract::workspace_root()?;
+    let (store, _ms) = stores()?;
+    let rep = crate::generalize::run_generalize(&root, &store)?;
+    let out_dir = root.join("reports").join("valid-corpus");
+    std::fs::create_dir_all(&out_dir).map_err(|e| e.to_string())?;
+    let json = serde_json::to_string_pretty(&rep).map_err(|e| e.to_string())?;
+    std::fs::write(out_dir.join("generalization.json"), json).map_err(|e| e.to_string())?;
+    append_summary_phase10(&out_dir)?;
+    Ok(rep)
+}
+
+/// Append the Phase-10 section to `reports/valid-corpus/summary.md` without rewriting any
+/// existing content (idempotent: a section already present is left untouched).
+fn append_summary_phase10(out_dir: &Path) -> Result<(), String> {
+    let summary_path = out_dir.join("summary.md");
+    let mut md = std::fs::read_to_string(&summary_path).unwrap_or_default();
+    if !md.contains(crate::generalize::SUMMARY_SECTION) {
+        if !md.is_empty() && !md.ends_with('\n') {
+            md.push('\n');
+        }
+        md.push_str(crate::generalize::SUMMARY_SECTION);
+        std::fs::write(&summary_path, md).map_err(|e| e.to_string())?;
+    }
+    Ok(())
 }
 
 /// `check-updates`: load every fetch spec under `specs_dir` and produce drift reports (no

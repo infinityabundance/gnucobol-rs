@@ -380,5 +380,69 @@ fn run(cmd: Command) -> Result<(), String> {
             }
             emit(&sum, json)
         }
+        Command::HeldOut { json } => {
+            let rep = cli::cmd_held_out()?;
+            if !json {
+                println!(
+                    "held-out: {} files, parse ok {}, check ok {}, run ok {} (first-failure by \
+                     phase: {:?}; all probes bounded at {}s)",
+                    rep.totals.files,
+                    rep.totals.parse_ok,
+                    rep.totals.check_ok,
+                    rep.totals.run_ok,
+                    rep.first_failure_by_phase,
+                    rep.timeout_seconds
+                );
+                println!("wrote reports/valid-corpus/held-out-results.json");
+            }
+            emit(&rep, json)
+        }
+        Command::Mutation { json } => {
+            let rep = cli::cmd_mutation()?;
+            if !json {
+                println!(
+                    "mutation: {} bases, {} variants ({} equivalent, {} divergent, {} skipped; \
+                     {}s bound per run)",
+                    rep.summary.total_bases,
+                    rep.summary.total_variants,
+                    rep.summary.equivalent,
+                    rep.summary.divergent,
+                    rep.summary.skipped,
+                    rep.timeout_seconds
+                );
+                println!("wrote reports/valid-corpus/mutation-results.json");
+            }
+            emit(&rep, json)
+        }
+        Command::Overfit { json } => {
+            let rep = cli::cmd_overfit()?;
+            if !json {
+                for c in &rep.checks {
+                    println!("overfit {:>28}: {}", c.name, c.result);
+                }
+                println!("overfit gate: {}", if rep.gate { "PASS" } else { "FAIL" });
+                println!("wrote reports/valid-corpus/overfitting.json");
+            }
+            emit(&rep, json)
+        }
+        Command::Generalize { json } => {
+            let rep = cli::cmd_generalize()?;
+            if !json {
+                println!(
+                    "generalization: dev {}/{} accepted ({:.3}), val {}/{} accepted ({:.3}), \
+                     held-out {} files, overfit gate {}",
+                    rep.development.candidate_accepted,
+                    rep.development.files,
+                    rep.development.accept_rate,
+                    rep.validation.candidate_accepted,
+                    rep.validation.files,
+                    rep.validation.accept_rate,
+                    rep.held_out.totals.files,
+                    if rep.overfitting.gate { "PASS" } else { "FAIL" }
+                );
+                println!("wrote reports/valid-corpus/generalization.json");
+            }
+            emit(&rep, json)
+        }
     }
 }
