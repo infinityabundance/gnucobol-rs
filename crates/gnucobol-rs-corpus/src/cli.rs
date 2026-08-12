@@ -123,6 +123,14 @@ pub enum Command {
     Unify {
         json: bool,
     },
+    /// Diagnostic-unblocked lane (additive; never touches the pristine suite):
+    ///   diag-unblocked transform <suite-src-root> <report-root> [--revision REV]
+    ///   diag-unblocked gate <patch> <pristine-root> <transformed-root> <transformations.json>
+    DiagUnblocked {
+        sub: String,
+        args: Vec<String>,
+        json: bool,
+    },
 }
 
 #[derive(Debug, Clone, PartialEq, Default)]
@@ -269,6 +277,15 @@ pub fn parse(args: &[String]) -> Result<Command, String> {
         "report" => Ok(Command::Report { json }),
         "gate" => Ok(Command::Gate { json }),
         "unify" => Ok(Command::Unify { json }),
+        "diag-unblocked" => {
+            let sub = args.get(1).cloned().unwrap_or_default();
+            let rest = args[2..].to_vec();
+            Ok(Command::DiagUnblocked {
+                sub,
+                args: rest,
+                json,
+            })
+        }
         "check-updates" => Ok(Command::CheckUpdates { json }),
         "extract-ccvs85" => Ok(Command::ExtractCcvs85 { json }),
         "extract-manual" => {

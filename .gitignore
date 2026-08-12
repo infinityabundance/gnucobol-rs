@@ -70,3 +70,8 @@ lab/corpus/opencbs/
 # base-image artifact paths are HOST facts, never committed; only symbolic aliases in evidence)
 /lab/valid-corpus/.env.local
 /lab/performance/.env.local
+
+# Diagnostic-unblocked lane: regenerable scratch trees (pristine/transformed copies of the
+# admitted suite sources are derived artifacts; the committed evidence is the patch + manifests)
+reports/gnucobol-testsuite/diagnostic-unblocked/scratch/
+reports/gnucobol-testsuite/diagnostic-unblocked/transform-test/

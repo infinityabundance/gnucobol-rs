@@ -248,6 +248,160 @@ impl<'a> Reader<'a> {
     }
 }
 
+/// A macro invocation with the byte span of every argument (used by the diagnostic-unblocked
+/// transformer, which must be able to replace ONLY an expectation argument's bytes).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SpannedMacro {
+    pub name: String,
+    pub line: usize,
+    /// `(start_byte, end_byte_exclusive)` of the whole `NAME(...)` invocation in the source.
+    pub full_span: (usize, usize),
+    /// One argument per element: the decoded text (one level of quoting removed) plus the raw
+    /// byte span in the source, INCLUDING the enclosing `[...]` brackets for quoted arguments.
+    pub args: Vec<SpannedArg>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SpannedArg {
+    pub text: String,
+    /// Raw byte span of the argument token in the source, including brackets for quoted args.
+    pub span: (usize, usize),
+    pub quoted: bool,
+}
+
+impl Reader<'_> {
+    /// Span-tracking variant of [`Reader::read_macro`]: same parsing rules, plus the byte span
+    /// of each argument (brackets included for quoted arguments) and of the whole invocation.
+    pub fn read_macro_spanned(
+        &mut self,
+    ) -> Result<Option<(String, Vec<SpannedArg>, (usize, usize))>, String> {
+        let start = self.pos;
+        let save = self.pos;
+        let name = match self.read_ident() {
+            Some(n) => n,
+            None => return Ok(None),
+        };
+        // only spaces/tabs may separate the name from its '(' (never a newline)
+        let mut j = self.pos;
+        while j < self.src.len() && matches!(self.src.as_bytes()[j], b' ' | b'\t') {
+            j += 1;
+        }
+        if !self.src[j..].starts_with('(') {
+            if name.starts_with("AT_") {
+                // zero-argument AT_* invocation (AT_CLEANUP / AT_COLOR_TESTS ...)
+                return Ok(Some((name, Vec::new(), (start, j))));
+            }
+            self.pos = save;
+            return Ok(None);
+        }
+        self.pos = j;
+        self.bump(); // '('
+        let mut args: Vec<SpannedArg> = Vec::new();
+        loop {
+            self.skip_ws();
+            if self.peek() == Some(')') {
+                self.bump();
+                break;
+            }
+            let arg_start = self.pos;
+            if self.peek() == Some('[') {
+                let text = self.read_quoted()?;
+                // read_quoted consumed the closing bracket; its span includes both brackets
+                let arg_end = self.pos;
+                args.push(SpannedArg {
+                    text,
+                    span: (arg_start, arg_end),
+                    quoted: true,
+                });
+            } else {
+                let mut s = String::new();
+                loop {
+                    match self.peek() {
+                        None => {
+                            return Err(format!(
+                                "unbalanced macro arguments for {name} (started at byte {save})"
+                            ))
+                        }
+                        Some(')') | Some(',') => break,
+                        Some(c) => {
+                            s.push(c);
+                            self.bump();
+                        }
+                    }
+                }
+                args.push(SpannedArg {
+                    text: s,
+                    span: (arg_start, self.pos),
+                    quoted: false,
+                });
+            }
+            self.skip_ws();
+            match self.peek() {
+                Some(',') => {
+                    self.bump();
+                    continue;
+                }
+                Some(')') => {
+                    self.bump();
+                    break;
+                }
+                None => {
+                    return Err(format!(
+                        "unbalanced macro arguments for {name} (started at byte {save})"
+                    ))
+                }
+                Some(c) => {
+                    return Err(format!(
+                        "unexpected {:?} in argument list of {name} at byte {}",
+                        c, self.pos
+                    ))
+                }
+            }
+        }
+        let end = self.pos;
+        Ok(Some((name, args, (start, end))))
+    }
+}
+
+/// Span-tracking scan: the whole source into [`SpannedMacro`] items. Comments/`dnl`/blank text
+/// between macros are consumed exactly as in [`scan`]; the caller that needs byte-exact patches
+/// works from the spans (top-level text is irrelevant for the AT_CHECK surface we transform).
+pub fn scan_spanned(src: &str) -> Result<Vec<SpannedMacro>, String> {
+    let mut r = Reader::new(src);
+    let mut out = Vec::new();
+    let mut line = 1usize;
+    while !r.eof() {
+        let before = r.pos;
+        r.skip_ws();
+        r.skip_hash_comment();
+        r.skip_dnl();
+        if r.pos != before {
+            line += src[before..r.pos].bytes().filter(|&b| b == b'\n').count();
+            continue;
+        }
+        let item_line = line;
+        match r.read_macro_spanned()? {
+            Some((name, args, span)) => {
+                line += src[before..r.pos].bytes().filter(|&b| b == b'\n').count();
+                out.push(SpannedMacro {
+                    name,
+                    line: item_line,
+                    full_span: span,
+                    args,
+                });
+            }
+            None => {
+                if let Some(c) = r.bump() {
+                    if c == '\n' {
+                        line += 1;
+                    }
+                }
+            }
+        }
+    }
+    Ok(out)
+}
+
 /// Scan the whole source into a flat item stream, consuming top-level comments/`dnl` and blank
 /// text. Text between macros is kept as [`Item::Text`] so the AT parser can detect unexpected
 /// content (fail-closed on constructs outside the known macro surface).
@@ -380,5 +534,39 @@ mod tests {
         let (name, args) = r.read_macro().unwrap().unwrap();
         assert_eq!(name, "M");
         assert_eq!(args, vec!["a", "b"]);
+    }
+
+    #[test]
+    fn spanned_args_carry_byte_spans_including_brackets() {
+        let src = "AT_CHECK([$COMPILE_ONLY prog.cob], [1], [],\n[prog.cob:9: error: bad\n])\n";
+        let items = scan_spanned(src).unwrap();
+        assert_eq!(items.len(), 1);
+        let m = &items[0];
+        assert_eq!(m.name, "AT_CHECK");
+        assert_eq!(m.args.len(), 4);
+        // command arg: quoted span includes both brackets
+        let cmd = &m.args[0];
+        assert_eq!(cmd.text, "$COMPILE_ONLY prog.cob");
+        assert_eq!(&src[cmd.span.0..cmd.span.1], "[$COMPILE_ONLY prog.cob]");
+        assert!(cmd.quoted);
+        // stderr arg: multiline quoted expectation, span includes brackets (leading newline
+        // after the comma is inter-argument whitespace, not part of the argument)
+        let err = &m.args[3];
+        assert!(err.text.contains("prog.cob:9: error: bad"));
+        assert_eq!(&src[err.span.0..err.span.1], "[prog.cob:9: error: bad\n]");
+        // the full span covers the invocation (leading/trailing inter-macro whitespace excluded)
+        assert_eq!(
+            &src[m.full_span.0..m.full_span.1],
+            "AT_CHECK([$COMPILE_ONLY prog.cob], [1], [],\n[prog.cob:9: error: bad\n])"
+        );
+    }
+
+    #[test]
+    fn spanned_zero_arg_at_macro() {
+        let src = "AT_SETUP([t])\nAT_CHECK([c], [0], [], [])\nAT_CLEANUP\n";
+        let items = scan_spanned(src).unwrap();
+        assert_eq!(items.len(), 3);
+        assert_eq!(items[2].name, "AT_CLEANUP");
+        assert!(items[2].args.is_empty());
     }
 }

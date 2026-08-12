@@ -224,6 +224,82 @@ fn run(cmd: Command) -> Result<(), String> {
                 Err(format!("{} gate failure(s)", fails.len()))
             }
         }
+        Command::DiagUnblocked { sub, args, json } => {
+            match sub.as_str() {
+                "transform" => {
+                    // diag-unblocked transform <suite-src-root> <report-root> [--revision REV]
+                    let src = PathBuf::from(args.first().ok_or_else(|| {
+                        "diag-unblocked transform: missing suite src root".to_string()
+                    })?);
+                    let out = PathBuf::from(args.get(1).ok_or_else(|| {
+                        "diag-unblocked transform: missing report root".to_string()
+                    })?);
+                    let revision = args
+                        .iter()
+                        .find_map(|a| a.strip_prefix("--revision=").map(|v| v.to_string()))
+                        .unwrap_or_else(|| "unknown".to_string());
+                    let rep =
+                        gnucobol_rs_corpus::diag_unblocked::cmd_transform(&src, &out, &revision)?;
+                    if !json {
+                        println!(
+                            "diag-unblocked transform: {} files, {} transformations, {} ignored, {} errors",
+                            rep.files_scanned,
+                            rep.transformations.len(),
+                            rep.transformations
+                                .iter()
+                                .filter(|t| t.disposition.ignores_stdout() || t.disposition.ignores_stderr())
+                                .count(),
+                            rep.errors.len()
+                        );
+                    }
+                    emit(&rep, json)
+                }
+                "gate" => {
+                    // diag-unblocked gate <patch> <pristine-root> <transformed-root> <transformations.json>
+                    let patch =
+                        PathBuf::from(args.first().ok_or_else(|| {
+                            "diag-unblocked gate: missing patch path".to_string()
+                        })?);
+                    let pristine =
+                        PathBuf::from(args.get(1).ok_or_else(|| {
+                            "diag-unblocked gate: missing pristine root".to_string()
+                        })?);
+                    let transformed = PathBuf::from(args.get(2).ok_or_else(|| {
+                        "diag-unblocked gate: missing transformed root".to_string()
+                    })?);
+                    let manifest = PathBuf::from(args.get(3).ok_or_else(|| {
+                        "diag-unblocked gate: missing transformations.json".to_string()
+                    })?);
+                    let verdict = gnucobol_rs_corpus::diag_unblocked::cmd_gate(
+                        &patch,
+                        &pristine,
+                        &transformed,
+                        &manifest,
+                    )?;
+                    if !json {
+                        if verdict.failures.is_empty() {
+                            println!("diag-unblocked gate: GREEN");
+                        } else {
+                            for f in &verdict.failures {
+                                println!("diag-unblocked gate FAIL: {f}");
+                            }
+                        }
+                    }
+                    emit(&verdict, json)?;
+                    if verdict.failures.is_empty() {
+                        Ok(())
+                    } else {
+                        Err(format!(
+                            "{} diag-unblocked gate failure(s)",
+                            verdict.failures.len()
+                        ))
+                    }
+                }
+                other => Err(format!(
+                    "diag-unblocked: unknown subcommand {other:?} (transform|gate)"
+                )),
+            }
+        }
         Command::ExtractXcobol {
             candidate,
             oracle,
