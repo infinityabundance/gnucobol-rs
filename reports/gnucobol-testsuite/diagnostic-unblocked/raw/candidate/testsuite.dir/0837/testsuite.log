@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+837. run_misc.at:13614: testing FLOAT-LONG with SIZE ERROR ...
+./run_misc.at:13664: $COMPILE prog.cob
+./run_misc.at:13667: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:00.859025414 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/837/stderr	2026-08-12 19:19:00.858414936 +0000
+@@ -1 +1 @@
+-SIZE ERROR raised
++
+stdout:
+math ERROR, last value > current: 536870912 > 1073741824
+ 
+counter is +0029
+837. run_misc.at:13614: 837. FLOAT-LONG with SIZE ERROR (run_misc.at:13614): FAILED (run_misc.at:13667)

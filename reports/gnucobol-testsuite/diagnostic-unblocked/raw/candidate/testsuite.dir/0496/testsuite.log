@@ -1,0 +1,82 @@
+#                             -*- compilation -*-
+496. listings.at:2597: testing Symbols: multiple programs/functions ...
+./listings.at:2642: $COMPILE_LISTING -t- -ftsymbols prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/496/stderr	2026-08-12 19:19:00.555241919 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-12 19:19:00.556583339 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/496/stdout	2026-08-12 19:19:00.555729478 +0000
+@@ -1,70 +1 @@
+-GnuCOBOL V.R.P          prog.cob                                        Page 0001
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000001
+-000002         IDENTIFICATION   DIVISION.
+-000003         FUNCTION-ID.     WITHPAR.
+-000004         DATA             DIVISION.
+-000005         LINKAGE          SECTION.
+-000006         01 PAR-IN        PIC 9.
+-000007         01 PAR-OUT       PIC 9.
+-000008         PROCEDURE DIVISION USING PAR-IN RETURNING PAR-OUT.
+-000009             ADD 1 TO PAR-IN GIVING PAR-OUT END-ADD.
+-000010             GOBACK.
+-000011         END FUNCTION WITHPAR.
+-000012
+-000013         IDENTIFICATION   DIVISION.
+-000014         FUNCTION-ID.     WITHOUTPAR.
+-000015         DATA             DIVISION.
+-000016         LINKAGE          SECTION.
+-000017         01 PAR           PIC 9.
+-000018         PROCEDURE DIVISION RETURNING PAR.
+-000019             MOVE 1 TO PAR.
+-000020             GOBACK.
+-000021         END FUNCTION WITHOUTPAR.
+-000022
+-000023         IDENTIFICATION   DIVISION.
+-000024         PROGRAM-ID.      prog.
+-000025         ENVIRONMENT      DIVISION.
+-000026         CONFIGURATION    SECTION.
+-000027         REPOSITORY.
+-000028             FUNCTION     WITHPAR
+-000029             FUNCTION     WITHOUTPAR.
+-000030         PROCEDURE        DIVISION.
+-000031             IF WITHPAR(1) NOT = 2
+-000032                DISPLAY WITHPAR(1)
+-000033                END-DISPLAY
+-000034             END-IF.
+-000035             IF WITHOUTPAR NOT = 1
+-000036                DISPLAY WITHOUTPAR
+-000037                END-DISPLAY
+-000038             END-IF.
+-000039             STOP RUN.
+-000040         END PROGRAM prog.
+-GnuCOBOL V.R.P          prog.cob                                        Page 0002
+-
+-SIZE  TYPE           LVL  NAME                           PICTURE
+-
+-      FUNCTION            WITHPAR
+-
+-      LINKAGE SECTION
+-
+-00001 NUMERIC        01   PAR-IN                         9
+-
+-00001 NUMERIC        01   PAR-OUT                        9
+-
+-      FUNCTION            WITHOUTPAR
+-
+-      LINKAGE SECTION
+-
+-00001 NUMERIC        01   PAR                            9
+-
+-      PROGRAM             prog
+-
+-      No fields defined.
+-
+-
+-0 warnings in compilation group
+-0 errors in compilation group
+ 
+./listings.at:2642: exit code was 1, expected 0
+496. listings.at:2597: 496. Symbols: multiple programs/functions (listings.at:2597): FAILED (listings.at:2642)

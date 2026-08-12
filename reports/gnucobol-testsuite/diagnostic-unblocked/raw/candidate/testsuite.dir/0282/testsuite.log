@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+282. syn_misc.at:1562: testing source text after program-text area ...
+./syn_misc.at:1576: $COMPILE_ONLY -Wextra prog.cob
+stderr:
+cobc-rs: unsupported: verb COMMENT
+./syn_misc.at:1576: exit code was 1, expected 0
+282. syn_misc.at:1562: 282. source text after program-text area (syn_misc.at:1562): FAILED (syn_misc.at:1576)

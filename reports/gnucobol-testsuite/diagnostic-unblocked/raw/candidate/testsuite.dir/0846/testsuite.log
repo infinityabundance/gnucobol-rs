@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+846. run_misc.at:14323: testing assorted math ...
+./run_misc.at:14352: $COMPILE prog.cob
+./run_misc.at:14353: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/846/stderr	2026-08-12 19:19:00.866726149 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unrecognized USAGE SIGNED-INT
+--- -	2026-08-12 19:19:00.868126460 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/846/stdout	2026-08-12 19:19:00.867366564 +0000
+@@ -1,2 +1 @@
+-9-9succeeded
+ 
+./run_misc.at:14353: exit code was 2, expected 0
+846. run_misc.at:14323: 846. assorted math (run_misc.at:14323): FAILED (run_misc.at:14353)

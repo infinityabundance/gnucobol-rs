@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1210. run_extensions.at:5835: testing PICTURE L (OCCURS ... PIC L) ...
+./run_extensions.at:5896: $COMPILE nested.cob
+./run_extensions.at:5897: $COBCRUN_DIRECT ./nested
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1210/stderr	2026-08-12 19:19:01.298142410 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: PIC LX(3): UnsupportedSymbol('L')
+./run_extensions.at:5897: exit code was 2, expected 0
+1210. run_extensions.at:5835: 1210. PICTURE L (OCCURS ... PIC L) (run_extensions.at:5835): FAILED (run_extensions.at:5897)

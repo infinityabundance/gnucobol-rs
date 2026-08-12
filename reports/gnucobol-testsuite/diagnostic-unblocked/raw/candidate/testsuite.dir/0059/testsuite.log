@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+59. syn_copy.at:464: testing COPY: LEADING replacement ...
+./syn_copy.at:488: $COMPILE prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/59/stderr	2026-08-12 19:19:00.254537784 +0000
+@@ -0,0 +1 @@
++cobc-rs: COPY expansion failed (fail closed): malformed COPY statement
+./syn_copy.at:488: exit code was 1, expected 0
+59. syn_copy.at:464: 59. COPY: LEADING replacement (syn_copy.at:464): FAILED (syn_copy.at:488)

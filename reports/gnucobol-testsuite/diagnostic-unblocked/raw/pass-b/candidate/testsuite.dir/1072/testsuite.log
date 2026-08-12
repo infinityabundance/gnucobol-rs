@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1072. run_functions.at:3003: testing FUNCTION REVERSE with reference modding ...
+./run_functions.at:3020: $COMPILE prog.cob
+./run_functions.at:3021: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1072/stdout	2026-08-12 19:19:37.606691727 +0000
+@@ -0,0 +1 @@
++$E+D%C.B#A
+1072. run_functions.at:3003: 1072. FUNCTION REVERSE with reference modding (run_functions.at:3003): FAILED (run_functions.at:3021)

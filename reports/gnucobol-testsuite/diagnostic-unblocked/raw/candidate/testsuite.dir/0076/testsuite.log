@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+76. syn_definition.at:100: testing invalid PROGRAM-ID type clause (2) ...
+./syn_definition.at:110: $COMPILE_ONLY prog.cob
+stderr:
+./syn_definition.at:110: exit code was 0, expected 1
+76. syn_definition.at:100: 76. invalid PROGRAM-ID type clause (2) (syn_definition.at:100): FAILED (syn_definition.at:110)

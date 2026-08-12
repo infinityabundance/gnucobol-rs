@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1246. data_binary.at:1781: testing MOVE BINARY to PACKED-DECIMAL ...
+./data_binary.at:1955: $COMPILE prog.cob
+./data_binary.at:1956: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1246/stderr	2026-08-12 19:19:01.336721117 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number REPLACE
+./data_binary.at:1956: exit code was 2, expected 0
+1246. data_binary.at:1781: 1246. MOVE BINARY to PACKED-DECIMAL (data_binary.at:1781): FAILED (data_binary.at:1956)

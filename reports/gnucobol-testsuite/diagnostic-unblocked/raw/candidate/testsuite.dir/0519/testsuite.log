@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+519. run_fundamental.at:450: testing MOVE to item with simple and floating insertion ...
+./run_fundamental.at:475: $COMPILE prog.cob
+./run_fundamental.at:476: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/519/stderr	2026-08-12 19:19:00.575810903 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number --
+--- -	2026-08-12 19:19:00.577928040 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/519/stdout	2026-08-12 19:19:00.576769380 +0000
+@@ -1,4 +1 @@
+->-**123<
+->$  *1,234.56<
+->$   1,234.56<
+ 
+./run_fundamental.at:476: exit code was 2, expected 0
+519. run_fundamental.at:450: 519. MOVE to item with simple and floating insertion (run_fundamental.at:450): FAILED (run_fundamental.at:476)

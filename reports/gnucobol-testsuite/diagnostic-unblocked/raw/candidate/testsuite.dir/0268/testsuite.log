@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+268. syn_misc.at:951: testing unreachable statement ...
+./syn_misc.at:991: $COMPILE_ONLY -Wunreachable prog.cob
+stderr:
+cobc-rs: unsupported: verb USE
+./syn_misc.at:991: exit code was 1, expected 0
+268. syn_misc.at:951: 268. unreachable statement (syn_misc.at:951): FAILED (syn_misc.at:991)

@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+88. syn_definition.at:422: testing Redefinition of 02 items ...
+./syn_definition.at:447: $COMPILE_ONLY prog2.cob
+stderr:
+cobc-rs: unsupported: no PROCEDURE DIVISION
+./syn_definition.at:447: exit code was 1, expected 0
+88. syn_definition.at:422: 88. Redefinition of 02 items (syn_definition.at:422): FAILED (syn_definition.at:447)

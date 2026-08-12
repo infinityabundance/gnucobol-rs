@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+297. syn_misc.at:2334: testing adding/removing reserved words ...
+./syn_misc.at:2354: $COMPILE_ONLY -freserved=hello,foo,bars,background-color -fnot-reserved=file prog.cob
+stderr:
+cobc-rs: -freserved=hello,foo,bars,background-color: unsupported option (rejected-unsupported; reserved-word changes: reject honestly): hello,foo,bars,background-color
+./syn_misc.at:2356: $COMPILE_ONLY -fnot-reserved=file prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/297/stderr	2026-08-12 19:19:36.899306049 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fnot-reserved=file: unsupported option (rejected-unsupported; reserved-word changes: reject honestly): file
+./syn_misc.at:2356: exit code was 1, expected 0
+297. syn_misc.at:2334: 297. adding/removing reserved words (syn_misc.at:2334): FAILED (syn_misc.at:2356)

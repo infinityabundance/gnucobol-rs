@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+1024. run_functions.at:1573: testing FUNCTION HIGHEST-ALGEBRAIC ...
+./run_functions.at:1635: $COMPILE prog.cob
+./run_functions.at:1636: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1024/stdout	2026-08-12 19:19:01.047724211 +0000
+@@ -0,0 +1,4 @@
++Test 4 fail: +00000000.0000
++Test 5 fail: +00000000.0000
++Test 6 fail: +00000999.0000
++Test 7 fail: +00000999.0000
+1024. run_functions.at:1573: 1024. FUNCTION HIGHEST-ALGEBRAIC (run_functions.at:1573): FAILED (run_functions.at:1636)

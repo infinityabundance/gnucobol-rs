@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+416. syn_move.at:521: testing invalid target for MOVE ...
+./syn_move.at:545: $COMPILE_ONLY prog.cob
+stderr:
+./syn_move.at:545: exit code was 0, expected 1
+416. syn_move.at:521: 416. invalid target for MOVE (syn_move.at:521): FAILED (syn_move.at:545)

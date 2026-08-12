@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+789. run_misc.at:5436: testing OCCURS clause with 1 entry ...
+./run_misc.at:5471: $COMPILE prog.cob
+./run_misc.at:5472: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/789/stdout	2026-08-12 19:19:37.270528963 +0000
+@@ -0,0 +1 @@
++   
+789. run_misc.at:5436: 789. OCCURS clause with 1 entry (run_misc.at:5436): FAILED (run_misc.at:5472)

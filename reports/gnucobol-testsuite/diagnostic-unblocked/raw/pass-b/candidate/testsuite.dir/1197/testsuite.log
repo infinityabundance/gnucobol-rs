@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+1197. run_extensions.at:5041: testing COBOLX format ...
+./run_extensions.at:5062: $COMPILE prog.cob
+./run_extensions.at:5063: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1197/stderr	2026-08-12 19:19:37.763340862 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: no PROCEDURE DIVISION
+--- -	2026-08-12 19:19:37.765323097 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1197/stdout	2026-08-12 19:19:37.764480677 +0000
+@@ -1,4 +1 @@
+-Hello!
+-Hi!
+-        20        30        40        50        60        70        80        90       100       110       120       130       140       150       160       170       180       190       200       210       220       230       240       250
+ 
+./run_extensions.at:5063: exit code was 2, expected 0
+1197. run_extensions.at:5041: 1197. COBOLX format (run_extensions.at:5041): FAILED (run_extensions.at:5063)

@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+322. syn_misc.at:3353: testing use of program-prototype-names ...
+./syn_misc.at:3371: $COMPILE_ONLY -fprogram-prototypes=warning prog.cob
+stderr:
+cobc-rs: -fprogram-prototypes=warning: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): warning
+./syn_misc.at:3371: exit code was 1, expected 0
+322. syn_misc.at:3353: 322. use of program-prototype-names (syn_misc.at:3353): FAILED (syn_misc.at:3371)

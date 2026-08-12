@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+183. syn_value.at:347: testing Numeric-edited item ...
+./syn_value.at:365: $COMPILE_ONLY prog.cob
+stderr:
+./syn_value.at:367: $COMPILE_ONLY -std=ibm-strict prog.cob
+stderr:
+./syn_value.at:367: exit code was 0, expected 1
+183. syn_value.at:347: 183. Numeric-edited item (syn_value.at:347): FAILED (syn_value.at:367)

@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+694. run_misc.at:911: testing TURN directive ...
+./run_misc.at:941: $COMPILE prog.cob
+./run_misc.at:942: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:37.185538303 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/694/stderr	2026-08-12 19:19:37.184337176 +0000
+@@ -1,3 +1,2 @@
+-libcob: prog.cob:20: error: subscript of 'y' out of bounds: 6
+-note: maximum subscript for 'y': 5
++cobrun: runtime error: subscript of 'Y' out of bounds: 6 (maximum: 5)
+ 
+--- -	2026-08-12 19:19:37.186252154 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/694/stdout	2026-08-12 19:19:37.184337176 +0000
+@@ -1 +1 @@
+-!!
++
+./run_misc.at:942: exit code was 2, expected 1
+694. run_misc.at:911: 694. TURN directive (run_misc.at:911): FAILED (run_misc.at:942)

@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+1238. data_binary.at:1133: testing BINARY: full-print ...
+./data_binary.at:1137: sed -e 's/@USAGE@/BINARY/' "${TEMPLATE}/numeric-display.cob" > prog.cob
+./data_binary.at:1139: $COMPILE -fbinary-size=1--8 \
+                   -fno-pretty-display prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1238/stderr	2026-08-12 19:19:01.327756527 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fbinary-size=1--8: unsupported option (rejected-unsupported; binary size model: the dialect's binary-size knob is set by -std/-conf; a bare override is rejected): 1--8
+./data_binary.at:1139: exit code was 1, expected 0
+1238. data_binary.at:1133: 1238. BINARY: full-print (data_binary.at:1133): FAILED (data_binary.at:1139)

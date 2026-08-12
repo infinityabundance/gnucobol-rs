@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+1189. run_extensions.at:4782: testing CALL own PROGRAM-ID and RECURSIVE attribute ...
+./run_extensions.at:4801: $COMPILE prog.cob
+stderr:
+./run_extensions.at:4804: $COMPILE -fself-call-recursive=error prog.cob
+stderr:
+cobc-rs: -fself-call-recursive=error: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): error
+./run_extensions.at:4807: $COMPILE -o prog_std -std=mf prog.cob
+./run_extensions.at:4826: $COMPILE progc.cob
+stderr:
+cobc-rs: COPY expansion failed (fail closed): malformed COPY statement
+./run_extensions.at:4826: exit code was 1, expected 0
+1189. run_extensions.at:4782: 1189. CALL own PROGRAM-ID and RECURSIVE attribute (run_extensions.at:4782): FAILED (run_extensions.at:4826)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1067. run_functions.at:2887: testing FUNCTION RANDOM ...
+./run_functions.at:2903: $COMPILE prog.cob
+./run_functions.at:2904: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1067/stderr	2026-08-12 19:19:01.108723558 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: FUNCTION RANDOM: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim
+./run_functions.at:2904: exit code was 2, expected 0
+1067. run_functions.at:2887: 1067. FUNCTION RANDOM (run_functions.at:2887): FAILED (run_functions.at:2904)

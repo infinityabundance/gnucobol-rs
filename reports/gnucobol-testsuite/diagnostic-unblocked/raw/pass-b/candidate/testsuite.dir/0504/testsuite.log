@@ -1,0 +1,66 @@
+#                             -*- compilation -*-
+504. listings.at:3883: testing LISTING directive free-form reference-format ...
+./listings.at:3920: $COMPILE_LISTING0 -t- -ftsymbols -free prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/504/stderr	2026-08-12 19:19:37.029087087 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-12 19:19:37.030296632 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/504/stdout	2026-08-12 19:19:37.029378881 +0000
+@@ -1,54 +1 @@
+-GnuCOBOL V.R.P               prog.cob
+-
+-LINE    .....................SOURCE.............................................
+-
+-000001
+-000002         IDENTIFICATION   DIVISION.
+-000003         PROGRAM-ID.      prog.
+-000004         DATA             DIVISION.
+-000005         WORKING-STORAGE  SECTION.
+-000006         COPY "copy.inc".
+-000001C
+-000002C >>LISTING OFF
+-000007C >>LISTING ON
+-000008C 01 TEST5-VAR PIC X(2) VALUE "OK".
+-000009C 01 TEST6-VAR PIC X(2) VALUE "OK".
+-000010C 01 TEST7-VAR PIC X(2) VALUE "OK".
+-000011C 01 TEST8-VAR PIC X(2) VALUE "OK".
+-000007         COPY "copy2.inc".
+-000001C >> LISTING OFF
+-000003C >>LISTING
+-000004C 01 TESTA-VAR PIC X(2) VALUE "OK".
+-000008         PROCEDURE        DIVISION.
+-000009  >>LISTING OFF
+-000012  >> LISTING ON
+-000013             STOP RUN.
+-
+-SIZE  TYPE           LVL  NAME                           PICTURE
+-
+-      WORKING-STORAGE SECTION
+-
+-00002 ALPHANUMERIC   01   TEST1-VAR                      X(2)
+-
+-00002 ALPHANUMERIC   01   TEST2-VAR                      X(2)
+-
+-00002 ALPHANUMERIC   01   TEST3-VAR                      X(2)
+-
+-00002 ALPHANUMERIC   01   TEST4-VAR                      X(2)
+-
+-00002 ALPHANUMERIC   01   TEST5-VAR                      X(2)
+-
+-00002 ALPHANUMERIC   01   TEST6-VAR                      X(2)
+-
+-00002 ALPHANUMERIC   01   TEST7-VAR                      X(2)
+-
+-00002 ALPHANUMERIC   01   TEST8-VAR                      X(2)
+-
+-00002 ALPHANUMERIC   01   TEST9-VAR                      X(2)
+-
+-00002 ALPHANUMERIC   01   TESTA-VAR                      X(2)
+-
+-
+-0 warnings in compilation group
+-0 errors in compilation group
+ 
+./listings.at:3920: exit code was 1, expected 0
+504. listings.at:3883: 504. LISTING directive free-form reference-format (listings.at:3883): FAILED (listings.at:3920)

@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+1234. data_binary.at:393: testing BINARY: 1-2-4-8 big-endian ...
+./data_binary.at:411: sed -e 's/@USAGE@/BINARY/' "${TEMPLATE}/numeric-dump.cob" > prog.cob
+./data_binary.at:413: $COMPILE_MODULE dump.c
+./data_binary.at:414: $COMPILE -fbinary-size=1-2-4-8 \
+                   -fbinary-byteorder=big-endian prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1234/stderr	2026-08-12 19:19:37.810889402 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fbinary-size=1-2-4-8: unsupported option (rejected-unsupported; binary size model: the dialect's binary-size knob is set by -std/-conf; a bare override is rejected): 1-2-4-8
+./data_binary.at:414: exit code was 1, expected 0
+1234. data_binary.at:393: 1234. BINARY: 1-2-4-8 big-endian (data_binary.at:393): FAILED (data_binary.at:414)

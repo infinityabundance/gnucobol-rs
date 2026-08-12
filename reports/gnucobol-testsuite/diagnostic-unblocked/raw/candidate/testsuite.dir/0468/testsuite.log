@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+468. syn_literals.at:1170: testing HP COBOL octal literals ...
+./syn_literals.at:1187: $COMPILE_ONLY -Wno-unfinished -fhp-octal-literals=ok prog.cob
+stderr:
+cobc-rs: -fhp-octal-literals=ok: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ok
+./syn_literals.at:1190: $COMPILE_ONLY -std=cobol2014 prog.cob
+stderr:
+./syn_literals.at:1190: exit code was 0, expected 1
+468. syn_literals.at:1170: 468. HP COBOL octal literals (syn_literals.at:1170): FAILED (syn_literals.at:1190)

@@ -1,0 +1,26 @@
+#                             -*- compilation -*-
+1276. data_packed.at:1971: testing PPP COMP-3 ...
+./data_packed.at:2063: $COMPILE -Wno-typing prog.cob
+./data_packed.at:2065: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1276/stderr	2026-08-12 19:19:01.375720699 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: FENCE
+--- -	2026-08-12 19:19:01.377729416 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1276/stdout	2026-08-12 19:19:01.377214867 +0000
+@@ -1,13 +1 @@
+-MOVE 1P17: -100000000000000000 : 2.
+-MOVE A-E : 1 000/000/000/000/000 00.
+-INIT X-1 : 091000 .
+-INIT X-2 : 092000 .
+-INIT X-4 : .000128 .
+-INIT D-1 : 095000 .
+-MOVE X-1 : 095000 .
+-MOVE X-2 : 095000 .
+-MOVE X-4 : .000256 .
+-MOVE D-1 : 095000 .
+-MOVE X-1 : 193000:193000 .
+-MOVE X-2 : 193000:193000 .
+ 
+./data_packed.at:2065: exit code was 2, expected 0
+1276. data_packed.at:1971: 1276. PPP COMP-3 (data_packed.at:1971): FAILED (data_packed.at:2065)

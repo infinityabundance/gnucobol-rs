@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+1145. run_extensions.at:2239: testing TALLY register ...
+./run_extensions.at:2260: $COMPILE_ONLY -fnot-register=TALLY prog.cob
+stderr:
+cobc-rs: -fnot-register=TALLY: unsupported option (rejected-unsupported; register changes: reject honestly): TALLY
+./run_extensions.at:2263: $COMPILE prog.cob
+./run_extensions.at:2264: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:01.223412768 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1145/stdout	2026-08-12 19:19:01.222722338 +0000
+@@ -1 +1 @@
+-00001
++00000
+1145. run_extensions.at:2239: 1145. TALLY register (run_extensions.at:2239): FAILED (run_extensions.at:2264)

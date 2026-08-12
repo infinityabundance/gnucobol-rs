@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+947. run_file.at:13266: testing EXTFH: File SORT, LINE SEQUENTIAL variable records ...
+./run_file.at:13315: $COMPILE -fcallfh=EXTFH prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/947/stderr	2026-08-12 19:19:37.418334669 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fcallfh=EXTFH: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): EXTFH
+./run_file.at:13315: exit code was 1, expected 0
+947. run_file.at:13266: 947. EXTFH: File SORT, LINE SEQUENTIAL variable records (run_file.at:13266): FAILED (run_file.at:13315)

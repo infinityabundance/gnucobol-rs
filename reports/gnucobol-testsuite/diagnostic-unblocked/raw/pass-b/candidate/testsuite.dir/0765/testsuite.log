@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+765. run_misc.at:4246: testing ALLOCATE / FREE with BASED item (1) ...
+./run_misc.at:4266: $COMPILE prog.cob
+./run_misc.at:4267: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/765/stderr	2026-08-12 19:19:37.250458898 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: MYFLD
+./run_misc.at:4267: exit code was 2, expected 0
+765. run_misc.at:4246: 765. ALLOCATE / FREE with BASED item (1) (run_misc.at:4246): FAILED (run_misc.at:4267)

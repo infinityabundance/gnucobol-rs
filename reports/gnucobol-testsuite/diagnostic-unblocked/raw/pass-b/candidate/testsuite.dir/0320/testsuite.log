@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+320. syn_misc.at:3277: testing STRING with non-DISPLAY ...
+./syn_misc.at:3305: $COMPILE -x -std=mf -debug -Wall prog.cob 
+stderr:
+./syn_misc.at:3305: exit code was 0, expected 1
+320. syn_misc.at:3277: 320. STRING with non-DISPLAY (syn_misc.at:3277): FAILED (syn_misc.at:3305)

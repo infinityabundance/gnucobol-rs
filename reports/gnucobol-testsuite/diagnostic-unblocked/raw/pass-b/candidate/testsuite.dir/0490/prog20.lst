@@ -1,0 +1,34 @@
+GnuCOBOL V.R.P          prog.cob                                        Page 0001
+
+LINE    PG/LN  A...B............................................................
+
+000001
+000002         IDENTIFICATION DIVISION.
+000003         PROGRAM-ID. prog-1.
+000004
+000005         DATA DIVISION.
+000006         WORKING-STORAGE SECTION.
+000007         01  blah PIC x.
+000008
+000009         END PROGRAM prog-1.
+000010
+000011         IDENTIFICATION DIVISION.
+000012         PROGRAM-ID. prog-2.
+000013         END PROGRAM prog-2.
+GnuCOBOL V.R.P          prog.cob                                        Page 0002
+
+SIZE  TYPE           LVL  NAME                           PICTURE
+
+      PROGRAM             prog-1
+
+      WORKING-STORAGE SECTION
+
+00001 ALPHANUMERIC   01   blah                           X
+
+      PROGRAM             prog-2
+
+      No fields defined.
+
+
+0 warnings in compilation group
+0 errors in compilation group

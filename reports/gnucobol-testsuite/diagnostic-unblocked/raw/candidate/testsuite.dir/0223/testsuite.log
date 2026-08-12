@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+223. syn_file.at:1779: testing ACCESS RANDOM with ORG SEQUENTIAL ...
+./syn_file.at:1799: $COMPILE_ONLY prog.cob
+stderr:
+./syn_file.at:1799: exit code was 0, expected 1
+223. syn_file.at:1779: 223. ACCESS RANDOM with ORG SEQUENTIAL (syn_file.at:1779): FAILED (syn_file.at:1799)

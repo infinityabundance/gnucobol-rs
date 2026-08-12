@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+400. syn_misc.at:7214: testing context sensitive alias ...
+./syn_misc.at:7231: $COMPILE -freserved="XX*=BYTE-LENGTH" prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/400/stderr	2026-08-12 19:19:00.482745560 +0000
+@@ -0,0 +1 @@
++cobc-rs: -freserved=XX*=BYTE-LENGTH: unsupported option (rejected-unsupported; reserved-word changes: reject honestly): XX*=BYTE-LENGTH
+./syn_misc.at:7231: exit code was 1, expected 0
+400. syn_misc.at:7214: 400. context sensitive alias (syn_misc.at:7214): FAILED (syn_misc.at:7231)

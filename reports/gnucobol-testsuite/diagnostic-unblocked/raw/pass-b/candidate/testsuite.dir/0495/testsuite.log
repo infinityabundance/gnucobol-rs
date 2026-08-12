@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+495. listings.at:2319: testing Symbols: pointer ...
+./listings.at:2371: $COMPILE_LISTING0 -t prog.lst -ftsymbols prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/495/stderr	2026-08-12 19:19:37.021289180 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+./listings.at:2371: exit code was 1, expected 0
+prog.lst:
+sed: can't read prog.lst: No such file or directory
+495. listings.at:2319: 495. Symbols: pointer (listings.at:2319): FAILED (listings.at:2371)

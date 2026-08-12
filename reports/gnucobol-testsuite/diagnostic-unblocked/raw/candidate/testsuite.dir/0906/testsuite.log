@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+906. run_file.at:5849: testing SEQUENTIAL file with blocked lock ...
+./run_file.at:5915: $COMPILE prog1.cob
+./run_file.at:5916: $COMPILE prog2.cob
+./run_file.at:5917: $COBCRUN_DIRECT ./prog1
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/906/stderr	2026-08-12 19:19:00.919735060 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "SYSTEM": not a contained program (external CALL is a boundary)
+./run_file.at:5917: exit code was 2, expected 0
+906. run_file.at:5849: 906. SEQUENTIAL file with blocked lock (run_file.at:5849): expected failure (run_file.at:5917)

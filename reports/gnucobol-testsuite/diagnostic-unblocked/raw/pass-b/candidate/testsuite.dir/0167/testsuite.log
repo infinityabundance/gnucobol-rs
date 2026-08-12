@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+167. syn_redefines.at:294: testing REDEFINES: size exceeds ...
+./syn_redefines.at:319: $COBC -fdiagnostics-plain-output -Wextra prog.cob
+--- -	2026-08-12 19:19:36.817598150 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/167/stderr	2026-08-12 19:19:36.816762031 +0000
+@@ -1,8 +1 @@
+-prog.cob:8: error: larger REDEFINES used
+-prog.cob:8: note: size of 'A' larger than size of 'X' [-Wdialect]
+-prog.cob:11: error: larger REDEFINES used
+-prog.cob:11: note: size of 'A' larger than size of 'X' [-Wdialect]
+-prog.cob:13: error: larger REDEFINES used
+-prog.cob:13: note: size of 'EXT-X-REDEF' larger than size of 'EXT-X' [-Wdialect]
+-prog.cob:17: warning: size of 'FILLER 1' larger than size of 'WRK-X2' [-Wlarger-01-redefines]
+ 
+./syn_redefines.at:319: exit code was 0, expected 1
+167. syn_redefines.at:294: 167. REDEFINES: size exceeds (syn_redefines.at:294): FAILED (syn_redefines.at:319)

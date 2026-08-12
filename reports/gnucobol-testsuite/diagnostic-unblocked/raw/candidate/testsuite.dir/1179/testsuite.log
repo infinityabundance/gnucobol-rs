@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1179. run_extensions.at:3651: testing System routine CBL_EQ ...
+./run_extensions.at:3672: $COMPILE prog.cob
+./run_extensions.at:3673: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1179/stderr	2026-08-12 19:19:01.266721866 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "CBL_EQ": not a contained program (external CALL is a boundary)
+./run_extensions.at:3673: exit code was 2, expected 0
+1179. run_extensions.at:3651: 1179. System routine CBL_EQ (run_extensions.at:3651): FAILED (run_extensions.at:3673)

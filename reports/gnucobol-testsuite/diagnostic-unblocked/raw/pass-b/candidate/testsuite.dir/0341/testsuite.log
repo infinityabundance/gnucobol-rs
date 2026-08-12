@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+341. syn_misc.at:4210: testing 78 VALUE ...
+./syn_misc.at:4230: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:4230: exit code was 0, expected 1
+341. syn_misc.at:4210: 341. 78 VALUE (syn_misc.at:4210): FAILED (syn_misc.at:4230)

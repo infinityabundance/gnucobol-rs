@@ -1,0 +1,38 @@
+#                             -*- compilation -*-
+498. listings.at:2807: testing Conditional compilation ...
+./listings.at:2847: $COMPILE_LISTING -DACTIVATE2 -t- prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/498/stderr	2026-08-12 19:19:00.556729467 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-12 19:19:00.558372916 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/498/stdout	2026-08-12 19:19:00.557749834 +0000
+@@ -1,26 +1 @@
+-GnuCOBOL V.R.P          prog.cob                                        Page 0001
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000001
+-000002         IDENTIFICATION   DIVISION.
+-000003         PROGRAM-ID.      prog.
+-000004         DATA             DIVISION.
+-000005         WORKING-STORAGE  SECTION.
+-000006         PROCEDURE        DIVISION.
+-000007         >>IF ACTIVATE DEFINED
+-000008X            DISPLAY "NOTOK" NO ADVANCING
+-000009X            END-DISPLAY
+-000010         >>ELIF ACTIVATE2 DEFINED
+-000011             DISPLAY "OK" NO ADVANCING
+-000012             END-DISPLAY
+-000013         >>ELSE
+-000014X            DISPLAY "NOTOK" NO ADVANCING
+-000015X            END-DISPLAY
+-000016         >>END-IF
+-000017             STOP RUN.
+-
+-
+-0 warnings in compilation group
+-0 errors in compilation group
+ 
+./listings.at:2847: exit code was 1, expected 0
+498. listings.at:2807: 498. Conditional compilation (listings.at:2807): FAILED (listings.at:2847)

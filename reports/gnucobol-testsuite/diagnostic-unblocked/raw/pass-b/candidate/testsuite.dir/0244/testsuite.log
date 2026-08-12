@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+244. syn_refmod.at:75: testing Static out of bounds ...
+./syn_refmod.at:105: $COMPILE_ONLY prog.cob
+stderr:
+./syn_refmod.at:105: exit code was 0, expected 1
+244. syn_refmod.at:75: 244. Static out of bounds (syn_refmod.at:75): FAILED (syn_refmod.at:105)

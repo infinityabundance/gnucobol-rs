@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+350. syn_misc.at:4799: testing Fall-Through to WHEN OTHER ...
+./syn_misc.at:4827: $COMPILE_ONLY prog.cob
+stderr:
+prog.cob:13: error: syntax error, unexpected OTHER
+prog.cob:13: error: WHEN without imperative statement
+./syn_misc.at:4830: $COMPILE_ONLY -frelax-syntax-checks prog.cob
+stderr:
+prog.cob:13: error: syntax error, unexpected OTHER
+prog.cob:13: error: WHEN without imperative statement
+350. syn_misc.at:4799: 350. Fall-Through to WHEN OTHER (syn_misc.at:4799): UNEXPECTED PASS     (0m0.017s 0m0.006s)

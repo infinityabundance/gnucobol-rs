@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+385. syn_misc.at:6221: testing PERFORM THRU syntax checks ...
+./syn_misc.at:6257: $COMPILE_ONLY -Wno-suspicious-perform-thru prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/385/stderr	2026-08-12 19:19:00.471730378 +0000
+@@ -0,0 +1 @@
++cobc-rs: unsupported: verb SUB1
+./syn_misc.at:6257: exit code was 1, expected 0
+385. syn_misc.at:6221: 385. PERFORM THRU syntax checks (syn_misc.at:6221): FAILED (syn_misc.at:6257)

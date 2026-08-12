@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+852. run_file.at:261: testing OPEN EXTEND and CLOSE, INDEXED ...
+./run_file.at:327: $COMPILE prog.cob
+./run_file.at:328: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/852/stderr	2026-08-12 19:19:00.871726095 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: OPEN: `FILE-OPT` is not a declared file
+./run_file.at:328: exit code was 2, expected 0
+852. run_file.at:261: 852. OPEN EXTEND and CLOSE, INDEXED (run_file.at:261): FAILED (run_file.at:328)

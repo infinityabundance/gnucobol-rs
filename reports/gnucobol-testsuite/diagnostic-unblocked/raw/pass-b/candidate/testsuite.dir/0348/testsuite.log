@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+348. syn_misc.at:4625: testing Constant Expressions (5) ...
+./syn_misc.at:4700: $COMPILE_ONLY -fdiagnostics-show-option -C -fno-remove-unreachable prog.cob
+--- -	2026-08-12 19:19:36.930336025 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/348/stderr	2026-08-12 19:19:36.929754752 +0000
+@@ -1,9 +1,2 @@
+-prog.cob: in paragraph 'MAIN-10':
+-prog.cob:17: warning: expression '115' GREATER THAN '16' is always TRUE [-Wconstant-numlit-expression]
+-prog.cob:17: warning: expression '115' LESS THAN '200' is always TRUE [-Wconstant-numlit-expression]
+-prog.cob:20: error: offset of 'VAR' out of bounds: -99
+-prog.cob:23: warning: expression '115' LESS THAN '16' is always FALSE [-Wconstant-numlit-expression]
+-prog.cob:35: warning: expression '3' EQUALS '7' is always FALSE [-Wconstant-numlit-expression]
+-prog.cob:60: warning: expression '115' LESS THAN '32' is always FALSE [-Wconstant-numlit-expression]
+-prog.cob:62: warning: expression '115' GREATER THAN '16' is always TRUE [-Wconstant-numlit-expression]
++cobc-rs: -C: unsupported option (rejected-unsupported; generate C: the candidate is an interpreter, not a C emitter; reject honestly): 
+ 
+348. syn_misc.at:4625: 348. Constant Expressions (5) (syn_misc.at:4625): FAILED (syn_misc.at:4700)

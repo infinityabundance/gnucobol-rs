@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+226. syn_file.at:1901: testing ALTERNATE RECORD definition WITH NO DUPLICATES ...
+./syn_file.at:1924: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: unsupported: no PROCEDURE DIVISION
+./syn_file.at:1926: $COMPILE_ONLY -frelax-syntax prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/226/stderr	2026-08-12 19:19:00.354731630 +0000
+@@ -0,0 +1 @@
++cobc-rs: -frelax-syntax: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
+./syn_file.at:1926: exit code was 1, expected 0
+226. syn_file.at:1901: 226. ALTERNATE RECORD definition WITH NO DUPLICATES (syn_file.at:1901): expected failure (syn_file.at:1926)

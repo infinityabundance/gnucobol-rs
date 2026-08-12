@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1004. run_functions.at:834: testing FUNCTION DATE-TO-YYYYMMDD ...
+./run_functions.at:853: $COMPILE prog.cob
+./run_functions.at:854: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1004/stderr	2026-08-12 19:19:37.484516127 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: FUNCTION DATE-TO-YYYYMMDD requires a pinned COB_CURRENT_DATE
+./run_functions.at:854: exit code was 2, expected 0
+1004. run_functions.at:834: 1004. FUNCTION DATE-TO-YYYYMMDD (run_functions.at:834): FAILED (run_functions.at:854)

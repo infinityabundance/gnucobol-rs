@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+744. run_misc.at:2942: testing UNSTRING DELIMITED ALL SPACE-2 ...
+./run_misc.at:2989: $COMPILE prog.cob
+./run_misc.at:2990: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/744/stdout	2026-08-12 19:19:00.782727048 +0000
+@@ -0,0 +1,5 @@
++Expected 5 - Got 41
++Expected ABC AND DE - Got                
++Expected 21 - Got 41
++Expected  FG AND HIJ - Got                
++Expected 40 - Got 41
+744. run_misc.at:2942: 744. UNSTRING DELIMITED ALL SPACE-2 (run_misc.at:2942): FAILED (run_misc.at:2990)

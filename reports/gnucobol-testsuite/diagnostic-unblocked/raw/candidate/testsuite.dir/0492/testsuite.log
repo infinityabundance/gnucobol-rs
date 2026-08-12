@@ -1,0 +1,33 @@
+#                             -*- compilation -*-
+492. listings.at:2037: testing command line ...
+./listings.at:2054: $COBC $LISTING_FLAGS -q -fsyntax-only -t- -fno-theader -ftcmd prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/492/stderr	2026-08-12 19:19:00.550381418 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-12 19:19:00.551474415 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/492/stdout	2026-08-12 19:19:00.550779129 +0000
+@@ -1,19 +1 @@
+ 
+-000001
+-000002         IDENTIFICATION   DIVISION.
+-000003         FUNCTION-ID.     WITHPAR.
+-000004         DATA             DIVISION.
+-000005         LINKAGE          SECTION.
+-000006         01 PAR-IN        PIC 9.
+-000007         01 PAR-OUT       PIC 9.
+-000008         PROCEDURE DIVISION USING PAR-IN RETURNING PAR-OUT.
+-000009             ADD 1 TO PAR-IN GIVING PAR-OUT END-ADD.
+-000010             GOBACK.
+-000011         END FUNCTION WITHPAR.
+-
+-command line:
+-  cobc -fttitle=GnuCOBOL_V.R.P -fno-ttimestamp -q -fsyntax-only -t-
+-+ -fno-theader -ftcmd prog.cob
+-0 warnings in compilation group
+-0 errors in compilation group
+-
+./listings.at:2054: exit code was 1, expected 0
+prog.lst:
+sed: can't read prog.lst: No such file or directory
+492. listings.at:2037: 492. command line (listings.at:2037): FAILED (listings.at:2054)

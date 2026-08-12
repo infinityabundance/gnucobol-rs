@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+150. syn_occurs.at:374: testing Nested OCCURS clause ...
+./syn_occurs.at:393: $COMPILE_ONLY prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/150/stderr	2026-08-12 19:19:36.805427200 +0000
+@@ -0,0 +1 @@
++cobc-rs: unsupported: no PROCEDURE DIVISION
+./syn_occurs.at:393: exit code was 1, expected 0
+150. syn_occurs.at:374: 150. Nested OCCURS clause (syn_occurs.at:374): FAILED (syn_occurs.at:393)

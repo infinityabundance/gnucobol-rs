@@ -1,0 +1,21 @@
+#                             -*- compilation -*-
+47. configuration.at:748: testing validation of COB_CONFIG_DIR ...
+./configuration.at:758: echo "$PATHSEP"
+--- -	2026-08-12 19:19:36.748349777 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/47/stdout	2026-08-12 19:19:36.747802006 +0000
+@@ -1,2 +1,2 @@
+-;
++:
+ 
+./configuration.at:763: COB_CONFIG_DIR=".:/temp:/tmp" \
+$COMPILE prog.cob
+--- -	2026-08-12 19:19:36.750172785 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/47/stderr	2026-08-12 19:19:36.749735290 +0000
+@@ -1,5 +1 @@
+-cobc: environment variable 'COB_CONFIG_DIR' is '.:/temp:/tmp'; should not contain ':'
+-configuration error:
+-./default.conf: No such file or directory
+-cobc: error: please check environment variables as noted above
+ 
+./configuration.at:763: exit code was 0, expected 1
+47. configuration.at:748: 47. validation of COB_CONFIG_DIR (configuration.at:748): FAILED (configuration.at:763)

@@ -1,0 +1,23 @@
+
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. prog.
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       DATA  DIVISION.
+       WORKING-STORAGE SECTION.
+       01  I-X        PIC  9(9) COMP-X VALUE 6.
+       01  I-B        PIC  9(9) BINARY VALUE 6.
+       01  I-P        PIC  9(9) COMP-3 VALUE 6.
+       01  I-D        PIC  9(9) VALUE 6.
+       01  I-F        COMP-1 VALUE 6.
+       01  TSTWRK   PIC X(48).
+
+       PROCEDURE DIVISION.
+       MAIN-10.
+           STRING " ID:" I-D
+               DELIMITED BY SIZE INTO TSTWRK.
+           STRING " IX:" I-X " IB:" I-B
+                  " ID:" I-D
+                  " IP:" I-P " IF:" I-F
+               DELIMITED BY SIZE INTO TSTWRK.
+           STOP RUN.

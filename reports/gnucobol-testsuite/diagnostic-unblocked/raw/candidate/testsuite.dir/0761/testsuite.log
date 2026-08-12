@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+761. run_misc.at:4082: testing COB_PRE_LOAD ...
+./run_misc.at:4101: $COMPILE_MODULE callee.cob
+./run_misc.at:4102: $COMPILE caller.cob
+./run_misc.at:4103: COB_PRE_LOAD=callee $COBCRUN_DIRECT ./caller
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/761/stderr	2026-08-12 19:19:00.800207085 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "callee2": not a contained program (external CALL is a boundary)
+./run_misc.at:4103: exit code was 2, expected 0
+761. run_misc.at:4082: 761. COB_PRE_LOAD (run_misc.at:4082): FAILED (run_misc.at:4103)

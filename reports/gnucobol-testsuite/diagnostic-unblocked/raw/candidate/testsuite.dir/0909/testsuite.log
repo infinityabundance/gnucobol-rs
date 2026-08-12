@@ -1,0 +1,25 @@
+#                             -*- compilation -*-
+909. run_file.at:6006: testing RELATIVE SEQUENTIAL with variable records ...
+./run_file.at:6062: $COMPILE prog.cob
+./run_file.at:6063: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/909/stderr	2026-08-12 19:19:00.919735060 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: RELATIVE file `F` has no RELATIVE KEY
+--- -	2026-08-12 19:19:00.921620545 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/909/stdout	2026-08-12 19:19:00.920725571 +0000
+@@ -1,12 +1 @@
+-20: >+12345678++12345678+<
+-19: >+12345678++12345678<
+-18: >+12345678++1234567<
+-17: >+12345678++123456<
+-16: >+12345678++12345<
+-15: >+12345678++1234<
+-14: >+12345678++123<
+-13: >+12345678++12<
+-12: >+12345678++1<
+-11: >+12345678++<
+-10: >+12345678+<
+ 
+./run_file.at:6063: exit code was 2, expected 0
+909. run_file.at:6006: 909. RELATIVE SEQUENTIAL with variable records (run_file.at:6006): FAILED (run_file.at:6063)

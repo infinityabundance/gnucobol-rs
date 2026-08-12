@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1116. run_extensions.at:217: testing Semi-parenthesized condition ...
+./run_extensions.at:231: $COMPILE -Wno-constant-expression prog.cob
+./run_extensions.at:232: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:37.670359296 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1116/stdout	2026-08-12 19:19:37.669694286 +0000
+@@ -1 +1 @@
+-OK
++
+1116. run_extensions.at:217: 1116. Semi-parenthesized condition (run_extensions.at:217): FAILED (run_extensions.at:232)

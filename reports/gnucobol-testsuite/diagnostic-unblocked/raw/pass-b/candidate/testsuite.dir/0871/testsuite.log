@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+871. run_file.at:1442: testing INDEXED file key-name ...
+./run_file.at:1478: $COMPILE prog.cob
+./run_file.at:1480: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/871/stderr	2026-08-12 19:19:37.349678824 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: expected program name after PROGRAM-ID
+--- -	2026-08-12 19:19:37.351588173 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/871/stdout	2026-08-12 19:19:37.350829158 +0000
+@@ -1 +1 @@
+-FINE
++
+./run_file.at:1480: exit code was 2, expected 0
+871. run_file.at:1442: 871. INDEXED file key-name (run_file.at:1442): FAILED (run_file.at:1480)

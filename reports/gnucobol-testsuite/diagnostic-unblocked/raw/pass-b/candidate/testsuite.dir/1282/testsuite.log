@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+1282. data_pointer.at:21: testing POINTER: display ...
+./data_pointer.at:41: $COMPILE prog.cob
+./data_pointer.at:43: test "$COB_HAS_64_BIT_POINTER" = "yes"
+./data_pointer.at:43: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1282/stderr	2026-08-12 19:19:37.875177187 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: NULL
+--- -	2026-08-12 19:19:37.876115557 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1282/stdout	2026-08-12 19:19:37.875177187 +0000
+@@ -1,4 +1 @@
+-0x0000000000000000
+-0x0000000000000001
+-0x0000000000000000
+ 
+./data_pointer.at:43: exit code was 2, expected 0
+1282. data_pointer.at:21: 1282. POINTER: display (data_pointer.at:21): FAILED (data_pointer.at:43)

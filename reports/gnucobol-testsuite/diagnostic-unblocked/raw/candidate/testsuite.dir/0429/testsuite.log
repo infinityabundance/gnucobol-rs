@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+429. syn_screen.at:279: testing Screen clauses ...
+./syn_screen.at:298: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: unsupported: unsupported level number SCREEN
+./syn_screen.at:298: exit code was 1, expected 0
+429. syn_screen.at:279: 429. Screen clauses (syn_screen.at:279): FAILED (syn_screen.at:298)

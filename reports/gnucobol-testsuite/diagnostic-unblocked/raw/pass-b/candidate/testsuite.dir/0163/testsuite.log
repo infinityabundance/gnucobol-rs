@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+163. syn_redefines.at:188: testing REDEFINES: with subscript ...
+./syn_redefines.at:204: $COMPILE_ONLY prog.cob
+stderr:
+./syn_redefines.at:204: exit code was 0, expected 1
+163. syn_redefines.at:188: 163. REDEFINES: with subscript (syn_redefines.at:188): FAILED (syn_redefines.at:204)

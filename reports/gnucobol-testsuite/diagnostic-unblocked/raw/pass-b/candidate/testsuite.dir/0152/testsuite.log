@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+152. syn_occurs.at:447: testing OCCURS DEPENDING followed by another field ...
+./syn_occurs.at:469: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: unsupported: no PROCEDURE DIVISION
+./syn_occurs.at:472: $COMPILE_ONLY -fcomplex-odo prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/152/stderr	2026-08-12 19:19:36.808438123 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fcomplex-odo: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
+./syn_occurs.at:472: exit code was 1, expected 0
+152. syn_occurs.at:447: 152. OCCURS DEPENDING followed by another field (syn_occurs.at:447): FAILED (syn_occurs.at:472)

@@ -1,0 +1,19 @@
+{
+  "schema": "gnurust-diag-unblocked-pass-meta-v1",
+  "pass": "a",
+  "git_commit": "e34b30bf30dcc9761b2fe2d39025012dc0137331",
+  "crate_version": "0.8.57",
+  "cobc_version": "cobc (GnuCOBOL) 3.2.0",
+  "configure": "./configure --prefix=/work/oracle/prefix --with-db BDB_CFLAGS=-I/usr/include/db5.3 BDB_LIBS=-ldb-5.3 CFLAGS=-O2 -std=gnu17 -fsigned-char",
+  "generated_testsuite_sha256": "9ef79a4baa6ca98386858a42b486e8e8b67d8d05bb0a73b0b17a0148b0e77049",
+  "generated_testsuite_bytes": 7946652,
+  "patch_sha256": "712a0b172021c7ec650c6d97e348b465efd355699e309e956d95f99a2dc69230",
+  "transformer_version": "gnurust-diag-unblocked-transform-v1",
+  "candidate_binary_sha256": "907e3128d5de8f49dfd24d113ce4a3bf30f35bc5e5dcf9874e4d2ff493a9f264",
+  "environment": {
+    "LC_ALL": "C.UTF-8", "LANG": "C.UTF-8", "TZ": "UTC0",
+    "SOURCE_DATE_EPOCH": "725846400",
+    "RUST_TOOLCHAIN": "1.96.0",
+    "jobs": "12", "nproc": "16"
+  }
+}

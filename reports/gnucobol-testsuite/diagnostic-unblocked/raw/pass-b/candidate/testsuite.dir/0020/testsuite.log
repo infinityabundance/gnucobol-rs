@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+20. used_binaries.at:774: testing run job after compilation ...
+./used_binaries.at:785: $COMPILE -jd prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/20/stderr	2026-08-12 19:19:36.729298441 +0000
+@@ -0,0 +1 @@
++cobc-rs: -jd: unsupported option (rejected-unsupported; debug job: requires the shared-memory job model; reject honestly): 
+--- -	2026-08-12 19:19:36.730455919 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/20/stdout	2026-08-12 19:19:36.729342051 +0000
+@@ -1 +1 @@
+-job
++
+./used_binaries.at:785: exit code was 1, expected 0
+20. used_binaries.at:774: 20. run job after compilation (used_binaries.at:774): FAILED (used_binaries.at:785)

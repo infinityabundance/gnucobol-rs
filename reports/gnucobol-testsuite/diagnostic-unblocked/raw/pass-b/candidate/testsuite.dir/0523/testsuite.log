@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+523. run_fundamental.at:612: testing equality of FLOAT-SHORT / FLOAT-LONG ...
+./run_fundamental.at:729: $COMPILE prog.cob
+./run_fundamental.at:730: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/523/stderr	2026-08-12 19:19:37.049344811 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: FAILED
+./run_fundamental.at:730: exit code was 2, expected 0
+523. run_fundamental.at:612: 523. equality of FLOAT-SHORT / FLOAT-LONG (run_fundamental.at:612): FAILED (run_fundamental.at:730)

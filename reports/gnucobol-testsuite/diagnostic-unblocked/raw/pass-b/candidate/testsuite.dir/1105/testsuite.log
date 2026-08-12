@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1105. run_functions.at:4405: testing Intrinsics without FUNCTION keyword (1) ...
+./run_functions.at:4420: $COMPILE -fintrinsics=all prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1105/stderr	2026-08-12 19:19:37.657332108 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fintrinsics=all: unsupported option (rejected-unsupported; intrinsic function set: reject honestly): all
+./run_functions.at:4420: exit code was 1, expected 0
+1105. run_functions.at:4405: 1105. Intrinsics without FUNCTION keyword (1) (run_functions.at:4405): FAILED (run_functions.at:4420)

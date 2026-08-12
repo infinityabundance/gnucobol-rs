@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+787. run_misc.at:5378: testing STOP ERROR ...
+./run_misc.at:5395: $COMPILE prog.cob -fstop-error-statement=ok
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/787/stderr	2026-08-12 19:19:37.268057996 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fstop-error-statement=ok: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ok
+./run_misc.at:5395: exit code was 1, expected 0
+787. run_misc.at:5378: 787. STOP ERROR (run_misc.at:5378): FAILED (run_misc.at:5395)

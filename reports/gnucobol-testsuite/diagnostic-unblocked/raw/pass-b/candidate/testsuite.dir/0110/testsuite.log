@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+110. syn_definition.at:1063: testing Non-matching level numbers (extension) ...
+./syn_definition.at:1085: $COMPILE_ONLY -frelax-level-hierarchy prog.cob
+stderr:
+cobc-rs: -frelax-level-hierarchy: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
+./syn_definition.at:1085: exit code was 1, expected 0
+110. syn_definition.at:1063: 110. Non-matching level numbers (extension) (syn_definition.at:1063): FAILED (syn_definition.at:1085)

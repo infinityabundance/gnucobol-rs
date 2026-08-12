@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+752. run_misc.at:3520: testing SORT: table (toplevel) ...
+./run_misc.at:3536: $COMPILE prog.cob
+./run_misc.at:3537: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/752/stderr	2026-08-12 19:19:37.233277529 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: SORT: `TBL` is not a declared file
+./run_misc.at:3537: exit code was 2, expected 0
+752. run_misc.at:3520: 752. SORT: table (toplevel) (run_misc.at:3520): FAILED (run_misc.at:3537)

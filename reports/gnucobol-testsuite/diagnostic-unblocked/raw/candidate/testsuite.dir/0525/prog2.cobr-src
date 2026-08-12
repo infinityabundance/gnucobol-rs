@@ -1,0 +1,33 @@
+
+        IDENTIFICATION DIVISION.
+        PROGRAM-ID. prog2.
+
+        DATA DIVISION.
+        WORKING-STORAGE SECTION.
+        01 STRUCTURE.
+            05 FIELD1 PIC X(5).
+            05 FIELD2 PIC X(10).
+
+        PROCEDURE DIVISION.
+           MOVE "Hallo" TO FIELD1.
+           MOVE "1234567890" TO FIELD2.
+
+           CALL "subprog" USING BY REFERENCE FIELD2 STRUCTURE.
+
+           STOP RUN.
+
+
+        IDENTIFICATION DIVISION.
+        PROGRAM-ID. subprog.
+        DATA DIVISION.
+        WORKING-STORAGE SECTION.
+        LINKAGE SECTION.
+        01 F1 PIC X(10).
+        01 F2 PIC X(15).
+
+        PROCEDURE DIVISION USING F1 F2.
+        MOVE F1(1:8) TO F2 (7:8).
+        IF F2 NOT = "Hallo1123456780"
+           DISPLAY "error:3: " F2.
+
+        GOBACK.

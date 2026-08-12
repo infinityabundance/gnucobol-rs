@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+255. syn_misc.at:582: testing missing headers ...
+./syn_misc.at:609: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: unsupported: no PROCEDURE DIVISION
+./syn_misc.at:612: $COMPILE_ONLY -frelax-syntax-checks prog.cob
+stderr:
+cobc-rs: -frelax-syntax-checks: unsupported option (rejected-unsupported; relaxed syntax checks: the candidate parser has one sealed strictness; reject honestly): 
+./syn_misc.at:612: exit code was 1, expected 0
+255. syn_misc.at:582: 255. missing headers (syn_misc.at:582): FAILED (syn_misc.at:612)

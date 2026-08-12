@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+1164. run_extensions.at:3225: testing System routine C$PARAMSIZE ...
+./run_extensions.at:3260: $COMPILE caller.cob
+./run_extensions.at:3261: $COMPILE_MODULE callee.cob
+./run_extensions.at:3262: $COBCRUN_DIRECT ./caller
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1164/stderr	2026-08-12 19:19:01.247722070 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "C$PARAMSIZE": not a contained program (external CALL is a boundary)
+./run_extensions.at:3262: exit code was 2, expected 0
+1164. run_extensions.at:3225: 1164. System routine C$PARAMSIZE (run_extensions.at:3225): FAILED (run_extensions.at:3262)

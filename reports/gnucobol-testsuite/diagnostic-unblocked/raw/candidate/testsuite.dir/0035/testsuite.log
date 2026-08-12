@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+35. configuration.at:272: testing cobc configuration: entries ...
+./configuration.at:285: $COMPILE_ONLY -q \
+-fcomment-paragraphsok prog.cob
+stderr:
+cobc-rs: -fcomment-paragraphsok: unknown option (no explicit policy; failing closed — see --print-capabilities)
+./configuration.at:288: $COMPILE_ONLY \
+-fassign-clause=cobol-2002 prog.cob
+stderr:
+cobc-rs: -fassign-clause=cobol-2002: unsupported option (rejected-unsupported; ASSIGN clause dialect: reject honestly): cobol-2002
+./configuration.at:291: $COMPILE_ONLY \
+-freserved-words=default prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/35/stderr	2026-08-12 19:19:00.240507037 +0000
+@@ -0,0 +1 @@
++cobc-rs: -freserved-words=default: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): default
+./configuration.at:291: exit code was 1, expected 0
+35. configuration.at:272: 35. cobc configuration: entries (configuration.at:272): FAILED (configuration.at:291)

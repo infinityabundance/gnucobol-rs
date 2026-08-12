@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+467. syn_literals.at:1146: testing binary-hexadecimal literals ...
+./syn_literals.at:1161: $COMPILE_ONLY prog.cob
+stderr:
+./syn_literals.at:1161: exit code was 0, expected 1
+467. syn_literals.at:1146: 467. binary-hexadecimal literals (syn_literals.at:1146): FAILED (syn_literals.at:1161)

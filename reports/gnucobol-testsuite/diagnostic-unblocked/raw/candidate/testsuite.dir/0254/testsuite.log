@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+254. syn_misc.at:549: testing Valid conditional expression ...
+./syn_misc.at:576: $COMPILE_ONLY prog.cob
+./syn_misc.at:577: $COMPILE_ONLY -fno-constant-folding prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/254/stderr	2026-08-12 19:19:00.373780928 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fno-constant-folding: unsupported option (rejected-unsupported; constant folding: reject honestly): 
+./syn_misc.at:577: exit code was 1, expected 0
+254. syn_misc.at:549: 254. Valid conditional expression (syn_misc.at:549): FAILED (syn_misc.at:577)

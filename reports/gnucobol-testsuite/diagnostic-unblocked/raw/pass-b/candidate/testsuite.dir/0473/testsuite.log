@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+473. syn_literals.at:1317: testing literal missing terminating character ...
+./syn_literals.at:1330: $COMPILE_ONLY -w prog.cob
+stderr:
+./syn_literals.at:1330: exit code was 0, expected 1
+473. syn_literals.at:1317: 473. literal missing terminating character (syn_literals.at:1317): FAILED (syn_literals.at:1330)

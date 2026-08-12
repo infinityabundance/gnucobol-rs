@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+560. run_fundamental.at:2567: testing Context sensitive words (7) ...
+./run_fundamental.at:2588: $COMPILE prog.cob
+./run_fundamental.at:2589: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:00.618912654 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/560/stdout	2026-08-12 19:19:00.617728815 +0000
+@@ -1 +1 @@
+-21
++20
+560. run_fundamental.at:2567: 560. Context sensitive words (7) (run_fundamental.at:2567): FAILED (run_fundamental.at:2589)

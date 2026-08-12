@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+904. run_file.at:5704: testing SEQUENTIAL file with SHARING NO ...
+./run_file.at:5767: $COMPILE prog1.cob
+./run_file.at:5768: $COMPILE prog2.cob
+./run_file.at:5769: $COBCRUN_DIRECT ./prog1
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/904/stderr	2026-08-12 19:19:37.378335098 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "SYSTEM": not a contained program (external CALL is a boundary)
+./run_file.at:5769: exit code was 2, expected 0
+904. run_file.at:5704: 904. SEQUENTIAL file with SHARING NO (run_file.at:5704): expected failure (run_file.at:5769)

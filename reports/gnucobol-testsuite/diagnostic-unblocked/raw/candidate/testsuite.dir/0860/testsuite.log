@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+860. run_file.at:719: testing ASSIGN EXTERNAL parsing ...
+./run_file.at:744: $COMPILE -fassign-clause=external prog.cob
+stderr:
+cobc-rs: -fassign-clause=external: unsupported option (rejected-unsupported; ASSIGN clause dialect: reject honestly): external
+./run_file.at:744: exit code was 1, expected 0
+860. run_file.at:719: 860. ASSIGN EXTERNAL parsing (run_file.at:719): FAILED (run_file.at:744)

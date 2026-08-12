@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+753. run_misc.at:3542: testing SORT: EBCDIC table ...
+./run_misc.at:3599: $COMPILE prog.cob
+./run_misc.at:3600: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/753/stderr	2026-08-12 19:19:00.792726941 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: SORT: `TBL` is not a declared file
+./run_misc.at:3600: exit code was 2, expected 0
+753. run_misc.at:3542: 753. SORT: EBCDIC table (run_misc.at:3542): FAILED (run_misc.at:3600)

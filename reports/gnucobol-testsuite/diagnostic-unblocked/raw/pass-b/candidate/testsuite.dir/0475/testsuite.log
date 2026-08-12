@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+475. listings.at:21: testing Minimal lines per listing pages ...
+./listings.at:75: $COMPILE_ONLY -t prog.lst -tlines=2 prog.cob
+stderr:
+cobc-rs: -t: unsupported option (rejected-unsupported; listing file: no listing model; reject honestly): prog.lst
+./listings.at:75: exit code was 1, expected 0
+prog.lst:
+sed: can't read prog.lst: No such file or directory
+475. listings.at:21: 475. Minimal lines per listing pages (listings.at:21): FAILED (listings.at:75)

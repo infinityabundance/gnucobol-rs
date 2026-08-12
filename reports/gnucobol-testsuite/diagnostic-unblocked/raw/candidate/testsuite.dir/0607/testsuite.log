@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+607. run_fundamental.at:6203: testing TYPEDEF application ...
+./run_fundamental.at:6249: $COMPILE caller.cob
+./run_fundamental.at:6250: $COMPILE_MODULE callee.cob
+./run_fundamental.at:6251: $COBCRUN_DIRECT ./caller
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/607/stderr	2026-08-12 19:19:00.661728343 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unrecognized USAGE INT
+./run_fundamental.at:6251: exit code was 2, expected 0
+607. run_fundamental.at:6203: 607. TYPEDEF application (run_fundamental.at:6203): FAILED (run_fundamental.at:6251)

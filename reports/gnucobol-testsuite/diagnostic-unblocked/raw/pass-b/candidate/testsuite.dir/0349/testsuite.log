@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+349. syn_misc.at:4725: testing Missing imperative statements ...
+./syn_misc.at:4790: $COMPILE_ONLY -w -fmissing-statement=error prog.cob
+stderr:
+cobc-rs: -fmissing-statement=error: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): error
+./syn_misc.at:4793: $COMPILE_ONLY -fno-constant-folding -fmissing-statement=warning prog.cob
+stderr:
+cobc-rs: -fno-constant-folding: unsupported option (rejected-unsupported; constant folding: reject honestly): 
+./syn_misc.at:4793: exit code was 1, expected 0
+349. syn_misc.at:4725: 349. Missing imperative statements (syn_misc.at:4725): FAILED (syn_misc.at:4793)

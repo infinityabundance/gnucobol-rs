@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1083. run_functions.at:3315: testing FUNCTION SUBSTITUTE-CASE with reference mod ...
+./run_functions.at:3335: $COMPILE prog.cob
+./run_functions.at:3336: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1083/stdout	2026-08-12 19:19:37.624332462 +0000
+@@ -0,0 +1 @@
++zz1114446665defxxzz 
+1083. run_functions.at:3315: 1083. FUNCTION SUBSTITUTE-CASE with reference mod (run_functions.at:3315): FAILED (run_functions.at:3336)

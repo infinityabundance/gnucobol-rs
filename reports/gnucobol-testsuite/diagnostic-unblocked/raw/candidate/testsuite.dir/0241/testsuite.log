@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+241. syn_reportwriter.at:595: testing Incorrect USAGE clause ...
+./syn_reportwriter.at:652: $COMPILE_ONLY prog.cob
+stderr:
+./syn_reportwriter.at:652: exit code was 0, expected 1
+241. syn_reportwriter.at:595: 241. Incorrect USAGE clause (syn_reportwriter.at:595): FAILED (syn_reportwriter.at:652)

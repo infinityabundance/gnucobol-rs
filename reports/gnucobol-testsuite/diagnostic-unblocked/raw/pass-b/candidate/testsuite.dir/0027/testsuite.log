@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+27. configuration.at:42: testing cobc dialect features for all -std ...
+./configuration.at:55: $COMPILE_ONLY -std=default prog.cob
+stderr:
+./configuration.at:57: $COMPILE_ONLY -std=cobol85 prog.cob
+stderr:
+./configuration.at:59: $COMPILE_ONLY -std=cobol2002 prog.cob
+stderr:
+./configuration.at:59: exit code was 0, expected 1
+27. configuration.at:42: 27. cobc dialect features for all -std (configuration.at:42): FAILED (configuration.at:59)

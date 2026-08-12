@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+137. syn_subscripts.at:23: testing Non-numeric subscript ...
+./syn_subscripts.at:42: $COMPILE_ONLY prog.cob
+stderr:
+./syn_subscripts.at:42: exit code was 0, expected 1
+137. syn_subscripts.at:23: 137. Non-numeric subscript (syn_subscripts.at:23): FAILED (syn_subscripts.at:42)

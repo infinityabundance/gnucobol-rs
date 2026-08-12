@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+78. syn_definition.at:148: testing Undefined data name ...
+./syn_definition.at:159: $COMPILE_ONLY prog.cob
+stderr:
+./syn_definition.at:159: exit code was 0, expected 1
+78. syn_definition.at:148: 78. Undefined data name (syn_definition.at:148): FAILED (syn_definition.at:159)

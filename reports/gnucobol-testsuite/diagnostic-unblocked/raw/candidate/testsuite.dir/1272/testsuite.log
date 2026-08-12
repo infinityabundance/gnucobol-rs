@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1272. data_packed.at:1474: testing COMP-6 arithmetic ...
+./data_packed.at:1557: $COMPILE prog.cob
+./data_packed.at:1558: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1272/stderr	2026-08-12 19:19:01.372137502 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: FENCE
+./data_packed.at:1558: exit code was 2, expected 0
+1272. data_packed.at:1474: 1272. COMP-6 arithmetic (data_packed.at:1474): FAILED (data_packed.at:1558)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+154. syn_occurs.at:519: testing OCCURS INDEXED before KEY ...
+./syn_occurs.at:544: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: unsupported: no PROCEDURE DIVISION
+./syn_occurs.at:547: $COMPILE_ONLY -frelax-syntax-checks prog.cob
+stderr:
+cobc-rs: -frelax-syntax-checks: unsupported option (rejected-unsupported; relaxed syntax checks: the candidate parser has one sealed strictness; reject honestly): 
+./syn_occurs.at:547: exit code was 1, expected 0
+154. syn_occurs.at:519: 154. OCCURS INDEXED before KEY (syn_occurs.at:519): FAILED (syn_occurs.at:547)

@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+474. syn_literals.at:1336: testing GCOS literals with EBCDIC symbols (syntax) ...
+./syn_literals.at:1350: $COMPILE -febcdic-symbolic-characters prog.cob
+stderr:
+cobc-rs: -febcdic-symbolic-characters: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
+./syn_literals.at:1359: $COMPILE -febcdic-symbolic-characters prog2.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/474/stderr	2026-08-12 19:19:37.006275832 +0000
+@@ -0,0 +1 @@
++cobc-rs: -febcdic-symbolic-characters: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog2.cob
+./syn_literals.at:1359: exit code was 1, expected 0
+474. syn_literals.at:1336: 474. GCOS literals with EBCDIC symbols (syntax) (syn_literals.at:1336): FAILED (syn_literals.at:1359)

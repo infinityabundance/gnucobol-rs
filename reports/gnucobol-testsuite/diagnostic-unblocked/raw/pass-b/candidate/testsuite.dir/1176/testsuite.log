@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1176. run_extensions.at:3571: testing System routine CBL_IMP ...
+./run_extensions.at:3592: $COMPILE prog.cob
+./run_extensions.at:3593: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1176/stderr	2026-08-12 19:19:37.739392067 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "CBL_IMP": not a contained program (external CALL is a boundary)
+./run_extensions.at:3593: exit code was 2, expected 0
+1176. run_extensions.at:3571: 1176. System routine CBL_IMP (run_extensions.at:3571): FAILED (run_extensions.at:3593)

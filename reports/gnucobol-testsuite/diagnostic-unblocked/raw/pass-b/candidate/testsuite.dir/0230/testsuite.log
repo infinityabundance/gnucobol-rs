@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+230. syn_file.at:2081: testing Invalid file name in SELECT ...
+./syn_file.at:2103: $COMPILE_ONLY prog.cob
+stderr:
+./syn_file.at:2103: exit code was 0, expected 1
+230. syn_file.at:2081: 230. Invalid file name in SELECT (syn_file.at:2081): FAILED (syn_file.at:2103)

@@ -1,0 +1,22 @@
+
+#include <stdio.h>
+#include <libcob.h>
+
+#define COUNT_OF(x) (sizeof(x)/sizeof(x[0]))
+
+struct verify_t {
+  char *prog, *packver_prog;
+  int patchlev_prog;
+} verify[] = {
+#include "testdata.h"
+};
+
+int
+main(int argc, char *argv[])
+{
+  struct verify_t *p;
+  for( p=verify; p < verify + COUNT_OF(verify); p++ ) {
+    cob_check_version(p->prog, p->packver_prog, p->patchlev_prog);
+  }
+  return 0;
+}

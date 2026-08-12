@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+798. run_misc.at:7191: testing EC-SCREEN-LINE-NUMBER and -STARTING-COLUMN ...
+./run_misc.at:7194: test "$COB_HAS_CURSES" = "yes" || exit 77
+./run_misc.at:7226: $COMPILE prog.cob
+./run_misc.at:7227: COB_EXIT_WAIT=0 $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/798/stderr	2026-08-12 19:19:00.827162275 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: INVALID-LINE
+stdout:
+./run_misc.at:7227: exit code was 2, expected 0
+798. run_misc.at:7191: 798. EC-SCREEN-LINE-NUMBER and -STARTING-COLUMN (run_misc.at:7191): FAILED (run_misc.at:7227)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+910. run_file.at:6080: testing INDEXED SEQUENTIAL basic I/O ...
+./run_file.at:6112: $COMPILE prog.cob
+./run_file.at:6113: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/910/stderr	2026-08-12 19:19:37.386115599 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: trailing tokens in condition at )
+./run_file.at:6113: exit code was 2, expected 0
+910. run_file.at:6080: 910. INDEXED SEQUENTIAL basic I/O (run_file.at:6080): FAILED (run_file.at:6113)

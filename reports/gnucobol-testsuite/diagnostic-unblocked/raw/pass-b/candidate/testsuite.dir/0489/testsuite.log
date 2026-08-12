@@ -1,0 +1,45 @@
+#                             -*- compilation -*-
+489. listings.at:1589: testing Two source files ...
+./listings.at:1612: $COMPILE_LISTING -t- prog.cob prog1.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/489/stderr	2026-08-12 19:19:37.018479192 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-12 19:19:37.020186875 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/489/stdout	2026-08-12 19:19:37.019351939 +0000
+@@ -1,33 +1 @@
+-GnuCOBOL V.R.P          prog.cob                                        Page 0001
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000001
+-000002         IDENTIFICATION   DIVISION.
+-000003         PROGRAM-ID.      prog.
+-000004         DATA             DIVISION.
+-000005         WORKING-STORAGE  SECTION.
+-000006        *COPY "copy.inc".
+-000007         PROCEDURE        DIVISION.
+-000008             STOP RUN.
+-
+-
+-0 warnings in compilation group
+-0 errors in compilation group
+-GnuCOBOL V.R.P          prog1.cob                                       Page 0001
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000001
+-000002         IDENTIFICATION   DIVISION.
+-000003         PROGRAM-ID.      prog1.
+-000004         DATA             DIVISION.
+-000005         WORKING-STORAGE  SECTION.
+-000006        *COPY "copy.inc".
+-000007         PROCEDURE        DIVISION.
+-000008             STOP RUN.
+-
+-
+-0 warnings in compilation group
+-0 errors in compilation group
+ 
+./listings.at:1612: exit code was 1, expected 0
+489. listings.at:1589: 489. Two source files (listings.at:1589): FAILED (listings.at:1612)

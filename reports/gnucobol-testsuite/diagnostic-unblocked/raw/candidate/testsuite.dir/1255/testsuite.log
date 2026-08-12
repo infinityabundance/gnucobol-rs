@@ -1,0 +1,24 @@
+#                             -*- compilation -*-
+1255. data_display.at:408: testing PPP DISPLAY ...
+./data_display.at:462: $COMPILE prog.cob
+./data_display.at:464: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1255/stderr	2026-08-12 19:19:01.347208599 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: PIC VPPP999: ScalingPDeferred
+--- -	2026-08-12 19:19:01.348349456 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1255/stdout	2026-08-12 19:19:01.347720999 +0000
+@@ -1,11 +1 @@
+-INIT X-1 : 091000 .
+-INIT X-2 : 092000 .
+-INIT X-4 : .000128 .
+-INIT D-1 : 095000 .
+-MOVE X-1 : 095000 .
+-MOVE X-2 : 095000 .
+-MOVE X-4 : .000256 .
+-MOVE D-1 : 095000 .
+-MOVE X-1 : 193000:193000 .
+-MOVE X-2 : 193000:193000 .
+ 
+./data_display.at:464: exit code was 2, expected 0
+1255. data_display.at:408: 1255. PPP DISPLAY (data_display.at:408): FAILED (data_display.at:464)

@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+358. syn_misc.at:5034: testing @OPTIONS parsing ...
+./syn_misc.at:5046: $COMPILE_ONLY valid.cob
+stderr:
+cobc-rs: unsupported: no PROCEDURE DIVISION
+./syn_misc.at:5046: exit code was 1, expected 0
+358. syn_misc.at:5034: 358. @OPTIONS parsing (syn_misc.at:5034): FAILED (syn_misc.at:5046)

@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+999. run_functions.at:655: testing FUNCTION as CALL parameter BY CONTENT ...
+./run_functions.at:684: $COMPILE prog.cob
+./run_functions.at:685: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/999/stderr	2026-08-12 19:19:01.009724618 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: FUNCTION
+--- -	2026-08-12 19:19:01.011680004 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/999/stdout	2026-08-12 19:19:01.010733820 +0000
+@@ -1,2 +1 @@
+-AbcD
+ 
+./run_functions.at:685: exit code was 2, expected 0
+999. run_functions.at:655: 999. FUNCTION as CALL parameter BY CONTENT (run_functions.at:655): FAILED (run_functions.at:685)

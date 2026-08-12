@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+585. run_fundamental.at:4855: testing DIVIDE complex ...
+./run_fundamental.at:4970: $COMPILE prog.cob
+./run_fundamental.at:4971: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/585/stderr	2026-08-12 19:19:37.095860757 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: RES-TAB(1)
+./run_fundamental.at:4971: exit code was 2, expected 0
+585. run_fundamental.at:4855: 585. DIVIDE complex (run_fundamental.at:4855): FAILED (run_fundamental.at:4971)

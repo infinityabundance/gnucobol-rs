@@ -1,0 +1,25 @@
+#                             -*- compilation -*-
+940. run_file.at:12659: testing LINE SEQUENTIAL data ...
+./run_file.at:12797: $COMPILE prog.cob
+./run_file.at:12799: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/940/stderr	2026-08-12 19:19:00.951181903 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: OCCURS count MAX-SUB is not an integer
+--- -	2026-08-12 19:19:00.952558870 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/940/stdout	2026-08-12 19:19:00.951773506 +0000
+@@ -1,12 +1 @@
+-MF Load data
+-MF Open Sts: 00
+-Read  ALP00000 Trms:0010
+-Read  BET00000 Trms:0013
+-Read  GAM00000 Trms:0003
+-Read  DEL00000 Trms:0254
+-Read Status: 10
+-Std Open Sts: 00
+-Read Status: 09
+-Std Load data
+-Error status 71 writing record ALP00000
+ 
+./run_file.at:12799: exit code was 2, expected 0
+940. run_file.at:12659: 940. LINE SEQUENTIAL data (run_file.at:12659): FAILED (run_file.at:12799)

@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+19. used_binaries.at:756: testing run job with unsuccessful compilation ...
+./used_binaries.at:768: $COMPILE -j prog.cob
+stderr:
+./used_binaries.at:768: exit code was 0, expected 1
+19. used_binaries.at:756: 19. run job with unsuccessful compilation (used_binaries.at:756): FAILED (used_binaries.at:768)

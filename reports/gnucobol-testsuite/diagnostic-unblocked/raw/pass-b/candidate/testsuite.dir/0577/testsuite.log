@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+577. run_fundamental.at:4507: testing ADD CORRESPONDING ...
+./run_fundamental.at:4549: $COMPILE prog.cob
+./run_fundamental.at:4550: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/577/stdout	2026-08-12 19:19:37.088786809 +0000
+@@ -0,0 +1 @@
++BAD FIELD-C 0
+577. run_fundamental.at:4507: 577. ADD CORRESPONDING (run_fundamental.at:4507): FAILED (run_fundamental.at:4550)

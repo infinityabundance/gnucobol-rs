@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1019. run_functions.at:1373: testing FUNCTION FORMATTED-DATETIME with ref modding ...
+./run_functions.at:1393: $COMPILE prog.cob
+./run_functions.at:1394: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1019/stdout	2026-08-12 19:19:37.521402471 +0000
+@@ -0,0 +1 @@
++1601
+1019. run_functions.at:1373: 1019. FUNCTION FORMATTED-DATETIME with ref modding (run_functions.at:1373): FAILED (run_functions.at:1394)

@@ -1,0 +1,46 @@
+#                             -*- compilation -*-
+484. listings.at:868: testing COPY LEADING replacement ...
+./listings.at:892: $COMPILE_LISTING0 -t- -ftsymbols prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/484/stderr	2026-08-12 19:19:37.013222132 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-12 19:19:37.015023149 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/484/stdout	2026-08-12 19:19:37.013841526 +0000
+@@ -1,34 +1 @@
+-GnuCOBOL V.R.P               prog.cob
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000001
+-000002         IDENTIFICATION   DIVISION.
+-000003         PROGRAM-ID.      prog.
+-000004         DATA             DIVISION.
+-000005         WORKING-STORAGE  SECTION.
+-000006         COPY "copy.inc"
+-000007              REPLACING LEADING ==TEST== BY ==FIRST==
+-000008                        LEADING ==NORM== BY ==SECOND==.
+-000001C
+-000002C        01 FIRST-VAR PIC X(2) VALUE "OK".
+-000003C        01 SECOND-VAR PIC X(2) VALUE "OK".
+-000009         PROCEDURE        DIVISION.
+-000010             DISPLAY FIRST-VAR NO ADVANCING
+-000011             END-DISPLAY.
+-000012             DISPLAY SECOND-VAR NO ADVANCING
+-000013             END-DISPLAY.
+-000014             STOP RUN.
+-
+-SIZE  TYPE           LVL  NAME                           PICTURE
+-
+-      WORKING-STORAGE SECTION
+-
+-00002 ALPHANUMERIC   01   FIRST-VAR                      X(2)
+-
+-00002 ALPHANUMERIC   01   SECOND-VAR                     X(2)
+-
+-
+-0 warnings in compilation group
+-0 errors in compilation group
+ 
+./listings.at:892: exit code was 1, expected 0
+484. listings.at:868: 484. COPY LEADING replacement (listings.at:868): FAILED (listings.at:892)

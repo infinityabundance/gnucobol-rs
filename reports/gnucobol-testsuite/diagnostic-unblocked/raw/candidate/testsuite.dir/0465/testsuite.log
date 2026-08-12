@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+465. syn_literals.at:1094: testing NX literals ...
+./syn_literals.at:1110: $COMPILE_ONLY prog.cob
+stderr:
+./syn_literals.at:1110: exit code was 0, expected 1
+465. syn_literals.at:1094: 465. NX literals (syn_literals.at:1094): FAILED (syn_literals.at:1110)

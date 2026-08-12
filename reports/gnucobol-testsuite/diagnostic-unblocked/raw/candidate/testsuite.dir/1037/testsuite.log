@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1037. run_functions.at:2038: testing FUNCTION LOWER-CASE ...
+./run_functions.at:2060: $COMPILE prog.cob
+./run_functions.at:2061: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1037/stderr	2026-08-12 19:19:01.063724040 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: FUNCTION
+./run_functions.at:2061: exit code was 2, expected 0
+1037. run_functions.at:2038: 1037. FUNCTION LOWER-CASE (run_functions.at:2038): FAILED (run_functions.at:2061)

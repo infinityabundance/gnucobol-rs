@@ -1,0 +1,20 @@
+#                             -*- compilation -*-
+818. run_misc.at:11679: testing CALL with directory ...
+./run_misc.at:11719: $COMPILE prog.cob
+./run_misc.at:11720: mkdir DIR
+./run_misc.at:11721: $COMPILE_MODULE sub.cob -o DIR/SUB.$COB_MODULE_EXT
+./run_misc.at:11722: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/818/stderr	2026-08-12 19:19:37.301082220 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: expected program name after PROGRAM-ID
+--- -	2026-08-12 19:19:37.302929944 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/818/stdout	2026-08-12 19:19:37.301644338 +0000
+@@ -1,5 +1 @@
+-SUB GOT X
+-SUB GOT Y
+-SUB GOT Z
+-SUB GOT 0
+ 
+./run_misc.at:11722: exit code was 2, expected 0
+818. run_misc.at:11679: 818. CALL with directory (run_misc.at:11679): FAILED (run_misc.at:11722)

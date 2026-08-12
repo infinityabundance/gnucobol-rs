@@ -1,0 +1,16 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      caller.
+       PROCEDURE        DIVISION.
+           CALL "callee" RETURNING OMITTED
+           END-CALL.
+           DISPLAY RETURN-CODE WITH NO ADVANCING
+           STOP RUN.
+
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      callee.
+       DATA             DIVISION.
+       PROCEDURE        DIVISION RETURNING OMITTED.
+           MOVE 42 TO RETURN-CODE
+           EXIT PROGRAM.

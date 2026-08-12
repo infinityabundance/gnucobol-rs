@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+968. run_reportwriter.at:3211: testing ORDER REPORT; Test substring ...
+./run_reportwriter.at:3435: $COMPILE prog.cob
+./run_reportwriter.at:3437: DD_CUSTORD="./inp_data" DD_REPORT2="./report.txt" $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/968/stderr	2026-08-12 19:19:00.977724961 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: OPEN: `OUTPUT` is not a declared file
+./run_reportwriter.at:3437: exit code was 2, expected 0
+968. run_reportwriter.at:3211: 968. ORDER REPORT; Test substring (run_reportwriter.at:3211): FAILED (run_reportwriter.at:3437)

@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+555. run_fundamental.at:2449: testing Context sensitive words (2) ...
+./run_fundamental.at:2467: $COMPILE prog.cob
+./run_fundamental.at:2468: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/555/stderr	2026-08-12 19:19:37.072077910 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim)
+--- -	2026-08-12 19:19:37.073589909 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/555/stdout	2026-08-12 19:19:37.073165478 +0000
+@@ -1 +1 @@
+-0
++
+./run_fundamental.at:2468: exit code was 2, expected 0
+555. run_fundamental.at:2449: 555. Context sensitive words (2) (run_fundamental.at:2449): FAILED (run_fundamental.at:2468)

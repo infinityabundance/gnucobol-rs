@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1104. run_functions.at:4367: testing FORMATTED-(DATE)TIME with SYSTEM-OFFSET ...
+./run_functions.at:4399: $COMPILE prog.cob
+./run_functions.at:4400: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1104/stderr	2026-08-12 19:19:37.657332108 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: SYSTEM-OFFSET
+./run_functions.at:4400: exit code was 2, expected 0
+1104. run_functions.at:4367: 1104. FORMATTED-(DATE)TIME with SYSTEM-OFFSET (run_functions.at:4367): FAILED (run_functions.at:4400)

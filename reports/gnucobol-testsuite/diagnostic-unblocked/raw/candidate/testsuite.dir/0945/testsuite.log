@@ -1,0 +1,20 @@
+#                             -*- compilation -*-
+945. run_file.at:13155: testing File SORT, LINE SEQUENTIAL same file ...
+./run_file.at:13189: $COMPILE prog.cob
+./run_file.at:13190: $COBCRUN_DIRECT ./prog
+./run_file.at:13191: cat test.txt
+--- -	2026-08-12 19:19:00.955984236 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/945/stdout	2026-08-12 19:19:00.955086222 +0000
+@@ -1,7 +1,7 @@
+ 
+-
+ bla
+-blubb
+-hello
+-world
++wblubb
++ello
+ 
++orld
++h
+945. run_file.at:13155: 945. File SORT, LINE SEQUENTIAL same file (run_file.at:13155): FAILED (run_file.at:13191)

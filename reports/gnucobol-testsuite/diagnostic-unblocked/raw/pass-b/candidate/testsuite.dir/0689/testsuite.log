@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+689. run_misc.at:745: testing MOVE Z'literal' ...
+./run_misc.at:781: $COMPILE prog.cob
+./run_misc.at:782: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/689/stderr	2026-08-12 19:19:37.178791957 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: Z
+--- -	2026-08-12 19:19:37.179843858 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/689/stdout	2026-08-12 19:19:37.179322666 +0000
+@@ -1 +1 @@
+-OK
++
+./run_misc.at:782: exit code was 2, expected 0
+689. run_misc.at:745: 689. MOVE Z'literal' (run_misc.at:745): FAILED (run_misc.at:782)

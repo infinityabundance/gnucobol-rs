@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+140. syn_subscripts.at:113: testing Subscripted item requires OCCURS clause ...
+./syn_subscripts.at:131: $COMPILE_ONLY prog.cob
+stderr:
+./syn_subscripts.at:131: exit code was 0, expected 1
+140. syn_subscripts.at:113: 140. Subscripted item requires OCCURS clause (syn_subscripts.at:113): FAILED (syn_subscripts.at:131)

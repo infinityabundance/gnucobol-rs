@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+129. syn_definition.at:1762: testing RENAMES item ...
+./syn_definition.at:1817: $COMPILE_ONLY -std=cobol2014 prog.cob
+stderr:
+./syn_definition.at:1817: exit code was 0, expected 1
+129. syn_definition.at:1762: 129. RENAMES item (syn_definition.at:1762): FAILED (syn_definition.at:1817)

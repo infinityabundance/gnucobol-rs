@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+28. configuration.at:92: testing cobc with configuration file via -std ...
+./configuration.at:106: $COMPILE_ONLY -std=cobol2014 prog.cob
+stderr:
+./configuration.at:106: exit code was 0, expected 1
+28. configuration.at:92: 28. cobc with configuration file via -std (configuration.at:92): FAILED (configuration.at:106)

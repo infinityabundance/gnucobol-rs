@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+970. run_reportwriter.at:3788: testing Sample Inventory Report ...
+./run_reportwriter.at:3892: $COMPILE prog.cob
+stderr:
+./run_reportwriter.at:3895: DD_INVFILE="./inp_data" DD_REPORT4="./report.txt" $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/970/stderr	2026-08-12 19:19:37.448163218 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: OPEN: `OUTPUT` is not a declared file
+./run_reportwriter.at:3895: exit code was 2, expected 0
+970. run_reportwriter.at:3788: 970. Sample Inventory Report (run_reportwriter.at:3788): FAILED (run_reportwriter.at:3895)

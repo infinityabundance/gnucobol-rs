@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+777. run_misc.at:5019: testing CALL STATIC C from COBOL ...
+./run_misc.at:5069: $COMPILE -o caller caller.cob callee.c
+./run_misc.at:5070: $COBCRUN_DIRECT ./caller
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/777/stderr	2026-08-12 19:19:37.259721035 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "STATIC": not a contained program (external CALL is a boundary)
+--- -	2026-08-12 19:19:37.261452122 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/777/stdout	2026-08-12 19:19:37.260826806 +0000
+@@ -1 +1 @@
+-OK
++
+./run_misc.at:5070: exit code was 2, expected 0
+777. run_misc.at:5019: 777. CALL STATIC C from COBOL (run_misc.at:5019): FAILED (run_misc.at:5070)

@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+841. run_misc.at:13835: testing ENTRY FOR GO TO / GO TO ENTRY ...
+./run_misc.at:13874: $COMPILE -std=mf-strict prog.cob
+stderr:
+./run_misc.at:13874: exit code was 0, expected 1
+841. run_misc.at:13835: 841. ENTRY FOR GO TO / GO TO ENTRY (run_misc.at:13835): FAILED (run_misc.at:13874)

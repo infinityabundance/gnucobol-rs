@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+336. syn_misc.at:3982: testing USE FOR DEBUGGING syntax-checks (2) ...
+./syn_misc.at:4029: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: unsupported: verb USE
+./syn_misc.at:4031: $COMPILE_ONLY -std=cobol85 prog.cob
+stderr:
+cobc-rs: unsupported: verb USE
+336. syn_misc.at:3982: 336. USE FOR DEBUGGING syntax-checks (2) (syn_misc.at:3982): UNEXPECTED PASS     (0m0.000s 0m0.002s)

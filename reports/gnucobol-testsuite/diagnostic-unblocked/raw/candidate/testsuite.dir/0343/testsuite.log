@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+343. syn_misc.at:4291: testing SYMBOLIC CONSTANT ...
+./syn_misc.at:4315: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:4318: $COMPILE_ONLY -std=mf-strict prog.cob
+stderr:
+./syn_misc.at:4318: exit code was 0, expected 1
+343. syn_misc.at:4291: 343. SYMBOLIC CONSTANT (syn_misc.at:4291): FAILED (syn_misc.at:4318)

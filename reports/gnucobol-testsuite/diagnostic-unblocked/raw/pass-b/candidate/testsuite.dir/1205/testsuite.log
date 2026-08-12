@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1205. run_extensions.at:5458: testing Bit Shift Operations ...
+./run_extensions.at:5509: $COMPILE -std=mf -fno-trunc prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1205/stderr	2026-08-12 19:19:37.769929735 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fno-trunc: unsupported option (rejected-unsupported; no binary truncation: the candidate's arithmetic model is fixed; reject honestly): 
+./run_extensions.at:5509: exit code was 1, expected 0
+1205. run_extensions.at:5458: 1205. Bit Shift Operations (run_extensions.at:5458): FAILED (run_extensions.at:5509)

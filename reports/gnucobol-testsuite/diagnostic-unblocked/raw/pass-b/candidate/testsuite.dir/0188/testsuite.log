@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+188. syn_file.at:77: testing Missing FD ...
+./syn_file.at:97: $COMPILE_ONLY prog.cob
+stderr:
+./syn_file.at:97: exit code was 0, expected 1
+188. syn_file.at:77: 188. Missing FD (syn_file.at:77): FAILED (syn_file.at:97)

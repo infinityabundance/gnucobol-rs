@@ -1,0 +1,21 @@
+#                             -*- compilation -*-
+107. syn_definition.at:982: testing Redefinition of label and variable names ...
+./syn_definition.at:1008: $COMPILE_ONLY -std=cobol2014 prog.cob
+stderr:
+prog.cob:7: warning: redefinition of 'WORD'
+prog.cob:3: note: 'WORD' previously defined here
+prog.cob: in section 'main':
+prog.cob:12: error: 'WORD' is ambiguous; needs qualification
+prog.cob:3: note: 'WORD' defined here
+prog.cob:7: note: 'WORD' defined here
+prog.cob:17: error: redefinition of 'WORD'
+prog.cob:3: note: 'WORD' previously defined here
+./syn_definition.at:1010: $COMPILE_ONLY prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/107/stderr	2026-08-12 19:18:47.488104123 +0000
+@@ -0,0 +1,3 @@
++prog.cob: in section 'main':
++prog.cob:17: error: redefinition of 'word'
++prog.cob:7: note: 'word' previously defined here
+./syn_definition.at:1010: exit code was 1, expected 0
+107. syn_definition.at:982: 107. Redefinition of label and variable names (syn_definition.at:982): expected failure (syn_definition.at:1010)

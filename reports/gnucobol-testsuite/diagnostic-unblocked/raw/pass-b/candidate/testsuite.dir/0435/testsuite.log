@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+435. syn_screen.at:480: testing VALUE clause missing ...
+./syn_screen.at:498: $COMPILE_ONLY -std=cobol2002 prog.cob
+stderr:
+cobc-rs: unsupported: unsupported level number SCREEN
+./syn_screen.at:500: $COMPILE_ONLY prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/435/stderr	2026-08-12 19:19:36.981789274 +0000
+@@ -0,0 +1 @@
++cobc-rs: unsupported: unsupported level number SCREEN
+./syn_screen.at:500: exit code was 1, expected 0
+435. syn_screen.at:480: 435. VALUE clause missing (syn_screen.at:480): FAILED (syn_screen.at:500)

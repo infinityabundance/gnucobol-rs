@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+866. run_file.at:1072: testing ASSIGN DYNAMIC with LOCAL-STORAGE item, INITIAL ...
+./run_file.at:1106: $COMPILE prog.cob
+./run_file.at:1107: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/866/stderr	2026-08-12 19:19:00.884725956 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number LOCAL-STORAGE
+./run_file.at:1107: exit code was 2, expected 0
+866. run_file.at:1072: 866. ASSIGN DYNAMIC with LOCAL-STORAGE item, INITIAL (run_file.at:1072): FAILED (run_file.at:1107)

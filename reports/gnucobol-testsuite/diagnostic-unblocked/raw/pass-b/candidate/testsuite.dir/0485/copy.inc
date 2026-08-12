@@ -1,0 +1,3 @@
+
+       01  TEST-FIRST  PIC X(2) VALUE "OK".
+       01  TEST-SECOND PIC X(2) VALUE "OK".

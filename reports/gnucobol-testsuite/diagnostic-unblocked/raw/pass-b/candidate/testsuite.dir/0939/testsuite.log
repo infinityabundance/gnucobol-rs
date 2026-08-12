@@ -1,0 +1,47 @@
+#                             -*- compilation -*-
+939. run_file.at:12387: testing LINE SEQUENTIAL REWRITE ...
+./run_file.at:12581: $COMPILE prog.cob
+./run_file.at:12583: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/939/stderr	2026-08-12 19:19:37.412766402 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: OCCURS count MAX-SUB is not an integer
+--- -	2026-08-12 19:19:37.413892741 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/939/stdout	2026-08-12 19:19:37.412766402 +0000
+@@ -1,34 +1 @@
+-Loading sample program data file.
+-Sample program data file load complete.
+-Open Sts:00
+-Read  ALP00000 Trms:08240
+-Read  BET00000 Trms:00010
+-Read  GAM00000 Trms:00013
+-Read  DEL00000 Trms:65535
+-Read  ALP00000 Trms:08240
+-REWRITE ALP00000 Sts 44 Trms:00010
+-Read  ALP00000 Trms:08240
+-Read  BET00000 Trms:00010
+-REWRITE BET00000 Sts 00 Trms:00011
+-Read  GAM00000 Trms:00013
+-Read EPS00000 Sts:00
+-REWRITE EPS00000 Sts 00 Trms:08240
+-List back Open Sts:00
+-Read  ALP00000 Trms:08240
+-Read  BET00000 Trms:00011
+-Read  GAM00000 Trms:00013
+-Read  DEL00000 Trms:65535
+-Read  EPS00000 Trms:08240
+-Read  FOR00000 Trms:00254
+-Read Status: 10
+-List after extend Open Sts:00
+-Read  ALP00000 Trms:08240
+-Read  BET00000 Trms:00011
+-Read  GAM00000 Trms:00013
+-Read  DEL00000 Trms:65535
+-Read  EPS00000 Trms:08240
+-Read  FOR00000 Trms:00254
+-Read  ALP00000 Trms:08240
+-Read  BET00000 Trms:00010
+-Read Status: 10
+ 
+./run_file.at:12583: exit code was 2, expected 0
+939. run_file.at:12387: 939. LINE SEQUENTIAL REWRITE (run_file.at:12387): FAILED (run_file.at:12583)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1167. run_extensions.at:3338: testing System routine C$PRINTABLE ...
+./run_extensions.at:3361: $COMPILE prog.cob
+./run_extensions.at:3362: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1167/stderr	2026-08-12 19:19:37.727331358 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "C$PRINTABLE": not a contained program (external CALL is a boundary)
+./run_extensions.at:3362: exit code was 2, expected 0
+1167. run_extensions.at:3338: 1167. System routine C$PRINTABLE (run_extensions.at:3338): FAILED (run_extensions.at:3362)

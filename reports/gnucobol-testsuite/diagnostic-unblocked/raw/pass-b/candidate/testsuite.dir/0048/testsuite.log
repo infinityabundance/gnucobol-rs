@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+48. configuration.at:788: testing cobc configuration: source format ...
+./configuration.at:807: $COMPILE_ONLY -fformat=unknown fixed.cob
+stderr:
+cobc-rs: -fformat=unknown: only fixed/free/auto are supported by the candidate (fail closed)
+./configuration.at:809: $COMPILE_ONLY -fixed fixed.cob
+./configuration.at:810: $COMPILE_ONLY -fformat=fixed fixed.cob
+./configuration.at:811: $COMPILE_ONLY -fformat=cobol85 fixed.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/48/stderr	2026-08-12 19:19:36.752004360 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fformat=cobol85: only fixed/free/auto are supported by the candidate (fail closed)
+./configuration.at:811: exit code was 1, expected 0
+48. configuration.at:788: 48. cobc configuration: source format (configuration.at:788): FAILED (configuration.at:811)

@@ -1,0 +1,6 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      prog.
+       PROCEDURE        DIVISION.
+           DISPLAY "job" WITH NO ADVANCING END-DISPLAY
+           STOP RUN WITH NORMAL STATUS.

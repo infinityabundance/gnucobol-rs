@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+185. syn_value.at:441: testing Implicit picture from value ...
+./syn_value.at:461: $COMPILE_ONLY -frelax-syntax-checks prog.cob
+stderr:
+cobc-rs: -frelax-syntax-checks: unsupported option (rejected-unsupported; relaxed syntax checks: the candidate parser has one sealed strictness; reject honestly): 
+./syn_value.at:461: exit code was 1, expected 0
+185. syn_value.at:441: 185. Implicit picture from value (syn_value.at:441): FAILED (syn_value.at:461)

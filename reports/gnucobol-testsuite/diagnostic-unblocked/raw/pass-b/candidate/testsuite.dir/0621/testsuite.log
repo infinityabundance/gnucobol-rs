@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+621. run_fundamental.at:7128: testing MOVE misc. edited ...
+./run_fundamental.at:7196: $COMPILE prog.cob
+./run_fundamental.at:7197: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/621/stderr	2026-08-12 19:19:37.123773461 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: PIC $$$$,$$9V99-: UnsupportedSymbol('V')
+./run_fundamental.at:7197: exit code was 2, expected 0
+621. run_fundamental.at:7128: 621. MOVE misc. edited (run_fundamental.at:7128): FAILED (run_fundamental.at:7197)

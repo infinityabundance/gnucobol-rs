@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+822. run_misc.at:12224: testing OCCURS INDEXED ASCENDING ...
+./run_misc.at:12311: $COMPILE -frelax-syntax-checks prog.cob 
+stderr:
+cobc-rs: -frelax-syntax-checks: unsupported option (rejected-unsupported; relaxed syntax checks: the candidate parser has one sealed strictness; reject honestly): 
+./run_misc.at:12311: exit code was 1, expected 0
+822. run_misc.at:12224: 822. OCCURS INDEXED ASCENDING (run_misc.at:12224): FAILED (run_misc.at:12311)

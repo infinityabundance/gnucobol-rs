@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+107. syn_definition.at:982: testing Redefinition of label and variable names ...
+./syn_definition.at:1008: $COMPILE_ONLY -std=cobol2014 prog.cob
+stderr:
+cobc-rs: unsupported: verb WORD
+./syn_definition.at:1010: $COMPILE_ONLY prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/107/stderr	2026-08-12 19:19:00.285732369 +0000
+@@ -0,0 +1 @@
++cobc-rs: unsupported: verb WORD
+./syn_definition.at:1010: exit code was 1, expected 0
+107. syn_definition.at:982: 107. Redefinition of label and variable names (syn_definition.at:982): expected failure (syn_definition.at:1010)

@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+298. syn_misc.at:2360: testing adding aliases ...
+./syn_misc.at:2382: $COMPILE_ONLY -freserved=FOO=DISPLAY* -freserved=BARS:FOO prog.cob
+--- -	2026-08-12 19:19:36.898750784 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/298/stderr	2026-08-12 19:19:36.898004643 +0000
+@@ -1,4 +1,2 @@
+-configuration warning: -freserved=FOO=DISPLAY*: ignored asterisk at end of alias target
+-configuration error:
+-alias target 'FOO' is not a default reserved word
++cobc-rs: -freserved=FOO=DISPLAY*: unsupported option (rejected-unsupported; reserved-word changes: reject honestly): FOO=DISPLAY*
+ 
+298. syn_misc.at:2360: 298. adding aliases (syn_misc.at:2360): FAILED (syn_misc.at:2382)

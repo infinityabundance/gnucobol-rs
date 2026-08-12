@@ -1,0 +1,25 @@
+#                             -*- compilation -*-
+682. run_misc.at:513: testing EXTERNAL data item size mismatch ...
+./run_misc.at:569: $COMPILE_MODULE callee.cob
+./run_misc.at:570: $COMPILE bigger.cob
+./run_misc.at:571: $COBCRUN_DIRECT ./bigger
+stderr:
+libcob: bigger.cob:13: warning: EXTERNAL item 'WRK_VAR' previously allocated with size 10, requested size is 8
+libcob: bigger.cob:13: warning: EXTERNAL item 'COB_VAR' previously allocated with size 10, requested size is 8
+libcob: bigger.cob:13: warning: EXTERNAL item 'EXT_VAR' previously allocated with size 10, requested size is 8
+./run_misc.at:573: $COMPILE smaller.cob
+./run_misc.at:574: $COBCRUN_DIRECT ./smaller
+stderr:
+libcob: smaller.cob:13: error: EXTERNAL item 'WRK_VAR' previously allocated with size 5, requested size is 8
+./run_misc.at:579: $COBCRUN_DIRECT ./bigger
+--- -	2026-08-12 19:19:26.948812076 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/682/stderr	2026-08-12 19:19:26.947814817 +0000
+@@ -1,4 +1,4 @@
+-libcob: callee.cob:6: warning: EXTERNAL item 'WRK-VAR' previously allocated with size 10, requested size is 8
+-libcob: callee.cob:7: warning: EXTERNAL item 'EXT-VAR' previously allocated with size 10, requested size is 8
+-libcob: callee.cob:8: warning: EXTERNAL item 'EXT-VAR' previously allocated with size 10, requested size is 8
++libcob: bigger.cob:13: warning: EXTERNAL item 'WRK_VAR' previously allocated with size 10, requested size is 8
++libcob: bigger.cob:13: warning: EXTERNAL item 'COB_VAR' previously allocated with size 10, requested size is 8
++libcob: bigger.cob:13: warning: EXTERNAL item 'EXT_VAR' previously allocated with size 10, requested size is 8
+ 
+682. run_misc.at:513: 682. EXTERNAL data item size mismatch (run_misc.at:513): expected failure (run_misc.at:579)

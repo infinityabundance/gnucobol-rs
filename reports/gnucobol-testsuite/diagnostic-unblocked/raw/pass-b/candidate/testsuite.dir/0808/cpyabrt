@@ -1,0 +1,7 @@
+
+            MOVE "Quick brown fox jumped over the dog"
+              TO TSTTAILX (1:40).
+            MOVE CM-COMPANY TO TSTTAILX (42:20).
+      *     DISPLAY ':' X ':'.
+      *     DISPLAY CM-COMPANY.
+      *     DISPLAY '>' CM-COMPANY '<'.

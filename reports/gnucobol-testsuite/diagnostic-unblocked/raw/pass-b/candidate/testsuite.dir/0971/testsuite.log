@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+971. run_reportwriter.at:3980: testing Duplicate Detail Line ...
+./run_reportwriter.at:4049: $COMPILE prog.cob
+./run_reportwriter.at:4051: DD_DUPDTL=./report.txt $COBCRUN_DIRECT ./prog
+./run_reportwriter.at:4103: diff reference report.txt
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/971/stderr	2026-08-12 19:19:37.448334348 +0000
+@@ -0,0 +1 @@
++diff: report.txt: No such file or directory
+./run_reportwriter.at:4103: exit code was 2, expected 0
+report.txt:
+sed: can't read report.txt: No such file or directory
+971. run_reportwriter.at:3980: 971. Duplicate Detail Line (run_reportwriter.at:3980): FAILED (run_reportwriter.at:4103)

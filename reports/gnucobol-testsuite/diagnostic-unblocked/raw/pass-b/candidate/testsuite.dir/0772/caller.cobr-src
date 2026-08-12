@@ -1,0 +1,33 @@
+
+#include <stdio.h>
+#include <libcob.h>
+
+int callee (char *, char *);
+
+#ifndef NULL
+#define NULL (void*)0
+#endif
+
+int
+main (int argc, char **argv)
+{
+   cob_global *cobol_global;
+   /* for storing COBOL return code */
+   int cob_ret;
+
+   /* initialize parameters */
+   char *p1 = "A";
+
+   /* initialize the COBOL run-time library */
+   cob_init(argc, argv);
+
+   /* setup for COBOL parameter handling */
+   cobol_global = cob_get_global_ptr ();
+   cobol_global->cob_call_params = 1;
+
+   /* call COBOL program */
+   cob_ret = callee (p1, NULL);
+
+   /* Clean up and terminate - This does not return */
+   cob_stop_run (cob_ret);
+}

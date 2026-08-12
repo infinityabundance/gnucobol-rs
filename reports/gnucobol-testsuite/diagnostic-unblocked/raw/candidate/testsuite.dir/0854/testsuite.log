@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+854. run_file.at:406: testing OUTPUT on INDEXED file to missing directory ...
+./run_file.at:437: $COMPILE prog.cob
+./run_file.at:438: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/854/stdout	2026-08-12 19:19:00.875726052 +0000
+@@ -0,0 +1 @@
++STATUS OPENO 00
+854. run_file.at:406: 854. OUTPUT on INDEXED file to missing directory (run_file.at:406): FAILED (run_file.at:438)

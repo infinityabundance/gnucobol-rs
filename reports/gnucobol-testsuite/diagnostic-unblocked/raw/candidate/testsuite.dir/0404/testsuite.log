@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+404. syn_move.at:119: testing MOVE alphanumeric TO x ...
+./syn_move.at:145: $COMPILE_ONLY -Wno-unfinished prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/404/stderr	2026-08-12 19:19:00.486730217 +0000
+@@ -0,0 +1 @@
++cobc-rs: unsupported: PIC BX: UnsupportedSymbol('X')
+./syn_move.at:145: exit code was 1, expected 0
+404. syn_move.at:119: 404. MOVE alphanumeric TO x (syn_move.at:119): FAILED (syn_move.at:145)

@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+450. syn_functions.at:240: testing Intrinsic functions: dialect ...
+./syn_functions.at:256: $COMPILE_ONLY prog.cob
+./syn_functions.at:257: $COMPILE_ONLY -std=acu-strict prog.cob
+stderr:
+./syn_functions.at:257: exit code was 0, expected 1
+450. syn_functions.at:240: 450. Intrinsic functions: dialect (syn_functions.at:240): FAILED (syn_functions.at:257)

@@ -1,0 +1,23 @@
+#                             -*- compilation -*-
+900. run_file.at:5380: testing LINE SEQUENTIAL file I/O with variable records ...
+./run_file.at:5436: $COMPILE prog.cob
+./run_file.at:5437: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:00.917947698 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/900/stdout	2026-08-12 19:19:00.917228667 +0000
+@@ -1,12 +1,4 @@
+-20: >+12345678++12345678+<
+-19: >+12345678++12345678<
+-18: >+12345678++1234567<
+-17: >+12345678++123456<
+-16: >+12345678++12345<
+-15: >+12345678++1234<
+-14: >+12345678++123<
+-13: >+12345678++12<
+-12: >+12345678++1<
+-11: >+12345678++<
+-10: >+12345678+<
++20: >                    <
++20: >                    <
++Failed: bad record size
+ 
+900. run_file.at:5380: 900. LINE SEQUENTIAL file I/O with variable records (run_file.at:5380): FAILED (run_file.at:5437)

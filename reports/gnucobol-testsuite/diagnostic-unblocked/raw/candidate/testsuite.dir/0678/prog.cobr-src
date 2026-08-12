@@ -1,0 +1,29 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      caller.
+       PROCEDURE        DIVISION.
+           CALL "callee".
+           STOP RUN.
+
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      callee.
+       DATA             DIVISION.
+       LOCAL-STORAGE    SECTION.
+       01 LCL-X.
+          05 FILLER     PIC XXX VALUE "abc".
+       PROCEDURE        DIVISION.
+           CALL "callee2" USING LCL-X.
+           MOVE ZERO TO LCL-X.
+           CALL "callee2" USING LCL-X.
+           EXIT PROGRAM.
+
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      callee2.
+       DATA             DIVISION.
+       LINKAGE          SECTION.
+       01 LNK-X         PIC XXX.
+       PROCEDURE        DIVISION USING LNK-X.
+           DISPLAY LNK-X NO ADVANCING.
+           EXIT PROGRAM.

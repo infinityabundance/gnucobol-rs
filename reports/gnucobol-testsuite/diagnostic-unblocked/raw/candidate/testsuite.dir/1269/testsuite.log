@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1269. data_packed.at:1333: testing PACKED-DECIMAL numeric test (2) ...
+./data_packed.at:1393: $COMPILE -std=ibm prog.cob
+./data_packed.at:1394: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1269/stderr	2026-08-12 19:19:01.367720785 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: X
+./data_packed.at:1394: exit code was 2, expected 0
+1269. data_packed.at:1333: 1269. PACKED-DECIMAL numeric test (2) (data_packed.at:1333): FAILED (data_packed.at:1394)

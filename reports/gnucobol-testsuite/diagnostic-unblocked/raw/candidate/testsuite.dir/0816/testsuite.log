@@ -1,0 +1,23 @@
+#                             -*- compilation -*-
+816. run_misc.at:11578: testing PROGRAM-ID / CALL literal/variable with spaces ...
+./run_misc.at:11625: $COMPILE prog.cob
+stderr:
+./run_misc.at:11628: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:00.844821525 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/816/stderr	2026-08-12 19:19:00.844185500 +0000
+@@ -1,3 +1,2 @@
+-libcob: prog.cob:12: warning: ' SUB' literal includes leading spaces which are omitted
+-libcob: prog.cob:16: warning: ' S U B' literal includes leading spaces which are omitted
++cobrun: unsupported: expected program name after PROGRAM-ID
+ 
+--- -	2026-08-12 19:19:00.845436041 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/816/stdout	2026-08-12 19:19:00.844726384 +0000
+@@ -1,6 +1 @@
+-SUB GOT X
+-SUB GOT Y
+-SUB GOT Z
+-S U B  GOT A
+-S U B  GOT B
+ 
+./run_misc.at:11628: exit code was 2, expected 0
+816. run_misc.at:11578: 816. PROGRAM-ID / CALL literal/variable with spaces (run_misc.at:11578): FAILED (run_misc.at:11628)

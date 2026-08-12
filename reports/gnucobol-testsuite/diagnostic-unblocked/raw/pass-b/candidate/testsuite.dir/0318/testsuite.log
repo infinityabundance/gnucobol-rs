@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+318. syn_misc.at:3159: testing STRING / UNSTRING with invalid syntax ...
+./syn_misc.at:3209: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:3209: exit code was 0, expected 1
+318. syn_misc.at:3159: 318. STRING / UNSTRING with invalid syntax (syn_misc.at:3159): FAILED (syn_misc.at:3209)

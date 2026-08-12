@@ -231,7 +231,7 @@ for f in diagnostic-ignore.patch transformations.json tree-manifest.json; do
   fi
 done
 rm -rf "$DU_REP/raw"
-mkdir -p "$DU_REP/raw"
+mkdir -p "$DU_REP/raw" "$DU_REP/raw/pass-b"
 cp -r "$OUT_DIR/pass-a/raw/"* "$DU_REP/raw/" 2>/dev/null || true
 cp -r "$OUT_DIR/pass-b/raw/"* "$DU_REP/raw/pass-b/" 2>/dev/null || true
 cp "$OUT_DIR/pass-a/meta.json" "$DU_REP/meta.json" 2>/dev/null || true

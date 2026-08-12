@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+303. syn_misc.at:2497: testing swapped SOURCE- and OBJECT-COMPUTER ...
+./syn_misc.at:2511: $COMPILE_ONLY prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/303/stderr	2026-08-12 19:19:36.898898850 +0000
+@@ -0,0 +1 @@
++cobc-rs: unsupported: no PROCEDURE DIVISION
+./syn_misc.at:2511: exit code was 1, expected 0
+303. syn_misc.at:2497: 303. swapped SOURCE- and OBJECT-COMPUTER (syn_misc.at:2497): FAILED (syn_misc.at:2511)

@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+217. syn_file.at:1551: testing FILE ... FROM literal ...
+./syn_file.at:1585: $COMPILE_ONLY prog.cob
+stderr:
+./syn_file.at:1585: exit code was 0, expected 1
+217. syn_file.at:1551: 217. FILE ... FROM literal (syn_file.at:1551): FAILED (syn_file.at:1585)

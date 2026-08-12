@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+956. run_reportwriter.at:189: testing Report Overlapping Fields ...
+./run_reportwriter.at:232: $COMPILE prog.cob
+./run_reportwriter.at:234: DD_PRINTOUT="./report.txt" $COBCRUN_DIRECT ./prog
+./run_reportwriter.at:253: diff reference report.txt
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/956/stderr	2026-08-12 19:19:37.432271904 +0000
+@@ -0,0 +1 @@
++diff: report.txt: No such file or directory
+./run_reportwriter.at:253: exit code was 2, expected 0
+report.txt:
+sed: can't read report.txt: No such file or directory
+956. run_reportwriter.at:189: 956. Report Overlapping Fields (run_reportwriter.at:189): FAILED (run_reportwriter.at:253)

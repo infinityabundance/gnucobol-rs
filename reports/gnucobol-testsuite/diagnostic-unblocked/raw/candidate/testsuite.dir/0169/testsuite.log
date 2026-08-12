@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+169. syn_redefines.at:376: testing REDEFINES: with intervention ...
+./syn_redefines.at:395: $COMPILE_ONLY prog.cob
+stderr:
+./syn_redefines.at:395: exit code was 0, expected 1
+169. syn_redefines.at:376: 169. REDEFINES: with intervention (syn_redefines.at:376): FAILED (syn_redefines.at:395)

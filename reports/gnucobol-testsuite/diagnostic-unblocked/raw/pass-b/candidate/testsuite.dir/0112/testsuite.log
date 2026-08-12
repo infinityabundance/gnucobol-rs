@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+112. syn_definition.at:1114: testing CALL BY VALUE national item (extension) ...
+./syn_definition.at:1129: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: unsupported: PIC N(4): UnsupportedSymbol('N')
+./syn_definition.at:1129: exit code was 1, expected 0
+112. syn_definition.at:1114: 112. CALL BY VALUE national item (extension) (syn_definition.at:1114): FAILED (syn_definition.at:1129)

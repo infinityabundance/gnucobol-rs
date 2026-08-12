@@ -1,0 +1,10 @@
+
+#include <stdio.h>
+#include <libcob.h>
+
+COB_EXT_EXPORT int
+dump (int *p)
+{
+  printf ("%8.8d\n", *p);
+  return 0;
+}

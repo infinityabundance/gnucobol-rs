@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+1135. run_extensions.at:1703: testing CALL USING file-name ...
+./run_extensions.at:1741: $COMPILE_MODULE setfilename.c
+./run_extensions.at:1742: $COMPILE prog.cob
+./run_extensions.at:1743: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1135/stderr	2026-08-12 19:19:37.694543099 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "setfilename": not a contained program (external CALL is a boundary)
+./run_extensions.at:1743: exit code was 2, expected 0
+1135. run_extensions.at:1703: 1135. CALL USING file-name (run_extensions.at:1703): FAILED (run_extensions.at:1743)

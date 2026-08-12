@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+741. run_misc.at:2710: testing STRING WITH POINTER ON OVERFLOW with DELIMITER ...
+./run_misc.at:2788: $COMPILE prog.cob
+./run_misc.at:2789: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/741/stdout	2026-08-12 19:19:00.782727048 +0000
+@@ -0,0 +1,3 @@
++Case B: Should overflow
++B: TRTG-STRING <ABC> != SPACES
++B: STR-POINTER <04> != <00>
+741. run_misc.at:2710: 741. STRING WITH POINTER ON OVERFLOW with DELIMITER (run_misc.at:2710): FAILED (run_misc.at:2789)

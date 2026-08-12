@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+128. syn_definition.at:1589: testing PROGRAM COLLATING SEQUENCE ...
+./syn_definition.at:1753: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: unsupported: no PROCEDURE DIVISION
+./syn_definition.at:1755: $COMPILE_ONLY prog2.cob
+stderr:
+cobc-rs: unsupported: no PROCEDURE DIVISION
+./syn_definition.at:1757: $COMPILE_ONLY -Wno-unfinished prog3.cob
+stderr:
+cobc-rs: unsupported: no PROCEDURE DIVISION
+./syn_definition.at:1757: exit code was 1, expected 0
+128. syn_definition.at:1589: 128. PROGRAM COLLATING SEQUENCE (syn_definition.at:1589): FAILED (syn_definition.at:1757)

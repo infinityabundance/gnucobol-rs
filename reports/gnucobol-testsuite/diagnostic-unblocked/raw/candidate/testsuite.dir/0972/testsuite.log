@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+972. run_reportwriter.at:4108: testing Report with OCCURS ...
+./run_reportwriter.at:4188: $COMPILE prog.cob
+./run_reportwriter.at:4190: DD_PRINTOUT=./report.txt $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/972/stderr	2026-08-12 19:19:00.983724896 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: NUMS
+./run_reportwriter.at:4190: exit code was 2, expected 0
+972. run_reportwriter.at:4108: 972. Report with OCCURS (run_reportwriter.at:4108): FAILED (run_reportwriter.at:4190)

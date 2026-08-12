@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+215. syn_file.at:1467: testing INDEXED file PASSWORD clause ...
+./syn_file.at:1508: $COMPILE_ONLY prog.cob
+stderr:
+./syn_file.at:1508: exit code was 0, expected 1
+215. syn_file.at:1467: 215. INDEXED file PASSWORD clause (syn_file.at:1467): FAILED (syn_file.at:1508)

@@ -1,0 +1,19 @@
+#                             -*- compilation -*-
+1114. run_extensions.at:127: testing HP COBOL octal literals ...
+./run_extensions.at:180: $COMPILE -fhp-octal-literals=ok prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1114/stderr	2026-08-12 19:19:31.773107111 +0000
+@@ -0,0 +1,12 @@
++prog.cob:7: warning: handling of HP COBOL octal literals is unfinished; implementation is likely to be changed
++prog.cob:9: warning: handling of HP COBOL octal literals is unfinished; implementation is likely to be changed
++prog.cob:11: warning: handling of HP COBOL octal literals is unfinished; implementation is likely to be changed
++prog.cob:7: warning: alphanumeric value is expected
++prog.cob:11: warning: value size exceeds data size
++prog.cob:14: warning: handling of HP COBOL octal literals is unfinished; implementation is likely to be changed
++prog.cob:26: warning: handling of HP COBOL octal literals is unfinished; implementation is likely to be changed
++prog.cob:31: warning: handling of HP COBOL octal literals is unfinished; implementation is likely to be changed
++prog.cob:31: warning: value size exceeds data size
++prog.cob:31: note: value is 12594
++prog.cob:11: note: 'ITEM-NUM' defined here as PIC 99
++prog.cob:36: warning: handling of HP COBOL octal literals is unfinished; implementation is likely to be changed
+1114. run_extensions.at:127: 1114. HP COBOL octal literals (run_extensions.at:127): expected failure (run_extensions.at:180)

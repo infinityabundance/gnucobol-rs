@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+286. syn_misc.at:1676: testing line and floating comments ...
+./syn_misc.at:1734: $COMPILE prog.cob
+./syn_misc.at:1736: $COBCRUN_DIRECT ./prog
+./syn_misc.at:1742: $COMPILE_ONLY prog2.cob
+stderr:
+cobc-rs: unsupported: verb |
+./syn_misc.at:1749: $COMPILE -fmfcomment prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/286/stderr	2026-08-12 19:19:36.893186411 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fmfcomment: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
+./syn_misc.at:1749: exit code was 1, expected 0
+286. syn_misc.at:1676: 286. line and floating comments (syn_misc.at:1676): FAILED (syn_misc.at:1749)

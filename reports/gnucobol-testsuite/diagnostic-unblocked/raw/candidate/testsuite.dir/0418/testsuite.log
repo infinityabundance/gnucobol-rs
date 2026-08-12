@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+418. syn_move.at:583: testing MOVE FIGURATIVE to NUMERIC ...
+./syn_move.at:615: $COMPILE_ONLY -std=cobol2002 -freserved=COMP-1:FLOAT prog.cob
+stderr:
+cobc-rs: -freserved=COMP-1:FLOAT: unsupported option (rejected-unsupported; reserved-word changes: reject honestly): COMP-1:FLOAT
+./syn_move.at:618: $COMPILE_ONLY -std=ibm prog.cob
+stderr:
+./syn_move.at:618: exit code was 0, expected 1
+418. syn_move.at:583: 418. MOVE FIGURATIVE to NUMERIC (syn_move.at:583): FAILED (syn_move.at:618)

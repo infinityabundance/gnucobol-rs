@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+1208. run_extensions.at:5702: testing PICTURE L (under/over shoot) ...
+./run_extensions.at:5719: $COMPILE under.cob
+./run_extensions.at:5720: $COBCRUN_DIRECT ./under
+--- -	2026-08-12 19:19:37.777770462 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1208/stderr	2026-08-12 19:19:37.776330833 +0000
+@@ -1,3 +1,2 @@
+-libcob: under.cob:11: error: OCCURS DEPENDING ON 'LGX' out of bounds: 0
+-note: minimum subscript for 'FILLER 1': 1
++cobrun: unsupported: PIC LX(9): UnsupportedSymbol('L')
+ 
+./run_extensions.at:5720: exit code was 2, expected 1
+1208. run_extensions.at:5702: 1208. PICTURE L (under/over shoot) (run_extensions.at:5702): FAILED (run_extensions.at:5720)

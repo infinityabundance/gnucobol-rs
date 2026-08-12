@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+208. syn_file.at:1091: testing WRITE / REWRITE FROM clause and FILE ...
+./syn_file.at:1137: $COMPILE_ONLY prog.cob
+stderr:
+./syn_file.at:1137: exit code was 0, expected 1
+208. syn_file.at:1091: 208. WRITE / REWRITE FROM clause and FILE (syn_file.at:1091): FAILED (syn_file.at:1137)

@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+436. syn_screen.at:505: testing FULL on numeric item ...
+./syn_screen.at:522: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: unsupported: no PROCEDURE DIVISION
+./syn_screen.at:522: exit code was 1, expected 0
+436. syn_screen.at:505: 436. FULL on numeric item (syn_screen.at:505): FAILED (syn_screen.at:522)

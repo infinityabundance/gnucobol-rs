@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+547. run_fundamental.at:2165: testing GLOBAL FD (3) ...
+./run_fundamental.at:2209: $COMPILE prog.cob
+./run_fundamental.at:2210: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/547/stdout	2026-08-12 19:19:37.064863832 +0000
+@@ -0,0 +1 @@
++Not OK
+547. run_fundamental.at:2165: 547. GLOBAL FD (3) (run_fundamental.at:2165): FAILED (run_fundamental.at:2210)

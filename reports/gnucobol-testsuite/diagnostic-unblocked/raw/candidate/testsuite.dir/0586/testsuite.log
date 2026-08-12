@@ -1,0 +1,50 @@
+#                             -*- compilation -*-
+586. run_fundamental.at:4976: testing COMPUTE with decimal constants ...
+./run_fundamental.at:5006: $COMPILE prog.cob
+./run_fundamental.at:5007: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/586/stdout	2026-08-12 19:19:00.643728536 +0000
+@@ -0,0 +1,42 @@
++01
++02
++03
++04
++05
++06
++07
++08
++09
++10
++11
++12
++13
++14
++15
++16
++17
++18
++19
++20
++21
++22
++23
++24
++25
++26
++27
++28
++29
++30
++31
++32
++33
++34
++35
++36
++37
++38
++39
++40
++41
++42
+586. run_fundamental.at:4976: 586. COMPUTE with decimal constants (run_fundamental.at:4976): FAILED (run_fundamental.at:5007)

@@ -1,0 +1,71 @@
+#                             -*- compilation -*-
+820. run_misc.at:11969: testing C-API (field based) ...
+./run_misc.at:12129: $COMPILE -Wno-unfinished prog.cob cmod.c
+stderr:
+./run_misc.at:12132: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:00.847858637 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/820/stderr	2026-08-12 19:19:00.846726363 +0000
+@@ -1,9 +1,2 @@
+-libcob: warning: cob_put_field_str: attempt to over-write constant field with '2563'
+-libcob: warning: cob_put_field_str: attempt to over-write constant field with '19'
+-libcob: warning: cob_put_field_str: attempt to over-write constant field with 'Bye!'
+-libcob: warning: cob_put_field_str: attempt to over-write constant field with 'Bye!'
+-libcob: warning: cob_put_field_str: attempt to over-write constant field with '21'
+-libcob: warning: cob_put_field_str: attempt to over-write constant field with 'Bye-Bye Birdie!'
+-libcob: warning: cob_put_field_str: attempt to over-write constant field with '21'
+-libcob: warning: cob_put_field_str: attempt to over-write constant field with 'Bye!'
++cobrun: unsupported: CALL "CAPI": not a contained program (external CALL is a boundary)
+ 
+--- -	2026-08-12 19:19:00.848372625 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/820/stdout	2026-08-12 19:19:00.847726352 +0000
+@@ -1,48 +1 @@
+-CAPI called with 2 parameters
+- 1: BINARY   BY VALUE     S9(9)       +000002560;
+- 2: DISPLAY  BY VALUE     9(2)        16;
+-CAPI called with 2 parameters
+- 1: BINARY   BY REFERENCE 9(5)        0000001280;
+- 2: EDITED   BY REFERENCE S9(5)V9(2)    512.77-  to   511.47 ;
+-CAPI called with 1 parameters
+- 1: BINARY   BY REFERENCE S9(5)       +01024;
+-CAPI called with 1 parameters
+- 1: BINARY   BY REFERENCE 9(9)        000002560;
+-CAPI called with 2 parameters
+- 1: COMP-3   BY REFERENCE 9(8)        00004096;
+- 2: EDITED   BY REFERENCE S9(5)V9(2)    512.77   to   514.07-;
+-CAPI called with 4 parameters
+- 1: DISPLAY  BY REFERENCE S9(8)       +00008192;
+- 2: BINARY   BY REFERENCE S9(5)       +01027;
+- 3: X        BY REFERENCE X(9)        'Hello    ';
+- 4: Group    BY REFERENCE (18)        'Hello    World    ';
+-CAPI called with 3 parameters
+- 1: COMP-3   BY REFERENCE 9(8)        00004099;
+- 2: EDITED   BY REFERENCE S9(5)V9(2)    514.07-  to   512.77 ;
+- 3: X        BY REFERENCE X(9)        'Bye!     ';
+-CAPI called with 2 parameters
+- 1: BINARY   BY REFERENCE 9(5)        0000001283;
+- 2: EDITED   BY REFERENCE S9(5)V9(2)    512.77   to   514.07-;
+-CAPI called with 2 parameters
+- 1: BINARY   BY REFERENCE 9(5)        0000001286;
+- 2: X        BY VALUE     X(9)        'Hello!   ';
+-CAPI called with 2 parameters
+- 1: BINARY   BY REFERENCE 9(5)        0000001289;
+- 2: X        BY VALUE     X(9)        'Hello!   ';
+-CAPI called with 1 parameters
+- 1: BINARY   BY VALUE     S9(9)       +000000018;
+-CAPI called with 2 parameters
+- 1: Group    BY VALUE     (18)        'Bye-Bye Birdie!   ';
+- 2: DISPLAY  BY VALUE     9(2)        18;
+-CAPI called with 2 parameters
+- 1: X        BY VALUE     X(9)        'Fred Fish';
+- 2: COMP-3   BY REFERENCE 9(8)        00004102;
+-CAPI called with 1 parameters
+- 1: COMP-3   BY REFERENCE S9(7)V9(2)  +0000012.50;
+-CAPI called with 0 parameters
+-COMP3    is now 00004105;
+-COMP4    is now 0000001292;
+-BINFLD5S is now +01030;
+-CHRX     is now Hello!   ;
+-NE       is now   514.07-;
+ 
+./run_misc.at:12132: exit code was 2, expected 0
+820. run_misc.at:11969: 820. C-API (field based) (run_misc.at:11969): FAILED (run_misc.at:12132)

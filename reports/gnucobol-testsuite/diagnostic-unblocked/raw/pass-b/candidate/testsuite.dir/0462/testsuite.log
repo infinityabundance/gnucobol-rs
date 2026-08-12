@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+462. syn_literals.at:974: testing floating-point literals ...
+./syn_literals.at:1036: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: unsupported: verb E1,
+./syn_literals.at:1039: $COMPILE_ONLY prog2.cob
+stderr:
+./syn_literals.at:1039: exit code was 0, expected 1
+462. syn_literals.at:974: 462. floating-point literals (syn_literals.at:974): FAILED (syn_literals.at:1039)

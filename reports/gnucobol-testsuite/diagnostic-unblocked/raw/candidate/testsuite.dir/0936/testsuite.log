@@ -1,0 +1,48 @@
+#                             -*- compilation -*-
+936. run_file.at:11234: testing RELATIVE Multi-Record ...
+./run_file.at:11442: $COMPILE prog.cob
+./run_file.at:11444: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/936/stderr	2026-08-12 19:19:00.948275054 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: OCCURS count MAX-SUB is not an integer
+--- -	2026-08-12 19:19:00.950349521 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/936/stdout	2026-08-12 19:19:00.949102467 +0000
+@@ -1,35 +1 @@
+-Loading sample program data file.
+-Sample program data file load complete.
+-Initial Re-Read Open Sts:00
+-Read2 ALP00000 #:00001 Trms:0010
+-Read  BET00000 #:00002 Trms:0013
+-Read2 GAM00000 #:00003 Trms:0075
+-Read  DEL00000 #:00004 Trms:0010
+-Read2 EPS00000 #:00005 Trms:0090
+-Read  FOR00000 #:00006 Trms:0254
+-Read Status: 10
+-For Rewrite Open I-O Sts:00
+-Read2 ALP00000 #:00001 Trms:0010
+-REWRITE ALP00000 Sts 00 Trms:0011
+-For Rewrite/Delete Open I-O Sts:00
+-Read2 ALP00000 #:00001 Trms:0011
+-REWRITE ALP00000 Sts 00 Trms:0012
+-Read  BET00000 #:00002 Trms:0013
+-DELETE BET00000 Sts 00
+-Re-list Open Sts:00
+-Read2 ALP00000 #:00001 Trms:0012
+-Read2 GAM00000 #:00003 Trms:0075
+-Read  DEL00000 #:00004 Trms:0010
+-Read2 EPS00000 #:00005 Trms:0090
+-Read  FOR00000 #:00006 Trms:0254
+-Read Status: 10
+-Re-list afer Extend Open Sts:00
+-Read2 ALP00000 #:00001 Trms:0012
+-Read2 GAM00000 #:00003 Trms:0075
+-Read  DEL00000 #:00004 Trms:0010
+-Read2 EPS00000 #:00005 Trms:0090
+-Read  FOR00000 #:00006 Trms:0254
+-Read2 ALP00000 #:00007 Trms:0010
+-Read  BET00000 #:00008 Trms:0013
+-Read Status: 10
+ 
+./run_file.at:11444: exit code was 2, expected 0
+936. run_file.at:11234: 936. RELATIVE Multi-Record (run_file.at:11234): FAILED (run_file.at:11444)

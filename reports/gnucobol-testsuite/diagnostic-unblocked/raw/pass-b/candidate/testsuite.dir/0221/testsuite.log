@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+221. syn_file.at:1672: testing ASSIGN external-name matching filename ...
+./syn_file.at:1692: $COMPILE_ONLY -fassign-clause=external prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/221/stderr	2026-08-12 19:19:36.847340787 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fassign-clause=external: unsupported option (rejected-unsupported; ASSIGN clause dialect: reject honestly): external
+./syn_file.at:1692: exit code was 1, expected 0
+221. syn_file.at:1672: 221. ASSIGN external-name matching filename (syn_file.at:1672): FAILED (syn_file.at:1692)

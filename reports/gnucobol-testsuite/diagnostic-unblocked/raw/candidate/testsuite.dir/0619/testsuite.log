@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+619. run_fundamental.at:6947: testing MOVE with de-editting to COMP-5 ...
+./run_fundamental.at:6993: $COMPILE prog.cob
+./run_fundamental.at:6994: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/619/stderr	2026-08-12 19:19:00.668728269 +0000
+@@ -0,0 +1 @@
++cobrun: runtime error: UnsupportedSymbol('(')
+./run_fundamental.at:6994: exit code was 2, expected 0
+619. run_fundamental.at:6947: 619. MOVE with de-editting to COMP-5 (run_fundamental.at:6947): FAILED (run_fundamental.at:6994)

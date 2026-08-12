@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+401. syn_move.at:38: testing MOVE SPACE TO numeric or numeric-edited item ...
+./syn_move.at:54: $COMPILE_ONLY prog.cob
+stderr:
+./syn_move.at:54: exit code was 0, expected 1
+401. syn_move.at:38: 401. MOVE SPACE TO numeric or numeric-edited item (syn_move.at:38): FAILED (syn_move.at:54)

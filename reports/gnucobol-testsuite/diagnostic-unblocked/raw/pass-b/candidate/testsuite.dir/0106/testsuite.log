@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+106. syn_definition.at:959: testing Redefinition of section and paragraph names ...
+./syn_definition.at:971: $COMPILE_ONLY prog.cob
+stderr:
+./syn_definition.at:971: exit code was 0, expected 1
+106. syn_definition.at:959: 106. Redefinition of section and paragraph names (syn_definition.at:959): FAILED (syn_definition.at:971)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+806. run_misc.at:7596: testing READY TRACE / RESET TRACE ...
+./run_misc.at:7777: COB_OLD_TRACE=y \
+$COBC -ftraceall callee1.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/806/stderr	2026-08-12 19:19:00.836726470 +0000
+@@ -0,0 +1 @@
++cobc-rs: -ftraceall: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): callee1.cob
+./run_misc.at:7777: exit code was 1, expected 0
+806. run_misc.at:7596: 806. READY TRACE / RESET TRACE (run_misc.at:7596): FAILED (run_misc.at:7777)

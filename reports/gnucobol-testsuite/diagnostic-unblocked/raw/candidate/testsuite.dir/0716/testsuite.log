@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+716. run_misc.at:1829: testing INSPECT CONVERTING NULL ...
+./run_misc.at:1845: $COMPILE prog.cob
+./run_misc.at:1846: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/716/stderr	2026-08-12 19:19:00.756727326 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: NULL
+./run_misc.at:1846: exit code was 2, expected 0
+716. run_misc.at:1829: 716. INSPECT CONVERTING NULL (run_misc.at:1829): FAILED (run_misc.at:1846)

@@ -1,0 +1,19 @@
+#                             -*- compilation -*-
+1183. run_extensions.at:4235: testing System routine CBL_GC_HOSTED ...
+./run_extensions.at:4357: $COMPILE_MODULE test_errno.c
+./run_extensions.at:4358: $COMPILE_MODULE test_stdio.c
+./run_extensions.at:4359: $COMPILE prog.cob
+./run_extensions.at:4360: $COBCRUN_DIRECT ./prog 1ARG
+--- -	2026-08-12 19:19:01.271791406 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1183/stderr	2026-08-12 19:19:01.270795099 +0000
+@@ -1 +1,2 @@
+-ERR
++cobrun: unsupported: unrecognized USAGE BINARY-C-LONG
++
+--- -	2026-08-12 19:19:01.272473067 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1183/stdout	2026-08-12 19:19:01.271721813 +0000
+@@ -1 +1 @@
+-OUT
++
+./run_extensions.at:4360: exit code was 2, expected 3
+1183. run_extensions.at:4235: 1183. System routine CBL_GC_HOSTED (run_extensions.at:4235): FAILED (run_extensions.at:4360)

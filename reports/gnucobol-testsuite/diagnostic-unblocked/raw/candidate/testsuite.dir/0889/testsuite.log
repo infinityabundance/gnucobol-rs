@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+889. run_file.at:4082: testing System routine CBL_COPY_FILE ...
+./run_file.at:4110: $COMPILE prog2.cob
+./run_file.at:4111: $COBCRUN_DIRECT ./prog2
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/889/stderr	2026-08-12 19:19:00.908074021 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "CBL_COPY_FILE": not a contained program (external CALL is a boundary)
+./run_file.at:4111: exit code was 2, expected 0
+889. run_file.at:4082: 889. System routine CBL_COPY_FILE (run_file.at:4082): FAILED (run_file.at:4111)

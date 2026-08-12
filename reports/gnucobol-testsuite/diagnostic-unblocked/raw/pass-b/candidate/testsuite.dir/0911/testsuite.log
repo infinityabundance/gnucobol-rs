@@ -1,0 +1,25 @@
+#                             -*- compilation -*-
+911. run_file.at:6118: testing INDEXED SEQUENTIAL with variable records ...
+./run_file.at:6182: $COMPILE prog.cob
+./run_file.at:6183: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/911/stderr	2026-08-12 19:19:37.387150188 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: reference-modification length 'REC-SIZE - 2' is not an integer
+--- -	2026-08-12 19:19:37.388369331 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/911/stdout	2026-08-12 19:19:37.387622148 +0000
+@@ -1,12 +1 @@
+-22: >+12345678++12345678+<
+-21: >+12345678++12345678<
+-20: >+12345678++1234567<
+-19: >+12345678++123456<
+-18: >+12345678++12345<
+-17: >+12345678++1234<
+-16: >+12345678++123<
+-15: >+12345678++12<
+-14: >+12345678++1<
+-13: >+12345678++<
+-12: >+12345678+<
+ 
+./run_file.at:6183: exit code was 2, expected 0
+911. run_file.at:6118: 911. INDEXED SEQUENTIAL with variable records (run_file.at:6118): FAILED (run_file.at:6183)

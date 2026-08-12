@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+329. syn_misc.at:3704: testing duplicate PROCEDURE DIVISION/ENTRY USING items ...
+./syn_misc.at:3718: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:3718: exit code was 0, expected 1
+329. syn_misc.at:3704: 329. duplicate PROCEDURE DIVISION/ENTRY USING items (syn_misc.at:3704): FAILED (syn_misc.at:3718)

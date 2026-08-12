@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+664. run_initialize.at:442: testing INITIALIZE with FILLER ...
+./run_initialize.at:503: $COMPILE prog.cob
+./run_initialize.at:504: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/664/stderr	2026-08-12 19:19:00.706727862 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: MY-FILLER(2:3)
+./run_initialize.at:504: exit code was 2, expected 0
+664. run_initialize.at:442: 664. INITIALIZE with FILLER (run_initialize.at:442): FAILED (run_initialize.at:504)

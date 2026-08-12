@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+883. run_file.at:3545: testing DECLARATIVES procedure referencing ...
+./run_file.at:3579: $COMPILE prog.cob
+./run_file.at:3580: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/883/stderr	2026-08-12 19:19:37.361208507 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: verb END
+./run_file.at:3580: exit code was 2, expected 0
+883. run_file.at:3545: 883. DECLARATIVES procedure referencing (run_file.at:3545): FAILED (run_file.at:3580)

@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+722. run_misc.at:2109: testing INSPECT TALLYING BEFORE and AFTER ...
+./run_misc.at:2139: $COMPILE prog.cob
+./run_misc.at:2140: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/722/stdout	2026-08-12 19:19:37.208612418 +0000
+@@ -0,0 +1 @@
++1: should be 0 but is 003
+722. run_misc.at:2109: 722. INSPECT TALLYING BEFORE and AFTER (run_misc.at:2109): FAILED (run_misc.at:2140)

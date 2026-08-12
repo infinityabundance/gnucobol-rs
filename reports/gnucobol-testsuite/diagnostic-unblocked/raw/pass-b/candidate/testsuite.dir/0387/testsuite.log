@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+387. syn_misc.at:6410: testing field-tree via COBC_GEN_DUMP_COMMENTS ...
+./syn_misc.at:6511: COBC_GEN_DUMP_COMMENTS=1 \
+  $COMPILE -C -fdump=all -w prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/387/stderr	2026-08-12 19:19:36.952544216 +0000
+@@ -0,0 +1 @@
++cobc-rs: -C: unsupported option (rejected-unsupported; generate C: the candidate is an interpreter, not a C emitter; reject honestly): 
+./syn_misc.at:6511: exit code was 1, expected 0
+prog.c:
+sed: can't read prog.c: No such file or directory
+387. syn_misc.at:6410: 387. field-tree via COBC_GEN_DUMP_COMMENTS (syn_misc.at:6410): FAILED (syn_misc.at:6511)

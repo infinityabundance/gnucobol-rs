@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+890. run_file.at:4117: testing Default file external name ...
+./run_file.at:4182: $COMPILE_MODULE fexists_signed.c
+./run_file.at:4183: $COMPILE prog.cob
+./run_file.at:4184: unset COB_FILE_PATH ; ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/890/stderr	2026-08-12 19:19:37.368053207 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim)
+./run_file.at:4184: exit code was 2, expected 0
+890. run_file.at:4117: 890. Default file external name (run_file.at:4117): FAILED (run_file.at:4184)

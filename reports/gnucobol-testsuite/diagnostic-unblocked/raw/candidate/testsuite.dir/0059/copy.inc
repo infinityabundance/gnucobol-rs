@@ -1,0 +1,3 @@
+
+       01  TEST-VAR PIC X(2) VALUE "OK".
+       01  NORM-VAR PIC X(2) VALUE "OK".

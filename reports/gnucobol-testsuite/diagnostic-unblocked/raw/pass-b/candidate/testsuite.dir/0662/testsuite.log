@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+662. run_initialize.at:298: testing INITIALIZE group item ...
+./run_initialize.at:405: $COMPILE prog.cob
+./run_initialize.at:406: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/662/stdout	2026-08-12 19:19:37.158058756 +0000
+@@ -0,0 +1,4 @@
++Test 1 failed: AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCC.
++    should be: AAAAAAAAAAAAB0 0 0 0 0 BCCCCCCCCCCCC.
++Test 2 failed: 2AAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCC.
++    should be: 2AAAAAAAAAAAB0 0 0 0 0 BCCCCCCCCCCCC.
+662. run_initialize.at:298: 662. INITIALIZE group item (run_initialize.at:298): FAILED (run_initialize.at:406)

@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+973. run_reportwriter.at:4212: testing Report CODE and LIMIT COLUMNS ...
+./run_reportwriter.at:4305: $COMPILE -std=cobol2002 -fassign-ext-dyn=ok progv.cob
+stderr:
+cobc-rs: -fassign-ext-dyn=ok: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ok
+./run_reportwriter.at:4305: exit code was 1, expected 0
+973. run_reportwriter.at:4212: 973. Report CODE and LIMIT COLUMNS (run_reportwriter.at:4212): FAILED (run_reportwriter.at:4305)

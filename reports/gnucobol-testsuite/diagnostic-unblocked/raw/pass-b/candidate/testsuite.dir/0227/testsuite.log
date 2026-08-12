@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+227. syn_file.at:1930: testing ALTERNATE RECORD definition omitting RECORD ...
+./syn_file.at:1952: $COMPILE_ONLY prog.cob
+stderr:
+./syn_file.at:1952: exit code was 0, expected 1
+227. syn_file.at:1930: 227. ALTERNATE RECORD definition omitting RECORD (syn_file.at:1930): expected failure (syn_file.at:1952)

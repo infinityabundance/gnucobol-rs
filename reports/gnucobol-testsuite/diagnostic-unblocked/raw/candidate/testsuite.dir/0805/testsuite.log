@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+805. run_misc.at:7561: testing void PROCEDURE, NOTHING return ...
+./run_misc.at:7585: $COMPILE -static caller.cob callee.cob -o prog
+./run_misc.at:7586: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/805/stderr	2026-08-12 19:19:00.835620963 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: verb RETURNING
+./run_misc.at:7586: exit code was 2, expected 42
+805. run_misc.at:7561: 805. void PROCEDURE, NOTHING return (run_misc.at:7561): FAILED (run_misc.at:7586)

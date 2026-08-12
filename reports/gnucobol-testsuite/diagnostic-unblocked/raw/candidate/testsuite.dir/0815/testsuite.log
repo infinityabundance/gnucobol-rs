@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+815. run_misc.at:11527: testing Alphanumeric MOVE with truncation ...
+./run_misc.at:11573: $COMPILE -Wno-truncate prog.cob
+./run_misc.at:11574: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/815/stderr	2026-08-12 19:19:00.839726438 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: X-LEFT,
+./run_misc.at:11574: exit code was 2, expected 0
+815. run_misc.at:11527: 815. Alphanumeric MOVE with truncation (run_misc.at:11527): FAILED (run_misc.at:11574)

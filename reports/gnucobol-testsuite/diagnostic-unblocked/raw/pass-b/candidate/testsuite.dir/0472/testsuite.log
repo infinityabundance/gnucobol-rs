@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+472. syn_literals.at:1286: testing long literal in error message ...
+./syn_literals.at:1311: $COMPILE_ONLY prog.cob
+stderr:
+./syn_literals.at:1311: exit code was 0, expected 1
+472. syn_literals.at:1286: 472. long literal in error message (syn_literals.at:1286): FAILED (syn_literals.at:1311)

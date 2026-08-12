@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+673. run_misc.at:128: testing DECIMAL-POINT is COMMA (4) ...
+./run_misc.at:148: $COMPILE prog.cob
+./run_misc.at:149: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:37.167625150 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/673/stdout	2026-08-12 19:19:37.166845686 +0000
+@@ -1,2 +1,2 @@
+-00,10
++01,00
+ 
+673. run_misc.at:128: 673. DECIMAL-POINT is COMMA (4) (run_misc.at:128): FAILED (run_misc.at:149)

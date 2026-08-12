@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+631. run_subscripts.at:242: testing length of ODO w/- reference-modification ...
+./run_subscripts.at:292: $COMPILE prog.cob
+./run_subscripts.at:293: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/631/stdout	2026-08-12 19:19:37.130337755 +0000
+@@ -0,0 +1,2 @@
++text2 wrong: seco
++text4 wrong:  sec
+631. run_subscripts.at:242: 631. length of ODO w/- reference-modification (run_subscripts.at:242): FAILED (run_subscripts.at:293)

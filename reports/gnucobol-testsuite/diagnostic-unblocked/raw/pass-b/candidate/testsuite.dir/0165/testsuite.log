@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+165. syn_redefines.at:242: testing REDEFINES: with qualification ...
+./syn_redefines.at:259: $COMPILE_ONLY prog.cob
+stderr:
+./syn_redefines.at:259: exit code was 0, expected 1
+165. syn_redefines.at:242: 165. REDEFINES: with qualification (syn_redefines.at:242): FAILED (syn_redefines.at:259)

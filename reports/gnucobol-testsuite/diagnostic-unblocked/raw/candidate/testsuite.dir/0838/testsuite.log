@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+838. run_misc.at:13672: testing EC-SIZE-ZERO-DIVIDE ...
+./run_misc.at:13710: $COMPILE prog.cob
+./run_misc.at:13711: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/838/stderr	2026-08-12 19:19:00.857726245 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: FUNCTION
+./run_misc.at:13711: exit code was 2, expected 0
+838. run_misc.at:13672: 838. EC-SIZE-ZERO-DIVIDE (run_misc.at:13672): FAILED (run_misc.at:13711)

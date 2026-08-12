@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+182. syn_value.at:315: testing National item ...
+./syn_value.at:332: $COMPILE_ONLY -Wno-unfinished prog.cob
+stderr:
+cobc-rs: unsupported: PIC NNN: UnsupportedSymbol('N')
+./syn_value.at:332: exit code was 1, expected 0
+182. syn_value.at:315: 182. National item (syn_value.at:315): FAILED (syn_value.at:332)

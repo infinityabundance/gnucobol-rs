@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+257. syn_misc.at:633: testing empty program ...
+./syn_misc.at:648: $COMPILE prog.cob
+./syn_misc.at:649: $COBC prog.cob
+./syn_misc.at:660: $COMPILE prog2.cob
+./syn_misc.at:661: $COBC prog2.cob
+./syn_misc.at:665: $COMPILE_ONLY prog3.cob
+stderr:
+cobc-rs: unsupported: no PROCEDURE DIVISION
+./syn_misc.at:668: $COMPILE -fdiagnostics-plain-output -frelax-syntax-checks prog3.cob
+stderr:
+cobc-rs: -frelax-syntax-checks: unsupported option (rejected-unsupported; relaxed syntax checks: the candidate parser has one sealed strictness; reject honestly): 
+./syn_misc.at:668: exit code was 1, expected 0
+257. syn_misc.at:633: 257. empty program (syn_misc.at:633): FAILED (syn_misc.at:668)

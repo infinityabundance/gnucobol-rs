@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+933. run_file.at:10498: testing EXTFH: RELATIVE files ...
+./run_file.at:10675: $COMPILE -fnotrunc prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/933/stderr	2026-08-12 19:19:00.938773261 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fnotrunc: unsupported option (rejected-unsupported; no binary truncation: the candidate's arithmetic model is fixed; reject honestly): 
+./run_file.at:10675: exit code was 1, expected 0
+933. run_file.at:10498: 933. EXTFH: RELATIVE files (run_file.at:10498): FAILED (run_file.at:10675)

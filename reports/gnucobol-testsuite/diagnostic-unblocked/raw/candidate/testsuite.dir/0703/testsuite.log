@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+703. run_misc.at:1263: testing Static CALL with ON EXCEPTION ...
+./run_misc.at:1288: $COMPILE_MODULE -c callee2.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/703/stderr	2026-08-12 19:19:00.743235227 +0000
+@@ -0,0 +1 @@
++cobc-rs: -c: unsupported option (rejected-unsupported; compile to object: the candidate has no native object model (no C emission); reject honestly): 
+./run_misc.at:1288: exit code was 1, expected 0
+703. run_misc.at:1263: 703. Static CALL with ON EXCEPTION (run_misc.at:1263): FAILED (run_misc.at:1288)

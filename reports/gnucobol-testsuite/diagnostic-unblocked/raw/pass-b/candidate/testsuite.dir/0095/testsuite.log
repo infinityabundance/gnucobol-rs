@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+95. syn_definition.at:630: testing PROCEDURE DIVISION RETURNING OMITTED: main ...
+./syn_definition.at:642: $COMPILE_MODULE prog.cob
+./syn_definition.at:643: $COMPILE prog.cob
+stderr:
+./syn_definition.at:643: exit code was 0, expected 1
+95. syn_definition.at:630: 95. PROCEDURE DIVISION RETURNING OMITTED: main (syn_definition.at:630): FAILED (syn_definition.at:643)

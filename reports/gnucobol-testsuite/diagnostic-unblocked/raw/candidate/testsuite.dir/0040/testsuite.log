@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+40. configuration.at:526: testing runtime configuration file ...
+./configuration.at:543: $COBCRUN --runtime-conf | \
+$GREP "COB_PHYSICAL_CANCEL" | $GREP "no" | $GREP "default"
+stdout:
+    : COB_PHYSICAL_CANCEL    : no       (default)
+./configuration.at:547: $COBCRUN -c test2.cfg --runtime-conf | \
+$GREP "physical_cancel" | $GREP "yes"
+stdout:
+./configuration.at:547: exit code was 1, expected 0
+40. configuration.at:526: 40. runtime configuration file (configuration.at:526): FAILED (configuration.at:547)

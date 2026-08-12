@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+376. syn_misc.at:5945: testing conditional / define directives (1) ...
+./syn_misc.at:5964: $COMPILE_ONLY -DACTIVATE2 prog.cob
+--- -	2026-08-12 19:19:00.467066892 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/376/stdout	2026-08-12 19:19:00.466204004 +0000
+@@ -1,2 +1 @@
+-OK
+ 
+376. syn_misc.at:5945: 376. conditional / define directives (1) (syn_misc.at:5945): FAILED (syn_misc.at:5964)

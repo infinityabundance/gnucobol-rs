@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+540. run_fundamental.at:1668: testing Contained program visibility (3) ...
+./run_fundamental.at:1713: $COMPILE prog.cob
+./run_fundamental.at:1714: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/540/stderr	2026-08-12 19:19:37.058566963 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: X
+./run_fundamental.at:1714: exit code was 2, expected 0
+540. run_fundamental.at:1668: 540. Contained program visibility (3) (run_fundamental.at:1668): FAILED (run_fundamental.at:1714)

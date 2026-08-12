@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+544. run_fundamental.at:1958: testing CALL/CANCEL/SET ADDRESS program-prototype-name ...
+./run_fundamental.at:2050: $COMPILE -Wno-unfinished prog.cob
+./run_fundamental.at:2051: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/544/stderr	2026-08-12 19:19:00.598254623 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: NULL
+--- -	2026-08-12 19:19:00.600478779 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/544/stdout	2026-08-12 19:19:00.599336029 +0000
+@@ -1,3 +1 @@
+-12<
+-121<
+ 
+./run_fundamental.at:2051: exit code was 2, expected 0
+544. run_fundamental.at:1958: 544. CALL/CANCEL/SET ADDRESS program-prototype-name (run_fundamental.at:1958): FAILED (run_fundamental.at:2051)

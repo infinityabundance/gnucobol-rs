@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+326. syn_misc.at:3564: testing conflicting entry conventions ...
+./syn_misc.at:3581: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:3596: $COMPILE_ONLY prog2.cob
+stderr:
+cobc-rs: unsupported: verb WITH
+./syn_misc.at:3596: exit code was 1, expected 0
+326. syn_misc.at:3564: 326. conflicting entry conventions (syn_misc.at:3564): FAILED (syn_misc.at:3596)

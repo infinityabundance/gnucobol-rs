@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1216. run_extensions.at:6178: testing EXAMINE REPLACING ...
+./run_extensions.at:6208: $COMPILE -freserved=EXAMINE prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1216/stderr	2026-08-12 19:19:37.785363467 +0000
+@@ -0,0 +1 @@
++cobc-rs: -freserved=EXAMINE: unsupported option (rejected-unsupported; reserved-word changes: reject honestly): EXAMINE
+./run_extensions.at:6208: exit code was 1, expected 0
+1216. run_extensions.at:6178: 1216. EXAMINE REPLACING (run_extensions.at:6178): FAILED (run_extensions.at:6208)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1177. run_extensions.at:3598: testing System routine CBL_NIMP ...
+./run_extensions.at:3619: $COMPILE prog.cob
+./run_extensions.at:3620: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1177/stderr	2026-08-12 19:19:37.741227548 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "CBL_NIMP": not a contained program (external CALL is a boundary)
+./run_extensions.at:3620: exit code was 2, expected 0
+1177. run_extensions.at:3598: 1177. System routine CBL_NIMP (run_extensions.at:3598): FAILED (run_extensions.at:3620)

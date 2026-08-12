@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+377. syn_misc.at:5970: testing conditional / define directives (2) ...
+./syn_misc.at:5989: $COMPILE_ONLY -D X prog.cob
+--- -	2026-08-12 19:19:00.470147846 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/377/stdout	2026-08-12 19:19:00.469378131 +0000
+@@ -1,2 +1 @@
+-X defined
+ 
+377. syn_misc.at:5970: 377. conditional / define directives (2) (syn_misc.at:5970): FAILED (syn_misc.at:5989)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+581. run_fundamental.at:4739: testing 88 level with FILLER ...
+./run_fundamental.at:4762: $COMPILE prog.cob
+./run_fundamental.at:4763: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/581/stderr	2026-08-12 19:19:00.636728611 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: FILLER
+./run_fundamental.at:4763: exit code was 2, expected 0
+581. run_fundamental.at:4739: 581. 88 level with FILLER (run_fundamental.at:4739): FAILED (run_fundamental.at:4763)

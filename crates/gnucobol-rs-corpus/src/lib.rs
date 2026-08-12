@@ -12,6 +12,7 @@
 pub mod bytes;
 pub mod cli;
 pub mod dedup;
+pub mod diag_reach;
 pub mod diag_unblocked;
 pub mod extract;
 pub mod generalize;

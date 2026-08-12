@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1011. run_functions.at:1091: testing FUNCTION EXCEPTION-STATUS ...
+./run_functions.at:1119: $COMPILE prog.cob
+./run_functions.at:1120: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:01.026760247 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1011/stdout	2026-08-12 19:19:01.024724457 +0000
+@@ -1 +1 @@
+-                               |EC-I-O-PERMANENT-ERROR         
++                               |                               
+1011. run_functions.at:1091: 1011. FUNCTION EXCEPTION-STATUS (run_functions.at:1091): FAILED (run_functions.at:1120)

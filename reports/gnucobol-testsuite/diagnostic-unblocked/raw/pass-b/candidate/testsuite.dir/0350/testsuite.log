@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+350. syn_misc.at:4799: testing Fall-Through to WHEN OTHER ...
+./syn_misc.at:4827: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:4827: exit code was 0, expected 1
+350. syn_misc.at:4799: 350. Fall-Through to WHEN OTHER (syn_misc.at:4799): expected failure (syn_misc.at:4827)

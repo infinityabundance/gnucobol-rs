@@ -1,0 +1,9 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      prog.
+       DATA             DIVISION.
+       WORKING-STORAGE  SECTION.
+       77  CRT-STATUS IS SPECIAL-NAMES CRT STATUS PIC X(5).
+       PROCEDURE        DIVISION.
+           ACCEPT OMITTED END-ACCEPT.
+           STOP RUN.

@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+327. syn_misc.at:3629: testing conflicting call conventions ...
+./syn_misc.at:3645: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:3645: exit code was 0, expected 1
+327. syn_misc.at:3629: 327. conflicting call conventions (syn_misc.at:3629): FAILED (syn_misc.at:3645)

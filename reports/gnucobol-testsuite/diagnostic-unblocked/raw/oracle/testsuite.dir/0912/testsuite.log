@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+912. run_file.at:6200: testing INDEXED file with LOCK MODE EXCLUSIVE ...
+./run_file.at:6272: $COMPILE prog1.cob
+./run_file.at:6273: $COMPILE prog2.cob
+./run_file.at:6274: $COBCRUN_DIRECT ./prog1
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/912/stdout	2026-08-12 19:18:53.351655138 +0000
+@@ -0,0 +1 @@
++FAILED: 00
+912. run_file.at:6200: 912. INDEXED file with LOCK MODE EXCLUSIVE (run_file.at:6200): expected failure (run_file.at:6274)

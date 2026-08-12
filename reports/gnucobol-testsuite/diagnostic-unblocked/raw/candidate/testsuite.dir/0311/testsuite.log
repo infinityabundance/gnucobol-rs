@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+311. syn_misc.at:2845: testing statement in Area A ...
+./syn_misc.at:2868: $COMPILE_ONLY prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/311/stderr	2026-08-12 19:19:00.416118103 +0000
+@@ -0,0 +1 @@
++cobc-rs: unsupported: verb SEC-1
+./syn_misc.at:2868: exit code was 1, expected 0
+311. syn_misc.at:2845: 311. statement in Area A (syn_misc.at:2845): FAILED (syn_misc.at:2868)

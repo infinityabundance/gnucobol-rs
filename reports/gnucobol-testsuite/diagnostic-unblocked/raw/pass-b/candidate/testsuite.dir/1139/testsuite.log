@@ -1,0 +1,26 @@
+#                             -*- compilation -*-
+1139. run_extensions.at:1900: testing CALL BY VALUE numeric literal with SIZE IS ...
+./run_extensions.at:1985: $COMPILE -Wno-unfinished prog.cob
+./run_extensions.at:1987: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1139/stderr	2026-08-12 19:19:37.700668208 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: 4
+--- -	2026-08-12 19:19:37.701866391 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1139/stdout	2026-08-12 19:19:37.701228352 +0000
+@@ -1,13 +1 @@
+-4: +0000000001
+-1: +002
+-2: +00003
+-4: +0000000004
+-8: +00000000000000000005
+-4: +0000000006
+-4: +0000000007
+-1: +002
+-2: +00003
+-4: +0000000004
+-8: +00000000000000000005
+-4: +0000000006
+ 
+./run_extensions.at:1987: exit code was 2, expected 0
+1139. run_extensions.at:1900: 1139. CALL BY VALUE numeric literal with SIZE IS (run_extensions.at:1900): FAILED (run_extensions.at:1987)

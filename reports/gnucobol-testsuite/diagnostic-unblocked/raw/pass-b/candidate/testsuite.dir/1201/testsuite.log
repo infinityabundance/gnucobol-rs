@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1201. run_extensions.at:5258: testing Binary COMP-1 (1) ...
+./run_extensions.at:5277: $COMPILE -fbinary-comp-1 prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1201/stderr	2026-08-12 19:19:37.765330951 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fbinary-comp-1: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
+./run_extensions.at:5277: exit code was 1, expected 0
+1201. run_extensions.at:5258: 1201. Binary COMP-1 (1) (run_extensions.at:5258): FAILED (run_extensions.at:5277)

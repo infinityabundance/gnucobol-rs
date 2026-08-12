@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+921. run_file.at:6956: testing INDEXED partial keys ...
+./run_file.at:7094: $COMPILE prog.cob
+./run_file.at:7095: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/921/stderr	2026-08-12 19:19:00.930725464 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: DELETE: `FILE` is not a declared file
+./run_file.at:7095: exit code was 2, expected 0
+921. run_file.at:6956: 921. INDEXED partial keys (run_file.at:6956): FAILED (run_file.at:7095)

@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+525. run_fundamental.at:866: testing Overlapping MOVE (GnuCOBOL) ...
+./run_fundamental.at:896: $COMPILE prog.cob
+stderr:
+./run_fundamental.at:899: $COBCRUN_DIRECT ./prog
+./run_fundamental.at:941: $COMPILE prog2.cob
+./run_fundamental.at:942: $COMPILE_MODULE subprog.cob
+./run_fundamental.at:943: $COBCRUN_DIRECT ./prog2
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/525/stderr	2026-08-12 19:19:00.587729136 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: 
+./run_fundamental.at:943: exit code was 2, expected 0
+525. run_fundamental.at:866: 525. Overlapping MOVE (GnuCOBOL) (run_fundamental.at:866): FAILED (run_fundamental.at:943)

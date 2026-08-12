@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+950. run_file.at:13459: testing SORT with INPUT/OUTPUT PROCEDUREs ...
+./run_file.at:13543: $COMPILE prog.cob
+./run_file.at:13544: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/950/stderr	2026-08-12 19:19:46.151241089 +0000
+@@ -0,0 +1 @@
++cobrun: runtime error: PERFORM VARYING exceeded 1e6 iterations
+./run_file.at:13544: exit code was 2, expected 0
+950. run_file.at:13459: 950. SORT with INPUT/OUTPUT PROCEDUREs (run_file.at:13459): FAILED (run_file.at:13544)

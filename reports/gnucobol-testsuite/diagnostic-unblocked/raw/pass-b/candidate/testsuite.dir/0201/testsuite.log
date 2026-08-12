@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+201. syn_file.at:766: testing variable record length DEPENDING item ...
+./syn_file.at:845: $COMPILE_ONLY prog.cob
+stderr:
+./syn_file.at:845: exit code was 0, expected 1
+201. syn_file.at:766: 201. variable record length DEPENDING item (syn_file.at:766): FAILED (syn_file.at:845)

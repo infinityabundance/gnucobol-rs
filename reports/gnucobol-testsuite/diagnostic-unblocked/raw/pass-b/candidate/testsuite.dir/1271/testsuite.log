@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+1271. data_packed.at:1432: testing COMP-6 used with MOVE ...
+./data_packed.at:1462: $COMPILE prog.cob
+./data_packed.at:1463: $COBCRUN_DIRECT ./prog
+./data_packed.at:1467: $COMPILE -fno-fast-compare -C -o progalt.c prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1271/stderr	2026-08-12 19:19:37.858282983 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fno-fast-compare: unsupported option (rejected-unsupported; fast-compare control: reject honestly): 
+./data_packed.at:1467: exit code was 1, expected 0
+1271. data_packed.at:1432: 1271. COMP-6 used with MOVE (data_packed.at:1432): FAILED (data_packed.at:1467)

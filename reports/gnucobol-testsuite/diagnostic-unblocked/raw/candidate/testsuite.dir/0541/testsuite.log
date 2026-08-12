@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+541. run_fundamental.at:1719: testing Contained program visibility (4) ...
+./run_fundamental.at:1767: $COMPILE prog.cob
+./run_fundamental.at:1768: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:00.596649481 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/541/stdout	2026-08-12 19:19:00.595729050 +0000
+@@ -1 +1 @@
+-P1P2P3P4
++P1P4P3P4
+541. run_fundamental.at:1719: 541. Contained program visibility (4) (run_fundamental.at:1719): FAILED (run_fundamental.at:1768)

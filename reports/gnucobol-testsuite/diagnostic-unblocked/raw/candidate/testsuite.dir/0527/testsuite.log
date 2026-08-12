@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+527. run_fundamental.at:1029: testing ALPHABETIC test ...
+./run_fundamental.at:1055: $COMPILE prog.cob
+./run_fundamental.at:1056: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/527/stdout	2026-08-12 19:19:00.582729189 +0000
+@@ -0,0 +1 @@
++Fail - Alphabetic
+527. run_fundamental.at:1029: 527. ALPHABETIC test (run_fundamental.at:1029): FAILED (run_fundamental.at:1056)

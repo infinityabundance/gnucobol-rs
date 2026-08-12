@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+707. run_misc.at:1463: testing Recursive CALL with RECURSIVE assumed ...
+./run_misc.at:1501: $COMPILE caller.cob
+./run_misc.at:1502: $COMPILE_MODULE -fno-recursive-check callee.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/707/stderr	2026-08-12 19:19:37.195337059 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fno-recursive-check: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): callee.cob
+./run_misc.at:1502: exit code was 1, expected 0
+707. run_misc.at:1463: 707. Recursive CALL with RECURSIVE assumed (run_misc.at:1463): FAILED (run_misc.at:1502)

@@ -1,0 +1,14 @@
+
+int callee (char *, char *);
+
+int
+main (int argc, char **argv)
+{
+   /* initialize parameters */
+   char *p1 = "A";
+   char *p2 = "FROM C";
+
+   /* call COBOL program (initialization missing)
+      note: COBOL program terminates the program by STOP RUN */
+   (void)callee (p1, p2);
+}

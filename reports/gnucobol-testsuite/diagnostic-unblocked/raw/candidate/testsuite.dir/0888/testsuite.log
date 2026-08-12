@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+888. run_file.at:3965: testing System routines for files - filename mapping ...
+./run_file.at:3998: mkdir -p sub
+./run_file.at:3999: $COMPILE prog.cob
+./run_file.at:4000: $COBCRUN_DIRECT ./prog notthere
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/888/stderr	2026-08-12 19:19:00.907725710 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: verb CHAINING
+--- -	2026-08-12 19:19:00.909191795 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/888/stdout	2026-08-12 19:19:00.908414887 +0000
+@@ -1,3 +1 @@
+-RUN WITH notthere
+-error opening file ...
+ 
+./run_file.at:4000: exit code was 2, expected 0
+888. run_file.at:3965: 888. System routines for files - filename mapping (run_file.at:3965): FAILED (run_file.at:4000)

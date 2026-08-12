@@ -196,7 +196,26 @@ The **full 175-court ledger** is in [`docs/sealed-courts.md`](docs/sealed-courts
 
 - **109 differential oracle sweep scripts** (`lab/oracle/*sweep*.sh`), each byte-for-byte vs the admitted GnuCOBOL 3.2, spanning arithmetic/numeric, edited/PICTURE/encoding, data movement/tables, control flow, files/I-O, strings, screen I/O (9 native terminal-byte courts), intrinsics/dates, and CALL/interop.
 - **Valid-COBOL corpus** (Phase 12 unified ledger, `reports/valid-corpus/`): **6442 admitted units** — 4732 step-extracted GnuCOBOL Autotest programs, 512 NIST CCVS85 units (the 4.3 MB `newcob.val.Z`, held under the `GNURUST.CCVS85.1` custody gate), the official manual examples, GnuCOBOL-shipped programs, 30 Open Mainframe Project course programs, and 1095 real-world X-COBOL files — every unit classified (no `UNKNOWN`), exact + near duplicates identified, licences decided or quarantined, and a frozen held-out partition kept for generalization measurement. Front-end corpus (`lab/corpus/frontend/`): the 193 hand-authored programs plus the earlier `lab/corpus/` collections (533 public GnuCOBOL-test-corpus programs, 53 open-banking programs).
+- **Diagnostic-unblocked testsuite lane** (methodology below): a mechanically restricted derivative of the upstream Autotest suite that exposes later semantic checks hidden behind exact compiler-diagnostic wording — 377 of 404 affected groups progress further and 140 later semantic checks become reachable when only proven diagnostic expectations are ignored (exit statuses, commands, source, runtime output and generated-file expectations all stay exact).
 - **Three independent parity maps** cross-check so a doc-comment can never masquerade as a port: DOXYGEN-PARITY (998/998 fns), LIBCOB-PARITY / PORT-INDEX (typed C↔Rust symbols, 100% active), and CLANG-AST-PARITY (870 defs / 3240 call edges). See [`COBOL-PARITY.md`](COBOL-PARITY.md), [`FILE-PARITY.md`](FILE-PARITY.md), [`DOXYGEN-PARITY.md`](DOXYGEN-PARITY.md), [`LIBCOB-PARITY.md`](LIBCOB-PARITY.md), [`CLANG-AST-PARITY.md`](CLANG-AST-PARITY.md), [`FUNCTION-EVIDENCE.md`](FUNCTION-EVIDENCE.md), and the 0–7 [`PORTING-LADDER.md`](PORTING-LADDER.md) (level 7 = compiler replacement, explicitly **NOT CLAIMED**; level is evidence *shape*, not quality).
+
+---
+
+## The diagnostic-unblocked testsuite lane (methodology)
+
+The upstream pristine testsuite remains untouched. A mechanically restricted derivative lane
+([`lab/gnucobol-testsuite/run-diagnostic-unblocked-docker.sh`](lab/gnucobol-testsuite/run-diagnostic-unblocked-docker.sh))
+replaces ONLY proven compiler-diagnostic expected streams with Autotest `ignore` — preserving
+commands, exit statuses, COBOL source, runtime output, generated-file expectations, environment,
+ordering and skip/xfail semantics — then regenerates the real suite with the upstream build
+mechanism (`make -C tests testsuite`). Its purpose is to expose later semantic checks that exact
+diagnostic wording would otherwise prevent from running; it is **not** a compatibility authority
+and its results are **not** pristine-suite passes. The transformer decides solely from the
+upstream test structure (never from candidate behaviour), the patch regenerates byte-identically,
+and an independent gate parses the actual diff and proves every hunk is legal (24 adversarial
+unit tests).
+
+Machine evidence: transformation manifest [`transformations.json`](reports/gnucobol-testsuite/diagnostic-unblocked/transformations.json) · patch [`diagnostic-ignore.patch`](reports/gnucobol-testsuite/diagnostic-unblocked/diagnostic-ignore.patch) · semantic reachability [`semantic-reachability.md`](reports/gnucobol-testsuite/diagnostic-unblocked/semantic-reachability.md) · pristine-vs-unblocked reconciliation [`pristine-vs-diagnostic-unblocked.md`](reports/gnucobol-testsuite/diagnostic-unblocked/pristine-vs-diagnostic-unblocked.md) · claim boundaries [`claim-boundaries.md`](reports/gnucobol-testsuite/diagnostic-unblocked/claim-boundaries.md). Replay: `bash lab/gnucobol-testsuite/run-diagnostic-unblocked-docker.sh`.
 
 ---
 

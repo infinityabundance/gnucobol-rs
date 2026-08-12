@@ -1,0 +1,28 @@
+#                             -*- compilation -*-
+1253. data_display.at:172: testing DISPLAY: unsigned ...
+./data_display.at:205: $COMPILE prog.cob
+./data_display.at:206: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1253/stderr	2026-08-12 19:19:01.342721053 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: a group MOVE is distributed across its leaves by write_field
+--- -	2026-08-12 19:19:01.344301089 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1253/stdout	2026-08-12 19:19:01.343721042 +0000
+@@ -1,15 +1 @@
+-127
+-128
+-32767
+-32768
+-2147483647
+-2147483648
+-2147483647
+-2147483648
+-09223372036854775807
+-09223372036854775808
+-32767
+-32768
+-2147483647
+-2147483648
+ 
+./data_display.at:206: exit code was 2, expected 0
+1253. data_display.at:172: 1253. DISPLAY: unsigned (data_display.at:172): FAILED (data_display.at:206)

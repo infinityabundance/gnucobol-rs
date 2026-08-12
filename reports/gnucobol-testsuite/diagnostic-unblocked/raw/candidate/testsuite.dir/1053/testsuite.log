@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1053. run_functions.at:2467: testing FUNCTION MODULE-TIME ...
+./run_functions.at:2486: $COMPILE prog.cob
+./run_functions.at:2487: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:01.090136854 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1053/stdout	2026-08-12 19:19:01.088723772 +0000
+@@ -1 +1 @@
+-OK
++
+1053. run_functions.at:2467: 1053. FUNCTION MODULE-TIME (run_functions.at:2467): FAILED (run_functions.at:2487)

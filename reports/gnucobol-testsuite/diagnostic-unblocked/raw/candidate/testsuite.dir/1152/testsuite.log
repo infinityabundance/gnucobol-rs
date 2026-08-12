@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+1152. run_extensions.at:2637: testing ASSIGN to KEYBOARD/DISPLAY ...
+./run_extensions.at:2682: $COMPILE prog.cob
+./run_extensions.at:2683: cat TEST-FILE | $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:01.233069961 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1152/stdout	2026-08-12 19:19:01.231722241 +0000
+@@ -1,7 +1 @@
+-a
+-ab
+-abc
+-abcd
+-abcde
+-abcdef
+ 
+1152. run_extensions.at:2637: 1152. ASSIGN to KEYBOARD/DISPLAY (run_extensions.at:2637): FAILED (run_extensions.at:2683)

@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+200. syn_file.at:666: testing variable record length ...
+./syn_file.at:748: $COMPILE_ONLY prog.cob
+stderr:
+./syn_file.at:748: exit code was 0, expected 1
+200. syn_file.at:666: 200. variable record length (syn_file.at:666): FAILED (syn_file.at:748)

@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+323. syn_misc.at:3376: testing checking prototypes and definitions match ...
+./syn_misc.at:3498: $COMPILE_ONLY -Wno-unfinished -Wno-pending prog.cob
+stderr:
+cobc-rs: unsupported: verb RETURNING
+323. syn_misc.at:3376: 323. checking prototypes and definitions match (syn_misc.at:3376): UNEXPECTED PASS     (0m0.001s 0m0.000s)

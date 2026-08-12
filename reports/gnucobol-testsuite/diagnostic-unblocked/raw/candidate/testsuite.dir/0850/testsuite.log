@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+850. run_file.at:154: testing DELETE FILE, SEQUENTIAL ...
+./run_file.at:218: $COMPILE prog.cob
+./run_file.at:219: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/850/stderr	2026-08-12 19:19:00.867726138 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: OPEN: `FILE-OPT` is not a declared file
+./run_file.at:219: exit code was 2, expected 0
+850. run_file.at:154: 850. DELETE FILE, SEQUENTIAL (run_file.at:154): FAILED (run_file.at:219)

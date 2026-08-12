@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+724. run_misc.at:2182: testing INSPECT REPLACING figurative constant ...
+./run_misc.at:2198: $COMPILE prog.cob
+./run_misc.at:2199: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/724/stdout	2026-08-12 19:19:37.207715175 +0000
+@@ -0,0 +1 @@
++BCA
+724. run_misc.at:2182: 724. INSPECT REPLACING figurative constant (run_misc.at:2182): FAILED (run_misc.at:2199)

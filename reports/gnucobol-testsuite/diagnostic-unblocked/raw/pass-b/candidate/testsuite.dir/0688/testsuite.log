@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+688. run_misc.at:710: testing MOVE X'00' ...
+./run_misc.at:738: $COMPILE_MODULE dump.c
+./run_misc.at:739: $COMPILE prog.cob
+./run_misc.at:740: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/688/stderr	2026-08-12 19:19:37.179675965 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "dump": not a contained program (external CALL is a boundary)
+--- -	2026-08-12 19:19:37.180981468 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/688/stdout	2026-08-12 19:19:37.180237251 +0000
+@@ -1 +1 @@
+-000102
++
+./run_misc.at:740: exit code was 2, expected 0
+688. run_misc.at:710: 688. MOVE X'00' (run_misc.at:710): FAILED (run_misc.at:740)

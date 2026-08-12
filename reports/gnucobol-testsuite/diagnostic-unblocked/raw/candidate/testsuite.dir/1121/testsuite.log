@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+1121. run_extensions.at:517: testing Complex OCCURS DEPENDING ON (1) ...
+./run_extensions.at:540: $COMPILE -std=mvs prog.cob
+./run_extensions.at:541: $COBCRUN_DIRECT ./prog
+Binary files - and /work/trees/a/tests/testsuite.dir/at-groups/1121/stdout differ
+1121. run_extensions.at:517: 1121. Complex OCCURS DEPENDING ON (1) (run_extensions.at:517): FAILED (run_extensions.at:541)

@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+896. run_file.at:4592: testing LINE SEQUENTIAL standard record overflow ...
+./run_file.at:4682: $COMPILE prog.cob
+./run_file.at:4684: DD_INFILE=./inp_data OUTFILE=TEST-FILE \
+$COBCRUN_DIRECT ./prog
+Binary files - and /work/trees/a/tests/testsuite.dir/at-groups/896/stdout differ
+TEST-FILE:
+sed: can't read TEST-FILE: No such file or directory
+896. run_file.at:4592: 896. LINE SEQUENTIAL standard record overflow (run_file.at:4592): FAILED (run_file.at:4684)

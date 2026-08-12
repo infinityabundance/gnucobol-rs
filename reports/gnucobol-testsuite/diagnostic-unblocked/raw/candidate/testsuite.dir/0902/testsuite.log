@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+902. run_file.at:5566: testing SEQUENTIAL file with LOCK MODE EXCLUSIVE ...
+./run_file.at:5629: $COMPILE prog1.cob
+./run_file.at:5630: $COMPILE prog2.cob
+./run_file.at:5631: $COBCRUN_DIRECT ./prog1
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/902/stderr	2026-08-12 19:19:00.919735060 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "SYSTEM": not a contained program (external CALL is a boundary)
+./run_file.at:5631: exit code was 2, expected 0
+902. run_file.at:5566: 902. SEQUENTIAL file with LOCK MODE EXCLUSIVE (run_file.at:5566): expected failure (run_file.at:5631)

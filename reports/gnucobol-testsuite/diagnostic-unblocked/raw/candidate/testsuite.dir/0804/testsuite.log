@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+804. run_misc.at:7522: testing CALL RETURNING ...
+./run_misc.at:7551: $COMPILE -static caller.cob callee.cob -o prog
+./run_misc.at:7553: $COMPILE_MODULE callee.cob
+./run_misc.at:7554: $COMPILE caller.cob
+./run_misc.at:7555: $COBCRUN_DIRECT ./caller
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/804/stdout	2026-08-12 19:19:00.834726491 +0000
+@@ -0,0 +1,2 @@
++1 - unexpected RETURN-CODE: +000000043
++1- unexpected RETURNING: 00
+./run_misc.at:7555: exit code was 43, expected 0
+804. run_misc.at:7522: 804. CALL RETURNING (run_misc.at:7522): FAILED (run_misc.at:7555)

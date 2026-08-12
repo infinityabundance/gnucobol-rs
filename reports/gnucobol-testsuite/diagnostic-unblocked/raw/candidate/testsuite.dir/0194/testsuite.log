@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+194. syn_file.at:417: testing SELECT without ASSIGN ...
+./syn_file.at:438: $COMPILE_ONLY prog.cob
+stderr:
+./syn_file.at:438: exit code was 0, expected 1
+194. syn_file.at:417: 194. SELECT without ASSIGN (syn_file.at:417): FAILED (syn_file.at:438)

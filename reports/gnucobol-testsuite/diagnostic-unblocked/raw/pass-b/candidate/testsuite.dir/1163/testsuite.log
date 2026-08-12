@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+1163. run_extensions.at:3148: testing System routine C$NARG ...
+./run_extensions.at:3215: $COMPILE caller.cob
+./run_extensions.at:3216: $COMPILE_MODULE callee.cob
+./run_extensions.at:3217: $COBCRUN_DIRECT ./caller 1 2
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1163/stderr	2026-08-12 19:19:37.727319561 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "C$NARG": not a contained program (external CALL is a boundary)
+./run_extensions.at:3217: exit code was 2, expected 0
+1163. run_extensions.at:3148: 1163. System routine C$NARG (run_extensions.at:3148): FAILED (run_extensions.at:3217)

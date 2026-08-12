@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+345. syn_misc.at:4452: testing Constant Expressions (2) ...
+./syn_misc.at:4494: $COMPILE_ONLY prog.cob 
+stderr:
+cobc-rs: unsupported: PIC X(CONST1): BadRepeat
+./syn_misc.at:4494: exit code was 1, expected 0
+345. syn_misc.at:4452: 345. Constant Expressions (2) (syn_misc.at:4452): FAILED (syn_misc.at:4494)

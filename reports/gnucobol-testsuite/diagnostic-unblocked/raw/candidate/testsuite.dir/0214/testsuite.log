@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+214. syn_file.at:1423: testing VSAM status ...
+./syn_file.at:1458: $COMPILE_ONLY -std=ibm prog.cob
+./syn_file.at:1459: $COMPILE_ONLY prog.cob
+stderr:
+./syn_file.at:1461: $COMPILE_ONLY -std=cobol2014 prog.cob
+stderr:
+./syn_file.at:1461: exit code was 0, expected 1
+214. syn_file.at:1423: 214. VSAM status (syn_file.at:1423): FAILED (syn_file.at:1461)

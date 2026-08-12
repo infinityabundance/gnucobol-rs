@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1119. run_extensions.at:451: testing SET TO SIZE OF ...
+./run_extensions.at:482: $COMPILE prog.cob 
+./run_extensions.at:483: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1119/stderr	2026-08-12 19:19:37.671810321 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: SIZE
+./run_extensions.at:483: exit code was 2, expected 0
+1119. run_extensions.at:451: 1119. SET TO SIZE OF (run_extensions.at:451): FAILED (run_extensions.at:483)

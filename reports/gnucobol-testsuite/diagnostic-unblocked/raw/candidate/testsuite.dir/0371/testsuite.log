@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+371. syn_misc.at:5770: testing Invalid parentheses around condition ...
+./syn_misc.at:5787: $COMPILE prog.cob
+stderr:
+./syn_misc.at:5787: exit code was 0, expected 1
+371. syn_misc.at:5770: 371. Invalid parentheses around condition (syn_misc.at:5770): FAILED (syn_misc.at:5787)

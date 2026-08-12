@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+579. run_fundamental.at:4604: testing SYNC in OCCURS ...
+./run_fundamental.at:4636: $COMPILE prog.cob
+./run_fundamental.at:4637: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/579/stderr	2026-08-12 19:19:00.635786991 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: FUNCTION
+--- -	2026-08-12 19:19:00.637521345 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/579/stdout	2026-08-12 19:19:00.636728611 +0000
+@@ -1,2 +1 @@
+-000000000
+ 
+./run_fundamental.at:4637: exit code was 2, expected 0
+579. run_fundamental.at:4604: 579. SYNC in OCCURS (run_fundamental.at:4604): FAILED (run_fundamental.at:4637)

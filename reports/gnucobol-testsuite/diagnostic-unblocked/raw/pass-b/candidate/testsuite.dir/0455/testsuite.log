@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+455. syn_functions.at:401: testing invalid formatted date/time args ...
+./syn_functions.at:462: $COMPILE_ONLY prog.cob
+stderr:
+./syn_functions.at:462: exit code was 0, expected 1
+455. syn_functions.at:401: 455. invalid formatted date/time args (syn_functions.at:401): FAILED (syn_functions.at:462)

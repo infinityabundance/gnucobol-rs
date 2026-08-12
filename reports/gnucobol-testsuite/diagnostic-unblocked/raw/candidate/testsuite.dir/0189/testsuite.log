@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+189. syn_file.at:102: testing Duplicated FD ...
+./syn_file.at:125: $COMPILE_ONLY prog.cob
+stderr:
+./syn_file.at:125: exit code was 0, expected 1
+189. syn_file.at:102: 189. Duplicated FD (syn_file.at:102): FAILED (syn_file.at:125)

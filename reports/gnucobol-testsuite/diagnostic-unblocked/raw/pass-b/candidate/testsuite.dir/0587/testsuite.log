@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+587. run_fundamental.at:5012: testing debugging lines (not active) ...
+./run_fundamental.at:5028: $COMPILE prog.cob
+./run_fundamental.at:5029: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:37.099468923 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/587/stdout	2026-08-12 19:19:37.098810846 +0000
+@@ -1 +1 @@
+-OK
++OKKO
+587. run_fundamental.at:5012: 587. debugging lines (not active) (run_fundamental.at:5012): FAILED (run_fundamental.at:5029)

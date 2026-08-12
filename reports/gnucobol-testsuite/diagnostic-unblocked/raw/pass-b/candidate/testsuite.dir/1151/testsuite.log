@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1151. run_extensions.at:2586: testing ENTRY ...
+./run_extensions.at:2621: $COMPILE caller.cob
+./run_extensions.at:2622: $COMPILE_MODULE -fentry-statement=ok hello.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1151/stderr	2026-08-12 19:19:37.713004705 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fentry-statement=ok: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ok
+./run_extensions.at:2622: exit code was 1, expected 0
+1151. run_extensions.at:2586: 1151. ENTRY (run_extensions.at:2586): FAILED (run_extensions.at:2622)

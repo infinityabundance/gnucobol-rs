@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+218. syn_file.at:1596: testing WRITE / REWRITE on REPORT files ...
+./syn_file.at:1625: $COMPILE_ONLY prog.cob
+stderr:
+./syn_file.at:1625: exit code was 0, expected 1
+218. syn_file.at:1596: 218. WRITE / REWRITE on REPORT files (syn_file.at:1596): FAILED (syn_file.at:1625)

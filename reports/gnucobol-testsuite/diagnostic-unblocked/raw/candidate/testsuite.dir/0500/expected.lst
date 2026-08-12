@@ -1,0 +1,331 @@
+GnuCOBOL V.R.P               prog.cob
+
+LINE    PG/LN  A...B............................................................
+
+000001
+000002         IDENTIFICATION DIVISION.
+000003         PROGRAM-ID. prog.
+000004
+000005         DATA DIVISION.
+000006         WORKING-STORAGE SECTION.
+000007         01  empty-pic PIC.
+error: missing PICTURE string
+000008         01  too-long-pic PIC XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+000009        -XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.
+000010         01  too-long-pic2 PIC XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+error: PICTURE string may not contain more than 255 characters; contains 301
+     + characters
+000011        -XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+000012        -XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+000013        -XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+000014        -XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.
+000015         01  multiple-symbols.
+000016             03  PIC 9CRCR.
+error: CR or DB may only occur once in a PICTURE string
+000017             03  PIC 9DBDB.
+error: CR or DB may only occur once in a PICTURE string
+000018             03  PIC SS99S.
+error: S may only occur once in a PICTURE string
+error: S must be at start of PICTURE string
+000019             03  PIC 99..9.
+error: . may only occur once in a PICTURE string
+000020             03  PIC 99VV9.
+error: V may only occur once in a PICTURE string
+000021             03  PIC +$99+.
+error: a trailing +/- sign cannot follow a leading +/- sign
+000022             03  PIC $+99$-.
+error: a leading +/- sign cannot follow a leading currency symbol
+error: a trailing currency symbol cannot follow a leading currency symbol
+error: a trailing +/- sign cannot follow a leading +/- sign
+000023         01  non-symbols.
+000024             03  PIC 9K.
+error: invalid PICTURE character 'K'
+000025             03  PIC 999C.
+error: C must be followed by R
+000026             03  PIC 999D.
+error: D must be followed by B
+000027         01  too-many-digits PIC 9(50).
+error: numeric field cannot be larger than 38 digits
+000028         01  too-long-number-in-parens PIC 9(11111111111111).
+error: only up to 10 significant digits are permitted within parentheses
+000029         01  nested-parens PIC 9((100)).
+error: parentheses must be preceded by a picture symbol
+000030         01  unbalanced-parens PIC 9(.
+error: unbalanced parentheses
+000031         01  multiple-pairs-of-parens PIC 9(5)(3).
+error: parentheses must be preceded by a picture symbol
+000032         01  no-digit-in-parens PIC 9().
+error: parentheses must contain an unsigned integer
+000033         01  mutually-exclusive-symbols.
+000034             03  PIC P(3)9.9.
+error: . cannot follow a P which is after the decimal point
+000035             03  PIC 9V.9.
+error: . cannot follow V
+000036             03  PIC Z*.
+error: cannot have both Z and * in PICTURE string
+000037             03  PIC +(5)--.
+error: a trailing +/- sign cannot follow a floating +/- string which is before
+     + the decimal point
+error: a trailing +/- sign may only occur once in a PICTURE string
+000038             03  PIC $(4)Z(9).
+error: a Z or * which is before the decimal point cannot follow a floating
+     + currency symbol string which is before the decimal point
+000039             03  PIC $$B*(4).
+error: a Z or * which is before the decimal point cannot follow a floating
+     + currency symbol string which is before the decimal point
+000040             03  PIC NX.
+error: A or X cannot follow N
+000041             03  PIC AN.
+error: N cannot follow A or X
+000042             03  PIC AZ(3).
+error: a Z or * which is before the decimal point cannot follow A or X
+000043             03  PIC 99.99XXXXX.
+error: A or X cannot follow .
+000044             03  PIC SA.
+error: A or X cannot follow S
+000045             03  PIC $$$B+++B---.
+error: a leading +/- sign cannot follow B, 0 or /
+error: a leading +/- sign cannot follow a floating currency symbol string
+     + which is before the decimal point
+error: a leading +/- sign may only occur once in a PICTURE string
+error: a trailing +/- sign cannot follow a leading +/- sign
+error: a trailing +/- sign may only occur once in a PICTURE string
+000046             03  PIC +++9+.
+error: a trailing +/- sign cannot follow a floating +/- string which is before
+     + the decimal point
+000047             03  PIC +9(5)CR.
+error: CR or DB cannot follow a leading +/- sign
+000048             03  PIC -9(5)DB.
+error: CR or DB cannot follow a leading +/- sign
+000049         01 non-rightmost-leftmost-symbols.
+000050             03  PIC BBB+BB99.
+error: a leading +/- sign cannot follow B, 0 or /
+000051             03  PIC 99-B.
+error: a leading +/- sign cannot follow 9
+000052             03  PIC 9CRB.
+error: B, 0 or / cannot follow CR or DB
+000053             03  PIC DB9(5).
+error: 9 cannot follow CR or DB
+000054             03  PIC 99$$$.
+error: a floating currency symbol string which is before the decimal point
+     + cannot follow 9
+000055             03  PIC 99$B.
+error: a leading currency symbol cannot follow 9
+000056             03  PIC 0$99.
+error: a leading currency symbol cannot follow B, 0 or /
+000057             03  PIC PPPVP9.
+error: P must be at start or end of PICTURE string
+error: V cannot follow a P which is after the decimal point
+000058         01  missing-symbols.
+000059             03  PIC B(5).
+error: PICTURE string must contain at least one of the set A, N, U, X, Z, 1, 9
+     + and *; or at least two of the set +, - and the currency symbol
+000060             03  PIC +.
+error: PICTURE string must contain at least one of the set A, N, U, X, Z, 1, 9
+     + and *; or at least two of the set +, - and the currency symbol
+000061             03  PIC $.
+error: PICTURE string must contain at least one of the set A, N, U, X, Z, 1, 9
+     + and *; or at least two of the set +, - and the currency symbol
+000062
+000063         01  str-constant CONSTANT "hello".
+000064         01  float-constant CONSTANT 1.0.
+000065         01  signed-constant CONSTANT -1.
+000066         01  invalid-constant.
+000067             03  PIC X(str-constant).
+error: 'STR-CONSTANT' is not an unsigned positive integer
+000068             03  PIC X(float-constant).
+error: 'FLOAT-CONSTANT' is not an unsigned positive integer
+000069             03  PIC X(signed-constant).
+error: 'SIGNED-CONSTANT' is not an unsigned positive integer
+000070             03  PIC X(unseen-constant).
+error: 'UNSEEN-CONSTANT' is not defined
+000071
+000072         01  integer-constant CONSTANT 5.
+000073         01  valid-pics.
+000074             03  PIC VP9B.
+000075             03  PIC B9P(3).
+000076             03  PIC B$$$.
+000077             03  PIC 0000+B0+++0B,+.
+000078             03  PIC +(5)P(3).
+000079             03  PIC ++.++.
+000080             03  PIC $(integer-constant).
+000081             03  PIC $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+warning: uncommon parentheses
+000082        -(integer-constant).   *> CHECKME: should this be really valid?
+000083
+000084
+000085         01  PC-COLOR-BACKGROUND-TABLE.
+000086             05  BIT-BACKGROUND-BLACK      PIC 1(8) BIT VALUE B"00000000".
+000087             05  BIT-BACKGROUND-BLUE       PIC 1(8) BIT VALUE B"00010000".
+000088             05  BIT-BACKGROUND-GREEN      PIC 1(8) BIT VALUE B"00100000".
+000089             05  BIT-BACKGROUND-CYAN       PIC 1(8) BIT VALUE B"00110000".
+000090             05  BIT-BACKGROUND-RED        PIC 1(8) BIT VALUE B"01000000".
+000091             05  BIT-BACKGROUND-MAGENTA    PIC 1(8) BIT VALUE B"01010000".
+000092             05  BIT-BACKGROUND-BROWN      PIC 1(8) BIT VALUE B"01100000".
+000093             05  BIT-BACKGROUND-LIGHT-GRAY PIC 1(8) BIT VALUE B"01110000".
+000094         01  FILLER REDEFINES PC-COLOR-BACKGROUND-TABLE.
+000095             05  COLOR-BACKGROUND
+000096                 OCCURS 8 TIMES            PIC 1(8) BIT.
+
+SIZE  TYPE           LVL  NAME                           PICTURE
+
+      WORKING-STORAGE SECTION
+
+00000 ALPHANUMERIC   01   empty-pic                      INVALID
+
+00077 ALPHANUMERIC   01   too-long-pic                   XXXXXXXXXXXXXXXXXXXX...
+
+00000 ALPHANUMERIC   01   too-long-pic2                  INVALID
+
+00000 GROUP          01   multiple-symbols
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+
+00000 GROUP          01   non-symbols
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+
+00050 NUMERIC        01   too-many-digits                9(50)
+
+00000 ALPHANUMERIC   01   too-long-number-in-parens      INVALID
+
+00000 ALPHANUMERIC   01   nested-parens                  INVALID
+
+00000 ALPHANUMERIC   01   unbalanced-parens              INVALID
+
+00000 ALPHANUMERIC   01   multiple-pairs-of-parens       INVALID
+
+00000 ALPHANUMERIC   01   no-digit-in-parens             INVALID
+
+00000 GROUP          01   mutually-exclusive-symbols
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+
+00000 GROUP          01   non-rightmost-leftmost-symbols
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+
+00000 GROUP          01   missing-symbols
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+
+00000 GROUP          01   invalid-constant
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+00000 ALPHANUMERIC   03   FILLER                         INVALID
+
+00086 GROUP          01   valid-pics
+00002 NUMERIC        03   FILLER                         VP9B
+00002 NUMERIC        03   FILLER                         B9P(3)
+00004 NUMERIC        03   FILLER                         B$$$
+00014 NUMERIC        03   FILLER                         0000+B0+++0B,+
+00005 NUMERIC        03   FILLER                         +(5)P(3)
+00005 NUMERIC        03   FILLER                         ++.++
+00005 NUMERIC        03   FILLER                         $(INTEGER-CONSTANT)
+00049 NUMERIC        03   FILLER                         $$$$$$$$$$$$$$$$$$$$...
+
+00008 GROUP          01   PC-COLOR-BACKGROUND-TABLE
+00001 NUMERIC        05   BIT-BACKGROUND-BLACK           1(8)
+00001 NUMERIC        05   BIT-BACKGROUND-BLUE            1(8)
+00001 NUMERIC        05   BIT-BACKGROUND-GREEN           1(8)
+00001 NUMERIC        05   BIT-BACKGROUND-CYAN            1(8)
+00001 NUMERIC        05   BIT-BACKGROUND-RED             1(8)
+00001 NUMERIC        05   BIT-BACKGROUND-MAGENTA         1(8)
+00001 NUMERIC        05   BIT-BACKGROUND-BROWN           1(8)
+00001 NUMERIC        05   BIT-BACKGROUND-LIGHT-GRAY      1(8)
+
+00008 GROUP          01   FILLER, REDEFINES PC-COLOR-BACKGROUND-TABLE
+00001 BOOLEAN        05   COLOR-BACKGROUND               1(8), OCCURS 8
+
+
+
+Error/Warning summary:
+
+prog.cob:7: error: missing PICTURE string
+prog.cob:10: error: PICTURE string may not contain more than 255 characters; contains 301 characters
+prog.cob:16: error: CR or DB may only occur once in a PICTURE string
+prog.cob:17: error: CR or DB may only occur once in a PICTURE string
+prog.cob:18: error: S may only occur once in a PICTURE string
+prog.cob:18: error: S must be at start of PICTURE string
+prog.cob:19: error: . may only occur once in a PICTURE string
+prog.cob:20: error: V may only occur once in a PICTURE string
+prog.cob:21: error: a trailing +/- sign cannot follow a leading +/- sign
+prog.cob:22: error: a leading +/- sign cannot follow a leading currency symbol
+prog.cob:22: error: a trailing currency symbol cannot follow a leading currency symbol
+prog.cob:22: error: a trailing +/- sign cannot follow a leading +/- sign
+prog.cob:24: error: invalid PICTURE character 'K'
+prog.cob:25: error: C must be followed by R
+prog.cob:26: error: D must be followed by B
+prog.cob:27: error: numeric field cannot be larger than 38 digits
+prog.cob:28: error: only up to 10 significant digits are permitted within parentheses
+prog.cob:29: error: parentheses must be preceded by a picture symbol
+prog.cob:30: error: unbalanced parentheses
+prog.cob:31: error: parentheses must be preceded by a picture symbol
+prog.cob:32: error: parentheses must contain an unsigned integer
+prog.cob:34: error: . cannot follow a P which is after the decimal point
+prog.cob:35: error: . cannot follow V
+prog.cob:36: error: cannot have both Z and * in PICTURE string
+prog.cob:37: error: a trailing +/- sign cannot follow a floating +/- string which is before the decimal point
+prog.cob:37: error: a trailing +/- sign may only occur once in a PICTURE string
+prog.cob:38: error: a Z or * which is before the decimal point cannot follow a floating currency symbol string which is before the decimal point
+prog.cob:39: error: a Z or * which is before the decimal point cannot follow a floating currency symbol string which is before the decimal point
+prog.cob:40: error: A or X cannot follow N
+prog.cob:41: error: N cannot follow A or X
+prog.cob:42: error: a Z or * which is before the decimal point cannot follow A or X
+prog.cob:43: error: A or X cannot follow .
+prog.cob:44: error: A or X cannot follow S
+prog.cob:45: error: a leading +/- sign cannot follow B, 0 or /
+prog.cob:45: error: a leading +/- sign cannot follow a floating currency symbol string which is before the decimal point
+prog.cob:45: error: a leading +/- sign may only occur once in a PICTURE string
+prog.cob:45: error: a trailing +/- sign cannot follow a leading +/- sign
+prog.cob:45: error: a trailing +/- sign may only occur once in a PICTURE string
+prog.cob:46: error: a trailing +/- sign cannot follow a floating +/- string which is before the decimal point
+prog.cob:47: error: CR or DB cannot follow a leading +/- sign
+prog.cob:48: error: CR or DB cannot follow a leading +/- sign
+prog.cob:50: error: a leading +/- sign cannot follow B, 0 or /
+prog.cob:51: error: a leading +/- sign cannot follow 9
+prog.cob:52: error: B, 0 or / cannot follow CR or DB
+prog.cob:53: error: 9 cannot follow CR or DB
+prog.cob:54: error: a floating currency symbol string which is before the decimal point cannot follow 9
+prog.cob:55: error: a leading currency symbol cannot follow 9
+prog.cob:56: error: a leading currency symbol cannot follow B, 0 or /
+prog.cob:57: error: P must be at start or end of PICTURE string
+prog.cob:57: error: V cannot follow a P which is after the decimal point
+prog.cob:59: error: PICTURE string must contain at least one of the set A, N, U, X, Z, 1, 9 and *; or at least two of the set +, - and the currency symbol
+prog.cob:60: error: PICTURE string must contain at least one of the set A, N, U, X, Z, 1, 9 and *; or at least two of the set +, - and the currency symbol
+prog.cob:61: error: PICTURE string must contain at least one of the set A, N, U, X, Z, 1, 9 and *; or at least two of the set +, - and the currency symbol
+prog.cob:67: error: 'STR-CONSTANT' is not an unsigned positive integer
+prog.cob:68: error: 'FLOAT-CONSTANT' is not an unsigned positive integer
+prog.cob:69: error: 'SIGNED-CONSTANT' is not an unsigned positive integer
+prog.cob:70: error: 'UNSEEN-CONSTANT' is not defined
+prog.cob:81: warning: uncommon parentheses
+
+1 warning in compilation group
+57 errors in compilation group

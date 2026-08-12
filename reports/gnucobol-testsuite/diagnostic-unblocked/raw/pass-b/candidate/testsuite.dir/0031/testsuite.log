@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+31. configuration.at:161: testing cobc configuration: recursive include ...
+./configuration.at:188: $COMPILE_ONLY -conf=test.conf prog.cob
+stderr:
+./configuration.at:188: exit code was 0, expected 1
+31. configuration.at:161: 31. cobc configuration: recursive include (configuration.at:161): FAILED (configuration.at:188)

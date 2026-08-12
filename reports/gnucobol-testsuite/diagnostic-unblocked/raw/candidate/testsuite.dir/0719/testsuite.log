@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+719. run_misc.at:1902: testing INSPECT numeric signed ...
+./run_misc.at:2038: $COMPILE prog.cob
+./run_misc.at:2039: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/719/stderr	2026-08-12 19:19:00.760727284 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: INSPECT region clause near Str([50])
+./run_misc.at:2039: exit code was 2, expected 0
+719. run_misc.at:1902: 719. INSPECT numeric signed (run_misc.at:1902): FAILED (run_misc.at:2039)

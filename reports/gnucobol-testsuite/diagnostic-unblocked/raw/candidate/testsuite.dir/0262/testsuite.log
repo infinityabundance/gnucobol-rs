@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+262. syn_misc.at:788: testing INSPECT missing keyword ...
+./syn_misc.at:802: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:802: exit code was 0, expected 1
+262. syn_misc.at:788: 262. INSPECT missing keyword (syn_misc.at:788): FAILED (syn_misc.at:802)

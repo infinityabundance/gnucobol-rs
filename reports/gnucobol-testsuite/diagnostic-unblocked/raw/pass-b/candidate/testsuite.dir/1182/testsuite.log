@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+1182. run_extensions.at:4183: testing System routine CBL_GC_WAITPID ...
+./run_extensions.at:4225: $COMPILE prog.cob
+./run_extensions.at:4227: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1182/stderr	2026-08-12 19:19:37.746783656 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "CBL_GC_FORK": not a contained program (external CALL is a boundary)
+--- -	2026-08-12 19:19:37.748442809 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1182/stdout	2026-08-12 19:19:37.747496986 +0000
+@@ -1,4 +1 @@
+-Hello, I am the parent
+-Hello, I am the child
+-Child ended status +000000002
+ 
+./run_extensions.at:4227: exit code was 2, expected 0
+1182. run_extensions.at:4183: 1182. System routine CBL_GC_WAITPID (run_extensions.at:4183): FAILED (run_extensions.at:4227)

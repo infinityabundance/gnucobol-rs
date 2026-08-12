@@ -1,0 +1,25 @@
+GnuCOBOL V.R.P          prog.cob             DDD MMM dd HH:MM:SS YYYY  Page 0001
+
+LINE    PG/LN  A...B............................................................
+
+000001
+000002        * some comments go here
+000003                   *> and here
+000004                          *> and finally... here
+000005         IDENTIFICATION   DIVISION.
+000006         PROGRAM-ID.      prog.
+000007         DATA             DIVISION.
+000008         WORKING-STORAGE  SECTION.
+000009         01 NEWSTUFF PIC X(80).
+000010         PROCEDURE        DIVISION.
+000011             DISPLAY NEWSTUFF " BENEFITS SOME PARTS FROM "
+000012             "MANY" "STUFF" ", " "VERY MUCH" "GOOD" NEWSTUFF
+000013             "AND STUFF !"
+000014                     NO ADVANCING
+000015             END-DISPLAY.
+000016             STOP RUN.
+
+GnuCOBOL V.R.P          prog.cob             DDD MMM dd HH:MM:SS YYYY  Page 0002
+
+0 warnings in compilation group
+0 errors in compilation group

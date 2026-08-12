@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+1161. run_extensions.at:3080: testing Obsolete 2002 keywords with COBOL2014 ...
+./run_extensions.at:3095: $COMPILE -std=cobol2002 prog.cob
+stderr:
+./run_extensions.at:3095: exit code was 0, expected 1
+1161. run_extensions.at:3080: 1161. Obsolete 2002 keywords with COBOL2014 (run_extensions.at:3080): FAILED (run_extensions.at:3095)

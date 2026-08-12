@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1198. run_extensions.at:5080: testing X/Open free-form format ...
+./run_extensions.at:5098: $COMPILE -fformat=xopen -fno-areacheck prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1198/stderr	2026-08-12 19:19:01.283721684 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fno-areacheck: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
+./run_extensions.at:5098: exit code was 1, expected 0
+1198. run_extensions.at:5080: 1198. X/Open free-form format (run_extensions.at:5080): FAILED (run_extensions.at:5098)

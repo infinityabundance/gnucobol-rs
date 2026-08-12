@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+261. syn_misc.at:767: testing INSPECT invalid target ...
+./syn_misc.at:782: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:782: exit code was 0, expected 1
+261. syn_misc.at:767: 261. INSPECT invalid target (syn_misc.at:767): FAILED (syn_misc.at:782)

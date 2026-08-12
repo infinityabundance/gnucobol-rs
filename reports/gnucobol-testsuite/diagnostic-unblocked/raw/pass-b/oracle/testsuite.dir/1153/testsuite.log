@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1153. run_extensions.at:2695: testing SORT ASSIGN KEYBOARD to ASSIGN DISPLAY ...
+./run_extensions.at:2743: $COMPILE prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1153/stderr	2026-08-12 19:19:32.151391100 +0000
+@@ -0,0 +1 @@
++prog.cob:11: error: ASSIGN clause is required for file 'SORT-FILE'
+./run_extensions.at:2743: exit code was 1, expected 0
+1153. run_extensions.at:2695: 1153. SORT ASSIGN KEYBOARD to ASSIGN DISPLAY (run_extensions.at:2695): expected failure (run_extensions.at:2743)

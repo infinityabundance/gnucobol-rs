@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+885. run_file.at:3629: testing System routines for directories (1) ...
+./run_file.at:3664: $COMPILE prog.cob
+./run_file.at:3665: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/885/stderr	2026-08-12 19:19:00.900583177 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "CBL_CREATE_DIR": not a contained program (external CALL is a boundary)
+./run_file.at:3665: exit code was 2, expected 0
+885. run_file.at:3629: 885. System routines for directories (1) (run_file.at:3629): FAILED (run_file.at:3665)

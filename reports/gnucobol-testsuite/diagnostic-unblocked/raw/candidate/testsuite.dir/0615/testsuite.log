@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+615. run_fundamental.at:6734: testing MOVE with de-editting to USAGE DISPLAY ...
+./run_fundamental.at:6780: $COMPILE prog.cob
+./run_fundamental.at:6781: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/615/stderr	2026-08-12 19:19:00.667453254 +0000
+@@ -0,0 +1 @@
++cobrun: runtime error: UnsupportedSymbol('(')
+./run_fundamental.at:6781: exit code was 2, expected 0
+615. run_fundamental.at:6734: 615. MOVE with de-editting to USAGE DISPLAY (run_fundamental.at:6734): FAILED (run_fundamental.at:6781)

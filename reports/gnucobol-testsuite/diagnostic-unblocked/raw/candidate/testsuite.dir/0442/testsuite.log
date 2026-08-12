@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+442. syn_set.at:51: testing SET item TO 88-level ...
+./syn_set.at:71: $COMPILE_ONLY prog.cob
+stderr:
+./syn_set.at:71: exit code was 0, expected 1
+442. syn_set.at:51: 442. SET item TO 88-level (syn_set.at:51): FAILED (syn_set.at:71)

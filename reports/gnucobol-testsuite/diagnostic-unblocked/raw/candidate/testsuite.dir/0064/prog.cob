@@ -1,0 +1,13 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      prog.
+       REPLACE LEADING "PREFIX-" BY SPACES
+               TRAILING "-SUFFIX" BY SPACE.
+       DATA             DIVISION.
+       WORKING-STORAGE  SECTION.
+       01 PREFIX-VAR1 PIC X(2) VALUE "OK".
+       01 VAR2-SUFFIX PIC X(2) VALUE "OK".
+       PROCEDURE        DIVISION.
+           DISPLAY "VAR1: " VAR1 NO ADVANCING.
+           DISPLAY "VAR1: " VAR2 NO ADVANCING.
+           STOP RUN.

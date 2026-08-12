@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+193. syn_file.at:319: testing ASSIGN to variable ...
+./syn_file.at:409: $COMPILE_ONLY -fassign-variable=warning -fassign-using-variable=warning -fassign-ext-dyn=warning -fassign-disk-from=warning prog.cob
+stderr:
+cobc-rs: -fassign-variable=warning: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): warning
+./syn_file.at:409: exit code was 1, expected 0
+193. syn_file.at:319: 193. ASSIGN to variable (syn_file.at:319): FAILED (syn_file.at:409)

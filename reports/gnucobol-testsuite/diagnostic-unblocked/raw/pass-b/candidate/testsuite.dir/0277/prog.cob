@@ -1,0 +1,15 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      prog.
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       DATA             DIVISION.
+       WORKING-STORAGE  SECTION.
+       01 X             PIC X.
+       PROCEDURE        DIVISION.
+           ACCEPT X                 END-ACCEPT.
+           ACCEPT X WITH    UPDATE  END-ACCEPT.
+           ACCEPT X WITH    DEFAULT END-ACCEPT.
+           ACCEPT X WITH NO UPDATE  END-ACCEPT.
+           ACCEPT X WITH NO DEFAULT END-ACCEPT.
+           STOP RUN.

@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+417. syn_move.at:551: testing SET error ...
+./syn_move.at:577: $COMPILE_ONLY prog.cob
+stderr:
+./syn_move.at:577: exit code was 0, expected 1
+417. syn_move.at:551: 417. SET error (syn_move.at:551): FAILED (syn_move.at:577)

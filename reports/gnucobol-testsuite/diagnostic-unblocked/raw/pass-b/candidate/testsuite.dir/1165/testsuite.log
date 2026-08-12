@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+1165. run_extensions.at:3267: testing System routine C$CALLEDBY ...
+./run_extensions.at:3306: $COMPILE caller.cob
+./run_extensions.at:3307: $COMPILE_MODULE callee.cob
+./run_extensions.at:3308: $COBCRUN_DIRECT ./caller
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1165/stderr	2026-08-12 19:19:37.728782889 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "C$CALLEDBY": not a contained program (external CALL is a boundary)
+--- -	2026-08-12 19:19:37.730585389 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1165/stdout	2026-08-12 19:19:37.729331337 +0000
+@@ -1 +1 @@
+-OKOK
++
+./run_extensions.at:3308: exit code was 2, expected 1
+1165. run_extensions.at:3267: 1165. System routine C$CALLEDBY (run_extensions.at:3267): FAILED (run_extensions.at:3308)

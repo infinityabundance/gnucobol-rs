@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+605. run_fundamental.at:6068: testing Abbreviated Expressions ...
+./run_fundamental.at:6149: $COMPILE prog.cob
+stderr:
+./run_fundamental.at:6152: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:00.658190336 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/605/stdout	2026-08-12 19:19:00.657065018 +0000
+@@ -1 +1,2 @@
++Test 06 failed!
+ ***FINE***
+605. run_fundamental.at:6068: 605. Abbreviated Expressions (run_fundamental.at:6068): FAILED (run_fundamental.at:6152)

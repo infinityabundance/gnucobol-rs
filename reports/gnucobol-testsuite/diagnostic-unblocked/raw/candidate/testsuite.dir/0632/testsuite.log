@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+632. run_subscripts.at:298: testing SEARCH ALL with OCCURS DEPENDING ON ...
+./run_subscripts.at:342: $COMPILE prog.cob
+./run_subscripts.at:343: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:00.679973675 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/632/stdout	2026-08-12 19:19:00.678728161 +0000
+@@ -1,4 +1,4 @@
+ END
+-FOUND
+-FOUND
++END
++END
+ 
+632. run_subscripts.at:298: 632. SEARCH ALL with OCCURS DEPENDING ON (run_subscripts.at:298): FAILED (run_subscripts.at:343)

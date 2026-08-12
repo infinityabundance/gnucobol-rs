@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1081. run_functions.at:3264: testing FUNCTION SUBSTITUTE with reference modding ...
+./run_functions.at:3284: $COMPILE prog.cob
+./run_functions.at:3285: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1081/stdout	2026-08-12 19:19:01.132723301 +0000
+@@ -0,0 +1 @@
++zz1114446665defxxzz 
+1081. run_functions.at:3264: 1081. FUNCTION SUBSTITUTE with reference modding (run_functions.at:3264): FAILED (run_functions.at:3285)

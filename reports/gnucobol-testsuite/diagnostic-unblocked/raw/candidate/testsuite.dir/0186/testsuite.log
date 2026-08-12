@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+186. syn_file.at:23: testing Missing SELECT ...
+./syn_file.at:43: $COMPILE_ONLY prog.cob
+stderr:
+./syn_file.at:43: exit code was 0, expected 1
+186. syn_file.at:23: 186. Missing SELECT (syn_file.at:23): FAILED (syn_file.at:43)

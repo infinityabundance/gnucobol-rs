@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+954. run_reportwriter.at:23: testing Report Line Order ...
+./run_reportwriter.at:82: $COMPILE prog.cob
+./run_reportwriter.at:84: DD_PRINTOUT="./report.txt" $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/954/stderr	2026-08-12 19:19:37.427508864 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: PIC : Empty
+./run_reportwriter.at:84: exit code was 2, expected 0
+954. run_reportwriter.at:23: 954. Report Line Order (run_reportwriter.at:23): FAILED (run_reportwriter.at:84)

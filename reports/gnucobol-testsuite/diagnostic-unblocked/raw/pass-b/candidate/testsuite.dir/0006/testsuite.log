@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+6. used_binaries.at:294: testing compiler outputs (assembler) ...
+./used_binaries.at:308: $COBC -v -S prog.cob
+stderr:
+cobc-rs: -S: unsupported option (rejected-unsupported; compile to assembler: no native codegen; reject honestly): 
+stdout:
+./used_binaries.at:308: exit code was 1, expected 0
+6. used_binaries.at:294: 6. compiler outputs (assembler) (used_binaries.at:294): FAILED (used_binaries.at:308)

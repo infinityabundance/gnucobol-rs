@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+109. syn_definition.at:1041: testing Ambiguous reference to paragraph name ...
+./syn_definition.at:1057: $COMPILE_ONLY prog.cob
+stderr:
+./syn_definition.at:1057: exit code was 0, expected 1
+109. syn_definition.at:1041: 109. Ambiguous reference to paragraph name (syn_definition.at:1041): FAILED (syn_definition.at:1057)

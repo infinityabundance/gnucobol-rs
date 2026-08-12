@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1226. run_ml.at:589: testing JSON GENERATE SUPPRESS ...
+./run_ml.at:623: $COMPILE prog.cob
+./run_ml.at:624: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1226/stdout	2026-08-12 19:19:37.798330598 +0000
+@@ -0,0 +1,2 @@
++Test 1 failed: {"A":{"C":" "}}                                                                                     
++Test 2 failed: {"X":{"Y":{}}}                                                                                      
+1226. run_ml.at:589: 1226. JSON GENERATE SUPPRESS (run_ml.at:589): FAILED (run_ml.at:624)

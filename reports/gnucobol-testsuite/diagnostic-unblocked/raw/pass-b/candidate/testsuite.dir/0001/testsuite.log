@@ -1,0 +1,185 @@
+#                             -*- compilation -*-
+1. used_binaries.at:27: testing compiler help and information ...
+./used_binaries.at:31: $COBC --version
+stdout:
+cobc-rs (gnucobol-rs, reproducing GnuCOBOL) 3.2.0
+A native-Rust COBOL front end + interpreter (ported runtime) with a cobc-shaped
+compatibility driver. NOT GnuCOBOL; no native code generation; no libcob linked.
+License LGPL-3.0-or-later. Not affiliated with the GNU project.
+./used_binaries.at:32: $COBC -v --version
+stderr:
+stdout:
+cobc-rs (gnucobol-rs, reproducing GnuCOBOL) 3.2.0
+A native-Rust COBOL front end + interpreter (ported runtime) with a cobc-shaped
+compatibility driver. NOT GnuCOBOL; no native code generation; no libcob linked.
+License LGPL-3.0-or-later. Not affiliated with the GNU project.
+./used_binaries.at:33: $COBC -q --version
+stdout:
+cobc-rs (gnucobol-rs, reproducing GnuCOBOL) 3.2.0
+A native-Rust COBOL front end + interpreter (ported runtime) with a cobc-shaped
+compatibility driver. NOT GnuCOBOL; no native code generation; no libcob linked.
+License LGPL-3.0-or-later. Not affiliated with the GNU project.
+./used_binaries.at:34: $COBC --help
+stdout:
+cobc-rs -- a cobc-shaped compatibility driver for the gnucobol-rs interpreter
+
+Usage: cobc-rs [options] <source.cob>
+
+Modes:
+  -x                    build a launch artifact (launcher + manifest; NOT a native executable)
+  -m                    build a loadable-module launch artifact (run via `cobcrun <name>`)
+  -fsyntax-only         parse + check only (no execution, no artifacts)
+  -E                    preprocess-only (define/copy expansion with #line headers)
+  -M [-MF file] [-MT t] make-style dependency output
+
+Options:
+  -std=<name>           dialect (default|ibm|mf|mvs|cobol85|cobol2002|cobol2014|...)
+  -conf=<file.conf>     dialect configuration file
+  -free | -fixed | -fformat=<fmt>   source format
+  -I <dir>              copybook search path (repeatable)
+  -D<NAME>[=value]      conditional-compilation define
+  -o <path>             output artifact path
+  --compat=strict|gnucobol-testsuite   option policy
+  --print-capabilities  list supported/translated/ignored/rejected options
+  --explain-translation <opts...>     explain each option's policy
+  --dump-invocation-json <path>       write the structured invocation record
+  --version | --info | --dumpversion | --runtime-conf | --help
+
+The candidate is an interpreter: it emits launch manifests, never native code.
+./used_binaries.at:35: $COBC --info
+stdout:
+cobc-rs (gnucobol-rs, reproducing GnuCOBOL) 3.2.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
+Written by Keisuke Nishida, Roger While, Ron Norman, Simon Sobisch, Edward Hart
+Built     Jan 01 1993 00:00:00
+Packaged  Jul 28 2023 17:02:56 UTC
+C version "13.3.0"
+
+build information
+build environment        : x86_64-pc-linux-gnu
+CC                       : gcc
+C version                : "13.3.0"
+CFLAGS                   : -O2 -std=gnu17 -fsigned-char -pipe
+LDFLAGS                  : -Wl,-z,relro,-z,now,-O1
+
+GnuCOBOL information
+COB_CC                   : gcc
+COB_CFLAGS               : -O2 -std=gnu17 -fsigned-char -pipe
+COB_STRIP_CMD            : strip --strip-unneeded
+COB_DEBUG_FLAGS          : -ggdb3 -fasynchronous-unwind-tables
+COB_LDFLAGS              :
+COB_LIBS                 : -L/usr/local/lib -lcob
+COB_CONFIG_DIR           : /usr/local/share/gnucobol/config
+COB_COPY_DIR             : /usr/local/share/gnucobol/copy
+COB_MSG_FORMAT           : GCC
+COB_OBJECT_EXT           : o
+COB_MODULE_EXT           : so
+COB_EXE_EXT              :
+64bit-mode               : yes
+BINARY-C-LONG            : 8 bytes
+endianness               : little-endian
+native EBCDIC            : no
+extended screen I/O      : ncursesw
+variable file format     : 0
+sequential file handler  : built-in
+indexed file handler     : BDB
+mathematical library     : GMP
+XML library              : libxml2
+JSON library             : json-c
+./used_binaries.at:36: $COBC -v --info
+stdout:
+cobc-rs (gnucobol-rs, reproducing GnuCOBOL) 3.2.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
+Written by Keisuke Nishida, Roger While, Ron Norman, Simon Sobisch, Edward Hart
+Built     Jan 01 1993 00:00:00
+Packaged  Jul 28 2023 17:02:56 UTC
+C version "13.3.0"
+
+build information
+build environment        : x86_64-pc-linux-gnu
+CC                       : gcc
+C version                : "13.3.0"
+CFLAGS                   : -O2 -std=gnu17 -fsigned-char -pipe
+LDFLAGS                  : -Wl,-z,relro,-z,now,-O1
+
+GnuCOBOL information
+COB_CC                   : gcc
+COB_CFLAGS               : -O2 -std=gnu17 -fsigned-char -pipe
+COB_STRIP_CMD            : strip --strip-unneeded
+COB_DEBUG_FLAGS          : -ggdb3 -fasynchronous-unwind-tables
+COB_LDFLAGS              :
+COB_LIBS                 : -L/usr/local/lib -lcob
+COB_CONFIG_DIR           : /usr/local/share/gnucobol/config
+COB_COPY_DIR             : /usr/local/share/gnucobol/copy
+COB_MSG_FORMAT           : GCC
+COB_OBJECT_EXT           : o
+COB_MODULE_EXT           : so
+COB_EXE_EXT              :
+64bit-mode               : yes
+BINARY-C-LONG            : 8 bytes
+endianness               : little-endian
+native EBCDIC            : no
+extended screen I/O      : ncursesw
+variable file format     : 0
+sequential file handler  : built-in
+indexed file handler     : BDB
+mathematical library     : GMP
+XML library              : libxml2
+JSON library             : json-c
+./used_binaries.at:37: $COBC -q --info
+stdout:
+cobc-rs (gnucobol-rs, reproducing GnuCOBOL) 3.2.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
+Written by Keisuke Nishida, Roger While, Ron Norman, Simon Sobisch, Edward Hart
+Built     Jan 01 1993 00:00:00
+Packaged  Jul 28 2023 17:02:56 UTC
+C version "13.3.0"
+
+build information
+build environment        : x86_64-pc-linux-gnu
+CC                       : gcc
+C version                : "13.3.0"
+CFLAGS                   : -O2 -std=gnu17 -fsigned-char -pipe
+LDFLAGS                  : -Wl,-z,relro,-z,now,-O1
+
+GnuCOBOL information
+COB_CC                   : gcc
+COB_CFLAGS               : -O2 -std=gnu17 -fsigned-char -pipe
+COB_STRIP_CMD            : strip --strip-unneeded
+COB_DEBUG_FLAGS          : -ggdb3 -fasynchronous-unwind-tables
+COB_LDFLAGS              :
+COB_LIBS                 : -L/usr/local/lib -lcob
+COB_CONFIG_DIR           : /usr/local/share/gnucobol/config
+COB_COPY_DIR             : /usr/local/share/gnucobol/copy
+COB_MSG_FORMAT           : GCC
+COB_OBJECT_EXT           : o
+COB_MODULE_EXT           : so
+COB_EXE_EXT              :
+64bit-mode               : yes
+BINARY-C-LONG            : 8 bytes
+endianness               : little-endian
+native EBCDIC            : no
+extended screen I/O      : ncursesw
+variable file format     : 0
+sequential file handler  : built-in
+indexed file handler     : BDB
+mathematical library     : GMP
+XML library              : libxml2
+JSON library             : json-c
+./used_binaries.at:38: $COBC --list-reserved
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1/stderr	2026-08-12 19:19:36.723528595 +0000
+@@ -0,0 +1 @@
++cobc-rs: --list-reserved: unsupported option (rejected-unsupported; keyword/intrinsic listing: the candidate has no upstream-identical lists; reject honestly): 
+stdout:
+./used_binaries.at:38: exit code was 1, expected 0
+1. used_binaries.at:27: 1. compiler help and information (used_binaries.at:27): FAILED (used_binaries.at:38)

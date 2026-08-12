@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+458. syn_functions.at:517: testing FUNCTION LENGTH / BYTE-LENGTH ...
+./syn_functions.at:534: $COMPILE -Wno-pending prog.cob
+stderr:
+./syn_functions.at:534: exit code was 0, expected 1
+458. syn_functions.at:517: 458. FUNCTION LENGTH / BYTE-LENGTH (syn_functions.at:517): FAILED (syn_functions.at:534)

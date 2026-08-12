@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+355. syn_misc.at:4955: testing WHEN-COMPILED register in dialect ...
+./syn_misc.at:4967: $COMPILE_ONLY -std=cobol2014 prog.cob
+stderr:
+./syn_misc.at:4967: exit code was 0, expected 1
+355. syn_misc.at:4955: 355. WHEN-COMPILED register in dialect (syn_misc.at:4955): FAILED (syn_misc.at:4967)

@@ -1,0 +1,35 @@
+#                             -*- compilation -*-
+750. run_misc.at:3303: testing SORT: table (2) ...
+./run_misc.at:3401: $COMPILE prog.cob
+./run_misc.at:3402: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/750/stderr	2026-08-12 19:19:37.231853424 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: TAB1-NR(K),
+--- -	2026-08-12 19:19:37.233795013 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/750/stdout	2026-08-12 19:19:37.232935231 +0000
+@@ -1,22 +1 @@
+-SINGLE TABLE
+-04
+-03
+-02
+-01
+-LOWER LEVEL TABLE
+-04
+-03
+-02
+-01
+-MULTY KEY SORT
+-06  AbCde  The
+-05  abc    cow
+-05  abcde  eats
+-04  zyx    grass
+-03  abcde  and
+-02  12345  mooos
+-02  12346  the
+-01  AbCde  whole
+-01  abcde  day
+-01  zyx    .
+ 
+./run_misc.at:3402: exit code was 2, expected 0
+750. run_misc.at:3303: 750. SORT: table (2) (run_misc.at:3303): FAILED (run_misc.at:3402)

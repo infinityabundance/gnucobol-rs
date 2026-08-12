@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+50. syn_copy.at:23: testing COPY: IN / OF / -I ...
+./syn_copy.at:94: mkdir -p SUB
+./syn_copy.at:99: mkdir -p sub2
+./syn_copy.at:104: mkdir -p SUB/UNDER
+./syn_copy.at:112: $COMPILE_ONLY prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/50/stderr	2026-08-12 19:19:00.255732690 +0000
+@@ -0,0 +1 @@
++cobc-rs: COPY expansion failed (fail closed): malformed COPY statement
+./syn_copy.at:112: exit code was 1, expected 0
+50. syn_copy.at:23: 50. COPY: IN / OF / -I (syn_copy.at:23): FAILED (syn_copy.at:112)

@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+270. syn_misc.at:1038: testing SPECIAL-NAMES clause ...
+./syn_misc.at:1123: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:1123: exit code was 0, expected 1
+270. syn_misc.at:1038: 270. SPECIAL-NAMES clause (syn_misc.at:1038): FAILED (syn_misc.at:1123)

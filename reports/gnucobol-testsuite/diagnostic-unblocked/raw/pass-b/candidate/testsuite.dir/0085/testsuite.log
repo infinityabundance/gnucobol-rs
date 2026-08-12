@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+85. syn_definition.at:347: testing GO TO sections and foreign paragraphs ...
+./syn_definition.at:368: $COBC -fdiagnostics-plain-output -fsyntax-only prog.cob
+stderr:
+./syn_definition.at:370: $COBC -fdiagnostics-plain-output -fsyntax-only -Wall -Werror=goto-section prog.cob
+stderr:
+./syn_definition.at:370: exit code was 0, expected 1
+85. syn_definition.at:347: 85. GO TO sections and foreign paragraphs (syn_definition.at:347): FAILED (syn_definition.at:370)

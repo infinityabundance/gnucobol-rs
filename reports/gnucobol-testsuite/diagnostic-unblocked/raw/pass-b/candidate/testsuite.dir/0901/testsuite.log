@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+901. run_file.at:5454: testing SEQUENTIAL file REWRITE ...
+./run_file.at:5557: $COMPILE prog.cob
+./run_file.at:5558: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/901/stderr	2026-08-12 19:19:37.377335108 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: SET EOF TO FALSE: the 88 has no `WHEN SET TO FALSE` value
+./run_file.at:5558: exit code was 2, expected 0
+901. run_file.at:5454: 901. SEQUENTIAL file REWRITE (run_file.at:5454): FAILED (run_file.at:5558)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+908. run_file.at:5956: testing RELATIVE RANDOM basic I/O ...
+./run_file.at:6000: $COMPILE prog.cob
+./run_file.at:6001: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/908/stderr	2026-08-12 19:19:00.919735060 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: DELETE: `FILE` is not a declared file
+./run_file.at:6001: exit code was 2, expected 0
+908. run_file.at:5956: 908. RELATIVE RANDOM basic I/O (run_file.at:5956): FAILED (run_file.at:6001)

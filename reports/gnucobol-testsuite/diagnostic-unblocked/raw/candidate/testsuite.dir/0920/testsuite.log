@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+920. run_file.at:6877: testing START INDEXED ...
+./run_file.at:6950: $COMPILE prog.cob
+./run_file.at:6951: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/920/stdout	2026-08-12 19:19:00.929765428 +0000
+@@ -0,0 +1,6 @@
++FAILED: START key > 0
++FAILED: START key < 99
++FAILED: START key FIRST
++FAILED: START key LAST
++FAILED: START key >= 0
++FAILED: START key <= 99
+920. run_file.at:6877: 920. START INDEXED (run_file.at:6877): FAILED (run_file.at:6951)

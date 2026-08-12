@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1120. run_extensions.at:488: testing WHEN-COMPILED ...
+./run_extensions.at:510: $COMPILE prog.cob
+./run_extensions.at:511: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1120/stderr	2026-08-12 19:19:01.192799168 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: WHEN-COMPILED
+./run_extensions.at:511: exit code was 2, expected 0
+1120. run_extensions.at:488: 1120. WHEN-COMPILED (run_extensions.at:488): FAILED (run_extensions.at:511)

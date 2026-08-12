@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+601. run_fundamental.at:5572: testing USE FOR DEBUGGING, referencing BASED item ...
+./run_fundamental.at:5611: $COMPILE -frelax-syntax-checks prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/601/stderr	2026-08-12 19:19:37.108737371 +0000
+@@ -0,0 +1 @@
++cobc-rs: -frelax-syntax-checks: unsupported option (rejected-unsupported; relaxed syntax checks: the candidate parser has one sealed strictness; reject honestly): 
+./run_fundamental.at:5611: exit code was 1, expected 0
+601. run_fundamental.at:5572: 601. USE FOR DEBUGGING, referencing BASED item (run_fundamental.at:5572): FAILED (run_fundamental.at:5611)

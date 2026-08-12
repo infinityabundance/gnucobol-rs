@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+166. syn_redefines.at:267: testing REDEFINES: multiple redefinition ...
+./syn_redefines.at:284: $COMPILE_ONLY prog.cob
+stderr:
+./syn_redefines.at:284: exit code was 0, expected 1
+166. syn_redefines.at:267: 166. REDEFINES: multiple redefinition (syn_redefines.at:267): FAILED (syn_redefines.at:284)

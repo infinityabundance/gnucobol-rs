@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+606. run_fundamental.at:6161: testing integer arithmetic on floating-point var ...
+./run_fundamental.at:6198: $COMPILE prog.cob
+./run_fundamental.at:6199: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/606/stdout	2026-08-12 19:19:37.113500651 +0000
+@@ -0,0 +1,4 @@
++ADD wrong: 483.45599
++SUBTRACT wrong: 123.45599
++DIVIDE wrong: 61.728001
++MULTIPLY wrong: 123.456
+606. run_fundamental.at:6161: 606. integer arithmetic on floating-point var (run_fundamental.at:6161): FAILED (run_fundamental.at:6199)

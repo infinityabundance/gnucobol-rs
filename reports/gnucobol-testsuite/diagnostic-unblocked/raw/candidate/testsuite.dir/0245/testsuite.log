@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+245. syn_refmod.at:111: testing constant-folding out of bounds ...
+./syn_refmod.at:135: $COMPILE_ONLY -fdiagnostics-show-option -Wno-constant-numlit-expression prog.cob
+stderr:
+cobc-rs: unsupported: PIC X(VAR-LEN): BadRepeat
+./syn_refmod.at:135: exit code was 1, expected 0
+245. syn_refmod.at:111: 245. constant-folding out of bounds (syn_refmod.at:111): FAILED (syn_refmod.at:135)

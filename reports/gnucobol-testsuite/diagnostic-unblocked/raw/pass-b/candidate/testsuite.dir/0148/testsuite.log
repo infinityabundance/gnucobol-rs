@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+148. syn_occurs.at:230: testing OCCURS UNBOUNDED ...
+./syn_occurs.at:313: $COMPILE_ONLY prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/148/stderr	2026-08-12 19:19:36.806209880 +0000
+@@ -0,0 +1 @@
++cobc-rs: unsupported: OCCURS count UNBOUNDED is not an integer
+./syn_occurs.at:313: exit code was 1, expected 0
+148. syn_occurs.at:230: 148. OCCURS UNBOUNDED (syn_occurs.at:230): FAILED (syn_occurs.at:313)

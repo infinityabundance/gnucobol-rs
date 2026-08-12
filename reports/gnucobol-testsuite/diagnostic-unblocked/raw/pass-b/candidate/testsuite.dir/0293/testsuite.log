@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+293. syn_misc.at:2155: testing ACUCOBOL GRAPHICAL controls ...
+./syn_misc.at:2220: $COMPILE_ONLY -std=acu-strict prog.cob
+stderr:
+cobc-rs: unsupported: unsupported level number SCREEN
+./syn_misc.at:2220: exit code was 1, expected 0
+293. syn_misc.at:2155: 293. ACUCOBOL GRAPHICAL controls (syn_misc.at:2155): FAILED (syn_misc.at:2220)

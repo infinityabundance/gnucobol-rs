@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+362. syn_misc.at:5197: testing invalid use of condition-name ...
+./syn_misc.at:5241: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:5241: exit code was 0, expected 1
+362. syn_misc.at:5197: 362. invalid use of condition-name (syn_misc.at:5197): FAILED (syn_misc.at:5241)

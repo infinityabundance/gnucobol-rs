@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1200. run_extensions.at:5208: testing MF FREE format (X/Open) ...
+./run_extensions.at:5225: $COMPILE -free -o prog-free prog.cob
+./run_extensions.at:5226: $COBCRUN_DIRECT ./prog-free
+--- -	2026-08-12 19:19:37.767464339 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1200/stdout	2026-08-12 19:19:37.766760206 +0000
+@@ -1 +1 @@
+-42
++06
+1200. run_extensions.at:5208: 1200. MF FREE format (X/Open) (run_extensions.at:5208): FAILED (run_extensions.at:5226)

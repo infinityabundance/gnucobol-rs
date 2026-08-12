@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1091. run_functions.at:3664: testing FUNCTION TEST-FORMATTED-DATETIME DP.COMMA ...
+./run_functions.at:3699: $COMPILE prog.cob
+./run_functions.at:3700: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1091/stdout	2026-08-12 19:19:37.638480918 +0000
+@@ -0,0 +1,2 @@
++Test 3 failed
++Test 4 failed
+1091. run_functions.at:3664: 1091. FUNCTION TEST-FORMATTED-DATETIME DP.COMMA (run_functions.at:3664): FAILED (run_functions.at:3700)

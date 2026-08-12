@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+758. run_misc.at:3964: testing PIC ZZZ-, ZZZ+ ...
+./run_misc.at:3999: $COMPILE prog.cob
+./run_misc.at:4000: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/758/stdout	2026-08-12 19:19:00.793726930 +0000
+@@ -0,0 +1 @@
++(   +)
+758. run_misc.at:3964: 758. PIC ZZZ-, ZZZ+ (run_misc.at:3964): FAILED (run_misc.at:4000)

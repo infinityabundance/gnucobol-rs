@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1009. run_functions.at:968: testing FUNCTION EXCEPTION-LOCATION ...
+./run_functions.at:1002: $COMPILE prog.cob
+./run_functions.at:1003: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:37.499536248 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1009/stdout	2026-08-12 19:19:37.498333812 +0000
+@@ -1 +1 @@
+- |prog; A00 OF A00-MAIN; 21
++ | 
+1009. run_functions.at:968: 1009. FUNCTION EXCEPTION-LOCATION (run_functions.at:968): FAILED (run_functions.at:1003)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1018. run_functions.at:1316: testing FUNCTION FORMATTED-DATETIME ...
+./run_functions.at:1367: $COMPILE prog.cob
+./run_functions.at:1368: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1018/stdout	2026-08-12 19:19:37.512809502 +0000
+@@ -0,0 +1,2 @@
++Test 3 failed: 1601001T123456+0000                     
++Test 5 failed: 2014001T000000.000000000Z               
+1018. run_functions.at:1316: 1018. FUNCTION FORMATTED-DATETIME (run_functions.at:1316): FAILED (run_functions.at:1368)

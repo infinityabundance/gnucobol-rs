@@ -295,8 +295,102 @@ fn run(cmd: Command) -> Result<(), String> {
                         ))
                     }
                 }
+                "reachability" => {
+                    // diag-unblocked reachability [--pristine-log P] [--pristine-dir P]
+                    //   [--unblocked-log P] [--unblocked-dir P] [--pristine-oracle-log P]
+                    //   [--unblocked-oracle-log P] [--transformations P] [--out P]
+                    let flag = |name: &str, dflt: &str| {
+                        args.iter()
+                            .find_map(|a| a.strip_prefix(name).map(|v| v.trim_start_matches('=')))
+                            .map(PathBuf::from)
+                            .unwrap_or_else(|| PathBuf::from(dflt))
+                    };
+                    let report = gnucobol_rs_corpus::diag_reach::cmd_reachability(
+                        &flag("--pristine-log", "reports/gnucobol-testsuite/raw/candidate/testsuite.log"),
+                        &flag("--pristine-dir", "reports/gnucobol-testsuite/raw/candidate/testsuite.dir"),
+                        &flag("--unblocked-log", "reports/gnucobol-testsuite/diagnostic-unblocked/raw/candidate/testsuite.log"),
+                        &flag("--unblocked-dir", "reports/gnucobol-testsuite/diagnostic-unblocked/raw/candidate/testsuite.dir"),
+                        &flag("--pristine-oracle-log", "reports/gnucobol-testsuite/raw/baseline/testsuite.log"),
+                        &flag("--unblocked-oracle-log", "reports/gnucobol-testsuite/diagnostic-unblocked/raw/oracle/testsuite.log"),
+                        &flag("--transformations", "reports/gnucobol-testsuite/diagnostic-unblocked/transformations.json"),
+                        &flag("--out", "reports/gnucobol-testsuite/diagnostic-unblocked"),
+                    )?;
+                    if !json {
+                        let t = &report.totals;
+                        println!(
+                            "diag-unblocked reachability: {} ignored, {} groups affected, {} progressed, {} newly-reached checks",
+                            t.get("diagnostic_expectations_ignored").and_then(|v| v.as_u64()).unwrap_or(0),
+                            t.get("groups_affected").and_then(|v| v.as_u64()).unwrap_or(0),
+                            t.get("groups_progressed_further").and_then(|v| v.as_u64()).unwrap_or(0),
+                            t.get("newly_reached_checks").and_then(|v| v.as_u64()).unwrap_or(0),
+                        );
+                    }
+                    emit(&report, json)
+                }
+                "reconcile" => {
+                    // diag-unblocked reconcile [--pristine-src DIR] [--transformations P]
+                    //   [--patch P] [--pristine-log P] [--unblocked-log P] [--pristine-dir P]
+                    //   [--unblocked-dir P] [--pristine-oracle-log P] [--unblocked-oracle-log P]
+                    //   [--out P]
+                    let flag = |name: &str, dflt: &str| {
+                        args.iter()
+                            .find_map(|a| a.strip_prefix(name).map(|v| v.trim_start_matches('=')))
+                            .map(PathBuf::from)
+                            .unwrap_or_else(|| PathBuf::from(dflt))
+                    };
+                    let report = gnucobol_rs_corpus::diag_reach::cmd_reconcile(
+                        &flag("--pristine-src", "lab/admit/gnucobol-3.2/tests/testsuite.src"),
+                        &flag("--transformations", "reports/gnucobol-testsuite/diagnostic-unblocked/transformations.json"),
+                        &flag("--patch", "reports/gnucobol-testsuite/diagnostic-unblocked/diagnostic-ignore.patch"),
+                        &flag("--pristine-log", "reports/gnucobol-testsuite/raw/candidate/testsuite.log"),
+                        &flag("--unblocked-log", "reports/gnucobol-testsuite/diagnostic-unblocked/raw/candidate/testsuite.log"),
+                        &flag("--pristine-dir", "reports/gnucobol-testsuite/raw/candidate/testsuite.dir"),
+                        &flag("--unblocked-dir", "reports/gnucobol-testsuite/diagnostic-unblocked/raw/candidate/testsuite.dir"),
+                        &flag("--pristine-oracle-log", "reports/gnucobol-testsuite/raw/baseline/testsuite.log"),
+                        &flag("--unblocked-oracle-log", "reports/gnucobol-testsuite/diagnostic-unblocked/raw/oracle/testsuite.log"),
+                        &flag("--out", "reports/gnucobol-testsuite/diagnostic-unblocked"),
+                    )?;
+                    if !json {
+                        println!(
+                            "diag-unblocked reconcile: AT_SETUP {}=={}, AT_CHECK {}=={}, patch reproducible: {}",
+                            report.at_setup_pristine,
+                            report.at_setup_transformed,
+                            report.at_check_pristine,
+                            report.at_check_transformed,
+                            report.patch_reproducible
+                        );
+                    }
+                    emit(&report, json)
+                }
+                "cross-check" => {
+                    // diag-unblocked cross-check [--unblocked-log P] [--unblocked-dir P]
+                    //   [--transformations P] [--valid-programs P] [--out P]
+                    let flag = |name: &str, dflt: &str| {
+                        args.iter()
+                            .find_map(|a| a.strip_prefix(name).map(|v| v.trim_start_matches('=')))
+                            .map(PathBuf::from)
+                            .unwrap_or_else(|| PathBuf::from(dflt))
+                    };
+                    let report = gnucobol_rs_corpus::diag_reach::cmd_cross_check(
+                        &flag("--unblocked-log", "reports/gnucobol-testsuite/diagnostic-unblocked/raw/candidate/testsuite.log"),
+                        &flag("--unblocked-dir", "reports/gnucobol-testsuite/diagnostic-unblocked/raw/candidate/testsuite.dir"),
+                        &flag("--transformations", "reports/gnucobol-testsuite/diagnostic-unblocked/transformations.json"),
+                        &flag("--valid-programs", "reports/valid-corpus/gnucobol-testsuite/valid-programs.json"),
+                        &flag("--out", "reports/gnucobol-testsuite/diagnostic-unblocked"),
+                    )?;
+                    if !json {
+                        println!(
+                            "diag-unblocked cross-check: {} steps in logs, {} matched in corpus, {} agreed, {} disagreements",
+                            report.totals["steps_in_unblocked_logs"].as_u64().unwrap_or(0),
+                            report.totals["matched_in_corpus"].as_u64().unwrap_or(0),
+                            report.totals["agreed"].as_u64().unwrap_or(0),
+                            report.totals["disagreed"].as_u64().unwrap_or(0),
+                        );
+                    }
+                    emit(&report, json)
+                }
                 other => Err(format!(
-                    "diag-unblocked: unknown subcommand {other:?} (transform|gate)"
+                    "diag-unblocked: unknown subcommand {other:?} (transform|gate|reachability|reconcile|cross-check)"
                 )),
             }
         }

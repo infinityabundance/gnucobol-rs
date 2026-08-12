@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+723. run_misc.at:2145: testing INSPECT TALLYING REPLACING BEFORE and AFTER ...
+./run_misc.at:2176: $COMPILE prog.cob
+./run_misc.at:2177: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/723/stdout	2026-08-12 19:19:00.768241614 +0000
+@@ -0,0 +1,2 @@
++Failed <ABCDEF11111111111111111111> != <AS>
++Failed <0000> != <19>
+723. run_misc.at:2145: 723. INSPECT TALLYING REPLACING BEFORE and AFTER (run_misc.at:2145): FAILED (run_misc.at:2177)

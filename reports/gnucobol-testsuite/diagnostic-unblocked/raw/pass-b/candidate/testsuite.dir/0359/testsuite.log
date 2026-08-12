@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+359. syn_misc.at:5076: testing PROCESS / CBL parsing ...
+./syn_misc.at:5133: $COMPILE_ONLY valid.cob
+stderr:
+cobc-rs: unsupported: no PROCEDURE DIVISION
+./syn_misc.at:5133: exit code was 1, expected 0
+359. syn_misc.at:5076: 359. PROCESS / CBL parsing (syn_misc.at:5076): FAILED (syn_misc.at:5133)

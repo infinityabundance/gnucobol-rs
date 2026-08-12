@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+937. run_file.at:11484: testing INDEXED File READ/DELETE/READ ...
+./run_file.at:12160: $COMPILE prog.cob
+./run_file.at:12164: $COBCRUN_DIRECT ./prog 1>prog.out
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/937/stderr	2026-08-12 19:19:00.951773506 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: OCCURS count MAX-SUB is not an integer
+./run_file.at:12164: exit code was 2, expected 0
+prog.out:
+937. run_file.at:11484: 937. INDEXED File READ/DELETE/READ (run_file.at:11484): FAILED (run_file.at:12164)

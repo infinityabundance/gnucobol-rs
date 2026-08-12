@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+651. run_accept.at:141: testing ACCEPT FROM TIME / DATE / DAY / DAY-OF-WEEK (2) ...
+./run_accept.at:260: $COMPILE prog.cob
+./run_accept.at:262: COB_CURRENT_DATE='2015/04/05 18:45:22.123400056' \
+$COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/651/stderr	2026-08-12 19:19:00.697727958 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: ACCEPT FROM MICROSECOND-TIME: a runtime non-claim (terminal/command-line input has no deterministic oracle); wired sources are DATE/DAY/TIME/DAY-OF-WEEK/ENVIRONMENT
+--- -	2026-08-12 19:19:00.699534791 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/651/stdout	2026-08-12 19:19:00.698727947 +0000
+@@ -1,4 +1 @@
+-PROCESS DATE/TIME : 04/05/15 18:45:22 MICROSECOND-TIME 00184522123400.
+-PROCESS BIG TIME : 00000018452212
+-PROCESS DATE/TIME : 04/05/15 18:45:22 MICROSECOND-TIME 184522123400  .
+ 
+./run_accept.at:262: exit code was 2, expected 0
+651. run_accept.at:141: 651. ACCEPT FROM TIME / DATE / DAY / DAY-OF-WEEK (2) (run_accept.at:141): FAILED (run_accept.at:262)

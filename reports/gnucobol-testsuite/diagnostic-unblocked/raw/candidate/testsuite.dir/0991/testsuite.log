@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+991. run_functions.at:220: testing FUNCTION CHAR ...
+./run_functions.at:252: $COMPILE prog.cob
+./run_functions.at:253: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/991/stderr	2026-08-12 19:19:00.999724725 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: FUNCTION
+./run_functions.at:253: exit code was 2, expected 0
+991. run_functions.at:220: 991. FUNCTION CHAR (run_functions.at:220): FAILED (run_functions.at:253)

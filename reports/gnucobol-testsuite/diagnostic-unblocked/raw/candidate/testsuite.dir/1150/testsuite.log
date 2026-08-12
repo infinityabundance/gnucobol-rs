@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1150. run_extensions.at:2536: testing GOBACK/EXIT PROGRAM RETURNING/GIVING ...
+./run_extensions.at:2578: $COMPILE prog.cob prog1.cob prog2.cob
+./run_extensions.at:2579: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1150/stdout	2026-08-12 19:19:01.230345132 +0000
+@@ -0,0 +1 @@
++RETURN-CODE +00000000 INSTEAD OF -1
+1150. run_extensions.at:2536: 1150. GOBACK/EXIT PROGRAM RETURNING/GIVING (run_extensions.at:2536): FAILED (run_extensions.at:2579)

@@ -1,0 +1,5 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      prog1.
+       PROCEDURE        DIVISION.
+           EXIT PROGRAM RETURNING -1.

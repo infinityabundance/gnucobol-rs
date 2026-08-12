@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1243. data_binary.at:1323: testing COMP-4 No Truncate ...
+./data_binary.at:1398: $COMPILE -w -fnotrunc prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1243/stderr	2026-08-12 19:19:37.817330394 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fnotrunc: unsupported option (rejected-unsupported; no binary truncation: the candidate's arithmetic model is fixed; reject honestly): 
+./data_binary.at:1398: exit code was 1, expected 0
+1243. data_binary.at:1323: 1243. COMP-4 No Truncate (data_binary.at:1323): FAILED (data_binary.at:1398)

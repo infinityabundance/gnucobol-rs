@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1229. run_ml.at:737: testing JSON GENERATE trimming ...
+./run_ml.at:832: $COMPILE prog.cob
+./run_ml.at:833: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1229/stderr	2026-08-12 19:19:37.800330576 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: PIC VPP99: ScalingPDeferred
+./run_ml.at:833: exit code was 2, expected 0
+1229. run_ml.at:737: 1229. JSON GENERATE trimming (run_ml.at:737): FAILED (run_ml.at:833)

@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+413. syn_move.at:404: testing MOVE to erroneous field ...
+./syn_move.at:420: $COMPILE_ONLY prog.cob
+stderr:
+./syn_move.at:420: exit code was 0, expected 1
+413. syn_move.at:404: 413. MOVE to erroneous field (syn_move.at:404): FAILED (syn_move.at:420)

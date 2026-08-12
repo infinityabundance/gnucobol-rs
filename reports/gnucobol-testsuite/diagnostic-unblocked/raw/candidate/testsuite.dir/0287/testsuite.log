@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+287. syn_misc.at:1796: testing word length ...
+./syn_misc.at:1891: $COMPILE_ONLY -free -fword-length=31 prog.cob
+stderr:
+cobc-rs: -fword-length=31: unsupported option (rejected-unsupported; word length: reject honestly): 31
+./syn_misc.at:1894: $COMPILE_ONLY -free -fword-length=45 prog.cob
+stderr:
+cobc-rs: -fword-length=45: unsupported option (rejected-unsupported; word length: reject honestly): 45
+./syn_misc.at:1897: $COMPILE_ONLY -free -fword-length=60 prog.cob
+stderr:
+cobc-rs: -fword-length=60: unsupported option (rejected-unsupported; word length: reject honestly): 60
+./syn_misc.at:1900: $COMPILE_ONLY -free -fword-length=45 -frelax-syntax-checks prog2.cob
+stderr:
+cobc-rs: -fword-length=45: unsupported option (rejected-unsupported; word length: reject honestly): 45
+./syn_misc.at:1900: exit code was 1, expected 0
+287. syn_misc.at:1796: 287. word length (syn_misc.at:1796): FAILED (syn_misc.at:1900)

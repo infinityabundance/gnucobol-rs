@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+710. run_misc.at:1623: testing CALL binary literal parameter/LENGTH OF ...
+./run_misc.at:1658: $COMPILE_MODULE dump.c
+./run_misc.at:1659: $COMPILE prog.cob
+./run_misc.at:1660: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/710/stderr	2026-08-12 19:19:37.196337048 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "dump": not a contained program (external CALL is a boundary)
+--- -	2026-08-12 19:19:37.198939365 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/710/stdout	2026-08-12 19:19:37.198147269 +0000
+@@ -1,4 +1 @@
+-00000001
+-00000009
+-00000004
+ 
+./run_misc.at:1660: exit code was 2, expected 0
+710. run_misc.at:1623: 710. CALL binary literal parameter/LENGTH OF (run_misc.at:1623): FAILED (run_misc.at:1660)

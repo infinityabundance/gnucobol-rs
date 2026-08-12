@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1264. data_packed.at:825: testing MOVE DISPLAY to PACKED-DECIMAL ...
+./data_packed.at:1020: $COMPILE prog.cob
+./data_packed.at:1021: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1264/stderr	2026-08-12 19:19:37.844330104 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number REPLACE
+./data_packed.at:1021: exit code was 2, expected 0
+1264. data_packed.at:825: 1264. MOVE DISPLAY to PACKED-DECIMAL (data_packed.at:825): FAILED (data_packed.at:1021)

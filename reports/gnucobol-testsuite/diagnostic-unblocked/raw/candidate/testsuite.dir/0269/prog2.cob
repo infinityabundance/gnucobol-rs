@@ -1,0 +1,14 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      prog2.
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       SPECIAL-NAMES.
+           CRT STATUS IS MY-CRT-STATUS.
+       DATA             DIVISION.
+       WORKING-STORAGE  SECTION.
+       01 X             PIC X.
+       77 MY-CRT-STATUS PIC 9(04).
+       PROCEDURE        DIVISION.
+           ACCEPT X END-ACCEPT.
+           STOP RUN.

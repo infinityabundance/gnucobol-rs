@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+979. run_reportwriter.at:9076: testing Report PRESENT AFTER ...
+./run_reportwriter.at:9258: $COMPILE prog.cob
+./run_reportwriter.at:9260: DD_INFILE=./inp_data DD_OREPORT=./report.txt \
+$COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/979/stdout	2026-08-12 19:19:37.460529812 +0000
+@@ -0,0 +1 @@
++ERROR OPENING INFILE FILE.STATUS = 35
+979. run_reportwriter.at:9076: 979. Report PRESENT AFTER (run_reportwriter.at:9076): FAILED (run_reportwriter.at:9260)

@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+466. syn_literals.at:1119: testing binary literals ...
+./syn_literals.at:1137: $COMPILE_ONLY -std=mf prog.cob
+stderr:
+./syn_literals.at:1137: exit code was 0, expected 1
+466. syn_literals.at:1119: 466. binary literals (syn_literals.at:1119): FAILED (syn_literals.at:1137)

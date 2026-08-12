@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+941. run_file.at:12816: testing Concatenated Files ...
+./run_file.at:12934: $COMPILE prog.cob
+./run_file.at:12936: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/941/stderr	2026-08-12 19:19:37.415343506 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: ENVIRONMENT
+--- -	2026-08-12 19:19:37.416740640 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/941/stdout	2026-08-12 19:19:37.416084066 +0000
+@@ -1,3 +1 @@
+-OPEN I-O: file1+file2+file3                                Sts:35
+-OPEN INPUT: file1&file2&file3                                Sts:35
+ 
+./run_file.at:12936: exit code was 2, expected 0
+941. run_file.at:12816: 941. Concatenated Files (run_file.at:12816): FAILED (run_file.at:12936)

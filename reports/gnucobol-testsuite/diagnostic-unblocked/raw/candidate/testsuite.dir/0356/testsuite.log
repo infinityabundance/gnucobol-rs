@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+356. syn_misc.at:4980: testing LIN / COL register ...
+./syn_misc.at:4993: $COMPILE_ONLY -std=cobol2014 prog.cob
+stderr:
+./syn_misc.at:4993: exit code was 0, expected 1
+356. syn_misc.at:4980: 356. LIN / COL register (syn_misc.at:4980): FAILED (syn_misc.at:4993)

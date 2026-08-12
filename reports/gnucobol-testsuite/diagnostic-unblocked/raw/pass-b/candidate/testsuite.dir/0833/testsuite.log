@@ -1,0 +1,25 @@
+#                             -*- compilation -*-
+833. run_misc.at:13097: testing DISPLAY UPON ...
+./run_misc.at:13125: $COMPILE -std=ibm prog.cob
+stderr:
+./run_misc.at:13128: $COBCRUN_DIRECT ./prog PLAIN
+--- -	2026-08-12 19:19:37.313957212 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/833/stderr	2026-08-12 19:19:37.313210449 +0000
+@@ -1,6 +1,2 @@
+-This is sent to SYSERR  PLAIN
+-This is also sent to SYSERR  PLAIN
+-libcob: prog.cob:18: warning: COB_DISPLAY_PUNCH_FILE is invalid, output to SYSPUNCH skipped
+-NO ...
+- ... SYSPUNCH
++cobrun: unsupported: verb CHAINING
+ 
+--- -	2026-08-12 19:19:37.315013921 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/833/stdout	2026-08-12 19:19:37.314055074 +0000
+@@ -1,5 +1 @@
+-This is sent to CONSOLE PLAIN
+-This is sent to PRINTER PLAIN
+-This is also sent to CONSOLE PLAIN
+-This is also sent to PRINTER PLAIN
+ 
+./run_misc.at:13128: exit code was 2, expected 0
+833. run_misc.at:13097: 833. DISPLAY UPON (run_misc.at:13097): FAILED (run_misc.at:13128)

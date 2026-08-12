@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+312. syn_misc.at:2878: testing pseudotext replacement with text in area A ...
+./syn_misc.at:2908: $COMPILE -std=cobol85 -fmissing-period=warning prog.cob
+stderr:
+cobc-rs: -fmissing-period=warning: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): warning
+./syn_misc.at:2908: exit code was 1, expected 0
+312. syn_misc.at:2878: 312. pseudotext replacement with text in area A (syn_misc.at:2878): FAILED (syn_misc.at:2908)

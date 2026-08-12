@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+228. syn_file.at:1958: testing SELECT/OPEN syntax extensions ...
+./syn_file.at:2036: $COMPILE_ONLY prog.cob
+stderr:
+./syn_file.at:2038: $COMPILE_ONLY -std=acu-strict prog.cob
+stderr:
+./syn_file.at:2038: exit code was 0, expected 1
+228. syn_file.at:1958: 228. SELECT/OPEN syntax extensions (syn_file.at:1958): FAILED (syn_file.at:2038)

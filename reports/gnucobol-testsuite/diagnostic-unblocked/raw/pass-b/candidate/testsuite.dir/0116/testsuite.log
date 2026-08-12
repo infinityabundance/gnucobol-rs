@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+116. syn_definition.at:1231: testing OSVS register CURRENT-DATE and TIME-OF-DAY ...
+./syn_definition.at:1272: $COMPILE_ONLY -std=cobol85 prog1.cob
+stderr:
+./syn_definition.at:1272: exit code was 0, expected 1
+116. syn_definition.at:1231: 116. OSVS register CURRENT-DATE and TIME-OF-DAY (syn_definition.at:1231): expected failure (syn_definition.at:1272)

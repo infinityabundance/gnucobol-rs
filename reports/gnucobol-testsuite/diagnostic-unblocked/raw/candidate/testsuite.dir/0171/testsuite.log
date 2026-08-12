@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+171. syn_redefines.at:449: testing REDEFINES: for ANY LENGTH item ...
+./syn_redefines.at:465: $COMPILE_ONLY prog.cob
+stderr:
+./syn_redefines.at:465: exit code was 0, expected 1
+171. syn_redefines.at:449: 171. REDEFINES: for ANY LENGTH item (syn_redefines.at:449): FAILED (syn_redefines.at:465)

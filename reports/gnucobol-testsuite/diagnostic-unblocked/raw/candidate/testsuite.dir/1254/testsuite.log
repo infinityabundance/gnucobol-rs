@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1254. data_display.at:226: testing MOVE DISPLAY to DISPLAY ...
+./data_display.at:402: $COMPILE prog.cob
+./data_display.at:403: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1254/stderr	2026-08-12 19:19:01.347720999 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number REPLACE
+./data_display.at:403: exit code was 2, expected 0
+1254. data_display.at:226: 1254. MOVE DISPLAY to DISPLAY (data_display.at:226): FAILED (data_display.at:403)

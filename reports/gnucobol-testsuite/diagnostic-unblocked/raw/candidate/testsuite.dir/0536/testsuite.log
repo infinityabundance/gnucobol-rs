@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+536. run_fundamental.at:1490: testing Entry point visibility (1) ...
+./run_fundamental.at:1515: $COMPILE prog.cob
+./run_fundamental.at:1516: $COMPILE_MODULE module.cob
+./run_fundamental.at:1517: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/536/stderr	2026-08-12 19:19:00.593752400 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "modulepart": not a contained program (external CALL is a boundary)
+--- -	2026-08-12 19:19:00.596105146 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/536/stdout	2026-08-12 19:19:00.594825591 +0000
+@@ -1 +1 @@
+-AB
++
+./run_fundamental.at:1517: exit code was 2, expected 0
+536. run_fundamental.at:1490: 536. Entry point visibility (1) (run_fundamental.at:1490): FAILED (run_fundamental.at:1517)

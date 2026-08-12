@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+1190. run_extensions.at:4839: testing DISPLAY DIRECTIVE and $DISPLAY ...
+./run_extensions.at:4862: $COMPILE prog.cob
+--- -	2026-08-12 19:19:01.277605865 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1190/stdout	2026-08-12 19:19:01.276721760 +0000
+@@ -1,6 +1 @@
+-MF compile time text # A.0-B;C
+-some.text-here
+-other  text #2
+-literal text...  *> no comment
+-MF compile time text
+ 
+1190. run_extensions.at:4839: 1190. DISPLAY DIRECTIVE and $DISPLAY (run_extensions.at:4839): FAILED (run_extensions.at:4862)

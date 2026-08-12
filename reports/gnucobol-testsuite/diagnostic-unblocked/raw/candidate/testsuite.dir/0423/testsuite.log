@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+423. syn_screen.at:85: testing Duplicate ACCEPT/DISPLAY clauses ...
+./syn_screen.at:102: $COMPILE_ONLY prog.cob
+stderr:
+./syn_screen.at:102: exit code was 0, expected 1
+423. syn_screen.at:85: 423. Duplicate ACCEPT/DISPLAY clauses (syn_screen.at:85): FAILED (syn_screen.at:102)

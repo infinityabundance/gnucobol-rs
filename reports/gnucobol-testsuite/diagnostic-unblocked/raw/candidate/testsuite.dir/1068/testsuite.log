@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1068. run_functions.at:2909: testing FUNCTION RANGE ...
+./run_functions.at:2925: $COMPILE prog.cob
+./run_functions.at:2926: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1068/stdout	2026-08-12 19:19:01.113723505 +0000
+@@ -0,0 +1 @@
+++0000000022
+1068. run_functions.at:2909: 1068. FUNCTION RANGE (run_functions.at:2909): FAILED (run_functions.at:2926)

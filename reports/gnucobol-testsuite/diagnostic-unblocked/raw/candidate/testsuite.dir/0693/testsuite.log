@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+693. run_misc.at:875: testing SOURCE FIXED/FREE directives ...
+./run_misc.at:904: $COMPILE prog.cob
+./run_misc.at:905: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/693/stderr	2026-08-12 19:19:00.733103259 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: verb T
+--- -	2026-08-12 19:19:00.734698122 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/693/stdout	2026-08-12 19:19:00.733727573 +0000
+@@ -1 +1 @@
+-OKOKOKOK
++
+./run_misc.at:905: exit code was 2, expected 0
+693. run_misc.at:875: 693. SOURCE FIXED/FREE directives (run_misc.at:875): FAILED (run_misc.at:905)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+904. run_file.at:5704: testing SEQUENTIAL file with SHARING NO ...
+./run_file.at:5767: $COMPILE prog1.cob
+./run_file.at:5768: $COMPILE prog2.cob
+./run_file.at:5769: $COBCRUN_DIRECT ./prog1
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/904/stdout	2026-08-12 19:19:29.916415044 +0000
+@@ -0,0 +1 @@
++FAILED: 00
+904. run_file.at:5704: 904. SEQUENTIAL file with SHARING NO (run_file.at:5704): expected failure (run_file.at:5769)

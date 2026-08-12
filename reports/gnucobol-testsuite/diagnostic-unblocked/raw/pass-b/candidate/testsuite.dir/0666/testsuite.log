@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+666. run_initialize.at:560: testing INITIALIZE with reference-modification ...
+./run_initialize.at:590: $COMPILE prog.cob
+./run_initialize.at:591: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/666/stderr	2026-08-12 19:19:37.159759987 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: MY-FLD(1:2)
+./run_initialize.at:591: exit code was 2, expected 0
+666. run_initialize.at:560: 666. INITIALIZE with reference-modification (run_initialize.at:560): FAILED (run_initialize.at:591)

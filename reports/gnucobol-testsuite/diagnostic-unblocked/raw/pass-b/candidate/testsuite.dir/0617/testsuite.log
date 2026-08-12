@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+617. run_fundamental.at:6844: testing MOVE with de-editting to BINARY ...
+./run_fundamental.at:6889: $COMPILE prog.cob
+./run_fundamental.at:6890: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/617/stderr	2026-08-12 19:19:37.121706247 +0000
+@@ -0,0 +1 @@
++cobrun: runtime error: UnsupportedSymbol('(')
+./run_fundamental.at:6890: exit code was 2, expected 0
+617. run_fundamental.at:6844: 617. MOVE with de-editting to BINARY (run_fundamental.at:6844): FAILED (run_fundamental.at:6890)

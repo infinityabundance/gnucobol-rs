@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+928. run_file.at:9274: testing EXTFH: LINE SEQUENTIAL files (2) ...
+./run_file.at:9433: $COMPILE -fnotrunc prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/928/stderr	2026-08-12 19:19:00.939725367 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fnotrunc: unsupported option (rejected-unsupported; no binary truncation: the candidate's arithmetic model is fixed; reject honestly): 
+./run_file.at:9433: exit code was 1, expected 0
+928. run_file.at:9274: 928. EXTFH: LINE SEQUENTIAL files (2) (run_file.at:9274): FAILED (run_file.at:9433)

@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+1185. run_extensions.at:4476: testing System routine CBL_EXIT_PROC ...
+./run_extensions.at:4575: $COMPILE prog.cob
+./run_extensions.at:4576: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1185/stderr	2026-08-12 19:19:37.750396130 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unrecognized USAGE PROCEDURE-POINTER
+--- -	2026-08-12 19:19:37.752090018 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1185/stdout	2026-08-12 19:19:37.750396130 +0000
+@@ -1,5 +1 @@
+-Program is starting
+-Program is stopping
+-Exit procedure from DemoExtProc
+-Exit procedure from ExtProc
+ 
+./run_extensions.at:4576: exit code was 2, expected 0
+1185. run_extensions.at:4476: 1185. System routine CBL_EXIT_PROC (run_extensions.at:4476): FAILED (run_extensions.at:4576)

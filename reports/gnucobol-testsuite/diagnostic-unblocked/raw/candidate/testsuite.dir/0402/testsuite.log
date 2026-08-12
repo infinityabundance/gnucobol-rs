@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+402. syn_move.at:62: testing MOVE ZERO TO alphabetic item ...
+./syn_move.at:76: $COMPILE_ONLY prog.cob
+stderr:
+./syn_move.at:76: exit code was 0, expected 1
+402. syn_move.at:62: 402. MOVE ZERO TO alphabetic item (syn_move.at:62): FAILED (syn_move.at:76)

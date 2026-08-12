@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+897. run_file.at:4728: testing LINAGE and LINAGE-COUNTER sample ...
+./run_file.at:5006: $COMPILE prog.cob
+./run_file.at:5007: COB_CURRENT_DATE="2015/02/06 16:40:52" $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/897/stderr	2026-08-12 19:19:37.373668475 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: OPEN: `DATA-FILE` is not a declared file
+--- -	2026-08-12 19:19:37.375200852 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/897/stdout	2026-08-12 19:19:37.373668475 +0000
+@@ -1,2 +1 @@
+-Normal termination, ending status: 10
+ 
+./run_file.at:5007: exit code was 2, expected 0
+mini-report:
+sed: can't read mini-report: No such file or directory
+897. run_file.at:4728: 897. LINAGE and LINAGE-COUNTER sample (run_file.at:4728): FAILED (run_file.at:5007)

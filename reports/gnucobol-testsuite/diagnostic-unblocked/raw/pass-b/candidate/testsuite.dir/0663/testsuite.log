@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+663. run_initialize.at:415: testing INITIALIZE with REDEFINES ...
+./run_initialize.at:436: $COMPILE prog.cob
+./run_initialize.at:437: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/663/stdout	2026-08-12 19:19:37.158337455 +0000
+@@ -0,0 +1 @@
++000
+\ No newline at end of file
+663. run_initialize.at:415: 663. INITIALIZE with REDEFINES (run_initialize.at:415): FAILED (run_initialize.at:437)

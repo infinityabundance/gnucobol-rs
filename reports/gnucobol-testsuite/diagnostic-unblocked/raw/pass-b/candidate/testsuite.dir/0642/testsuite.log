@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+642. run_refmod.at:145: testing Length underflow ...
+./run_refmod.at:161: $COMPILE -std=cobol2002 prog.cob
+./run_refmod.at:162: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:37.140796526 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/642/stderr	2026-08-12 19:19:37.139822560 +0000
+@@ -1,2 +1 @@
+-libcob: prog.cob:9: error: length of 'X' out of bounds: 0
+ 
+./run_refmod.at:162: exit code was 0, expected 1
+642. run_refmod.at:145: 642. Length underflow (run_refmod.at:145): FAILED (run_refmod.at:162)

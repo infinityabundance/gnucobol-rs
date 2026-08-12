@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+802. run_misc.at:7335: testing Figurative constants to numeric field ...
+./run_misc.at:7372: $COMPILE -std=mf prog.cob
+stderr:
+./run_misc.at:7375: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:00.830972087 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/802/stdout	2026-08-12 19:19:00.830049808 +0000
+@@ -1,6 +1,4 @@
+ NUM9 value SPACES is 000000.
+-9(6) Does NOT test OK for LOW-VALUES
+-9(6) tests as ZERO instead of LOW-VALUES
+-9(6) Does NOT test OK for HIGH-VALUES
+-9(6) tests as ZERO instead of HIGH-VALUES
++9(6) tests OK for LOW-VALUES
++9(6) tests OK for HIGH-VALUES
+ 
+802. run_misc.at:7335: 802. Figurative constants to numeric field (run_misc.at:7335): FAILED (run_misc.at:7375)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1214. run_extensions.at:6084: testing INSPECT REPLACING complex ...
+./run_extensions.at:6113: $COMPILE prog.cob
+./run_extensions.at:6114: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1214/stderr	2026-08-12 19:19:37.782590517 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: INSPECT region clause near Str([66])
+./run_extensions.at:6114: exit code was 2, expected 0
+1214. run_extensions.at:6084: 1214. INSPECT REPLACING complex (run_extensions.at:6084): FAILED (run_extensions.at:6114)

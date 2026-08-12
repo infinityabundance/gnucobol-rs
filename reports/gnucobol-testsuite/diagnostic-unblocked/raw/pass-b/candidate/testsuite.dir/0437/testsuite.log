@@ -1,0 +1,22 @@
+#                             -*- compilation -*-
+437. syn_screen.at:528: testing Compiler-specific SCREEN SECTION clause rules ...
+./syn_screen.at:569: $COMPILE_ONLY -fscreen-section-rules=std prog.cob
+stderr:
+cobc-rs: -fscreen-section-rules=std: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): std
+./syn_screen.at:572: $COMPILE_ONLY -fscreen-section-rules=acu prog.cob
+stderr:
+cobc-rs: -fscreen-section-rules=acu: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): acu
+./syn_screen.at:575: $COMPILE_ONLY -fscreen-section-rules=mf prog.cob
+stderr:
+cobc-rs: -fscreen-section-rules=mf: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): mf
+./syn_screen.at:578: $COMPILE_ONLY -fscreen-section-rules=rm prog.cob
+stderr:
+cobc-rs: -fscreen-section-rules=rm: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): rm
+./syn_screen.at:581: $COMPILE_ONLY -fscreen-section-rules=xopen prog.cob
+stderr:
+cobc-rs: -fscreen-section-rules=xopen: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): xopen
+./syn_screen.at:584: $COMPILE_ONLY -fscreen-section-rules=gc prog.cob
+stderr:
+cobc-rs: -fscreen-section-rules=gc: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): gc
+./syn_screen.at:584: exit code was 1, expected 0
+437. syn_screen.at:528: 437. Compiler-specific SCREEN SECTION clause rules (syn_screen.at:528): FAILED (syn_screen.at:584)

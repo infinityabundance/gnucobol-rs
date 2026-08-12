@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+52. syn_copy.at:170: testing COPY: extension ...
+./syn_copy.at:242: mkdir -p SUB/OSUB
+./syn_copy.at:247: $COMPILE_ONLY prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/52/stderr	2026-08-12 19:19:36.754117349 +0000
+@@ -0,0 +1 @@
++cobc-rs: COPY expansion failed (fail closed): malformed COPY statement
+./syn_copy.at:247: exit code was 1, expected 0
+52. syn_copy.at:170: 52. COPY: extension (syn_copy.at:170): FAILED (syn_copy.at:247)

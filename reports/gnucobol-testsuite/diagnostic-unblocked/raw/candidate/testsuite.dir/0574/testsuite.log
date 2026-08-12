@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+574. run_fundamental.at:4108: testing Numeric operations (6) ...
+./run_fundamental.at:4161: $COMPILE_MODULE dump.c
+./run_fundamental.at:4162: $COMPILE prog.cob
+./run_fundamental.at:4163: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/574/stderr	2026-08-12 19:19:00.632742025 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "dump": not a contained program (external CALL is a boundary)
+--- -	2026-08-12 19:19:00.634721615 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/574/stdout	2026-08-12 19:19:00.634231402 +0000
+@@ -1 +1 @@
+-05108855
++
+./run_fundamental.at:4163: exit code was 2, expected 0
+574. run_fundamental.at:4108: 574. Numeric operations (6) (run_fundamental.at:4108): FAILED (run_fundamental.at:4163)

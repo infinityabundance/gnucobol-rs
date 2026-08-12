@@ -1,0 +1,115 @@
+GnuCOBOL V.R.P          prog-1.cob                                      Page 0001
+
+LINE    PG/LN  A...B............................................................
+
+000001
+000002         IDENTIFICATION DIVISION.
+000003         PROGRAM-ID. prog-1.
+000004
+000005         DATA DIVISION.
+000006         WORKING-STORAGE SECTION.
+000007         01  blah   PIC x.
+000008
+000009         PROCEDURE DIVISION.
+000010             ACCEPT blah END-ACCEPT
+000011             CALL "prog-2" USING blah END-CALL
+000012             GO TO EX
+000013
+000014             DISPLAY blah.
+warning: unreachable statement 'DISPLAY'
+000015
+000016         EX. STOP RUN.
+GnuCOBOL V.R.P          prog-1.cob                                      Page 0002
+
+SIZE  TYPE           LVL  NAME                           PICTURE
+
+      WORKING-STORAGE SECTION
+
+00001 ALPHANUMERIC   01   blah                           X
+
+GnuCOBOL V.R.P          prog-1.cob                                      Page 0003
+
+NAME                           DEFINED                REFERENCES
+
+blah                           7       *10      11      14             x3
+
+GnuCOBOL V.R.P          prog-1.cob                                      Page 0004
+
+LABEL                          DEFINED                REFERENCES
+
+E prog__1                      10
+P EX                           16       12                             x1
+GnuCOBOL V.R.P          prog-1.cob                                      Page 0005
+
+FUNCTION                       TYPE                   REFERENCES
+
+L prog-2                       EXTERN   11                             x1
+
+GnuCOBOL V.R.P          prog-1.cob                                      Page 0006
+
+Error/Warning summary:
+
+prog-1.cob:14: warning: unreachable statement 'DISPLAY'
+
+1 warning in compilation group
+0 errors in compilation group
+GnuCOBOL V.R.P          prog-2.cob                                      Page 0001
+
+LINE    PG/LN  A...B............................................................
+
+000001
+000002         IDENTIFICATION DIVISION.
+000003         PROGRAM-ID. prog-2.
+000004
+000005         DATA DIVISION.
+000006         WORKING-STORAGE SECTION.
+000007         01  data-b  PIC 9.
+000008         LINKAGE SECTION.
+000009         01  stuff   PIC x.
+000010         PROCEDURE DIVISION USING stuff.
+000011         MAIN.
+000012             MOVE FUNCTION NUMVAL (stuff) TO data-b
+000013             DISPLAY data-b
+000014             GO TO EX
+000015
+000016             ACCEPT stuff.
+warning: unreachable statement 'ACCEPT'
+000017
+000018         EX. STOP RUN.
+000019
+GnuCOBOL V.R.P          prog-2.cob                                      Page 0002
+
+SIZE  TYPE           LVL  NAME                           PICTURE
+
+      WORKING-STORAGE SECTION
+
+00001 NUMERIC        01   data-b                         9
+
+      LINKAGE SECTION
+
+00001 ALPHANUMERIC   01   stuff                          X
+
+GnuCOBOL V.R.P          prog-2.cob                                      Page 0003
+
+NAME                           DEFINED                REFERENCES
+
+data-b                         7       *12      13                     x2
+
+stuff                          9       *10      12     *16             x3
+
+GnuCOBOL V.R.P          prog-2.cob                                      Page 0004
+
+LABEL                          DEFINED                REFERENCES
+
+E prog__2                      11
+P MAIN                         11     not referenced
+P EX                           18       14                             x1
+
+GnuCOBOL V.R.P          prog-2.cob                                      Page 0005
+
+Error/Warning summary:
+
+prog-2.cob:16: warning: unreachable statement 'ACCEPT'
+
+2 warnings in compilation group
+0 errors in compilation group

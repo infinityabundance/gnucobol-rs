@@ -1,0 +1,9 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      prog.
+       DATA             DIVISION.
+       WORKING-STORAGE  SECTION.
+       77  CRT-STATUS   PIC 9(3) IS SPECIAL-NAMES CRT STATUS.
+       PROCEDURE        DIVISION.
+           ACCEPT OMITTED END-ACCEPT.
+           STOP RUN.

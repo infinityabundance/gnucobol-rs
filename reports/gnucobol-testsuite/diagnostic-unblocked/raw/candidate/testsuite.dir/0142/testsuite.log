@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+142. syn_subscripts.at:173: testing SET SSRANGE syntax ...
+./syn_subscripts.at:195: $COMPILE_ONLY prog.cob
+stderr:
+./syn_subscripts.at:195: exit code was 0, expected 1
+142. syn_subscripts.at:173: 142. SET SSRANGE syntax (syn_subscripts.at:173): FAILED (syn_subscripts.at:195)

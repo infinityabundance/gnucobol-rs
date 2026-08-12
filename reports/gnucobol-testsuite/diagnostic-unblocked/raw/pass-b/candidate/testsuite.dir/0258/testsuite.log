@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+258. syn_misc.at:676: testing INITIALIZE constant ...
+./syn_misc.at:694: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:694: exit code was 0, expected 1
+258. syn_misc.at:676: 258. INITIALIZE constant (syn_misc.at:676): FAILED (syn_misc.at:694)

@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+1156. run_extensions.at:2826: testing 78 Level (2) ...
+./run_extensions.at:2844: $COMPILE prog.cob
+./run_extensions.at:2845: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:01.237786884 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1156/stdout	2026-08-12 19:19:01.236722188 +0000
+@@ -1,2 +1,2 @@
+-OKOKOK
++OKOKOKOK
+ 
+1156. run_extensions.at:2826: 1156. 78 Level (2) (run_extensions.at:2826): FAILED (run_extensions.at:2845)

@@ -1,0 +1,16 @@
+
+        IDENTIFICATION DIVISION.
+        PROGRAM-ID. prog.
+        DATA DIVISION.
+        WORKING-STORAGE SECTION.
+        01 BLA PIC X(5) VALUE 'bluBb'.
+        PROCEDURE DIVISION.
+        MAIN-PROC SECTION.
+        00.
+
+           DISPLAY BLA NO ADVANCING.
+        END-PROC  SECTION.
+
+           DISPLAY ' END' NO ADVANCING.
+        EX.
+            STOP RUN.

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1273. data_packed.at:1563: testing COMP-6 numeric ...
+./data_packed.at:1603: $COMPILE prog.cob
+./data_packed.at:1604: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1273/stderr	2026-08-12 19:19:01.374720710 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: X
+./data_packed.at:1604: exit code was 2, expected 0
+1273. data_packed.at:1563: 1273. COMP-6 numeric (data_packed.at:1563): FAILED (data_packed.at:1604)

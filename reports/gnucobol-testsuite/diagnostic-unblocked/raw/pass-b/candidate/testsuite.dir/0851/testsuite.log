@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+851. run_file.at:224: testing OUTPUT on SEQUENTIAL file to missing directory ...
+./run_file.at:252: $COMPILE prog.cob
+./run_file.at:253: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/851/stdout	2026-08-12 19:19:37.329548988 +0000
+@@ -0,0 +1 @@
++STATUS OPENO 00
+851. run_file.at:224: 851. OUTPUT on SEQUENTIAL file to missing directory (run_file.at:224): FAILED (run_file.at:253)

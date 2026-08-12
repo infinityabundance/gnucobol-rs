@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+138. syn_subscripts.at:48: testing Subscript range check ...
+./syn_subscripts.at:79: $COMPILE_ONLY prog.cob
+stderr:
+./syn_subscripts.at:79: exit code was 0, expected 1
+138. syn_subscripts.at:48: 138. Subscript range check (syn_subscripts.at:48): FAILED (syn_subscripts.at:79)

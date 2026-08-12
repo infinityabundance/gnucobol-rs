@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+22. used_binaries.at:809: testing run job with optional arguments ...
+./used_binaries.at:824: $COMPILE -j="job 123" prog.cob
+--- -	2026-08-12 19:19:00.230230680 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/22/stdout	2026-08-12 19:19:00.229365036 +0000
+@@ -1 +1 @@
+-job 123 
++
+22. used_binaries.at:809: 22. run job with optional arguments (used_binaries.at:809): FAILED (used_binaries.at:824)

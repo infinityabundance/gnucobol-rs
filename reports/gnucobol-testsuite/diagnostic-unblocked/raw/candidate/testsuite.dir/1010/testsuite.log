@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1010. run_functions.at:1056: testing FUNCTION EXCEPTION-STATEMENT ...
+./run_functions.at:1084: $COMPILE prog.cob
+./run_functions.at:1085: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:01.023469031 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1010/stdout	2026-08-12 19:19:01.022724479 +0000
+@@ -1 +1 @@
+-                               |OPEN                           
++                               |                               
+1010. run_functions.at:1056: 1010. FUNCTION EXCEPTION-STATEMENT (run_functions.at:1056): FAILED (run_functions.at:1085)

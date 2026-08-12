@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1262. data_packed.at:459: testing MOVE PACKED-DECIMAL to PACKED-DECIMAL ...
+./data_packed.at:633: $COMPILE prog.cob
+./data_packed.at:634: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1262/stderr	2026-08-12 19:19:37.842040544 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number REPLACE
+./data_packed.at:634: exit code was 2, expected 0
+1262. data_packed.at:459: 1262. MOVE PACKED-DECIMAL to PACKED-DECIMAL (data_packed.at:459): FAILED (data_packed.at:634)

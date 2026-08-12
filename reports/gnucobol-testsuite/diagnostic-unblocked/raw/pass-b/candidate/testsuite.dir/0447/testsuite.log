@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+447. syn_functions.at:164: testing Missing prototype/definition ...
+./syn_functions.at:188: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: unsupported: no PROGRAM-ID
+./syn_functions.at:188: exit code was 1, expected 0
+447. syn_functions.at:164: 447. Missing prototype/definition (syn_functions.at:164): FAILED (syn_functions.at:188)

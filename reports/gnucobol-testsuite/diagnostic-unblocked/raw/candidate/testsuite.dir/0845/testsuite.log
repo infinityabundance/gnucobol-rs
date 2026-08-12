@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+845. run_misc.at:14218: testing libcob version check ...
+./run_misc.at:14267: $COMPILE prog.c
+./run_misc.at:14268: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/845/stderr	2026-08-12 19:19:00.867366564 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: no PROCEDURE DIVISION
+./run_misc.at:14268: exit code was 2, expected 0
+845. run_misc.at:14218: 845. libcob version check (run_misc.at:14218): FAILED (run_misc.at:14268)

@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+415. syn_move.at:495: testing invalid source for MOVE ...
+./syn_move.at:515: $COMPILE_ONLY prog.cob
+stderr:
+./syn_move.at:515: exit code was 0, expected 1
+415. syn_move.at:495: 415. invalid source for MOVE (syn_move.at:495): FAILED (syn_move.at:515)

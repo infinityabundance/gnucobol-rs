@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+292. syn_misc.at:2092: testing ACUCOBOL WINDOW statements ...
+./syn_misc.at:2146: $COMPILE_ONLY -std=acu-strict prog.cob
+stderr:
+./syn_misc.at:2146: exit code was 0, expected 1
+292. syn_misc.at:2092: 292. ACUCOBOL WINDOW statements (syn_misc.at:2092): FAILED (syn_misc.at:2146)

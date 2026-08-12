@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+265. syn_misc.at:857: testing INSPECT multiple BEFORE/AFTER clauses ...
+./syn_misc.at:874: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:874: exit code was 0, expected 1
+265. syn_misc.at:857: 265. INSPECT multiple BEFORE/AFTER clauses (syn_misc.at:857): FAILED (syn_misc.at:874)

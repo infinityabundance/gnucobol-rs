@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+572. run_fundamental.at:3638: testing Numeric operations (4) BINARY ...
+./run_fundamental.at:3867: $COMPILE -Wno-truncate prog.cob
+./run_fundamental.at:3868: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/572/stderr	2026-08-12 19:19:00.628728697 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number REPLACE
+./run_fundamental.at:3868: exit code was 2, expected 0
+572. run_fundamental.at:3638: 572. Numeric operations (4) BINARY (run_fundamental.at:3638): FAILED (run_fundamental.at:3868)

@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+351. syn_misc.at:4835: testing CONSTANT LENGTH / BYTE-LENGTH ...
+./syn_misc.at:4855: $COMPILE_ONLY prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/351/stderr	2026-08-12 19:19:36.927759502 +0000
+@@ -0,0 +1 @@
++cobc-rs: unsupported: no PROCEDURE DIVISION
+./syn_misc.at:4855: exit code was 1, expected 0
+351. syn_misc.at:4835: 351. CONSTANT LENGTH / BYTE-LENGTH (syn_misc.at:4835): FAILED (syn_misc.at:4855)

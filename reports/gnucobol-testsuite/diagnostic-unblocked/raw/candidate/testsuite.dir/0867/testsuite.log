@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+867. run_file.at:1112: testing ASSIGN DYNAMIC with BASED data item ...
+./run_file.at:1180: $COMPILE prog.cob
+./run_file.at:1181: $COBCRUN_DIRECT ./prog X
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/867/stderr	2026-08-12 19:19:00.886409584 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: verb CHAINING
+./run_file.at:1181: exit code was 2, expected 0
+867. run_file.at:1112: 867. ASSIGN DYNAMIC with BASED data item (run_file.at:1112): FAILED (run_file.at:1181)

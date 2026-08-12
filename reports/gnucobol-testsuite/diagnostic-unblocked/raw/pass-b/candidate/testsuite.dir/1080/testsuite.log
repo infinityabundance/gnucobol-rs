@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1080. run_functions.at:3237: testing FUNCTION SUBSTITUTE ...
+./run_functions.at:3258: $COMPILE prog.cob
+./run_functions.at:3259: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1080/stderr	2026-08-12 19:19:37.618718998 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: FUNCTION
+./run_functions.at:3259: exit code was 2, expected 0
+1080. run_functions.at:3237: 1080. FUNCTION SUBSTITUTE (run_functions.at:3237): FAILED (run_functions.at:3259)

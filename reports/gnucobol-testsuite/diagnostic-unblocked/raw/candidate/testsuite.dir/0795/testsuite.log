@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+795. run_misc.at:7060: testing POINTER ...
+./run_misc.at:7090: $COMPILE prog.cob
+./run_misc.at:7091: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/795/stderr	2026-08-12 19:19:00.825726588 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: SET ADDRESS UP/DOWN BY: not a numeric index
+./run_misc.at:7091: exit code was 2, expected 0
+795. run_misc.at:7060: 795. POINTER (run_misc.at:7060): FAILED (run_misc.at:7091)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1148. run_extensions.at:2357: testing PROCEDURE DIVISION CHAINING ...
+./run_extensions.at:2454: $COMPILE prog.cob
+./run_extensions.at:2455: $COBCRUN_DIRECT ./prog X ABCD
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1148/stderr	2026-08-12 19:19:37.713004705 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: verb CHAINING
+./run_extensions.at:2455: exit code was 2, expected 0
+1148. run_extensions.at:2357: 1148. PROCEDURE DIVISION CHAINING (run_extensions.at:2357): FAILED (run_extensions.at:2455)

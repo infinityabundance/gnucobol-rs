@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+797. run_misc.at:7166: testing ON EXCEPTION clause of DISPLAY ...
+./run_misc.at:7169: test "$COB_HAS_CURSES" = "yes" || exit 77
+./run_misc.at:7185: $COMPILE prog.cob
+./run_misc.at:7186: COB_EXIT_WAIT=0 $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/797/stderr	2026-08-12 19:19:37.279721640 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: AT
+stdout:
+./run_misc.at:7186: exit code was 2, expected 0
+797. run_misc.at:7166: 797. ON EXCEPTION clause of DISPLAY (run_misc.at:7166): FAILED (run_misc.at:7186)

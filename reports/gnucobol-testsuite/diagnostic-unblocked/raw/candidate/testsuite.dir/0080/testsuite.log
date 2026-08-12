@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+80. syn_definition.at:185: testing Undefined data name in group ...
+./syn_definition.at:201: $COMPILE_ONLY prog.cob
+stderr:
+./syn_definition.at:201: exit code was 0, expected 1
+80. syn_definition.at:185: 80. Undefined data name in group (syn_definition.at:185): FAILED (syn_definition.at:201)

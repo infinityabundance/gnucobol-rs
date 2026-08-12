@@ -1,0 +1,35 @@
+#                             -*- compilation -*-
+479. listings.at:268: testing COPY replacement with partial match ...
+./listings.at:288: $COMPILE_LISTING0 -t- prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/479/stderr	2026-08-12 19:19:37.009811233 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-12 19:19:37.010939226 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/479/stdout	2026-08-12 19:19:37.010371778 +0000
+@@ -1,23 +1 @@
+-GnuCOBOL V.R.P               prog.cob
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000001
+-000002         IDENTIFICATION   DIVISION.
+-000003         PROGRAM-ID.      prog.
+-000004         DATA             DIVISION.
+-000005         WORKING-STORAGE  SECTION.
+-000006         01 GET-VALUE.
+-000007         COPY "copy.inc" REPLACING ==TEST-VAR==     BY ==TEST-AVR==
+-000008                                   == 02 TEST-EE == BY == 02 TEST-FF ==.
+-000001C
+-000002C        02 TEST-AVR PIC X(2) VALUE "OK".
+-000003C        02 TEST-CC PIC X(4) VALUE "OK 2".
+-000009         PROCEDURE DIVISION.
+-000010             DISPLAY TEST-AVR.
+-000011             STOP RUN.
+-
+-
+-0 warnings in compilation group
+-0 errors in compilation group
+ 
+./listings.at:288: exit code was 1, expected 0
+479. listings.at:268: 479. COPY replacement with partial match (listings.at:268): FAILED (listings.at:288)

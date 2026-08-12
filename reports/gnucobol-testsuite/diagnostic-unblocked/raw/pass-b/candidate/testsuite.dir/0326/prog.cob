@@ -1,0 +1,13 @@
+
+       IDENTIFICATION  DIVISION.
+       PROGRAM-ID.     prog.
+       OPTIONS.
+           ENTRY-CONVENTION COBOL.
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       SPECIAL-NAMES.
+           CALL-CONVENTION 0 IS EXTERN.
+
+       PROCEDURE     DIVISION EXTERN.
+           CONTINUE
+           .

@@ -1,0 +1,19 @@
+#                             -*- compilation -*-
+14. used_binaries.at:500: testing cobcrun -M DSO entry argument ...
+./used_binaries.at:503: $COBCRUN -M "" nope
+./used_binaries.at:562: $COMPILE_MODULE callee.cob
+./used_binaries.at:563: $COMPILE_MODULE caller.cob
+./used_binaries.at:564: $COBCRUN -M ./caller inside again
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/14/stderr	2026-08-12 19:19:36.726342084 +0000
+@@ -0,0 +1 @@
++cobcrun: cannot find module inside
+--- -	2026-08-12 19:19:36.728509210 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/14/stdout	2026-08-12 19:19:36.727756086 +0000
+@@ -1,4 +1 @@
+-Aloha
+-World
+-again
+ 
+./used_binaries.at:564: exit code was 1, expected 0
+14. used_binaries.at:500: 14. cobcrun -M DSO entry argument (used_binaries.at:500): FAILED (used_binaries.at:564)

@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+1039. run_functions.at:2092: testing FUNCTION LOWEST-ALGEBRAIC ...
+./run_functions.at:2139: $COMPILE prog.cob
+./run_functions.at:2140: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1039/stdout	2026-08-12 19:19:37.547424511 +0000
+@@ -0,0 +1,3 @@
++Test 4 fail
++Test 5 fail
++Test 6 fail
+1039. run_functions.at:2092: 1039. FUNCTION LOWEST-ALGEBRAIC (run_functions.at:2092): FAILED (run_functions.at:2140)

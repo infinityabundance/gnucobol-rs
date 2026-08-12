@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+306. syn_misc.at:2626: testing NOT ON EXCEPTION phrases before ON EXCEPTION ...
+./syn_misc.at:2682: $COMPILE_ONLY -std=cobol85 prog.cob
+stderr:
+cobc-rs: unsupported: verb END-OF-PAGE
+./syn_misc.at:2684: $COMPILE_ONLY prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/306/stderr	2026-08-12 19:19:36.904906590 +0000
+@@ -0,0 +1 @@
++cobc-rs: unsupported: verb END-OF-PAGE
+./syn_misc.at:2684: exit code was 1, expected 0
+306. syn_misc.at:2626: 306. NOT ON EXCEPTION phrases before ON EXCEPTION (syn_misc.at:2626): FAILED (syn_misc.at:2684)

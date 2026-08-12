@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+63. syn_copy.at:622: testing COPY: fixed/free format ...
+./syn_copy.at:642: $COMPILE -free prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/63/stderr	2026-08-12 19:19:36.758064257 +0000
+@@ -0,0 +1 @@
++cobc-rs: COPY expansion failed (fail closed): malformed COPY statement
+./syn_copy.at:642: exit code was 1, expected 0
+63. syn_copy.at:622: 63. COPY: fixed/free format (syn_copy.at:622): FAILED (syn_copy.at:642)

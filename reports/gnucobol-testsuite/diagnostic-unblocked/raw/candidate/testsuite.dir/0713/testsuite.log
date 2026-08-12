@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+713. run_misc.at:1725: testing TRANSFORM statement ...
+./run_misc.at:1752: $COMPILE prog.cob
+./run_misc.at:1753: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/713/stderr	2026-08-12 19:19:00.754304863 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: MY-ASCII
+./run_misc.at:1753: exit code was 2, expected 0
+713. run_misc.at:1725: 713. TRANSFORM statement (run_misc.at:1725): FAILED (run_misc.at:1753)

@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+29. configuration.at:112: testing cobc with standard configuration file via -conf ...
+./configuration.at:126: $COMPILE_ONLY -conf=cobol2014.conf prog.cob
+stderr:
+cobc-rs: warning: cannot read dialect config "cobol2014.conf"; using -std/default
+./configuration.at:126: exit code was 0, expected 1
+29. configuration.at:112: 29. cobc with standard configuration file via -conf (configuration.at:112): FAILED (configuration.at:126)

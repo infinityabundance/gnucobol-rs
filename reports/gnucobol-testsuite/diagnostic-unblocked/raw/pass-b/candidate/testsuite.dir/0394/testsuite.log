@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+394. syn_misc.at:6984: testing AREACHECK / NOAREACHECK directives ...
+./syn_misc.at:7009: $COMPILE_ONLY -std=cobol85 prog.cob
+stderr:
+cobc-rs: unsupported: verb $SET
+./syn_misc.at:7011: $COMPILE_ONLY -std=cobol85 -frelax-syntax-checks prog.cob
+stderr:
+cobc-rs: -frelax-syntax-checks: unsupported option (rejected-unsupported; relaxed syntax checks: the candidate parser has one sealed strictness; reject honestly): 
+./syn_misc.at:7011: exit code was 1, expected 0
+394. syn_misc.at:6984: 394. AREACHECK / NOAREACHECK directives (syn_misc.at:6984): FAILED (syn_misc.at:7011)

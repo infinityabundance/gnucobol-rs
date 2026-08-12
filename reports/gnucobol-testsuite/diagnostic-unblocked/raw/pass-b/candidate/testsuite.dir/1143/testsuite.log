@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1143. run_extensions.at:2135: testing PROGRAM-ID AS clause ...
+./run_extensions.at:2152: $COMPILE prog.cob
+./run_extensions.at:2153: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1143/stderr	2026-08-12 19:19:37.703161796 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "prog": not a contained program (external CALL is a boundary)
+./run_extensions.at:2153: exit code was 2, expected 0
+1143. run_extensions.at:2135: 1143. PROGRAM-ID AS clause (run_extensions.at:2135): FAILED (run_extensions.at:2153)

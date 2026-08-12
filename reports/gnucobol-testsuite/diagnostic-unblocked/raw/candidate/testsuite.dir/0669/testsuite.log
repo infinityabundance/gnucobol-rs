@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+669. run_misc.at:23: testing Comma separator without space ...
+./run_misc.at:35: $COMPILE prog.cob
+./run_misc.at:36: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/669/stderr	2026-08-12 19:19:00.714727776 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: 1,1,1
+--- -	2026-08-12 19:19:00.717076251 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/669/stdout	2026-08-12 19:19:00.716533720 +0000
+@@ -1 +1 @@
+-111
++
+./run_misc.at:36: exit code was 2, expected 0
+669. run_misc.at:23: 669. Comma separator without space (run_misc.at:23): FAILED (run_misc.at:36)

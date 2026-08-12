@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1274. data_packed.at:1609: testing COMP-6 comparison ...
+./data_packed.at:1659: $COMPILE prog.cob
+./data_packed.at:1660: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1274/stderr	2026-08-12 19:19:01.374611304 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number REPLACE
+./data_packed.at:1660: exit code was 2, expected 0
+1274. data_packed.at:1609: 1274. COMP-6 comparison (data_packed.at:1609): FAILED (data_packed.at:1660)

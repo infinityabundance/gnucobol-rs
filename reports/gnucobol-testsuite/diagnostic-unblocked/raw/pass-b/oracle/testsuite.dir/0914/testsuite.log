@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+914. run_file.at:6357: testing INDEXED file with SHARING NO ...
+./run_file.at:6429: $COMPILE prog1.cob
+./run_file.at:6430: $COMPILE prog2.cob
+./run_file.at:6431: $COBCRUN_DIRECT ./prog1
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/914/stdout	2026-08-12 19:19:30.093413148 +0000
+@@ -0,0 +1 @@
++FAILED: 00
+914. run_file.at:6357: 914. INDEXED file with SHARING NO (run_file.at:6357): expected failure (run_file.at:6431)

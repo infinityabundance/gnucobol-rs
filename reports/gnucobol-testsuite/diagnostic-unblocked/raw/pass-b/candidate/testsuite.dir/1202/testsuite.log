@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+1202. run_extensions.at:5289: testing Binary COMP-1 (2) ...
+./run_extensions.at:5313: $COMPILE -DBINARY-COMP-1 prog.cob
+./run_extensions.at:5314: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:37.770893712 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1202/stdout	2026-08-12 19:19:37.769929735 +0000
+@@ -1,2 +1,2 @@
+-3.0
++3.5
+ 
+1202. run_extensions.at:5289: 1202. Binary COMP-1 (2) (run_extensions.at:5289): FAILED (run_extensions.at:5314)

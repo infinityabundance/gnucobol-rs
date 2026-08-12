@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+131. syn_definition.at:1845: testing SAME AS clause ...
+./syn_definition.at:1891: $COMPILE_ONLY prog.cob
+./syn_definition.at:1892: $COMPILE_ONLY -std=mf-strict prog.cob
+stderr:
+./syn_definition.at:1892: exit code was 0, expected 1
+131. syn_definition.at:1845: 131. SAME AS clause (syn_definition.at:1845): FAILED (syn_definition.at:1892)

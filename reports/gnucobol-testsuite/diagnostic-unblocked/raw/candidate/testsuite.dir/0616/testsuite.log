@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+616. run_fundamental.at:6786: testing MOVE with de-editting to DECIMAL IS COMMA ...
+./run_fundamental.at:6838: $COMPILE prog.cob
+./run_fundamental.at:6839: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/616/stderr	2026-08-12 19:19:00.666245492 +0000
+@@ -0,0 +1 @@
++cobrun: runtime error: UnsupportedSymbol('(')
+./run_fundamental.at:6839: exit code was 2, expected 0
+616. run_fundamental.at:6786: 616. MOVE with de-editting to DECIMAL IS COMMA (run_fundamental.at:6786): FAILED (run_fundamental.at:6839)

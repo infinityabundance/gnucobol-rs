@@ -1,0 +1,165 @@
+
+
+******************     THIS PAGE INTENTIONALLY LEFT BLANK     ******************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PAGE: 0001                         LC: 000000                       DATE: 150206
+000001
+000002 IDENTIFICATION DIVISION.
+000003 PROGRAM-ID. prog.
+000004 ENVIRONMENT DIVISION.
+000005 INPUT-OUTPUT SECTION.
+000006 FILE-CONTROL.
+000007     select optional data-file assign to 'prog.cob'
+000008         organization is line sequential
+000009         file status is data-file-status.
+000010     select mini-report assign to "mini-report".
+000011
+000012 DATA DIVISION.
+000013 FILE SECTION.
+000014 FD  data-file.
+
+
+
+
+
+PAGE: 0002                         LC: 000015                       DATE: 150206
+000001 01  data-record.
+000002     88 endofdata        value high-values.
+000003     02 data-line        pic x(80).
+000004 FD  mini-report
+000005     linage is 16 lines
+000006         with footing at 15
+000007         lines at top 2
+000008         lines at bottom 2.
+000009 01  report-line         pic x(80).
+000010
+000011 WORKING-STORAGE SECTION.
+000012 01  command-arguments   pic x(1024).
+000013 01  file-name           pic x(160).
+000014 01  data-file-status    pic xx.
+
+
+
+
+
+PAGE: 0003                         LC: 000015                       DATE: 150206
+000001 01  lc                  pic 99.
+000002 01  report-line-blank.
+000003     02 filler           pic x(18) value all "*".
+000004     02 filler           pic x(05) value spaces.
+000005     02 filler           pic x(34)
+000006         VALUE "THIS PAGE INTENTIONALLY LEFT BLANK".
+000007     02 filler           pic x(05) value spaces.
+000008     02 filler           pic x(18) value all "*".
+000009 01  report-line-data.
+000010     02 body-tag         pic 9(6).
+000011     02 line-3           pic x(74).
+000012 01  report-line-header.
+000013     02 filler           pic x(6) VALUE "PAGE: ".
+000014     02 page-no          pic 9999.
+
+
+
+
+
+PAGE: 0004                         LC: 000015                       DATE: 150206
+000001     02 filler           pic x(24).
+000002     02 filler           pic x(5) VALUE " LC: ".
+000003     02 header-tag       pic 9(6).
+000004     02 filler           pic x(23).
+000005     02 filler           pic x(6) VALUE "DATE: ".
+000006     02 page-date        pic x(6).
+000007
+000008 01  page-count          pic 9999.
+000009
+000010 PROCEDURE DIVISION.
+000011 main.
+000012     open input data-file.
+000013     read data-file
+000014         at end
+
+
+
+
+
+PAGE: 0005                         LC: 000015                       DATE: 150206
+000001             display "File open error: " data-file-status
+000002             stop run
+000003     end-read.
+000004
+000005     open output mini-report.
+000006
+000007     write report-line
+000008         from report-line-blank
+000009     end-write.
+000010
+000011     move 1 to page-count.
+000012     accept page-date from date end-accept.
+000013     move page-count to page-no.
+000014     write report-line
+
+
+
+
+
+PAGE: 0006                         LC: 000015                       DATE: 150206
+000001         from report-line-header
+000002         after advancing page
+000003     end-write.
+000004
+000005     perform readwrite-loop until endofdata.
+000006
+000007     display
+000008         "Normal termination, ending status: "
+000009         data-file-status
+000010     close mini-report.
+000011
+000012     close data-file.
+000013     stop run.
+000014
+
+
+
+
+
+PAGE: 0007                         LC: 000015                       DATE: 150206
+000001****************************************************************
+000002 readwrite-loop.
+000003     move data-record to report-line-data
+000004     move linage-counter to body-tag
+000005     write report-line from report-line-data
+000006         end-of-page
+000007             add 1 to page-count end-add
+000008             move page-count to page-no
+000009             move linage-counter to header-tag
+000010             write report-line from report-line-header
+000011                 after advancing page
+000012             end-write
+000013     end-write
+000014     read data-file
+
+
+
+
+
+PAGE: 0008                         LC: 000015                       DATE: 150206
+000001         at end set endofdata to true
+000002     end-read
+000003     .

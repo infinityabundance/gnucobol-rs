@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+398. syn_misc.at:7122: testing AREACHECK ...
+./syn_misc.at:7148: $COMPILE_ONLY -std=mvs pgm1.cob
+stderr:
+./syn_misc.at:7151: $COMPILE_ONLY -std=mvs-strict pgm1.cob
+stderr:
+./syn_misc.at:7151: exit code was 0, expected 1
+398. syn_misc.at:7122: 398. AREACHECK (syn_misc.at:7122): FAILED (syn_misc.at:7151)

@@ -1,0 +1,13 @@
+
+#include <stdio.h>
+
+#include <libcob.h>
+COB_EXT_EXPORT int
+test_stdio(FILE *si, FILE *so, FILE *se)
+{
+    if (feof(si)) {
+        fprintf(se, "BAD STDIN EOF\n");
+    }
+    fprintf(so, "OUT");
+    return fprintf(se, "ERR");
+}

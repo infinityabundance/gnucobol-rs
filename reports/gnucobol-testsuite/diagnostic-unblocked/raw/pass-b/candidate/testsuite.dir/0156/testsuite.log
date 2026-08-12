@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+156. syn_redefines.at:28: testing REDEFINES: not following entry-name ...
+./syn_redefines.at:40: $COMPILE_ONLY -ffree-redefines-position=error prog.cob
+stderr:
+cobc-rs: -ffree-redefines-position=error: unsupported option (rejected-unsupported; free-format REDEFINES position rules: reject honestly): error
+./syn_redefines.at:43: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: unsupported: no PROCEDURE DIVISION
+./syn_redefines.at:43: exit code was 1, expected 0
+156. syn_redefines.at:28: 156. REDEFINES: not following entry-name (syn_redefines.at:28): FAILED (syn_redefines.at:43)

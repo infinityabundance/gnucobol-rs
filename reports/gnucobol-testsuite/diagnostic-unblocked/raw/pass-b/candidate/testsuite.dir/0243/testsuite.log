@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+243. syn_refmod.at:53: testing invalid reference-modification ...
+./syn_refmod.at:69: $COMPILE prog.cob
+stderr:
+./syn_refmod.at:69: exit code was 0, expected 1
+243. syn_refmod.at:53: 243. invalid reference-modification (syn_refmod.at:53): FAILED (syn_refmod.at:69)

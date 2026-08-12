@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+252. syn_misc.at:429: testing Invalid conditional expression (2) ...
+./syn_misc.at:483: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:483: exit code was 0, expected 1
+252. syn_misc.at:429: 252. Invalid conditional expression (2) (syn_misc.at:429): FAILED (syn_misc.at:483)

@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1231. run_ml.at:868: testing JSON dpc-in-data config option ...
+./run_ml.at:893: $COMPILE -fdpc-in-data=none prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1231/stderr	2026-08-12 19:19:37.805291867 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fdpc-in-data=none: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): none
+./run_ml.at:893: exit code was 1, expected 0
+1231. run_ml.at:868: 1231. JSON dpc-in-data config option (run_ml.at:868): FAILED (run_ml.at:893)

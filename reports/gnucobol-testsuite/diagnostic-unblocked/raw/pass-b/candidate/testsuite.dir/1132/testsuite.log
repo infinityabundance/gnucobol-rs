@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+1132. run_extensions.at:1463: testing DEPENDING ON with ODOSLIDE for IBM ...
+./run_extensions.at:1556: $COBC -x -std=ibm prog.cob
+./run_extensions.at:1558: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1132/stderr	2026-08-12 19:19:37.690331755 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: L1-3-2(1,
+--- -	2026-08-12 19:19:37.692536388 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1132/stdout	2026-08-12 19:19:37.691331744 +0000
+@@ -1,5 +1 @@
+-Length is +0000000222 with 03, 04, 00, 06, 01
+-"01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567.901234567890123456789012345+++901234567890123456789--2345678901234567890123456789012345678901234567890123456789012345678901"
+-Length is +0000000134 with 02, 03, 01, 04, 00
+-"012345678901234567890123456789012345678901234567890123456789012345678901234567.901+++567--01234567890123456789012345678901234567890123"
+ 
+./run_extensions.at:1558: exit code was 2, expected 0
+1132. run_extensions.at:1463: 1132. DEPENDING ON with ODOSLIDE for IBM (run_extensions.at:1463): FAILED (run_extensions.at:1558)

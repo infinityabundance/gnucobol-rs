@@ -1,0 +1,46 @@
+#                             -*- compilation -*-
+485. listings.at:931: testing COPY TRAILING replacement ...
+./listings.at:956: $COMPILE_LISTING0 -t- -ftsymbols prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/485/stderr	2026-08-12 19:19:37.014155051 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-12 19:19:37.015390634 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/485/stdout	2026-08-12 19:19:37.014786578 +0000
+@@ -1,34 +1 @@
+-GnuCOBOL V.R.P               prog.cob
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000001
+-000002         IDENTIFICATION   DIVISION.
+-000003         PROGRAM-ID.      prog.
+-000004         DATA             DIVISION.
+-000005         WORKING-STORAGE  SECTION.
+-000006         COPY "copy.inc"
+-000007              REPLACING TRAILING ==FIRST== BY ==VAR1==
+-000008                        TRAILING ==SECOND== BY ==VAR2==.
+-000001C
+-000002C        01 TEST-VAR1 PIC X(2) VALUE "OK".
+-000003C        01 TEST-VAR2 PIC X(2) VALUE "OK".
+-000009         PROCEDURE        DIVISION.
+-000010             DISPLAY TEST-VAR1 NO ADVANCING
+-000011             END-DISPLAY.
+-000012             DISPLAY TEST-VAR2 NO ADVANCING
+-000013             END-DISPLAY.
+-000014             STOP RUN.
+-
+-SIZE  TYPE           LVL  NAME                           PICTURE
+-
+-      WORKING-STORAGE SECTION
+-
+-00002 ALPHANUMERIC   01   TEST-VAR1                      X(2)
+-
+-00002 ALPHANUMERIC   01   TEST-VAR2                      X(2)
+-
+-
+-0 warnings in compilation group
+-0 errors in compilation group
+ 
+./listings.at:956: exit code was 1, expected 0
+485. listings.at:931: 485. COPY TRAILING replacement (listings.at:931): FAILED (listings.at:956)

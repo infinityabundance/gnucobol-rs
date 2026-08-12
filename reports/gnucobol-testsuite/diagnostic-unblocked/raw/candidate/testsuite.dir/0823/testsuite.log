@@ -1,0 +1,24 @@
+#                             -*- compilation -*-
+823. run_misc.at:12324: testing ZERO unsigned and negative binary subscript ...
+./run_misc.at:12378: $COMPILE prog.cob
+./run_misc.at:12379: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:00.847236397 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/823/stderr	2026-08-12 19:19:00.846662477 +0000
+@@ -1,2 +1 @@
+-libcob: prog.cob:26: error: subscript of 'TSTY' out of bounds: 0
+ 
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/823/stdout	2026-08-12 19:19:00.846662477 +0000
+@@ -0,0 +1,10 @@
++UNUP: 00000000 is :    :
++SNUP: +00000000 is :    :
++SBIN: +00000000 is :    :
++SBIN: -00000001 is :    :
++SBIN: -00000001 is :    :
++UBIN: 00000000 is :    :
++UBIN: 00000001 is :1111:
++UCHR: 000 is :    :
++SCHR: -001 is :    :
++UCHR: 129 is :zzz :
+./run_misc.at:12379: exit code was 0, expected 1
+823. run_misc.at:12324: 823. ZERO unsigned and negative binary subscript (run_misc.at:12324): FAILED (run_misc.at:12379)

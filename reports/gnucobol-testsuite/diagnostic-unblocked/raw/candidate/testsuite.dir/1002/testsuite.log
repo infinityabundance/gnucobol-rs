@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1002. run_functions.at:738: testing FUNCTION CURRENT-DATE ...
+./run_functions.at:803: $COMPILE prog.cob
+./run_functions.at:804: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1002/stderr	2026-08-12 19:19:01.012724586 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: FUNCTION
+./run_functions.at:804: exit code was 2, expected 0
+1002. run_functions.at:738: 1002. FUNCTION CURRENT-DATE (run_functions.at:738): FAILED (run_functions.at:804)

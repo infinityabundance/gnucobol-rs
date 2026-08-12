@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+995. run_functions.at:358: testing FUNCTION BIT-OF and BIT-TO-CHAR ...
+./run_functions.at:409: $COMPILE prog.cob
+./run_functions.at:410: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/995/stderr	2026-08-12 19:19:37.473694163 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: MOVE ALL: expected a non-empty literal or figurative
+./run_functions.at:410: exit code was 2, expected 0
+995. run_functions.at:358: 995. FUNCTION BIT-OF and BIT-TO-CHAR (run_functions.at:358): FAILED (run_functions.at:410)

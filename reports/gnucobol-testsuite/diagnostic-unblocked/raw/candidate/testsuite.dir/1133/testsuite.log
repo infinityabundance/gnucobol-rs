@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1133. run_extensions.at:1568: testing INITIALIZE level 01 OCCURS ...
+./run_extensions.at:1619: $COMPILE prog.cob
+./run_extensions.at:1620: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1133/stderr	2026-08-12 19:19:01.210722466 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: DEFAULT
+./run_extensions.at:1620: exit code was 2, expected 0
+1133. run_extensions.at:1568: 1133. INITIALIZE level 01 OCCURS (run_extensions.at:1568): FAILED (run_extensions.at:1620)

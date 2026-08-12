@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+877. run_file.at:3108: testing START RELATIVE (1) ...
+./run_file.at:3151: $COMPILE prog.cob
+./run_file.at:3152: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/877/stderr	2026-08-12 19:19:00.894725849 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: DELETE: `FILE` is not a declared file
+./run_file.at:3152: exit code was 2, expected 0
+877. run_file.at:3108: 877. START RELATIVE (1) (run_file.at:3108): FAILED (run_file.at:3152)

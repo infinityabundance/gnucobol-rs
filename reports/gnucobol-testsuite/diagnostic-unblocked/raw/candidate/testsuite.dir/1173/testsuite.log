@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1173. run_extensions.at:3490: testing System routine CBL_NOR ...
+./run_extensions.at:3511: $COMPILE prog.cob
+./run_extensions.at:3512: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1173/stderr	2026-08-12 19:19:01.259721942 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: X
+./run_extensions.at:3512: exit code was 2, expected 0
+1173. run_extensions.at:3490: 1173. System routine CBL_NOR (run_extensions.at:3490): FAILED (run_extensions.at:3512)

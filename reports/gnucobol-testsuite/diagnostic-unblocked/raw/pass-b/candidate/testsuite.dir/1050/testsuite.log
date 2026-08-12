@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1050. run_functions.at:2400: testing FUNCTION MODULE-ID ...
+./run_functions.at:2415: $COMPILE prog.cob
+./run_functions.at:2416: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:37.572502341 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1050/stdout	2026-08-12 19:19:37.571373988 +0000
+@@ -1 +1 @@
+-prog
++PROG
+1050. run_functions.at:2400: 1050. FUNCTION MODULE-ID (run_functions.at:2400): FAILED (run_functions.at:2416)

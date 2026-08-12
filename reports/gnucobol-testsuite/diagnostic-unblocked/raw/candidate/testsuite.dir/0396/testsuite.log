@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+396. syn_misc.at:7050: testing optional dots ...
+./syn_misc.at:7068: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: unsupported: verb P
+./syn_misc.at:7068: exit code was 1, expected 0
+396. syn_misc.at:7050: 396. optional dots (syn_misc.at:7050): FAILED (syn_misc.at:7068)

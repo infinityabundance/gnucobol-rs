@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+969. run_reportwriter.at:3559: testing Sample Control Break ...
+./run_reportwriter.at:3700: $COMPILE prog.cob
+./run_reportwriter.at:3702: DD_STUDREC="./inp_data" DD_REPORT3="./report.txt" $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/969/stderr	2026-08-12 19:19:37.445744489 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: OPEN: `OUTPUT` is not a declared file
+./run_reportwriter.at:3702: exit code was 2, expected 0
+969. run_reportwriter.at:3559: 969. Sample Control Break (run_reportwriter.at:3559): FAILED (run_reportwriter.at:3702)

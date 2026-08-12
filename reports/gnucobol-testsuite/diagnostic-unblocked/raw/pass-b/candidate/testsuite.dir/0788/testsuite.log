@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+788. run_misc.at:5403: testing SYMBOLIC clause ...
+./run_misc.at:5430: $COMPILE prog.cob
+./run_misc.at:5431: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/788/stderr	2026-08-12 19:19:37.269945775 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: Z-ASC
+./run_misc.at:5431: exit code was 2, expected 0
+788. run_misc.at:5403: 788. SYMBOLIC clause (run_misc.at:5403): FAILED (run_misc.at:5431)

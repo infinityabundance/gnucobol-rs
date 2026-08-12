@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+84. syn_definition.at:308: testing Same paragraphs in different sections ...
+./syn_definition.at:341: $COMPILE_ONLY prog.cob
+./syn_definition.at:342: $COMPILE_ONLY prog2.cob
+stderr:
+./syn_definition.at:342: exit code was 0, expected 1
+84. syn_definition.at:308: 84. Same paragraphs in different sections (syn_definition.at:308): FAILED (syn_definition.at:342)

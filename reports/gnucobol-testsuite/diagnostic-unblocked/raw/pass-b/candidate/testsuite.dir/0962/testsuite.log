@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+962. run_reportwriter.at:1128: testing Sample Charge Report 2 ...
+./run_reportwriter.at:1353: $COMPILE prog.cob
+./run_reportwriter.at:1355: DD_DATAIN="./inp_data" DD_SYSPRINT="./report.txt" $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/962/stderr	2026-08-12 19:19:37.437534374 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: OPEN: `TRANSACTION-DATA,` is not a declared file
+./run_reportwriter.at:1355: exit code was 2, expected 0
+962. run_reportwriter.at:1128: 962. Sample Charge Report 2 (run_reportwriter.at:1128): FAILED (run_reportwriter.at:1355)

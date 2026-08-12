@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1093. run_functions.at:3856: testing FUNCTION TEST-NUMVAL-C ...
+./run_functions.at:3950: $COMPILE prog.cob
+./run_functions.at:3951: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1093/stdout	2026-08-12 19:19:37.640332291 +0000
+@@ -0,0 +1,2 @@
++Test 19 fail: +0000000003
++Test 20 fail: +0000000003
+1093. run_functions.at:3856: 1093. FUNCTION TEST-NUMVAL-C (run_functions.at:3856): FAILED (run_functions.at:3951)

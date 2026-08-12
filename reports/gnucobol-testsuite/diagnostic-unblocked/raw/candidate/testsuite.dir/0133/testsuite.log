@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+133. syn_definition.at:2220: testing LIKE clause ...
+./syn_definition.at:2266: $COMPILE_ONLY prog.cob
+./syn_definition.at:2267: $COMPILE_ONLY -std=mf-strict prog.cob
+stderr:
+./syn_definition.at:2267: exit code was 0, expected 1
+133. syn_definition.at:2220: 133. LIKE clause (syn_definition.at:2220): expected failure (syn_definition.at:2267)

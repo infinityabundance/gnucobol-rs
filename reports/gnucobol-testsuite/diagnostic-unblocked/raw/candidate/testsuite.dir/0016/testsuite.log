@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+16. used_binaries.at:625: testing cobcrun -M directory/dso alternate ...
+./used_binaries.at:666: $COMPILE_MODULE callee.cob
+./used_binaries.at:667: $COMPILE_MODULE caller.cob
+./used_binaries.at:668: $COBCRUN -M ./caller inside
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/16/stderr	2026-08-12 19:19:00.224733022 +0000
+@@ -0,0 +1 @@
++cobcrun: cannot find module inside
+--- -	2026-08-12 19:19:00.225979114 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/16/stdout	2026-08-12 19:19:00.224733022 +0000
+@@ -1,3 +1 @@
+-Aloha
+-World
+ 
+./used_binaries.at:668: exit code was 1, expected 0
+16. used_binaries.at:625: 16. cobcrun -M directory/dso alternate (used_binaries.at:625): FAILED (used_binaries.at:668)

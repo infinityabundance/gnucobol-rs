@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+397. syn_misc.at:7092: testing optional dots before PROCEDURE DIVISION ...
+./syn_misc.at:7112: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:7112: exit code was 0, expected 1
+397. syn_misc.at:7092: 397. optional dots before PROCEDURE DIVISION (syn_misc.at:7092): FAILED (syn_misc.at:7112)

@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+654. run_accept.at:367: testing ACCEPT OMITTED (SCREEN) ...
+./run_accept.at:370: test "$COB_HAS_CURSES" = "yes" || exit 77
+./run_accept.at:389: $COMPILE prog.cob
+./run_accept.at:390: $COBCRUN_DIRECT ./prog < input.txt
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/654/stderr	2026-08-12 19:19:00.699727937 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: ACCEPT FROM terminal/console: interactive input is a runtime non-claim (no deterministic oracle); the wired sources are DATE/DAY/TIME/DAY-OF-WEEK/ENVIRONMENT
+stdout:
+./run_accept.at:390: exit code was 2, expected 0
+654. run_accept.at:367: 654. ACCEPT OMITTED (SCREEN) (run_accept.at:367): FAILED (run_accept.at:390)

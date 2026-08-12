@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+388. syn_misc.at:6690: testing CONTROL DIVISION ...
+./syn_misc.at:6699: $COMPILE_ONLY -fcontrol-division=ok empty.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/388/stderr	2026-08-12 19:19:00.476424837 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fcontrol-division=ok: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ok
+./syn_misc.at:6699: exit code was 1, expected 0
+388. syn_misc.at:6690: 388. CONTROL DIVISION (syn_misc.at:6690): FAILED (syn_misc.at:6699)

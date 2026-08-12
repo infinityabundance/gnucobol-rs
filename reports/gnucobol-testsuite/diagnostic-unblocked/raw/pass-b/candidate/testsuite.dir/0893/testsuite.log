@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+893. run_file.at:4306: testing LINE SEQUENTIAL WRITE AFTER ...
+./run_file.at:4339: $COMPILE prog.cob
+./run_file.at:4340: $COBCRUN_DIRECT ./prog
+./run_file.at:4341: cat TEST-FILE
+--- -	2026-08-12 19:19:37.370901116 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/893/stdout	2026-08-12 19:19:37.370386828 +0000
+@@ -1,6 +1,5 @@
+ a
+-
+-ababc
+-
++ab
++abc
+ abcd
+ 
+893. run_file.at:4306: 893. LINE SEQUENTIAL WRITE AFTER (run_file.at:4306): FAILED (run_file.at:4341)

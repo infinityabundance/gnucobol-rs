@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+184. syn_value.at:375: testing Alphanumeric-edited item ...
+./syn_value.at:391: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: unsupported: PIC BXX: UnsupportedSymbol('X')
+./syn_value.at:391: exit code was 1, expected 0
+184. syn_value.at:375: 184. Alphanumeric-edited item (syn_value.at:375): FAILED (syn_value.at:391)

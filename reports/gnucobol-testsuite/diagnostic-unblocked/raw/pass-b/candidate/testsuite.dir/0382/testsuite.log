@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+382. syn_misc.at:6111: testing conditional directives with lvl 78 (2) ...
+./syn_misc.at:6153: $COMPILE_ONLY prog.cob
+--- -	2026-08-12 19:19:36.949800130 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/382/stdout	2026-08-12 19:19:36.948813110 +0000
+@@ -1,4 +1 @@
+-correct Y = Y2
+-correct Y < X
+-correct X > Y
+ 
+382. syn_misc.at:6111: 382. conditional directives with lvl 78 (2) (syn_misc.at:6111): expected failure (syn_misc.at:6153)

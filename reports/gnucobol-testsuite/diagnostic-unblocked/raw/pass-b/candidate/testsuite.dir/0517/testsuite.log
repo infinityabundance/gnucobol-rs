@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+517. run_fundamental.at:296: testing MOVE to edited item (2) ...
+./run_fundamental.at:333: $COMPILE prog.cob
+./run_fundamental.at:334: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:37.040675670 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/517/stdout	2026-08-12 19:19:37.038338741 +0000
+@@ -1,6 +1,6 @@
+->0000 <
+->0000+<
+->     <
+->0000  <
++>0000-<
++>0000-<
++>    -<
++>0000DB<
+ >0001DB<
+ 
+517. run_fundamental.at:296: 517. MOVE to edited item (2) (run_fundamental.at:296): FAILED (run_fundamental.at:334)

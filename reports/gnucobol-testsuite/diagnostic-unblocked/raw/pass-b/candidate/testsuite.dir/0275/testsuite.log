@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+275. syn_misc.at:1387: testing missing mnemonic-name declaration ...
+./syn_misc.at:1401: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:1401: exit code was 0, expected 1
+275. syn_misc.at:1387: 275. missing mnemonic-name declaration (syn_misc.at:1387): FAILED (syn_misc.at:1401)

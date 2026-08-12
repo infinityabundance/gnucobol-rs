@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+2. used_binaries.at:51: testing compiler warnings ...
+./used_binaries.at:69: $COBC -fsyntax-only prog.cob
+./used_binaries.at:71: $COBC -fsyntax-only -fdiagnostics-plain-output -Wadditional prog.cob
+stderr:
+./used_binaries.at:73: $COBC -fsyntax-only -fdiagnostics-plain-output -fno-diagnostics-show-option -Wadditional prog.cob
+stderr:
+./used_binaries.at:76: $COBC -fsyntax-only -fdiagnostics-plain-output -Wall prog.cob
+stderr:
+./used_binaries.at:79: $COBC -fsyntax-only -fdiagnostics-plain-output -Wextra prog.cob
+stderr:
+./used_binaries.at:82: $COBC -fsyntax-only -fdiagnostics-plain-output -W prog.cob
+stderr:
+cobc-rs: -fsyntax-only needs a source file
+./used_binaries.at:82: exit code was 1, expected 0
+2. used_binaries.at:51: 2. compiler warnings (used_binaries.at:51): FAILED (used_binaries.at:82)

@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+576. run_fundamental.at:4458: testing Numeric operations (8) ...
+./run_fundamental.at:4498: $COMPILE prog.cob
+stderr:
+./run_fundamental.at:4500: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/576/stderr	2026-08-12 19:19:00.635786991 +0000
+@@ -0,0 +1 @@
++cobrun: runtime error: OutOfRange
+./run_fundamental.at:4500: exit code was 2, expected 0
+576. run_fundamental.at:4458: 576. Numeric operations (8) (run_fundamental.at:4458): FAILED (run_fundamental.at:4500)

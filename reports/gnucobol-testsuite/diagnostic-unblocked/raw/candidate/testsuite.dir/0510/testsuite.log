@@ -1,0 +1,55 @@
+#                             -*- compilation -*-
+510. listings.at:6910: testing Long concatenated literal ...
+./listings.at:6937: $COMPILE_LISTING0 -t- prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/510/stderr	2026-08-12 19:19:00.566144113 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-12 19:19:00.568299651 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/510/stdout	2026-08-12 19:19:00.566729360 +0000
+@@ -1,43 +1 @@
+-GnuCOBOL V.R.P               prog.cob
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000001
+-000002         >>SOURCE FORMAT IS FREE
+-000003  ID DIVISION.
+-000004  PROGRAM-ID. ED000MAIN IS INITIAL.
+-000005  DATA DIVISION.
+-000006  WORKING-STORAGE SECTION.
+-000007  01 WCOVER PIC X(1280) VALUE
+-000008        "          _________             _________________________________
+-000008+ ___            " &
+-000009        "          __  ____/__________  ___  ____/_  __ \__  __ )_  __ \__
+-000009+   /            " &
+-000010        "          _  / __ __  __ \  / / /  /    _  / / /_  __  |  / / /_
+-000010+  /             " &
+-000011        "          / /_/ / _  / / / /_/ // /___  / /_/ /_  /_/ // /_/ /_
+-000011+ /___           " &
+-000012        "          \____/  /_/ /_/\__,_/ \____/  \____/ /_____/ \____/ /__
+-000012+ ___/           " &
+-000013        "                           _________________________
+-000013+                " &
+-000014        "                           ___  ____/__  __ \__  __ \
+-000014+                " &
+-000015        "                           __  __/  __  /_/ /_  /_/ /
+-000015+                " &
+-000016        "                           _  /___  _  _, _/_  ____/
+-000016+                " &
+-000017        "                           /_____/  /_/ |_| /_/
+-000017+                " &
+-000018        "     /_/  |_|  .___/_  .___//_/  /_/  \___/ \__,_/ \__/ /_/  \___
+-000018+ _//_/ /_/      " &
+-000019        "    /_/     /_/
+-000019+                " &
+-000020        "1234567890123456789012".
+-000021  PROCEDURE DIVISION.
+-000022      EXIT.
+-
+-
+-0 warnings in compilation group
+-0 errors in compilation group
+ 
+./listings.at:6937: exit code was 1, expected 0
+510. listings.at:6910: 510. Long concatenated literal (listings.at:6910): FAILED (listings.at:6937)

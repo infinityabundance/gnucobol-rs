@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+308. syn_misc.at:2710: testing redundant periods ...
+./syn_misc.at:2733: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: COPY expansion failed (fail closed): copybook 'A' not found
+./syn_misc.at:2733: exit code was 1, expected 0
+308. syn_misc.at:2710: 308. redundant periods (syn_misc.at:2710): FAILED (syn_misc.at:2733)

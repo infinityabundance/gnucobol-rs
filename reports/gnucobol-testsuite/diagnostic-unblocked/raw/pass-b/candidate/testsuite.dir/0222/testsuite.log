@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+222. syn_file.at:1700: testing Undeclared ASSIGN variable ...
+./syn_file.at:1773: $COMPILE_ONLY -Wimplicit-define prog.cob
+--- -	2026-08-12 19:19:36.850125437 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/222/stderr	2026-08-12 19:19:36.849494481 +0000
+@@ -1,2 +1,2 @@
+-prog.cob:60: warning: variable 'GLOB-PATH' will be implicitly defined
++cobc-rs: unsupported: verb IDENTIFICATION
+ 
+./syn_file.at:1773: exit code was 1, expected 0
+222. syn_file.at:1700: 222. Undeclared ASSIGN variable (syn_file.at:1700): FAILED (syn_file.at:1773)

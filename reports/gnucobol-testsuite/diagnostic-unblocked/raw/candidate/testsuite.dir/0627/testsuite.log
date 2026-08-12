@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+627. run_subscripts.at:122: testing Subscript bounds with OCCURS DEPENDING ON (1) ...
+./run_subscripts.at:139: $COMPILE prog.cob
+./run_subscripts.at:140: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:00.676766947 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/627/stderr	2026-08-12 19:19:00.675728193 +0000
+@@ -1,3 +1 @@
+-libcob: prog.cob:10: error: subscript of 'X' out of bounds: 5
+-note: current maximum subscript for 'X': 4
+ 
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/627/stdout	2026-08-12 19:19:00.675728193 +0000
+@@ -0,0 +1 @@
++ 
+./run_subscripts.at:140: exit code was 0, expected 1
+627. run_subscripts.at:122: 627. Subscript bounds with OCCURS DEPENDING ON (1) (run_subscripts.at:122): FAILED (run_subscripts.at:140)

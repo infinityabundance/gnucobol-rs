@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+375. syn_misc.at:5854: testing SET CONSTANT directive ...
+./syn_misc.at:5927: $COMPILE_ONLY -std=mf prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/375/stderr	2026-08-12 19:19:00.466204004 +0000
+@@ -0,0 +1 @@
++cobc-rs: unsupported: unsupported level number $SET
+./syn_misc.at:5927: exit code was 1, expected 0
+375. syn_misc.at:5854: 375. SET CONSTANT directive (syn_misc.at:5854): FAILED (syn_misc.at:5927)

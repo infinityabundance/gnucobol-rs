@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+196. syn_file.at:479: testing OPEN SEQUENTIAL file REVERSED ...
+./syn_file.at:513: $COMPILE_ONLY prog.cob
+stderr:
+./syn_file.at:517: $COMPILE_ONLY -Werror=obsolete -fdiagnostics-show-option prog.cob
+stderr:
+./syn_file.at:517: exit code was 0, expected 1
+196. syn_file.at:479: 196. OPEN SEQUENTIAL file REVERSED (syn_file.at:479): FAILED (syn_file.at:517)

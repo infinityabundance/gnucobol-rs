@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+469. syn_literals.at:1196: testing ACUCOBOL literals ...
+./syn_literals.at:1217: $COMPILE_ONLY -std=acu prog.cob
+stderr:
+./syn_literals.at:1217: exit code was 0, expected 1
+469. syn_literals.at:1196: 469. ACUCOBOL literals (syn_literals.at:1196): FAILED (syn_literals.at:1217)

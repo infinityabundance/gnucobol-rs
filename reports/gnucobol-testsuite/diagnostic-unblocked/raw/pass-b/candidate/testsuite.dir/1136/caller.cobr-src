@@ -1,0 +1,45 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      caller.
+       PROCEDURE        DIVISION.
+           CALL "A@B"
+           END-CALL.
+           CALL "A#B"
+           END-CALL.
+           CALL "A-B"
+           END-CALL.
+           CALL "A_B"
+           END-CALL.
+           STOP RUN.
+
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      "A@B".
+       PROCEDURE        DIVISION.
+           DISPLAY "P1" NO ADVANCING
+           END-DISPLAY.
+           EXIT PROGRAM.
+
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      "A#B".
+       PROCEDURE        DIVISION.
+           DISPLAY "P2" NO ADVANCING
+           END-DISPLAY.
+           EXIT PROGRAM.
+
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      "A-B".
+       PROCEDURE        DIVISION.
+           DISPLAY "P3" NO ADVANCING
+           END-DISPLAY.
+           EXIT PROGRAM.
+
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      "A_B".
+       PROCEDURE        DIVISION.
+           DISPLAY "P4" NO ADVANCING
+           END-DISPLAY.
+           EXIT PROGRAM.

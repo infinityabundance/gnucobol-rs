@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+441. syn_set.at:24: testing SET ADDRESS OF item ...
+./syn_set.at:45: $COMPILE_ONLY prog.cob
+stderr:
+./syn_set.at:45: exit code was 0, expected 1
+441. syn_set.at:24: 441. SET ADDRESS OF item (syn_set.at:24): FAILED (syn_set.at:45)

@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+917. run_file.at:6604: testing INDEXED file with LOCK AUTOMATIC (1) ...
+./run_file.at:6687: $COMPILE prog1.cob
+./run_file.at:6688: $COMPILE prog2.cob
+./run_file.at:6689: $COBCRUN_DIRECT ./prog1
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/917/stderr	2026-08-12 19:19:00.930374884 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "SYSTEM": not a contained program (external CALL is a boundary)
+./run_file.at:6689: exit code was 2, expected 0
+917. run_file.at:6604: 917. INDEXED file with LOCK AUTOMATIC (1) (run_file.at:6604): expected failure (run_file.at:6689)

@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+139. syn_subscripts.at:88: testing Subscript bounds with OCCURS DEPENDING ON ...
+./syn_subscripts.at:105: $COMPILE_ONLY prog.cob
+stderr:
+./syn_subscripts.at:105: exit code was 0, expected 1
+139. syn_subscripts.at:88: 139. Subscript bounds with OCCURS DEPENDING ON (syn_subscripts.at:88): FAILED (syn_subscripts.at:105)

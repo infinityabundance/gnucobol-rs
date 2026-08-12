@@ -1,0 +1,43 @@
+#                             -*- compilation -*-
+875. run_file.at:2446: testing INDEXED sample ...
+./run_file.at:2773: $COMPILE prog.cob
+./run_file.at:2774: rm -f "indexed-file.*"
+./run_file.at:2775: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/875/stderr	2026-08-12 19:19:00.894725849 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: PIC 99X99: UnsupportedSymbol('X')
+--- -	2026-08-12 19:19:00.898074800 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/875/stdout	2026-08-12 19:19:00.897202945 +0000
+@@ -1,29 +1 @@
+-Read all 00b02 keys sequentially
+-Reading: 00b02
+-    12345679  00 b 02, some 12345679 data
+-    97654321  00 b 02, some 97654321 data
+-    12349765  00 b 02, some 12349765 data
+-    97651234  00 b 02, some 97651234 data
+------------------------------------------
+-Read all alternate keys greater than 00a02
+-Seeking >= 00a02
+-    12345679  00 b 02, some 12345679 data
+-    97654321  00 b 02, some 97654321 data
+-    12349765  00 b 02, some 12349765 data
+-    97651234  00 b 02, some 97651234 data
+-    12345689  00 c 13, some 12345689 data
+-    98654321  00 c 13, some 98654321 data
+-    12349865  00 c 13, some 12349865 data
+-    98651234  00 c 13, some 98651234 data
+------------------------------------------
+-Read all primary keys less than 87654321
+-Prime < 87654321
+-    87651234  00 a 01, some 87651234 data
+-    12349865  00 c 13, some 12349865 data
+-    12349765  00 b 02, some 12349765 data
+-    12348765  00 a 01, some 12348765 data
+-    12345689  00 c 13, some 12345689 data
+-    12345679  00 b 02, some 12345679 data
+-    12345678  00 a 01, some 12345678 data
+------------------------------------------
+ 
+./run_file.at:2775: exit code was 2, expected 0
+875. run_file.at:2446: 875. INDEXED sample (run_file.at:2446): FAILED (run_file.at:2775)

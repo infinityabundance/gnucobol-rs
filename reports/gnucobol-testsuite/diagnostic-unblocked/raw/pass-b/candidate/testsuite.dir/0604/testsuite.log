@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+604. run_fundamental.at:6013: testing Expression numeric vs. DISPLAY ...
+./run_fundamental.at:6060: $COMPILE prog.cob
+./run_fundamental.at:6061: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/604/stderr	2026-08-12 19:19:37.113500651 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number REPLACE
+./run_fundamental.at:6061: exit code was 2, expected 0
+604. run_fundamental.at:6013: 604. Expression numeric vs. DISPLAY (run_fundamental.at:6013): FAILED (run_fundamental.at:6061)

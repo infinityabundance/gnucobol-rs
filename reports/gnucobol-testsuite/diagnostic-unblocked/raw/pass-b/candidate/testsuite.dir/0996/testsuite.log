@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+996. run_functions.at:415: testing FUNCTION HEX-OF and HEX-TO-CHAR ...
+./run_functions.at:540: $COMPILE -Wno-unfinished prog.cob
+./run_functions.at:541: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/996/stderr	2026-08-12 19:19:37.476334048 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: USAGE NATIONAL: cobc 3.2 leaves NATIONAL unfinished (-Wunfinished) -- a non-claim, not a buildable front-end gap
+./run_functions.at:541: exit code was 2, expected 0
+996. run_functions.at:415: 996. FUNCTION HEX-OF and HEX-TO-CHAR (run_functions.at:415): FAILED (run_functions.at:541)

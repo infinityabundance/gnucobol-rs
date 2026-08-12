@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+714. run_misc.at:1758: testing INSPECT CONVERTING alphabet ...
+./run_misc.at:1786: $COMPILE prog.cob
+./run_misc.at:1787: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/714/stderr	2026-08-12 19:19:37.196337048 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: X
+--- -	2026-08-12 19:19:37.199310337 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/714/stdout	2026-08-12 19:19:37.198509474 +0000
+@@ -1 +1 @@
+-Converted: "A#O2018 |!"
++
+./run_misc.at:1787: exit code was 2, expected 0
+714. run_misc.at:1758: 714. INSPECT CONVERTING alphabet (run_misc.at:1758): FAILED (run_misc.at:1787)

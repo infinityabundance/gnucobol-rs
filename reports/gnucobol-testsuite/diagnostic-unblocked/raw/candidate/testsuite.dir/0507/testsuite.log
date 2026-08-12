@@ -1,0 +1,588 @@
+#                             -*- compilation -*-
+507. listings.at:4219: testing Cross reference ...
+./listings.at:4549: $COMPILE_LISTING0 -Xref -t- -ftsymbols EDITOR.cob
+stderr:
+cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-12 19:19:00.567171969 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/507/stdout	2026-08-12 19:19:00.566144113 +0000
+@@ -1,579 +1 @@
+-GnuCOBOL V.R.P               EDITOR.cob
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000001
+-000002         IDENTIFICATION DIVISION.
+-000003         PROGRAM-ID.
+-000004             EDITOR.
+-000005
+-000006        *NOTE.
+-000007        *    THIS VERSION OF EDITOR 1 COMPRISES AN ENTIRE RE_WRITE
+-000008        *    OF THE BASIC EDITOR WITH ONLY ONE CHANGE IN THE COMMAND
+-000009        *    STRUCTURE, THAT BEING THE ADDITION OF A "CHANGE" COMMAND
+-000010        *    TO SERVE IN PLACE OF THE INSERT-DELETE COMBINATION WHICH
+-000011        *    WAS REQUIRED IN PREVIOUS VERSIONS. RECORD NUMBER FIELDS
+-000012        *    HAVE ALSO BEEN REDUCED FROM 5 DIGITS TO 4.
+-000013        *    CHANGE 1.
+-000014        *       MODIFY TO RUN ON TI-990.
+-000015        *    CHANGE 2.
+-000016        *       MODIFY TO RUN ON GNUCOBOL.
+-000017
+-000018         ENVIRONMENT DIVISION.
+-000019         CONFIGURATION SECTION.
+-000020         SOURCE-COMPUTER.
+-000021             IBM-360.
+-000022         OBJECT-COMPUTER.
+-000023             IBM-360.
+-000024         INPUT-OUTPUT SECTION.
+-000025         FILE-CONTROL.
+-000026             SELECT OLD-VERSION  ASSIGN TO "SYSUT1"
+-000027                                 ORGANIZATION LINE SEQUENTIAL.
+-000028             SELECT NEW-VERSION  ASSIGN TO "SYSUT2"
+-000029                                 ORGANIZATION LINE SEQUENTIAL.
+-000030             SELECT PRT-VERSION  ASSIGN TO "SYSUT2"
+-error: missing file description for FILE PRT-VERSION
+-000031                                 ORGANIZATION LINE SEQUENTIAL.
+-000032             SELECT MODIFICATION ASSIGN TO "SYSIN1"
+-000033                                 ORGANIZATION LINE SEQUENTIAL.
+-000034             SELECT COMMENTARY   ASSIGN TO "SYSOU1"
+-000035                                 ORGANIZATION LINE SEQUENTIAL.
+-000036
+-000037         DATA DIVISION.
+-000038
+-000039         FILE SECTION.
+-000040
+-000041         FD  OLD-VERSION
+-000042             LABEL RECORDS ARE STANDARD
+-warning: LABEL RECORDS is obsolete in GnuCOBOL
+-000043             BLOCK CONTAINS 80 CHARACTERS
+-000044             DATA RECORD IS OLD-RECORD.
+-warning: DATA RECORDS is obsolete in GnuCOBOL
+-000045
+-000046         01  OLD-RECORD.
+-000047             02 OLD-STATEMENT       PICTURE X(75).
+-000048             02 OLD-NUMBER          PICTURE X(5).
+-000049
+-000050         FD  NEW-VERSION
+-000051             LABEL RECORDS ARE STANDARD
+-warning: LABEL RECORDS is obsolete in GnuCOBOL
+-000052             BLOCK CONTAINS 80 CHARACTERS
+-000053             DATA RECORD IS NEW-RECORD.
+-warning: DATA RECORDS is obsolete in GnuCOBOL
+-000054
+-000055         01  NEW-RECORD.
+-000056             02 NEW-STATEMENT       PICTURE X(75).
+-000057             02 NEW-NUMBER          PICTURE X(5).
+-000058
+-000059         FD  MODIFICATION
+-000060             LABEL RECORDS ARE OMITTED
+-warning: LABEL RECORDS is obsolete in GnuCOBOL
+-000061             BLOCK CONTAINS 80 CHARACTERS
+-000062             DATA RECORD IS UPDATE-ORDER.
+-warning: DATA RECORDS is obsolete in GnuCOBOL
+-000063
+-000064         01  UPDATE-ORDER.
+-000065             02 INSERTION.
+-000066                03 COMMAND          PICTURE X(6).
+-000067                   88 ENDJOB        VALUE "ENDJOB".
+-000068                   88 ENDSET        VALUE "ENDSET".
+-000069                   88 REMOVE        VALUE "REMOVE".
+-000070                   88 ADDNEW        VALUE "INSERT".
+-000071                   88 CHANGE        VALUE "CHANGE".
+-000072                   88 DISPLY        VALUE "DISPLY".
+-000073                03 FILLER           PICTURE X.
+-000074                03 A-FIELD          PICTURE 9(5).
+-000075                03 A-ALPHA REDEFINES A-FIELD    PICTURE X(5).
+-000076                   88 A-BLANK       VALUE SPACES.
+-000077                03 FILLER           PICTURE X(4).
+-000078                03 B-FIELD          PICTURE 9(5).
+-000079                03 B-ALPHA REDEFINES B-FIELD    PICTURE X(5).
+-000080                   88 B-BLANK       VALUE SPACES.
+-000081                03 FILLER           PICTURE X(54).
+-000082             02 FILLER              PICTURE X(5).
+-000083
+-000084         FD  COMMENTARY
+-000085             LABEL RECORDS ARE OMITTED
+-warning: LABEL RECORDS is obsolete in GnuCOBOL
+-000086             BLOCK CONTAINS 82 CHARACTERS
+-000087             DATA RECORD IS COMMENT-LINE.
+-warning: DATA RECORDS is obsolete in GnuCOBOL
+-000088
+-000089         01  COMMENT-LINE.
+-000090             02 FILLER              PICTURE X(82).
+-000091
+-000092         WORKING-STORAGE SECTION.
+-000093
+-000094         77  COMMAND-ADDITIONS      PICTURE 9(3) COMPUTATIONAL VALUE 0.
+-000095         77  COMMAND-SUBTRACTIONS   PICTURE 9(3) COMPUTATIONAL VALUE 0.
+-000096         77  TOTAL-INSERTED         PICTURE 9(3) COMPUTATIONAL VALUE 0.
+-000097         77  TOTAL-DELETED          PICTURE 9(3) COMPUTATIONAL VALUE 0.
+-000098         77  OUTPUT-COUNT           PICTURE 9(5) COMPUTATIONAL VALUE 0.
+-000099         77  LINE-COUNT             PICTURE 9(2) COMPUTATIONAL VALUE 0.
+-000100         77  FIELDA                 PICTURE 9(5) VALUE 0.
+-000101         77  FIELDB                 PICTURE 9(5) VALUE 0.
+-000102         77  BLANK-LINE             PICTURE X(82) VALUE SPACES.
+-000103
+-000104         01  DATE-FROM-SYS.
+-000105             02 DFSYS OCCURS 3 TIMES PICTURE 99.
+-000106
+-000107         01  HEADINGS-LINE.
+-000108             02 FILLER              PICTURE X(15) VALUE "EDITOR VERSION".
+-000109             02 FILLER              PICTURE X(20) VALUE "1.1 - 206/72".
+-000110             02 PHASE               PICTURE X(17) VALUE "UPDATING AS OF".
+-000111             02 MONTH-RUN           PICTURE XX.
+-000112             02 FILLER              PICTURE X VALUE "/".
+-000113             02 DAY-RUN             PICTURE XX.
+-000114             02 FILLER              PICTURE X VALUE "/".
+-000115             02 YEAR-RUN            PICTURE XX.
+-000116             02 FILLER              PICTURE X(8) VALUE SPACES.
+-000117             02 FILLER              PICTURE X(8) VALUE "  PAGE: ".
+-000118             02 PAGE-NUMBER         PICTURE 9(4) VALUE 0.
+-000119
+-000120         01  COMMAND-LISTING.
+-000121             02 FILLER              PICTURE X(2) VALUE SPACES.
+-000122             02 COMMAND-IMAGE       PICTURE X(80).
+-000123
+-000124         01  ACTIVITIES-LISTING.
+-000125             02 DISPOSITION         PICTURE X(2).
+-000126             02 ACTIVE-IMAGE        PICTURE X(80).
+-000127
+-000128         01  UPSI-BYTE.
+-000129             02 UPSI-BIT OCCURS 8 TIMES  PICTURE X.
+-000130
+-000131         01  MESSAGE-LOG.
+-000132             02 FILLER              PICTURE X(2) VALUE SPACES.
+-000133             02 MESSAGE-TEXT        PICTURE X(80).
+-000134
+-000135         01  DISPLAY-MESSAGE.
+-000136             02 FILLER              PICTURE X(2) VALUE SPACES.
+-000137             02 DISPLAY-TEMP        PICTURE X(6).
+-000138             02 FILLER              PICTURE X(2) VALUE SPACES.
+-000139             02 DISPLAY-TEXT        PICTURE X(60).
+-000140
+-000141         77  END-JOB-PROCESS        PICTURE 9 VALUE 0.
+-000142         77  DELETE-PROCESS         PICTURE 9 VALUE 1.
+-000143         77  INSERT-PROCESS         PICTURE 9 VALUE 2.
+-000144         77  WRITE-PROCESS          PICTURE 9 VALUE 3.
+-000145
+-000146         01  SELECTORS.
+-000147             02 RETURN-SELECT       PICTURE 9 VALUE 0.
+-000148             02 NEXT-JOB-SELECT     PICTURE 9 VALUE 0.
+-000149
+-000150         PROCEDURE DIVISION.
+-000151
+-000152         START-SECTION.
+-000153             OPEN INPUT OLD-VERSION, MODIFICATION,
+-000154                  OUTPUT NEW-VERSION, COMMENTARY.
+-000155             MOVE "F" TO UPSI-BIT (1), UPSI-BIT (2).
+-000156             ACCEPT DATE-FROM-SYS FROM DATE.
+-000157             MOVE DFSYS (1) TO YEAR-RUN.
+-000158             MOVE DFSYS (2) TO MONTH-RUN.
+-000159             MOVE DFSYS (3) TO DAY-RUN.
+-000160             READ OLD-VERSION AT END
+-000161                MOVE "NO OLD VERSION FOUND" TO MESSAGE-TEXT
+-000162                WRITE COMMENT-LINE FROM MESSAGE-LOG
+-000163                GO TO END-JOB.
+-000164             MOVE OLD-STATEMENT TO NEW-STATEMENT.
+-000165             PERFORM OUTPUT-A-RECORD.
+-000166
+-000167         TOP-OF-PAGE-ROUTINE.
+-000168             ADD 1 TO PAGE-NUMBER.
+-000169             MOVE ZERO TO LINE-COUNT.
+-000170             WRITE COMMENT-LINE FROM HEADINGS-LINE AFTER PAGE.
+-000171             WRITE COMMENT-LINE FROM BLANK-LINE.
+-000172
+-000173         READ-A-COMMAND.
+-000174             READ MODIFICATION AT END
+-000175                MOVE "MODIFICATION FILE ENDED " TO MESSAGE-TEXT
+-000176                WRITE COMMENT-LINE FROM MESSAGE-LOG
+-000177                GO TO FINISH-JOB.
+-000178             MOVE UPDATE-ORDER TO COMMAND-IMAGE.
+-000179             WRITE COMMENT-LINE FROM COMMAND-LISTING.
+-000180             ADD 2 TO LINE-COUNT.
+-000181             IF A-BLANK MOVE ZEROES TO A-FIELD.
+-000182             IF B-BLANK MOVE ZEROES TO B-FIELD.
+-000183             MOVE A-FIELD TO FIELDA.
+-000184             MOVE B-FIELD TO FIELDB.
+-000185
+-000186         TEST-COMMAND-TYPE.
+-000187             IF CHANGE GO TO CHANGE-A-RECORD.
+-000188             IF REMOVE GO TO DELETE-A-RECORD.
+-000189             IF DISPLY MOVE "T" TO UPSI-BIT (2)
+-000190                GO TO FINISH-JOB.
+-000191             IF ENDJOB GO TO FINISH-JOB.
+-000192             IF ADDNEW GO TO INSERT-A-RECORD.
+-000193             MOVE "INVALID COMMAND IGNORED." TO MESSAGE-TEXT.
+-000194             WRITE COMMENT-LINE FROM MESSAGE-LOG.
+-000195             GO TO READ-A-COMMAND.
+-000196
+-000197         CHANGE-A-RECORD.
+-000198             ALTER RETURN-TO-USER TO PROCEED TO INSERTION-PROCESS.
+-warning: ALTER is obsolete in GnuCOBOL
+-000199             ALTER NEXT-JOB-STEP TO PROCEED TO DELETION-PROCESS.
+-warning: ALTER is obsolete in GnuCOBOL
+-000200
+-000201         FIND-FIELDA.
+-000202             IF OLD-NUMBER IS GREATER THAN FIELDA
+-000203                MOVE "RECORD ALREADY PASSED" TO MESSAGE-TEXT
+-000204                WRITE COMMENT-LINE FROM MESSAGE-LOG
+-000205                GO TO READ-A-COMMAND.
+-000206             READ OLD-VERSION AT END
+-000207                MOVE "NOT FOUND IN OLD VERSION" TO DISPLAY-TEXT
+-000208                MOVE FIELDA TO DISPLAY-TEMP
+-000209                WRITE COMMENT-LINE FROM DISPLAY-MESSAGE
+-000210                GO TO END-JOB.
+-000211             IF OLD-NUMBER IS LESS THAN FIELDA
+-000212                MOVE OLD-STATEMENT TO NEW-STATEMENT
+-000213                PERFORM OUTPUT-A-RECORD
+-000214                GO TO FIND-FIELDA.
+-000215
+-000216         RETURN-TO-USER.
+-000217             GO TO END-JOB.
+-000218
+-000219         INSERT-A-RECORD.
+-000220             ALTER RETURN-TO-USER TO PROCEED TO INSERTION-PROCESS.
+-warning: ALTER is obsolete in GnuCOBOL
+-000221             ALTER NEXT-JOB-STEP TO PROCEED TO FORCED-WRITE.
+-warning: ALTER is obsolete in GnuCOBOL
+-000222             GO TO FIND-FIELDA.
+-000223
+-000224         INSERTION-PROCESS.
+-000225             READ MODIFICATION AT END
+-000226                MOVE "NO ENDSET FOUND" TO MESSAGE-TEXT
+-000227                WRITE COMMENT-LINE FROM MESSAGE-LOG
+-000228                GO TO END-JOB.
+-000229             IF ENDSET
+-000230                MOVE COMMAND-ADDITIONS TO DISPLAY-TEMP
+-000231                MOVE "RECORDS INSERTED." TO DISPLAY-TEXT
+-000232                WRITE COMMENT-LINE FROM DISPLAY-MESSAGE
+-000233                ADD COMMAND-ADDITIONS TO TOTAL-INSERTED
+-000234                MOVE ZEROES TO COMMAND-ADDITIONS
+-000235                GO TO NEXT-JOB-STEP.
+-000236             MOVE INSERTION TO NEW-STATEMENT, ACTIVE-IMAGE.
+-000237             MOVE "I " TO DISPOSITION.
+-000238             PERFORM OUTPUT-A-RECORD.
+-000239             WRITE COMMENT-LINE FROM ACTIVITIES-LISTING.
+-000240             ADD 1 TO COMMAND-ADDITIONS.
+-000241             ADD 1 TO LINE-COUNT.
+-000242             IF LINE-COUNT EQUAL 56 PERFORM TOP-OF-PAGE-ROUTINE.
+-000243             GO TO INSERTION-PROCESS.
+-000244
+-000245         NEXT-JOB-STEP.
+-000246             GO TO END-JOB.
+-000247
+-000248         FORCED-WRITE.
+-000249             MOVE OLD-STATEMENT TO NEW-STATEMENT.
+-000250             PERFORM OUTPUT-A-RECORD.
+-000251             GO TO READ-A-COMMAND.
+-000252
+-000253         DELETE-A-RECORD.
+-000254             ALTER RETURN-TO-USER TO PROCEED TO DELETION-PROCESS.
+-warning: ALTER is obsolete in GnuCOBOL
+-000255             GO TO FIND-FIELDA.
+-000256
+-000257         DELETION-PROCESS.
+-000258             MOVE OLD-RECORD TO ACTIVE-IMAGE.
+-000259             MOVE "D " TO DISPOSITION.
+-000260             WRITE COMMENT-LINE FROM ACTIVITIES-LISTING.
+-000261             ADD 1 TO LINE-COUNT.
+-000262             IF LINE-COUNT EQUAL 56 PERFORM TOP-OF-PAGE-ROUTINE.
+-000263             ADD 1 TO COMMAND-SUBTRACTIONS.
+-000264             IF OLD-NUMBER IS NOT LESS THAN FIELDB
+-000265                MOVE COMMAND-SUBTRACTIONS TO DISPLAY-TEMP
+-000266                MOVE "RECORDS DELETED." TO DISPLAY-TEXT
+-000267                WRITE COMMENT-LINE FROM DISPLAY-MESSAGE
+-000268                ADD COMMAND-SUBTRACTIONS TO TOTAL-DELETED
+-000269                MOVE OLD-STATEMENT TO NEW-STATEMENT
+-000270                MOVE ZEROES TO COMMAND-SUBTRACTIONS
+-000271                GO TO READ-A-COMMAND.
+-000272             READ OLD-VERSION AT END
+-000273                MOVE "NOT FOUND IN OLD VERSION DOING DELETE"
+-000274                      TO DISPLAY-TEXT
+-000275                WRITE COMMENT-LINE FROM DISPLAY-MESSAGE
+-000276                GO TO END-JOB.
+-000277             GO TO DELETION-PROCESS.
+-000278
+-000279         OUTPUT-A-RECORD.
+-000280             ADD 1 TO OUTPUT-COUNT.
+-000281             MOVE OUTPUT-COUNT TO NEW-NUMBER.
+-000282             WRITE NEW-RECORD.
+-000283
+-000284         FINISH-JOB.
+-000285             READ OLD-VERSION AT END GO TO TEST-FOR-LISTING.
+-000286             MOVE OLD-STATEMENT TO NEW-STATEMENT.
+-000287             GO TO OUTPUT-A-RECORD.
+-000288
+-000289         TEST-FOR-LISTING.
+-000290             PERFORM TOP-OF-PAGE-ROUTINE.
+-000291             MOVE OLD-NUMBER TO DISPLAY-TEMP.
+-000292             MOVE "RECORDS READ." TO DISPLAY-TEXT.
+-000293             WRITE COMMENT-LINE FROM DISPLAY-MESSAGE.
+-000294             MOVE TOTAL-INSERTED TO DISPLAY-TEMP.
+-000295             MOVE "RECORDS ADDED." TO DISPLAY-TEXT.
+-000296             WRITE COMMENT-LINE FROM DISPLAY-MESSAGE.
+-000297             MOVE TOTAL-DELETED TO DISPLAY-TEMP.
+-000298             MOVE "RECORDS DROPPED." TO DISPLAY-TEXT.
+-000299             WRITE COMMENT-LINE FROM DISPLAY-MESSAGE.
+-000300             MOVE OUTPUT-COUNT TO DISPLAY-TEMP.
+-000301             MOVE "RECORDS IN NEW FILE." TO DISPLAY-TEXT.
+-000302             WRITE COMMENT-LINE FROM DISPLAY-MESSAGE.
+-000303             IF UPSI-BIT (2) EQUAL "F" GO TO END-JOB.
+-000304             CLOSE NEW-VERSION.
+-000305             OPEN INPUT NEW-VERSION.
+-000306             MOVE "UPDATED LISTING" TO PHASE.
+-000307             MOVE ZEROES TO PAGE-NUMBER.
+-000308             PERFORM TOP-OF-PAGE-ROUTINE.
+-000309             MOVE SPACES TO DISPOSITION.
+-000310
+-000311         LISTING-LOOP.
+-000312             READ NEW-VERSION AT END GO TO END-JOB.
+-000313             MOVE NEW-RECORD TO ACTIVE-IMAGE.
+-000314             WRITE COMMENT-LINE FROM ACTIVITIES-LISTING.
+-000315             ADD 1 TO LINE-COUNT.
+-000316             IF LINE-COUNT EQUAL 56 PERFORM TOP-OF-PAGE-ROUTINE.
+-000317             GO TO LISTING-LOOP.
+-000318
+-000319         END-JOB.
+-000320             MOVE "PROGRAM TERMINATION" TO MESSAGE-TEXT.
+-000321             WRITE COMMENT-LINE FROM MESSAGE-LOG.
+-000322             CLOSE OLD-VERSION, NEW-VERSION, MODIFICATION, COMMENTARY.
+-000323             STOP RUN.
+-000324
+-000325         END PROGRAM EDITOR.
+-
+-SIZE  TYPE           LVL  NAME                           PICTURE
+-
+-00080 FILE                OLD-VERSION
+-00080 GROUP          01   OLD-RECORD
+-00075 ALPHANUMERIC   02   OLD-STATEMENT                  X(75)
+-00005 ALPHANUMERIC   02   OLD-NUMBER                     X(5)
+-
+-00080 FILE                NEW-VERSION
+-00080 GROUP          01   NEW-RECORD
+-00075 ALPHANUMERIC   02   NEW-STATEMENT                  X(75)
+-00005 ALPHANUMERIC   02   NEW-NUMBER                     X(5)
+-
+-00032 FILE                PRT-VERSION
+-
+-00080 FILE                MODIFICATION
+-00080 GROUP          01   UPDATE-ORDER
+-00075 GROUP          02   INSERTION
+-00006 ALPHANUMERIC   03   COMMAND                        X(6)
+-      CONDITIONAL    88   ENDJOB
+-      CONDITIONAL    88   ENDSET
+-      CONDITIONAL    88   REMOVE
+-      CONDITIONAL    88   ADDNEW
+-      CONDITIONAL    88   CHANGE
+-      CONDITIONAL    88   DISPLY
+-00001 ALPHANUMERIC   03   FILLER                         X
+-00005 NUMERIC        03   A-FIELD                        9(5)
+-00005 ALPHANUMERIC   03   A-ALPHA                        X(5), REDEFINES A-FIELD
+-      CONDITIONAL    88   A-BLANK
+-00004 ALPHANUMERIC   03   FILLER                         X(4)
+-00005 NUMERIC        03   B-FIELD                        9(5)
+-00005 ALPHANUMERIC   03   B-ALPHA                        X(5), REDEFINES B-FIELD
+-      CONDITIONAL    88   B-BLANK
+-00054 ALPHANUMERIC   03   FILLER                         X(54)
+-00005 ALPHANUMERIC   02   FILLER                         X(5)
+-
+-00082 FILE                COMMENTARY
+-00082 GROUP          01   COMMENT-LINE
+-00082 ALPHANUMERIC   02   FILLER                         X(82)
+-
+-      WORKING-STORAGE SECTION
+-
+-00002 NUMERIC        77   COMMAND-ADDITIONS              9(3) COMP
+-00002 NUMERIC        77   COMMAND-SUBTRACTIONS           9(3) COMP
+-00002 NUMERIC        77   TOTAL-INSERTED                 9(3) COMP
+-00002 NUMERIC        77   TOTAL-DELETED                  9(3) COMP
+-00004 NUMERIC        77   OUTPUT-COUNT                   9(5) COMP
+-00001 NUMERIC        77   LINE-COUNT                     9(2) COMP
+-00005 NUMERIC        77   FIELDA                         9(5)
+-00005 NUMERIC        77   FIELDB                         9(5)
+-00082 ALPHANUMERIC   77   BLANK-LINE                     X(82)
+-
+-00006 GROUP          01   DATE-FROM-SYS
+-00002 NUMERIC        02   DFSYS                          99, OCCURS 3
+-
+-00080 GROUP          01   HEADINGS-LINE
+-00015 ALPHANUMERIC   02   FILLER                         X(15)
+-00020 ALPHANUMERIC   02   FILLER                         X(20)
+-00017 ALPHANUMERIC   02   PHASE                          X(17)
+-00002 ALPHANUMERIC   02   MONTH-RUN                      XX
+-00001 ALPHANUMERIC   02   FILLER                         X
+-00002 ALPHANUMERIC   02   DAY-RUN                        XX
+-00001 ALPHANUMERIC   02   FILLER                         X
+-00002 ALPHANUMERIC   02   YEAR-RUN                       XX
+-00008 ALPHANUMERIC   02   FILLER                         X(8)
+-00008 ALPHANUMERIC   02   FILLER                         X(8)
+-00004 NUMERIC        02   PAGE-NUMBER                    9(4)
+-
+-00082 GROUP          01   COMMAND-LISTING
+-00002 ALPHANUMERIC   02   FILLER                         X(2)
+-00080 ALPHANUMERIC   02   COMMAND-IMAGE                  X(80)
+-
+-00082 GROUP          01   ACTIVITIES-LISTING
+-00002 ALPHANUMERIC   02   DISPOSITION                    X(2)
+-00080 ALPHANUMERIC   02   ACTIVE-IMAGE                   X(80)
+-
+-00008 GROUP          01   UPSI-BYTE
+-00001 ALPHANUMERIC   02   UPSI-BIT                       X, OCCURS 8
+-
+-00082 GROUP          01   MESSAGE-LOG
+-00002 ALPHANUMERIC   02   FILLER                         X(2)
+-00080 ALPHANUMERIC   02   MESSAGE-TEXT                   X(80)
+-
+-00070 GROUP          01   DISPLAY-MESSAGE
+-00002 ALPHANUMERIC   02   FILLER                         X(2)
+-00006 ALPHANUMERIC   02   DISPLAY-TEMP                   X(6)
+-00002 ALPHANUMERIC   02   FILLER                         X(2)
+-00060 ALPHANUMERIC   02   DISPLAY-TEXT                   X(60)
+-
+-00001 NUMERIC        77   END-JOB-PROCESS                9
+-00001 NUMERIC        77   DELETE-PROCESS                 9
+-00001 NUMERIC        77   INSERT-PROCESS                 9
+-00001 NUMERIC        77   WRITE-PROCESS                  9
+-
+-00002 GROUP          01   SELECTORS
+-00001 NUMERIC        02   RETURN-SELECT                  9
+-00001 NUMERIC        02   NEXT-JOB-SELECT                9
+-
+-
+-NAME                           DEFINED                REFERENCES
+-
+-OLD-VERSION                    26       41      153     160     206     272
+-                                        285     322                    x7
+-OLD-RECORD                     46       44      258                    x2
+-OLD-STATEMENT                  47       164     212     249     269     286
+-                                                                       x5
+-OLD-NUMBER                     48       202     211     264     291    x4
+-
+-NEW-VERSION                    28       50     *154    *282     304     305
+-                                        312     322                    x7
+-NEW-RECORD                     55       53      282     313            x3
+-NEW-STATEMENT                  56      *164    *212    *236    *249    *269
+-                                       *286                            x6
+-NEW-NUMBER                     57      *281                            x1
+-
+-PRT-VERSION                    30     not referenced
+-
+-MODIFICATION                   32       59      153     174     225     322
+-                                                                       x5
+-UPDATE-ORDER                   64       62      178                    x2
+-INSERTION                      65       236                            x1
+-COMMAND                        66     referenced by parent/child
+-ENDJOB                         67       191                            x1
+-ENDSET                         68       229                            x1
+-REMOVE                         69       188                            x1
+-ADDNEW                         70       192                            x1
+-CHANGE                         71       187                            x1
+-DISPLY                         72       189                            x1
+-A-FIELD                        74      *181     183                    x2
+-A-ALPHA                        75     referenced by parent/child
+-A-BLANK                        76       181                            x1
+-B-FIELD                        78      *182     184                    x2
+-B-ALPHA                        79     referenced by parent/child
+-B-BLANK                        80       182                            x1
+-
+-COMMENTARY                     34       84     *154    *162    *170    *171
+-                                       *176    *179    *194    *204    *209
+-                                       *227    *232    *239    *260    *267
+-                                       *275    *293    *296    *299    *302
+-                                       *314    *321     322            x23
+-COMMENT-LINE                   89       87     *162    *170    *171    *176
+-                                       *179    *194    *204    *209    *227
+-                                       *232    *239    *260    *267    *275
+-                                       *293    *296    *299    *302    *314
+-                                       *321                            x21
+-
+-COMMAND-ADDITIONS              94       230     233    *234    *240    x4
+-COMMAND-SUBTRACTIONS           95      *263     265     268    *270    x4
+-TOTAL-INSERTED                 96      *233     294                    x2
+-TOTAL-DELETED                  97      *268     297                    x2
+-OUTPUT-COUNT                   98      *280     281     300            x3
+-LINE-COUNT                     99      *169    *180    *241     242    *261
+-                                        262    *315     316            x8
+-FIELDA                         100     *183     202     208     211    x4
+-FIELDB                         101     *184     264                    x2
+-BLANK-LINE                     102      171                            x1
+-DATE-FROM-SYS                  104     *156                            x1
+-DFSYS                          105      157     158     159            x3
+-HEADINGS-LINE                  107      170                            x1
+-PHASE                          110     *306                            x1
+-MONTH-RUN                      111     *158                            x1
+-DAY-RUN                        113     *159                            x1
+-YEAR-RUN                       115     *157                            x1
+-PAGE-NUMBER                    118     *168    *307                    x2
+-COMMAND-LISTING                120      179                            x1
+-COMMAND-IMAGE                  122     *178                            x1
+-ACTIVITIES-LISTING             124      239     260     314            x3
+-DISPOSITION                    125     *237    *259    *309            x3
+-ACTIVE-IMAGE                   126     *236    *258    *313            x3
+-UPSI-BYTE                      128    referenced by child
+-UPSI-BIT                       129     *155    *189     303            x3
+-MESSAGE-LOG                    131      162     176     194     204     227
+-                                        321                            x6
+-MESSAGE-TEXT                   133     *161    *175    *193    *203    *226
+-                                       *320                            x6
+-DISPLAY-MESSAGE                135      209     232     267     275     293
+-                                        296     299     302            x8
+-DISPLAY-TEMP                   137     *208    *230    *265    *291    *294
+-                                       *297    *300                    x7
+-DISPLAY-TEXT                   139     *207    *231    *266    *274    *292
+-                                       *295    *298    *301            x8
+-END-JOB-PROCESS                141    not referenced
+-DELETE-PROCESS                 142    not referenced
+-INSERT-PROCESS                 143    not referenced
+-WRITE-PROCESS                  144    not referenced
+-SELECTORS                      146    not referenced
+-RETURN-SELECT                  147    not referenced
+-NEXT-JOB-SELECT                148    not referenced
+-
+-
+-LABEL                          DEFINED                REFERENCES
+-
+-E EDITOR                       152
+-P START-SECTION                152    not referenced
+-P TOP-OF-PAGE-ROUTINE          167      242     262     290     308     316
+-                                                                       x5
+-P READ-A-COMMAND               173      195     205     251     271    x4
+-P TEST-COMMAND-TYPE            186    not referenced
+-P CHANGE-A-RECORD              197      187                            x1
+-P FIND-FIELDA                  201      214     222     255            x3
+-P RETURN-TO-USER               216      198     220     254            x3
+-P INSERT-A-RECORD              219      192                            x1
+-P INSERTION-PROCESS            224      198     220     243            x3
+-P NEXT-JOB-STEP                245      199     221     235            x3
+-P FORCED-WRITE                 248      221                            x1
+-P DELETE-A-RECORD              253      188                            x1
+-P DELETION-PROCESS             257      199     254     277            x3
+-P OUTPUT-A-RECORD              279      165     213     238     250     287
+-                                                                       x5
+-P FINISH-JOB                   284      177     190     191            x3
+-P TEST-FOR-LISTING             289      285                            x1
+-P LISTING-LOOP                 311      317                            x1
+-P END-JOB                      319      163     210     217     228     246
+-                                        276     303     312            x8
+-
+-
+-Error/Warning summary:
+-
+-EDITOR.cob:30: error: missing file description for FILE PRT-VERSION
+-EDITOR.cob:42: warning: LABEL RECORDS is obsolete in GnuCOBOL
+-EDITOR.cob:44: warning: DATA RECORDS is obsolete in GnuCOBOL
+-EDITOR.cob:51: warning: LABEL RECORDS is obsolete in GnuCOBOL
+-EDITOR.cob:53: warning: DATA RECORDS is obsolete in GnuCOBOL
+-EDITOR.cob:60: warning: LABEL RECORDS is obsolete in GnuCOBOL
+-EDITOR.cob:62: warning: DATA RECORDS is obsolete in GnuCOBOL
+-EDITOR.cob:85: warning: LABEL RECORDS is obsolete in GnuCOBOL
+-EDITOR.cob:87: warning: DATA RECORDS is obsolete in GnuCOBOL
+-EDITOR.cob:198: warning: ALTER is obsolete in GnuCOBOL
+-EDITOR.cob:199: warning: ALTER is obsolete in GnuCOBOL
+-EDITOR.cob:220: warning: ALTER is obsolete in GnuCOBOL
+-EDITOR.cob:221: warning: ALTER is obsolete in GnuCOBOL
+-EDITOR.cob:254: warning: ALTER is obsolete in GnuCOBOL
+-
+-13 warnings in compilation group
+-1 error in compilation group
+ 
+507. listings.at:4219: 507. Cross reference (listings.at:4219): FAILED (listings.at:4549)

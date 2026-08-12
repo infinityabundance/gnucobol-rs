@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+839. run_misc.at:13715: testing EC-SIZE-OVERFLOW ...
+./run_misc.at:13741: $COMPILE prog.cob
+./run_misc.at:13742: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/839/stderr	2026-08-12 19:19:00.859284537 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: FUNCTION
+./run_misc.at:13742: exit code was 2, expected 0
+839. run_misc.at:13715: 839. EC-SIZE-OVERFLOW (run_misc.at:13715): FAILED (run_misc.at:13742)

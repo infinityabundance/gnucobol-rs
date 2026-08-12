@@ -1,0 +1,11 @@
+
+       IDENTIFICATION  DIVISION.
+       PROGRAM-ID.     prog2.
+       OPTIONS.
+           ENTRY-CONVENTION COBOL.
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+
+       PROCEDURE     DIVISION WITH C LINKAGE.
+           CONTINUE
+           .

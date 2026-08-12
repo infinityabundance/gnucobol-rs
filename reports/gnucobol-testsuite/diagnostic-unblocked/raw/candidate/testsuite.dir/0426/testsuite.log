@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+426. syn_screen.at:193: testing FROM clause ...
+./syn_screen.at:215: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: unsupported: unsupported level number SCREEN
+./syn_screen.at:215: exit code was 1, expected 0
+426. syn_screen.at:193: 426. FROM clause (syn_screen.at:193): FAILED (syn_screen.at:215)

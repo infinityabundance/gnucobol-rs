@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+978. run_reportwriter.at:4753: testing Next Group Next Page ...
+./run_reportwriter.at:5042: $COMPILE prog.cob
+./run_reportwriter.at:5044: DD_TEMPFILE=./inp_data DD_REPORTFILE=./report.txt $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/978/stderr	2026-08-12 19:19:00.990619453 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: condition: unrecognized relational operator (expected = > < >= <= <> GREATER LESS EQUAL)
+./run_reportwriter.at:5044: exit code was 2, expected 0
+978. run_reportwriter.at:4753: 978. Next Group Next Page (run_reportwriter.at:4753): FAILED (run_reportwriter.at:5044)

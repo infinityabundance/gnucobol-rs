@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+340. syn_misc.at:4176: testing 01 CONSTANT ...
+./syn_misc.at:4195: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:4195: exit code was 0, expected 1
+340. syn_misc.at:4176: 340. 01 CONSTANT (syn_misc.at:4176): FAILED (syn_misc.at:4195)

@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+588. run_fundamental.at:5035: testing debugging lines (-fdebugging-line) ...
+./run_fundamental.at:5051: $COMPILE -fdebugging-line prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/588/stderr	2026-08-12 19:19:00.642259708 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fdebugging-line: unsupported option (rejected-unsupported; debugging lines: no debug-line model; reject honestly): 
+./run_fundamental.at:5051: exit code was 1, expected 0
+588. run_fundamental.at:5035: 588. debugging lines (-fdebugging-line) (run_fundamental.at:5035): FAILED (run_fundamental.at:5051)

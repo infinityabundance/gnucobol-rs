@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+93. syn_definition.at:583: testing Redefinition of program-name within program ...
+./syn_definition.at:600: $COMPILE_ONLY prog.cob
+stderr:
+./syn_definition.at:600: exit code was 0, expected 1
+93. syn_definition.at:583: 93. Redefinition of program-name within program (syn_definition.at:583): FAILED (syn_definition.at:600)

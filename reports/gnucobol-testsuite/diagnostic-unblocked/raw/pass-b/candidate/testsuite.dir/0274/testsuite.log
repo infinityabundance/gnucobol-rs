@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+274. syn_misc.at:1364: testing wrong device for mnemonic-name ...
+./syn_misc.at:1381: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:1381: exit code was 0, expected 1
+274. syn_misc.at:1364: 274. wrong device for mnemonic-name (syn_misc.at:1364): FAILED (syn_misc.at:1381)

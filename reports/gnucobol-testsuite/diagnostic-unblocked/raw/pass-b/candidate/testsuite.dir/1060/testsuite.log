@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1060. run_functions.at:2718: testing FUNCTION NUMVAL-C DP.COMMA ...
+./run_functions.at:2740: $COMPILE prog.cob
+./run_functions.at:2741: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1060/stdout	2026-08-12 19:19:37.589719978 +0000
+@@ -0,0 +1 @@
++X1 ' % 19.876,1234 DB   ' : -00019,87612
+1060. run_functions.at:2718: 1060. FUNCTION NUMVAL-C DP.COMMA (run_functions.at:2718): FAILED (run_functions.at:2741)

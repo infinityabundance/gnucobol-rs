@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+1055. run_functions.at:2515: testing FUNCTION MONETARY-THOUSANDS-SEPARATOR ...
+./run_functions.at:2532: $COMPILE prog.cob
+./run_functions.at:2533: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1055/stderr	2026-08-12 19:19:01.092723729 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: FUNCTION MONETARY-THOUSANDS-SEPARATOR: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim
+--- -	2026-08-12 19:19:01.094698478 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1055/stdout	2026-08-12 19:19:01.093723718 +0000
+@@ -1 +1 @@
+-OK
++
+./run_functions.at:2533: exit code was 2, expected 0
+1055. run_functions.at:2515: 1055. FUNCTION MONETARY-THOUSANDS-SEPARATOR (run_functions.at:2515): FAILED (run_functions.at:2533)

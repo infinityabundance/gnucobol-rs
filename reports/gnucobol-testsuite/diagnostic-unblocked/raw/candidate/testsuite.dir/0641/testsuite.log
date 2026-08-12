@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+641. run_refmod.at:118: testing Offset overflow ...
+./run_refmod.at:134: $COMPILE prog.cob
+./run_refmod.at:135: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:00.688863547 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/641/stderr	2026-08-12 19:19:00.688209107 +0000
+@@ -1,2 +1,2 @@
+-libcob: prog.cob:10: error: offset of 'X' out of bounds: 5, maximum: 4
++cobrun: unsupported: expected data name after a level number
+ 
+./run_refmod.at:135: exit code was 2, expected 1
+641. run_refmod.at:118: 641. Offset overflow (run_refmod.at:118): FAILED (run_refmod.at:135)

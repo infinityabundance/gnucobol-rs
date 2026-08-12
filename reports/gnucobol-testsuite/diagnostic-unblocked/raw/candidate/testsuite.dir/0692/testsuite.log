@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+692. run_misc.at:851: testing Concatenation operator ...
+./run_misc.at:869: $COMPILE prog.cob
+./run_misc.at:870: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:00.733678151 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/692/stdout	2026-08-12 19:19:00.733103259 +0000
+@@ -1 +1 @@
+-OK OK
++OK   
+692. run_misc.at:851: 692. Concatenation operator (run_misc.at:851): FAILED (run_misc.at:870)

@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+718. run_misc.at:1873: testing INSPECT CONVERTING complex ...
+./run_misc.at:1897: $COMPILE prog.cob
+./run_misc.at:1898: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/718/stdout	2026-08-12 19:19:37.205417091 +0000
+@@ -0,0 +1 @@
++2 - Z0ZYYXDXXEXX
+718. run_misc.at:1873: 718. INSPECT CONVERTING complex (run_misc.at:1873): FAILED (run_misc.at:1898)

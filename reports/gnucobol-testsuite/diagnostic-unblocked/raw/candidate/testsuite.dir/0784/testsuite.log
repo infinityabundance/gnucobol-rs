@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+784. run_misc.at:5304: testing access to OPTIONAL LINKAGE item not passed ...
+./run_misc.at:5332: $COMPILE caller.cob
+./run_misc.at:5333: $COMPILE_MODULE callee.cob
+./run_misc.at:5335: $COBCRUN_DIRECT ./caller
+--- -	2026-08-12 19:19:00.818411552 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/784/stderr	2026-08-12 19:19:00.817726673 +0000
+@@ -1,2 +1,2 @@
+-libcob: callee.cob:9: error: LINKAGE item 'X' (accessed by 'Y') not passed by caller
++cobrun: unsupported: CALL "callee": fewer USING args than the 2 parameters
+ 
+./run_misc.at:5335: exit code was 2, expected 1
+784. run_misc.at:5304: 784. access to OPTIONAL LINKAGE item not passed (run_misc.at:5304): FAILED (run_misc.at:5335)

@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1204. run_extensions.at:5355: testing Bit Operations ...
+./run_extensions.at:5430: $COMPILE -facu-literal=ok -fno-trunc prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1204/stderr	2026-08-12 19:19:01.291721599 +0000
+@@ -0,0 +1 @@
++cobc-rs: -facu-literal=ok: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ok
+./run_extensions.at:5430: exit code was 1, expected 0
+1204. run_extensions.at:5355: 1204. Bit Operations (run_extensions.at:5355): FAILED (run_extensions.at:5430)

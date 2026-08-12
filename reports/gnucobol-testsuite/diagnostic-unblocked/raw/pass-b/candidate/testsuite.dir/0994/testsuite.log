@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+994. run_functions.at:330: testing FUNCTION CONCATENATE with reference modding ...
+./run_functions.at:352: $COMPILE prog.cob
+./run_functions.at:353: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/994/stdout	2026-08-12 19:19:37.472124918 +0000
+@@ -0,0 +1 @@
++defxabczz
+994. run_functions.at:330: 994. FUNCTION CONCATENATE with reference modding (run_functions.at:330): FAILED (run_functions.at:353)

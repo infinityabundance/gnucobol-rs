@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+438. syn_screen.at:590: testing MS-COBOL position-spec ...
+./syn_screen.at:625: $COMPILE_ONLY prog.cob
+stderr:
+./syn_screen.at:625: exit code was 0, expected 1
+438. syn_screen.at:590: 438. MS-COBOL position-spec (syn_screen.at:590): FAILED (syn_screen.at:625)

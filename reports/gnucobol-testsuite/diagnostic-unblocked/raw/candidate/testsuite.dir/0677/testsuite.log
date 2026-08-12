@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+677. run_misc.at:268: testing LOCAL-STORAGE (1) ...
+./run_misc.at:297: $COMPILE_MODULE callee.cob
+./run_misc.at:298: $COMPILE -o prog caller.cob
+./run_misc.at:299: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/677/stderr	2026-08-12 19:19:00.718727733 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number LOCAL-STORAGE
+--- -	2026-08-12 19:19:00.720228919 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/677/stdout	2026-08-12 19:19:00.719294096 +0000
+@@ -1 +1 @@
+-abcabc000abc
++
+./run_misc.at:299: exit code was 2, expected 0
+677. run_misc.at:268: 677. LOCAL-STORAGE (1) (run_misc.at:268): FAILED (run_misc.at:299)

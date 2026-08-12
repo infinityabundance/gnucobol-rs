@@ -1,0 +1,22 @@
+#                             -*- compilation -*-
+894. run_file.at:4352: testing LINE SEQUENTIAL record truncation (1) ...
+./run_file.at:4389: $COMPILE prog.cob
+./run_file.at:4390: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/894/stderr	2026-08-12 19:19:00.908725699 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: condition: missing left operand
+--- -	2026-08-12 19:19:00.910786398 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/894/stdout	2026-08-12 19:19:00.909816139 +0000
+@@ -1,9 +1 @@
+-(a   )
+-(ab  )
+-(abc )
+-(abcd)
+-(abcd)
+-(e   )
+-(abcd)
+-(ef  )
+ 
+./run_file.at:4390: exit code was 2, expected 0
+894. run_file.at:4352: 894. LINE SEQUENTIAL record truncation (1) (run_file.at:4352): FAILED (run_file.at:4390)

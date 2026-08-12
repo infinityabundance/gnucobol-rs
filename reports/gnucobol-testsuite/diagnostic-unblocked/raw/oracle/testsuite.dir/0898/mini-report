@@ -1,0 +1,146 @@
+
+
+******************     THIS PAGE INTENTIONALLY LEFT BLANK     ******************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PAGE: 0001                         LC: 000000
+000001
+000002 IDENTIFICATION DIVISION.
+000003 PROGRAM-ID. prog.
+000004 ENVIRONMENT DIVISION.
+000005 INPUT-OUTPUT SECTION.
+000006 FILE-CONTROL.
+000007     select optional data-file assign to 'prog.cob'
+000008         organization is line sequential
+000009         file status is data-file-status.
+000010     select mini-report assign to "mini-report".
+000011
+000012 DATA DIVISION.
+000013 FILE SECTION.
+000014 FD  data-file.
+000015 01  data-record.
+000016     88 endofdata        value high-values.
+
+
+
+
+000001     02 data-line        pic x(80).
+000002 FD  mini-report
+000003     linage is 16 lines
+000004         with footing at 15
+000005         lines at top 2
+000006         lines at bottom 2.
+000007 01  report-line         pic x(80).
+000008
+000009 WORKING-STORAGE SECTION.
+000010 01  command-arguments   pic x(1024).
+000011 01  file-name           pic x(160).
+000012 01  data-file-status    pic xx.
+000013 01  lc                  pic 99.
+000014 01  report-line-blank.
+000015     02 filler           pic x(18) value all "*".
+000016     02 filler           pic x(05) value spaces.
+
+
+
+
+000001     02 filler           pic x(34)
+000002         VALUE "THIS PAGE INTENTIONALLY LEFT BLANK".
+000003     02 filler           pic x(05) value spaces.
+000004     02 filler           pic x(18) value all "*".
+000005 01  report-line-data.
+000006     02 body-tag         pic 9(6).
+000007     02 line-3           pic x(74).
+000008 01  report-line-header.
+000009     02 filler           pic x(6) VALUE "PAGE: ".
+000010     02 page-no          pic 9999.
+000011     02 filler           pic x(24).
+000012     02 filler           pic x(5) VALUE " LC: ".
+000013     02 header-tag       pic 9(6).
+000014
+000015
+000016
+
+
+
+
+000001
+000002 01  page-count          pic 9999.
+000003
+000004 PROCEDURE DIVISION.
+000005 main.
+000006     open input data-file.
+000007     read data-file
+000008         at end
+000009             display "File open error: " data-file-status
+000010             stop run
+000011     end-read.
+000012
+000013     open output mini-report.
+000014
+000015     write report-line
+000016         from report-line-blank
+
+
+
+
+000001     end-write.
+000002
+000003     move 1 to page-count.
+000004     move page-count to page-no.
+000005     write report-line
+000006         from report-line-header
+000007         after advancing page
+000008     end-write.
+000009
+000010     perform readwrite-loop until endofdata.
+000011
+000012     display
+000013         "Normal termination, ending status: "
+000014         data-file-status
+000015     close mini-report.
+000016
+
+
+
+
+000001     close data-file.
+000002     stop run.
+000003
+000004****************************************************************
+000005 readwrite-loop.
+000006     move data-record to report-line-data
+000007     move linage-counter to body-tag
+000008     write report-line from report-line-data
+000009         end-of-page
+000010             add 1 to page-count end-add
+000011             move page-count to page-no
+000012             move linage-counter to header-tag
+000013             write report-line from report-line-header
+000014                 after advancing page
+000015             end-write
+000016     end-write
+
+
+
+
+000001     read data-file
+000002         at end set endofdata to true
+000003     end-read
+000004     .

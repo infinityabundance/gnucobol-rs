@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+1203. run_extensions.at:5325: testing EXHIBIT statement ...
+./run_extensions.at:5345: $COMPILE -std=mvs -Wno-strict-typing -Wno-pending prog.cob
+./run_extensions.at:5346: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1203/stderr	2026-08-12 19:19:37.770330898 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: SORT-RETURN
+--- -	2026-08-12 19:19:37.772003421 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1203/stdout	2026-08-12 19:19:37.771366794 +0000
+@@ -1,5 +1 @@
+-         X
+-VAR-1 = 123XXXXX VAR-2 = 000 Y
+-VAR-2 = 000
+-SORT-RETURN = +000000000 TALLY = 00000
+ 
+./run_extensions.at:5346: exit code was 2, expected 0
+1203. run_extensions.at:5325: 1203. EXHIBIT statement (run_extensions.at:5325): FAILED (run_extensions.at:5346)

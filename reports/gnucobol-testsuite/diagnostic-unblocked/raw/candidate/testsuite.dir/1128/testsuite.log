@@ -1,0 +1,20 @@
+#                             -*- compilation -*-
+1128. run_extensions.at:908: testing OCCURS UNBOUNDED (2) ...
+./run_extensions.at:1034: $COMPILE -std=ibm-strict -w ALLOC.cob
+./run_extensions.at:1036: $COBCRUN_DIRECT ./ALLOC
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1128/stderr	2026-08-12 19:19:01.206780131 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: OCCURS max UNBOUNDED is not an integer
+--- -	2026-08-12 19:19:01.208027957 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1128/stdout	2026-08-12 19:19:01.206780131 +0000
+@@ -1,7 +1 @@
+-First allocation, using 00322 bytes.
+-VARTAB(12) = "9999        0000"
+-VARTAB(17) = "0000HI MOM  0000"
+-Re-allocation, using 00482 bytes.
+-VARTAB(12) = "9999        0000"
+-VARTAB(17) = "0000HI MOM  0000"
+ 
+./run_extensions.at:1036: exit code was 2, expected 0
+1128. run_extensions.at:908: 1128. OCCURS UNBOUNDED (2) (run_extensions.at:908): FAILED (run_extensions.at:1036)

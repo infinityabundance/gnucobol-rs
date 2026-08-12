@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+624. run_fundamental.at:9030: testing SPECIAL-NAMES CLASS ...
+./run_fundamental.at:9087: $COMPILE prog.cob
+./run_fundamental.at:9088: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/624/stderr	2026-08-12 19:19:37.125326857 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: condition: unrecognized relational operator (expected = > < >= <= <> GREATER LESS EQUAL)
+./run_fundamental.at:9088: exit code was 2, expected 0
+624. run_fundamental.at:9030: 624. SPECIAL-NAMES CLASS (run_fundamental.at:9030): FAILED (run_fundamental.at:9088)

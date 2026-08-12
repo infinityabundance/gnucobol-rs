@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+783. run_misc.at:5265: testing access to BASED item without allocation ...
+./run_misc.at:5291: $COMPILE prog.cob
+./run_misc.at:5292: $COMPILE prog2.cob
+./run_misc.at:5294: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:37.266121597 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/783/stderr	2026-08-12 19:19:37.264336319 +0000
+@@ -1,2 +1 @@
+-libcob: prog.cob:8: error: BASED/LINKAGE item 'X' has NULL address
+ 
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/783/stdout	2026-08-12 19:19:37.264336319 +0000
+@@ -0,0 +1 @@
++    
+\ No newline at end of file
+./run_misc.at:5294: exit code was 0, expected 1
+783. run_misc.at:5265: 783. access to BASED item without allocation (run_misc.at:5265): FAILED (run_misc.at:5294)

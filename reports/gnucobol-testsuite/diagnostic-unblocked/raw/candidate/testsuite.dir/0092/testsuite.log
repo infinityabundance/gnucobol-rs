@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+92. syn_definition.at:508: testing Redefinition of program-name by other programs ...
+./syn_definition.at:565: $COMPILE_ONLY --ffold-call=upper -fdiagnostics-show-option prog.cob
+--- -	2026-08-12 19:19:00.274456737 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/92/stderr	2026-08-12 19:19:00.273382284 +0000
+@@ -1,10 +1,2 @@
+-prog.cob:7: warning: redefinition of 'prog' [-Wredefinition]
+-prog.cob:3: note: 'prog' previously defined here [-Wredefinition]
+-prog.cob:23: error: redefinition of program name 'foo'
+-prog.cob:31: error: redefinition of program name 'prog'
+-prog.cob:42: error: redefinition of 'foo'
+-prog.cob:35: note: 'foo' previously defined here [-Wredefinition]
+-prog.cob:42: error: redefinition of program name 'foo'
+-prog.cob:49: error: PROCEDURE DIVISION header missing
+-prog.cob:50: error: redefinition of program name 'samename'
++cobc-rs: --ffold-call=upper: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): upper
+ 
+92. syn_definition.at:508: 92. Redefinition of program-name by other programs (syn_definition.at:508): FAILED (syn_definition.at:565)

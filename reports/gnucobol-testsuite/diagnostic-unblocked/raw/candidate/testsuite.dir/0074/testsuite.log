@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+74. syn_definition.at:36: testing Invalid PROGRAM-ID ...
+./syn_definition.at:48: $COMPILE_ONLY SHORT.cob
+stderr:
+./syn_definition.at:48: exit code was 0, expected 1
+74. syn_definition.at:36: 74. Invalid PROGRAM-ID (syn_definition.at:36): FAILED (syn_definition.at:48)

@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+307. syn_misc.at:2688: testing wrong dialect hints ...
+./syn_misc.at:2705: $COMPILE_ONLY -std=cobol85 prog.cob
+stderr:
+./syn_misc.at:2705: exit code was 0, expected 1
+307. syn_misc.at:2688: 307. wrong dialect hints (syn_misc.at:2688): FAILED (syn_misc.at:2705)

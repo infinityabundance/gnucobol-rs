@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+25. used_binaries.at:883: testing cobc diagnostics show caret ...
+./used_binaries.at:903: cat progprep.cob | tr -d '#' > prog.cob
+./used_binaries.at:905: $COBC -fdiagnostics-plain-output -Wall prog.cob
+--- -	2026-08-12 19:19:36.735296543 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/25/stderr	2026-08-12 19:19:36.734587000 +0000
+@@ -1,4 +1,2 @@
+-prog.cob:7: error: CRUD.CPY: No such file or directory
+-prog.cob:6: warning: numeric value is expected [-Wothers]
+-prog.cob:14: warning: ignoring redundant . [-Wothers]
++cobc-rs: COPY expansion failed (fail closed): malformed COPY statement
+ 
+25. used_binaries.at:883: 25. cobc diagnostics show caret (used_binaries.at:883): FAILED (used_binaries.at:905)

@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+164. syn_redefines.at:210: testing REDEFINES: with variable occurrence ...
+./syn_redefines.at:234: $COMPILE_ONLY prog.cob
+stderr:
+./syn_redefines.at:234: exit code was 0, expected 1
+164. syn_redefines.at:210: 164. REDEFINES: with variable occurrence (syn_redefines.at:210): FAILED (syn_redefines.at:234)

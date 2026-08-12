@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+1154. run_extensions.at:2757: testing Environment/Argument variable ...
+./run_extensions.at:2792: $COMPILE prog.cob
+./run_extensions.at:2793: TEST_ENV=OK $COBCRUN_DIRECT ./prog CHECKPAR
+--- -	2026-08-12 19:19:37.714977553 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1154/stdout	2026-08-12 19:19:37.713331508 +0000
+@@ -1,5 +1,5 @@
+ (OK  )
+ (RXW )
+-(CHECKPAR)
+-(0001)
++(        )
++(0000)
+ 
+1154. run_extensions.at:2757: 1154. Environment/Argument variable (run_extensions.at:2757): FAILED (run_extensions.at:2793)

@@ -1,0 +1,51 @@
+#                             -*- compilation -*-
+1184. run_extensions.at:4365: testing System routine SYSTEM, parameter handling ...
+./run_extensions.at:4432: $COMPILE prog.cob
+./run_extensions.at:4433: PATH=.:$PATH $COBCRUN_DIRECT prog "start"
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1184/stderr	2026-08-12 19:19:01.269721834 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: verb CHAINING
+--- -	2026-08-12 19:19:01.271148998 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1184/stdout	2026-08-12 19:19:01.269721834 +0000
+@@ -1,38 +1 @@
+-Test #1:
+-  CALL 'SYSTEM' with prog 1:
+-  called with -1-
+-  --> return of the given CALL 'SYSTEM': +000000000
+-Test #2:
+-  CALL 'SYSTEM' with prog "1":
+-  called with -1-
+-  --> return of the given CALL 'SYSTEM': +000000000
+-Test #3:
+-  CALL 'SYSTEM' with "prog" 1:
+-  called with -1-
+-  --> return of the given CALL 'SYSTEM': +000000000
+-Test #4:
+-  CALL 'SYSTEM' with "prog" "1":
+-  called with -1-
+-  --> return of the given CALL 'SYSTEM': +000000000
+-Test #5:
+-  CALL 'SYSTEM' with prog a v:
+-  called with -a- and with -v-
+-  --> return of the given CALL 'SYSTEM': +000000000
+-Test #6:
+-  CALL 'SYSTEM' with prog "a v":
+-  called with -a v-
+-  --> return of the given CALL 'SYSTEM': +000000000
+-Test #7:
+-  CALL 'SYSTEM' with "prog" a v:
+-  called with -a- and with -v-
+-  --> return of the given CALL 'SYSTEM': +000000000
+-Test #8:
+-  CALL 'SYSTEM' with "prog" "a v":
+-  called with -a v-
+-  --> return of the given CALL 'SYSTEM': +000000000
+-Test #9:
+-  CALL 'SYSTEM' with "prog" "a" "v":
+-  called with -a- and with -v-
+-  --> return of the given CALL 'SYSTEM': +000000000
+-tests finished
+ 
+./run_extensions.at:4433: exit code was 2, expected 0
+1184. run_extensions.at:4365: 1184. System routine SYSTEM, parameter handling (run_extensions.at:4365): FAILED (run_extensions.at:4433)

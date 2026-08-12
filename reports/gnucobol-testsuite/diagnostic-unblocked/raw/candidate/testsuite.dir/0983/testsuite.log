@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+983. run_returncode.at:49: testing RETURN-CODE passing ...
+./run_returncode.at:94: $COMPILE_MODULE mod1.cob
+./run_returncode.at:95: $COMPILE_MODULE mod2.cob
+./run_returncode.at:96: $COMPILE prog.cob
+./run_returncode.at:97: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/983/stdout	2026-08-12 19:19:00.995724768 +0000
+@@ -0,0 +1 @@
+++000000001
+\ No newline at end of file
+./run_returncode.at:97: exit code was 1, expected 0
+983. run_returncode.at:49: 983. RETURN-CODE passing (run_returncode.at:49): FAILED (run_returncode.at:97)

@@ -1,0 +1,39 @@
+#                             -*- compilation -*-
+834. run_misc.at:13190: testing FLOAT-DECIMAL w/o SIZE ERROR ...
+./run_misc.at:13331: $COMPILE prog.cob
+./run_misc.at:13333: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/834/stderr	2026-08-12 19:19:00.856294533 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unrecognized USAGE FLOAT-DECIMAL-16
+--- -	2026-08-12 19:19:00.857605998 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/834/stdout	2026-08-12 19:19:00.856726256 +0000
+@@ -1,26 +1 @@
+---- FLOAT-DECIMAL-34 ---
+-A: 9216586.861751152073732718894009216
+-B: 5305036.78779840848806366047745358
+-Z: 476.1904761904761904761904761904761 IS OK
+-    ...
+---- FLOAT-DECIMAL-16 ---
+-A: 9216586.861751152
+-B: 5305036.787798408
+-Z: 476.1904761904761 IS OK
+-    ...
+---- 99 + 1 / 3 ---
+-FD34: 99.33333333333333333333333333333333 IS OK
+-FD16: 99.33333333333333 IS OK
+-    ...
+---- 99 ---
+-FD34: 99 IS OK
+-FD16: 99 IS OK
+-    ...
+---- Test overflow ---
+-FD16: after 99E369 SIZE ERROR
+-FD34: after 99E6111 SIZE ERROR
+-    ...
+---- Test underflow ---
+-FD16: after 99E-398 SIZE ERROR
+-FD34: after 99E-6176 SIZE ERROR
+ 
+./run_misc.at:13333: exit code was 2, expected 0
+834. run_misc.at:13190: 834. FLOAT-DECIMAL w/o SIZE ERROR (run_misc.at:13190): FAILED (run_misc.at:13333)

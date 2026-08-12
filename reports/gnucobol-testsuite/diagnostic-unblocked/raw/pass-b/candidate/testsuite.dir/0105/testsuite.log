@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+105. syn_definition.at:937: testing Redefinition of section names ...
+./syn_definition.at:949: $COMPILE_ONLY prog.cob
+stderr:
+./syn_definition.at:949: exit code was 0, expected 1
+105. syn_definition.at:937: 105. Redefinition of section names (syn_definition.at:937): FAILED (syn_definition.at:949)

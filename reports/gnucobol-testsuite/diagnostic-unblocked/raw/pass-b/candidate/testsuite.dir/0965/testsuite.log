@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+965. run_reportwriter.at:2214: testing Sample Payroll Report ...
+./run_reportwriter.at:2794: $COMPILE prog.cob
+./run_reportwriter.at:2796: DD_DATAIN="./inp_data" DD_SYSPRINT="./report.txt" $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/965/stderr	2026-08-12 19:19:37.441302138 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: OPEN: `PAYROLL-REGISTER-DATA,` is not a declared file
+./run_reportwriter.at:2796: exit code was 2, expected 0
+965. run_reportwriter.at:2214: 965. Sample Payroll Report (run_reportwriter.at:2214): FAILED (run_reportwriter.at:2796)

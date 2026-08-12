@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+153. syn_occurs.at:486: testing OCCURS with unmatched DEPENDING / TO phrases ...
+./syn_occurs.at:506: $COMPILE_ONLY -std=cobol2014 prog.cob
+stderr:
+./syn_occurs.at:506: exit code was 0, expected 1
+153. syn_occurs.at:486: 153. OCCURS with unmatched DEPENDING / TO phrases (syn_occurs.at:486): FAILED (syn_occurs.at:506)

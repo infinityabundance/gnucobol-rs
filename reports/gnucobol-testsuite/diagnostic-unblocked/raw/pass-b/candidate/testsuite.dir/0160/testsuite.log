@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+160. syn_redefines.at:113: testing REDEFINES: level 88 ...
+./syn_redefines.at:128: $COMPILE_ONLY prog.cob
+stderr:
+./syn_redefines.at:128: exit code was 0, expected 1
+160. syn_redefines.at:113: 160. REDEFINES: level 88 (syn_redefines.at:113): FAILED (syn_redefines.at:128)

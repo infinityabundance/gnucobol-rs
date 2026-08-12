@@ -1,0 +1,19 @@
+#                             -*- compilation -*-
+516. run_fundamental.at:247: testing MOVE to edited item (1) ...
+./run_fundamental.at:284: $COMPILE prog.cob
+./run_fundamental.at:285: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/516/stderr	2026-08-12 19:19:37.040150361 +0000
+@@ -0,0 +1 @@
++cobrun: runtime error: UnsupportedSymbol('(')
+--- -	2026-08-12 19:19:37.042381360 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/516/stdout	2026-08-12 19:19:37.040680550 +0000
+@@ -1,6 +1 @@
+->    1<
+->    0<
+->    0<
+->   +0<
+->     <
+ 
+./run_fundamental.at:285: exit code was 2, expected 0
+516. run_fundamental.at:247: 516. MOVE to edited item (1) (run_fundamental.at:247): FAILED (run_fundamental.at:285)

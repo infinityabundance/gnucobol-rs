@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+1108. run_functions.at:4500: testing UDF in COMPUTE ...
+./run_functions.at:4535: $COMPILE prog.cob
+./run_functions.at:4536: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1108/stderr	2026-08-12 19:19:01.179722798 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: FUNCTION FUNC: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim
+--- -	2026-08-12 19:19:01.181066666 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1108/stdout	2026-08-12 19:19:01.179722798 +0000
+@@ -1,2 +1 @@
+-201
+ 
+./run_functions.at:4536: exit code was 2, expected 0
+1108. run_functions.at:4500: 1108. UDF in COMPUTE (run_functions.at:4500): FAILED (run_functions.at:4536)

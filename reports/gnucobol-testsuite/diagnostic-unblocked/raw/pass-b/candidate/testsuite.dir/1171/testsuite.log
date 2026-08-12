@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1171. run_extensions.at:3438: testing System routine C$TOLOWER ...
+./run_extensions.at:3457: $COMPILE prog.cob
+./run_extensions.at:3458: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1171/stderr	2026-08-12 19:19:37.736233999 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "C$TOLOWER": not a contained program (external CALL is a boundary)
+./run_extensions.at:3458: exit code was 2, expected 0
+1171. run_extensions.at:3438: 1171. System routine C$TOLOWER (run_extensions.at:3438): FAILED (run_extensions.at:3458)

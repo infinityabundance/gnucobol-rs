@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+456. syn_functions.at:467: testing invalid formats w/ DECIMAL-POINT IS COMMA ...
+./syn_functions.at:489: $COMPILE_ONLY prog.cob
+stderr:
+./syn_functions.at:489: exit code was 0, expected 1
+456. syn_functions.at:467: 456. invalid formats w/ DECIMAL-POINT IS COMMA (syn_functions.at:467): FAILED (syn_functions.at:489)

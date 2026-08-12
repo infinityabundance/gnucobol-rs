@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+531. run_fundamental.at:1174: testing GLOBAL at lower level ...
+./run_fundamental.at:1213: $COMPILE prog.cob
+./run_fundamental.at:1214: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/531/stderr	2026-08-12 19:19:37.051069767 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: X
+--- -	2026-08-12 19:19:37.052268121 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/531/stdout	2026-08-12 19:19:37.051069767 +0000
+@@ -1,4 +1 @@
+-prog1
+-prog2
+-prog2
+ 
+./run_fundamental.at:1214: exit code was 2, expected 0
+531. run_fundamental.at:1174: 531. GLOBAL at lower level (run_fundamental.at:1174): FAILED (run_fundamental.at:1214)

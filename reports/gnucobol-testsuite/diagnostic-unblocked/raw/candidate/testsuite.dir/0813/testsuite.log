@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+813. run_misc.at:11436: testing Quote marks in comment paragraphs ...
+./run_misc.at:11450: $COMPILE -o prog prog.cob
+stderr:
+./run_misc.at:11452: $COMPILE -free -o prog prog.cob
+stderr:
+./run_misc.at:11454: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/813/stderr	2026-08-12 19:19:00.840635381 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: no PROCEDURE DIVISION
+--- -	2026-08-12 19:19:00.841724311 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/813/stdout	2026-08-12 19:19:00.840726427 +0000
+@@ -1,2 +1 @@
+-Hello, world!
+ 
+./run_misc.at:11454: exit code was 2, expected 0
+813. run_misc.at:11436: 813. Quote marks in comment paragraphs (run_misc.at:11436): FAILED (run_misc.at:11454)

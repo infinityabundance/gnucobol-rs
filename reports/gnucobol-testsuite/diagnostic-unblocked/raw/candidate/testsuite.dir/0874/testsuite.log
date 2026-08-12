@@ -1,0 +1,55 @@
+#                             -*- compilation -*-
+874. run_file.at:2170: testing INDEXED file variable length record ...
+./run_file.at:2397: $COMPILE prog.cob 
+./run_file.at:2399: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/874/stderr	2026-08-12 19:19:00.890725892 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: DELETE: `FILE` is not a declared file
+--- -	2026-08-12 19:19:00.892531577 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/874/stdout	2026-08-12 19:19:00.891800153 +0000
+@@ -1,42 +1 @@
+-delete file
+-delete file done
+-open
+-open done
+-start > tbw-key
+-start > tbw-key inv
+-read next
+-read next 46
+-write
+-write done
+-start >= tbw-alt
+-start >= tbw-alt done
+-start > tbw-key
+-start > tbw-key done
+-read next
+-read next done
+-read next
+-read next end
+-close
+-close done
+-delete file
+-delete file done
+-open
+-open done
+-start > tbw-key
+-start > tbw-key inv
+-read next
+-read next 46
+-write
+-write done
+-write
+-write done
+-start >= tbw-alt
+-start >= tbw-alt done
+-read next
+-read next done
+-rewrite
+-rewrite done 00
+-close
+-close done
+-Test completed
+ 
+./run_file.at:2399: exit code was 2, expected 0
+874. run_file.at:2170: 874. INDEXED file variable length record (run_file.at:2170): FAILED (run_file.at:2399)

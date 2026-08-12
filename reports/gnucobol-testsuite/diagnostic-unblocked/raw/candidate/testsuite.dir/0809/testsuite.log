@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+809. run_misc.at:11003: testing dump feature with NULL address ...
+./run_misc.at:11116: $COMPILE -fdump=ALL prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/809/stderr	2026-08-12 19:19:00.834300602 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fdump=ALL: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ALL
+./run_misc.at:11116: exit code was 1, expected 0
+809. run_misc.at:11003: 809. dump feature with NULL address (run_misc.at:11003): FAILED (run_misc.at:11116)

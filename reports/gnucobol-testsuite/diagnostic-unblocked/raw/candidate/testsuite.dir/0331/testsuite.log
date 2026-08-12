@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+331. syn_misc.at:3746: testing ADD / SUBTRACT TABLE ...
+./syn_misc.at:3776: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:3776: exit code was 0, expected 1
+331. syn_misc.at:3746: 331. ADD / SUBTRACT TABLE (syn_misc.at:3746): FAILED (syn_misc.at:3776)

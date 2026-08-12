@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1180. run_extensions.at:3678: testing System routine CBL_GC_GETOPT ...
+./run_extensions.at:4095: $COMPILE prog.cob
+./run_extensions.at:4096: $COBCRUN_DIRECT ./prog --version --verbose -jkl
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1180/stderr	2026-08-12 19:19:37.743811886 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: NULL
+./run_extensions.at:4096: exit code was 2, expected 0
+1180. run_extensions.at:3678: 1180. System routine CBL_GC_GETOPT (run_extensions.at:3678): FAILED (run_extensions.at:4096)

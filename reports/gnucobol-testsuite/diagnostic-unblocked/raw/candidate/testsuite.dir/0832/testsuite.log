@@ -1,0 +1,30 @@
+#                             -*- compilation -*-
+832. run_misc.at:13017: testing 01 CONSTANT ...
+./run_misc.at:13078: $COMPILE prog.cob
+./run_misc.at:13080: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:00.856894542 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/832/stdout	2026-08-12 19:19:00.856294533 +0000
+@@ -1,12 +1,12 @@
+ CAT  is 'Cat '
+-Yard is 'Cat & Dog '
+-DIV1 is 33
+-HUN  is 143
+-HUN2 is 1855
+-78 VALUE has simple left to right precedence.
+-01 CONSTANT has normal operator precedence.
+-CON3 is 23
+-CON4 is 26 vs 3.141596 & -2.189 & +12
+-CON6 is 18.
+-My Dog's name is Piper;
++Yard is 'CAT'
++DIV1 is 100
++HUN  is 10
++HUN2 is HUN
++78 VALUE is 1 normal precedence.
++01 CONSTANT is 1 left to right precedence.
++CON3 is (((1
++CON4 is AS vs 3.141596 & -2.189 & +12
++CON6 is AS.
++My Dog's name is FROM;
+ 
+832. run_misc.at:13017: 832. 01 CONSTANT (run_misc.at:13017): FAILED (run_misc.at:13080)

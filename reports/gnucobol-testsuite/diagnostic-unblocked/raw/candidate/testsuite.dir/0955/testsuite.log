@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+955. run_reportwriter.at:120: testing REPORT COL PLUS ...
+./run_reportwriter.at:163: $COMPILE prog.cob
+./run_reportwriter.at:165: DD_PRINTOUT="./report.txt" $COBCRUN_DIRECT ./prog
+./run_reportwriter.at:184: diff reference report.txt
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/955/stderr	2026-08-12 19:19:00.964512474 +0000
+@@ -0,0 +1 @@
++diff: report.txt: No such file or directory
+./run_reportwriter.at:184: exit code was 2, expected 0
+report.txt:
+sed: can't read report.txt: No such file or directory
+955. run_reportwriter.at:120: 955. REPORT COL PLUS (run_reportwriter.at:120): FAILED (run_reportwriter.at:184)

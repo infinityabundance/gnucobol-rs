@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+975. run_reportwriter.at:4573: testing Duplicate INITIATE ...
+./run_reportwriter.at:4619: $COMPILE prog.cob
+./run_reportwriter.at:4621: DD_PRINTOUT=./report.txt $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:37.452279362 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/975/stderr	2026-08-12 19:19:37.451502273 +0000
+@@ -1,2 +1,2 @@
+-libcob: prog.cob:34: error: INITIATE rp was already done
++cobrun: unsupported: not a numeric literal: FOO,
+ 
+./run_reportwriter.at:4621: exit code was 2, expected 0
+975. run_reportwriter.at:4573: 975. Duplicate INITIATE (run_reportwriter.at:4573): FAILED (run_reportwriter.at:4621)

@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+1111. run_extensions.at:25: testing CALL BY CONTENT binary and literal ...
+./run_extensions.at:62: $COMPILE_MODULE dump.c
+./run_extensions.at:63: $COMPILE prog.cob
+./run_extensions.at:64: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1111/stderr	2026-08-12 19:19:37.669694286 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "dump": not a contained program (external CALL is a boundary)
+--- -	2026-08-12 19:19:37.671100297 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1111/stdout	2026-08-12 19:19:37.670243370 +0000
+@@ -1,3 +1 @@
+-00001234
+-00004660
+ 
+./run_extensions.at:64: exit code was 2, expected 0
+1111. run_extensions.at:25: 1111. CALL BY CONTENT binary and literal (run_extensions.at:25): FAILED (run_extensions.at:64)

@@ -1,0 +1,33 @@
+#                             -*- compilation -*-
+493. listings.at:2101: testing Wide listing ...
+./listings.at:2114: $COMPILE_LISTING -T- prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/493/stderr	2026-08-12 19:19:00.552729510 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-12 19:19:00.554673760 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/493/stdout	2026-08-12 19:19:00.553729500 +0000
+@@ -1,21 +1 @@
+-GnuCOBOL V.R.P          prog.cob                                                                                 Page 0001
+-
+-LINE    PG/LN  A...B............................................................SEQUENCE
+-
+-000001
+-000002         IDENTIFICATION   DIVISION.                                       PROG001
+-000003         PROGRAM-ID.      prog.                                           PROG002
+-000004         DATA             DIVISION.                                       PROG003
+-000005         WORKING-STORAGE  SECTION.                                        PROG004
+-GnuCOBOL V.R.P          prog.cob                                                                                 Page 0002
+-
+-LINE    PG/LN  A...B............................................................SEQUENCE
+-
+-000006        /                                                                 PROG005
+-000007         PROCEDURE        DIVISION.                                       PROG006
+-000008             STOP RUN.                                                    PROG007
+-
+-
+-0 warnings in compilation group
+-0 errors in compilation group
+ 
+./listings.at:2114: exit code was 1, expected 0
+493. listings.at:2101: 493. Wide listing (listings.at:2101): FAILED (listings.at:2114)

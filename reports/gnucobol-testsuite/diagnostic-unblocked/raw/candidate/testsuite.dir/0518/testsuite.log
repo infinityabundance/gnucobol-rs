@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+518. run_fundamental.at:345: testing MOVE to edited item (3) ...
+./run_fundamental.at:444: $COMPILE -Wno-truncate prog.cob
+./run_fundamental.at:445: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/518/stderr	2026-08-12 19:19:00.573729286 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: PIC 0XXXXXX: UnsupportedSymbol('X')
+./run_fundamental.at:445: exit code was 2, expected 0
+518. run_fundamental.at:345: 518. MOVE to edited item (3) (run_fundamental.at:345): FAILED (run_fundamental.at:445)

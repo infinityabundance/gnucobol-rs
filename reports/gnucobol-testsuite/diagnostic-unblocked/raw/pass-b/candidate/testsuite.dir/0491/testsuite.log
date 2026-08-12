@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+491. listings.at:1859: testing Multiple programs in one compilation group ...
+./listings.at:2028: $COMPILE $LISTING_FLAGS -Wunreachable -t prog.lst -Xref -ftsymbols prog-1.cob prog-2.cob
+stderr:
+cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+./listings.at:2028: exit code was 1, expected 0
+prog.lst:
+sed: can't read prog.lst: No such file or directory
+491. listings.at:1859: 491. Multiple programs in one compilation group (listings.at:1859): FAILED (listings.at:2028)

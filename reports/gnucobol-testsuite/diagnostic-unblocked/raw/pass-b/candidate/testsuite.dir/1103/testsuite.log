@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+1103. run_functions.at:4293: testing Formatted funcs w/ invalid variable format ...
+./run_functions.at:4357: $COMPILE prog.cob
+stderr:
+./run_functions.at:4361: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1103/stdout	2026-08-12 19:19:37.657313215 +0000
+@@ -0,0 +1,7 @@
++Test 1 failed
++Test 2 failed
++Test 3 failed
++Test 4 failed
++Test 5 failed
++Test 6 failed
++Test 7 failed
+1103. run_functions.at:4293: 1103. Formatted funcs w/ invalid variable format (run_functions.at:4293): FAILED (run_functions.at:4361)

@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+273. syn_misc.at:1340: testing unexpected mnemonic-name location ...
+./syn_misc.at:1358: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:1358: exit code was 0, expected 1
+273. syn_misc.at:1340: 273. unexpected mnemonic-name location (syn_misc.at:1340): FAILED (syn_misc.at:1358)

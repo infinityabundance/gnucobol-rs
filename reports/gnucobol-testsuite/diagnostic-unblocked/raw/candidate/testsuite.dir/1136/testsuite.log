@@ -1,0 +1,19 @@
+#                             -*- compilation -*-
+1136. run_extensions.at:1749: testing CALL unusual PROGRAM-ID. ...
+./run_extensions.at:1803: $COMPILE_MODULE A@B.cob
+./run_extensions.at:1804: $COMPILE_MODULE A#B.cob
+./run_extensions.at:1805: $COMPILE_MODULE A-B.cob
+./run_extensions.at:1806: $COMPILE_MODULE A_B.cob
+./run_extensions.at:1807: $COMPILE -o caller caller.cob
+./run_extensions.at:1809: $COBCRUN_DIRECT ./caller
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1136/stderr	2026-08-12 19:19:01.217751785 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: expected program name after PROGRAM-ID
+--- -	2026-08-12 19:19:01.219463836 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1136/stdout	2026-08-12 19:19:01.218722380 +0000
+@@ -1 +1 @@
+-P1P2P3P4
++
+./run_extensions.at:1809: exit code was 2, expected 0
+1136. run_extensions.at:1749: 1136. CALL unusual PROGRAM-ID. (run_extensions.at:1749): FAILED (run_extensions.at:1809)

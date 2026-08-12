@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+195. syn_file.at:444: testing START on SEQUENTIAL file ...
+./syn_file.at:473: $COMPILE_ONLY prog.cob
+stderr:
+./syn_file.at:473: exit code was 0, expected 1
+195. syn_file.at:444: 195. START on SEQUENTIAL file (syn_file.at:444): FAILED (syn_file.at:473)

@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+760. run_misc.at:4040: testing Sticky LINKAGE ...
+./run_misc.at:4075: $COMPILE_MODULE -fsticky-linkage callee.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/760/stderr	2026-08-12 19:19:00.796387835 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fsticky-linkage: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): callee.cob
+./run_misc.at:4075: exit code was 1, expected 0
+760. run_misc.at:4040: 760. Sticky LINKAGE (run_misc.at:4040): FAILED (run_misc.at:4075)

@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+772. run_misc.at:4638: testing CALL in from C, cob_call_params explicitly set ...
+./run_misc.at:4691: $COMPILE -o caller caller.c callee.cob
+./run_misc.at:4692: $COBCRUN_DIRECT ./caller
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/772/stderr	2026-08-12 19:19:37.252819288 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: no PROCEDURE DIVISION
+--- -	2026-08-12 19:19:37.254468443 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/772/stdout	2026-08-12 19:19:37.253336437 +0000
+@@ -1 +1 @@
+-P1: A
++
+./run_misc.at:4692: exit code was 2, expected 0
+772. run_misc.at:4638: 772. CALL in from C, cob_call_params explicitly set (run_misc.at:4638): FAILED (run_misc.at:4692)

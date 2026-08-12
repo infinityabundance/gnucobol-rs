@@ -1,0 +1,28 @@
+#                             -*- compilation -*-
+116. syn_definition.at:1231: testing OSVS register CURRENT-DATE and TIME-OF-DAY ...
+./syn_definition.at:1272: $COMPILE_ONLY -std=cobol85 prog1.cob
+stderr:
+prog1.cob:8: error: 'CURRENT-DATE' is not defined
+prog1.cob:9: error: 'TIME-OF-DAY' is not defined
+./syn_definition.at:1274: $COMPILE_ONLY -std=ibm-strict prog1.cob
+stderr:
+prog1.cob:8: error: 'CURRENT-DATE' is not defined
+prog1.cob:9: error: 'TIME-OF-DAY' is not defined
+./syn_definition.at:1276: $COMPILE_ONLY -std=mf prog1.cob
+stderr:
+prog1.cob:8: error: 'CURRENT-DATE' is not defined
+prog1.cob:9: error: 'TIME-OF-DAY' is not defined
+./syn_definition.at:1279: $COMPILE_ONLY prog1.cob prog2.cob
+stderr:
+prog1.cob:8: error: 'CURRENT-DATE' is not defined
+prog1.cob:9: error: 'TIME-OF-DAY' is not defined
+./syn_definition.at:1281: $COMPILE_ONLY -fregister=current-date,time-of-day \
+  prog1.cob prog2.cob prog3.cob
+stderr:
+configuration error:
+-fregister=current-date,time-of-day: special register 'CURRENT-DATE' is unknown, needs a definition
+special register 'TIME-OF-DAY' is unknown, needs a definition
+prog1.cob:8: error: 'CURRENT-DATE' is not defined
+prog1.cob:9: error: 'TIME-OF-DAY' is not defined
+prog3.cob:5: error: 'CURRENT-DATE' is not defined
+116. syn_definition.at:1231: 116. OSVS register CURRENT-DATE and TIME-OF-DAY (syn_definition.at:1231): UNEXPECTED PASS     (0m0.046s 0m0.011s)

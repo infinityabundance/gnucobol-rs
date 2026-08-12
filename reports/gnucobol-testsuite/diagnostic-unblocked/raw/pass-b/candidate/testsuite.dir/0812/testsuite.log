@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+812. run_misc.at:11409: testing PICTURE with constant-name ...
+./run_misc.at:11429: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: unsupported: PIC 9(FOO-BAR)9(FOO-BAR): BadRepeat
+./run_misc.at:11429: exit code was 1, expected 0
+812. run_misc.at:11409: 812. PICTURE with constant-name (run_misc.at:11409): FAILED (run_misc.at:11429)

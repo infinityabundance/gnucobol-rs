@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+99. syn_definition.at:783: testing Ambiguous reference to 02 items ...
+./syn_definition.at:800: $COMPILE_ONLY prog.cob
+stderr:
+./syn_definition.at:800: exit code was 0, expected 1
+99. syn_definition.at:783: 99. Ambiguous reference to 02 items (syn_definition.at:783): FAILED (syn_definition.at:800)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+310. syn_misc.at:2772: testing missing periods with COPYs ...
+./syn_misc.at:2811: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: COPY expansion failed (fail closed): malformed COPY statement
+./syn_misc.at:2813: $COMPILE -fformat=cobol85 prog.cob
+stderr:
+cobc-rs: -fformat=cobol85: only fixed/free/auto are supported by the candidate (fail closed)
+./syn_misc.at:2813: exit code was 1, expected 0
+310. syn_misc.at:2772: 310. missing periods with COPYs (syn_misc.at:2772): FAILED (syn_misc.at:2813)

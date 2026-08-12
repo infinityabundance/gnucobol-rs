@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+923. run_file.at:7274: testing READ INPUT pipe & WRITE OUTPUT pipe ...
+./run_file.at:7360: $COMPILE prog.cob
+./run_file.at:7361: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/923/stdout	2026-08-12 19:19:30.061413491 +0000
+@@ -0,0 +1 @@
++FAILED: OPEN INPUT
+923. run_file.at:7274: 923. READ INPUT pipe & WRITE OUTPUT pipe (run_file.at:7274): expected failure (run_file.at:7361)

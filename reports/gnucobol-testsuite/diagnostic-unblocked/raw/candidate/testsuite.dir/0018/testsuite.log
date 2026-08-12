@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+18. used_binaries.at:722: testing cobcrun error messages ...
+./used_binaries.at:725: $COBCRUN -q
+./used_binaries.at:729: $COBCRUN -q -prog
+--- -	2026-08-12 19:19:00.227681047 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/18/stderr	2026-08-12 19:19:00.226792210 +0000
+@@ -1,2 +1,2 @@
+-cobcrun: unrecognized option '-prog'
++cobcrun: invalid option -- 'p'
+ 
+18. used_binaries.at:722: 18. cobcrun error messages (used_binaries.at:722): FAILED (used_binaries.at:729)

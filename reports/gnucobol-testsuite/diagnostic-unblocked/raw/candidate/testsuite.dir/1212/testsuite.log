@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1212. run_extensions.at:5992: testing INSPECT TRAILING ...
+./run_extensions.at:6056: $COMPILE prog.cob
+./run_extensions.at:6057: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1212/stderr	2026-08-12 19:19:01.300725355 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: INSPECT TALLYING FOR: unrecognized mode `TRAILING` (expected ALL/LEADING/CHARACTERS)
+./run_extensions.at:6057: exit code was 2, expected 0
+1212. run_extensions.at:5992: 1212. INSPECT TRAILING (run_extensions.at:5992): FAILED (run_extensions.at:6057)

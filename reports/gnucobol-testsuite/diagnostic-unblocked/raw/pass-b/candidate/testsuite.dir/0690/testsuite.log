@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+690. run_misc.at:787: testing Floating continuation indicator ...
+./run_misc.at:803: $COMPILE prog.cob
+./run_misc.at:804: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/690/stderr	2026-08-12 19:19:37.178791957 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: -
+--- -	2026-08-12 19:19:37.179901225 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/690/stdout	2026-08-12 19:19:37.179322666 +0000
+@@ -1 +1 @@
+-OKOK
++
+./run_misc.at:804: exit code was 2, expected 0
+690. run_misc.at:787: 690. Floating continuation indicator (run_misc.at:787): FAILED (run_misc.at:804)

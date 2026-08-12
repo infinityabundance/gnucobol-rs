@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+887. run_file.at:3768: testing System routines for files ...
+./run_file.at:3952: $COMPILE prog.cob
+./run_file.at:3953: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:37.369808169 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/887/stderr	2026-08-12 19:19:37.369248275 +0000
+@@ -1,4 +1,2 @@
+-libcob: prog.cob:15: warning: call to CBL_CREATE_FILE with wrong file_lock: 11
+-libcob: prog.cob:15: warning: call to CBL_CREATE_FILE with wrong file_dev: 22
+-libcob: prog.cob:15: warning: call to CBL_OPEN_FILE with wrong access mode: 55
++cobrun: unsupported: CALL "CBL_CREATE_FILE": not a contained program (external CALL is a boundary)
+ 
+./run_file.at:3953: exit code was 2, expected 0
+887. run_file.at:3768: 887. System routines for files (run_file.at:3768): FAILED (run_file.at:3953)

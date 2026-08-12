@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+990. run_functions.at:165: testing FUNCTION BYTE-LENGTH ...
+./run_functions.at:213: $COMPILE prog.cob
+stderr:
+./run_functions.at:215: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/990/stderr	2026-08-12 19:19:00.999724725 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: PIC N(4): UnsupportedSymbol('N')
+./run_functions.at:215: exit code was 2, expected 0
+990. run_functions.at:165: 990. FUNCTION BYTE-LENGTH (run_functions.at:165): FAILED (run_functions.at:215)

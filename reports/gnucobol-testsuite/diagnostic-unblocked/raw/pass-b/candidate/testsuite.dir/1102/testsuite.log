@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1102. run_functions.at:4269: testing FUNCTION YEAR-TO-YYYY ...
+./run_functions.at:4287: $COMPILE prog.cob
+./run_functions.at:4288: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1102/stderr	2026-08-12 19:19:37.657313215 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: FUNCTION YEAR-TO-YYYY requires a pinned COB_CURRENT_DATE
+./run_functions.at:4288: exit code was 2, expected 0
+1102. run_functions.at:4269: 1102. FUNCTION YEAR-TO-YYYY (run_functions.at:4269): FAILED (run_functions.at:4288)

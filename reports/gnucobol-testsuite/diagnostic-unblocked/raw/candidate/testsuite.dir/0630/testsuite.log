@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+630. run_subscripts.at:211: testing Subscript by arithmetic expression ...
+./run_subscripts.at:236: $COMPILE prog.cob
+./run_subscripts.at:237: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/630/stderr	2026-08-12 19:19:00.677728172 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: subscript '(3 + 1) / 2' is not an integer
+./run_subscripts.at:237: exit code was 2, expected 0
+630. run_subscripts.at:211: 630. Subscript by arithmetic expression (run_subscripts.at:211): FAILED (run_subscripts.at:237)

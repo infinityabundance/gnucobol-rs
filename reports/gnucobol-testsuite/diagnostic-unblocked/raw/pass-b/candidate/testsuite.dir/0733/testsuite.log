@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+733. run_misc.at:2485: testing EXIT SECTION ...
+./run_misc.at:2515: $COMPILE -fno-section-exit-check prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/733/stderr	2026-08-12 19:19:37.216336833 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fno-section-exit-check: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
+./run_misc.at:2515: exit code was 1, expected 0
+733. run_misc.at:2485: 733. EXIT SECTION (run_misc.at:2485): FAILED (run_misc.at:2515)

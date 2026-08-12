@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+828. run_misc.at:12714: testing SET CONSTANT directive ...
+./run_misc.at:12783: $COMPILE -std=mf prog.cob
+./run_misc.at:12787: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/828/stderr	2026-08-12 19:19:37.309615448 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number $SET
+--- -	2026-08-12 19:19:37.310804875 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/828/stdout	2026-08-12 19:19:37.309967293 +0000
+@@ -1,5 +1 @@
+-Your Dog's name is Barky;
+-The Dog's name is Barky ;
+-My Horse is Blacky ;
+-My little pony is Blacky.
+ 
+./run_misc.at:12787: exit code was 2, expected 0
+828. run_misc.at:12714: 828. SET CONSTANT directive (run_misc.at:12714): FAILED (run_misc.at:12787)

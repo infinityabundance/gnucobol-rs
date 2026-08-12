@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+464. syn_literals.at:1070: testing national literals ...
+./syn_literals.at:1085: $COMPILE_ONLY prog.cob
+stderr:
+./syn_literals.at:1088: $COMPILE_ONLY -std=cobol85 prog.cob
+stderr:
+./syn_literals.at:1088: exit code was 0, expected 1
+464. syn_literals.at:1070: 464. national literals (syn_literals.at:1070): FAILED (syn_literals.at:1088)

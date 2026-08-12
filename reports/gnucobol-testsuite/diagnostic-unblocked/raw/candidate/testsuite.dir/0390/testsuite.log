@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+390. syn_misc.at:6766: testing CONTROL: default section ...
+./syn_misc.at:6786: $COMPILE -fcontrol-division=ok prog.cob
+stderr:
+cobc-rs: -fcontrol-division=ok: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ok
+./syn_misc.at:6786: exit code was 1, expected 0
+390. syn_misc.at:6766: 390. CONTROL: default section (syn_misc.at:6766): FAILED (syn_misc.at:6786)

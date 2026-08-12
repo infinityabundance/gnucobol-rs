@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+826. run_misc.at:12556: testing OSVS Arithmetic (1) ...
+./run_misc.at:12633: $COMPILE -farithmetic-osvs prog.cob
+stderr:
+cobc-rs: -farithmetic-osvs: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
+./run_misc.at:12633: exit code was 1, expected 0
+826. run_misc.at:12556: 826. OSVS Arithmetic (1) (run_misc.at:12556): FAILED (run_misc.at:12633)

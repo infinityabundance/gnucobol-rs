@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+767. run_misc.at:4316: testing ALLOCATE CHARACTERS INITIALIZED (TO) ...
+./run_misc.at:4357: $COMPILE prog.cob
+./run_misc.at:4358: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/767/stderr	2026-08-12 19:19:37.247454287 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: ADDRESS
+./run_misc.at:4358: exit code was 2, expected 0
+767. run_misc.at:4316: 767. ALLOCATE CHARACTERS INITIALIZED (TO) (run_misc.at:4316): FAILED (run_misc.at:4358)

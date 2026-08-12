@@ -1,0 +1,32 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      error.
+       DATA             DIVISION.
+       WORKING-STORAGE  SECTION.
+       01 WRK-VAR       PIC X(10) EXTERNAL.
+       01 MYVAR         PIC X(10) EXTERNAL AS "COB-VAR".
+       01 EXT-VAR       PIC X(10) EXTERNAL.
+       PROCEDURE        DIVISION.
+           MOVE "Extrn" TO WRK-VAR
+           MOVE "Hello" TO MYVAR
+           MOVE SPACES  TO EXT-VAR
+           CALL "callee"
+           IF EXT-VAR NOT = "World"
+              DISPLAY 'simple external back not correct: ' EXT-VAR.
+           STOP RUN.
+
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      callee.
+       DATA             DIVISION.
+       WORKING-STORAGE  SECTION.
+       01 PRG-VAR       PIC X(8) EXTERNAL AS "WRK-VAR".
+       01 COB-VAR       PIC X(8) EXTERNAL.
+       01 EXT-VAR       PIC X(8) EXTERNAL.
+       PROCEDURE        DIVISION.
+           IF PRG-VAR NOT = "Extrn"
+              DISPLAY 'local named external is not correct: ' PRG-VAR.
+           IF COB-VAR NOT = "Hello"
+              DISPLAY 'remote named external is not correct: ' COB-VAR.
+           MOVE "World" TO EXT-VAR.
+           EXIT PROGRAM.

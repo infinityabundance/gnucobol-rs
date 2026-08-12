@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+675. run_misc.at:190: testing CURRENCY SIGN ...
+./run_misc.at:214: $COMPILE prog.cob
+./run_misc.at:215: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/675/stderr	2026-08-12 19:19:37.169162806 +0000
+@@ -0,0 +1 @@
++cobrun: runtime error: UnsupportedSymbol('(')
+--- -	2026-08-12 19:19:37.170623138 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/675/stdout	2026-08-12 19:19:37.169755671 +0000
+@@ -1 +1 @@
+-Amount is #  Y1512.34#
++
+./run_misc.at:215: exit code was 2, expected 0
+675. run_misc.at:190: 675. CURRENCY SIGN (run_misc.at:190): FAILED (run_misc.at:215)

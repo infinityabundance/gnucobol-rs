@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1278. data_packed.at:2174: testing arithmetic truncation with USAGE PACKED-DECIMAL ...
+./data_packed.at:2230: $COMPILE prog.cob
+./data_packed.at:2231: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/1278/stderr	2026-08-12 19:19:37.869545268 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: FENCE
+./data_packed.at:2231: exit code was 2, expected 0
+1278. data_packed.at:2174: 1278. arithmetic truncation with USAGE PACKED-DECIMAL (data_packed.at:2174): FAILED (data_packed.at:2231)

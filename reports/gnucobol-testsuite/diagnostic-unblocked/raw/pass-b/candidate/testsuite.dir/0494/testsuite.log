@@ -1,0 +1,53 @@
+#                             -*- compilation -*-
+494. listings.at:2177: testing Symbols: simple ...
+./listings.at:2198: $COMPILE_LISTING0 -t- -fno-tmessages -ftsymbols prog.cob
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/494/stderr	2026-08-12 19:19:37.020819284 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-12 19:19:37.023340454 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/494/stdout	2026-08-12 19:19:37.021338923 +0000
+@@ -1,39 +1 @@
+-GnuCOBOL V.R.P               prog.cob
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000001
+-000002         IDENTIFICATION   DIVISION.
+-000003         PROGRAM-ID.      prog.
+-000004         DATA             DIVISION.
+-000005         WORKING-STORAGE  SECTION.
+-000006         01 WS-ONE    PIC 9(4) VALUE 37.
+-000007         01 WS-TWO    PIC A(4) VALUE 'HIGH'.
+-000008         01 WS-THREE  PIC X(4) VALUE 'BAR'.
+-000009         01 WS-FOUR            COMP-1 VALUE 37.
+-000010         01 WS-FIVE            COMP-2 VALUE 37.
+-000011         01 WS-SIX    PIC S999 COMP-3 VALUE -37.
+-000012         01 WS-SEVEN  PIC $$,$$$,$$9.99 VALUE ZERO.
+-000013         PROCEDURE        DIVISION.
+-000014             STOP RUN.
+-
+-SIZE  TYPE           LVL  NAME                           PICTURE
+-
+-      WORKING-STORAGE SECTION
+-
+-00004 NUMERIC        01   WS-ONE                         9(4)
+-
+-00004 ALPHABETIC     01   WS-TWO                         A(4)
+-
+-00004 ALPHANUMERIC   01   WS-THREE                       X(4)
+-
+-00004 NUMERIC        01   WS-FOUR                        S9(7)V9(8) COMP-1
+-
+-00008 NUMERIC        01   WS-FIVE                        S9(17)V9(17) COMP-2
+-
+-00002 NUMERIC        01   WS-SIX                         S999 COMP-3
+-
+-00013 NUMERIC        01   WS-SEVEN                       $$,$$$,$$9.99
+-
+-
+ 
+./listings.at:2198: exit code was 1, expected 0
+prog.lst:
+sed: can't read prog.lst: No such file or directory
+494. listings.at:2177: 494. Symbols: simple (listings.at:2177): FAILED (listings.at:2198)

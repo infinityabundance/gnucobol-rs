@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+187. syn_file.at:48: testing Duplicated SELECT ...
+./syn_file.at:70: $COMPILE_ONLY prog.cob
+stderr:
+./syn_file.at:70: exit code was 0, expected 1
+187. syn_file.at:48: 187. Duplicated SELECT (syn_file.at:48): FAILED (syn_file.at:70)

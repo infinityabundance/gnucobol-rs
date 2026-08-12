@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+570. run_fundamental.at:3098: testing Numeric operations (2) DISPLAY ...
+./run_fundamental.at:3328: $COMPILE -Wno-truncate prog.cob
+./run_fundamental.at:3329: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/570/stderr	2026-08-12 19:19:00.627215152 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number REPLACE
+./run_fundamental.at:3329: exit code was 2, expected 0
+570. run_fundamental.at:3098: 570. Numeric operations (2) DISPLAY (run_fundamental.at:3098): FAILED (run_fundamental.at:3329)

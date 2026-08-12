@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+302. syn_misc.at:2476: testing ANY LENGTH item as BY VALUE formal parameter ...
+./syn_misc.at:2492: $COMPILE_ONLY prog.cob
+stderr:
+./syn_misc.at:2492: exit code was 0, expected 1
+302. syn_misc.at:2476: 302. ANY LENGTH item as BY VALUE formal parameter (syn_misc.at:2476): FAILED (syn_misc.at:2492)

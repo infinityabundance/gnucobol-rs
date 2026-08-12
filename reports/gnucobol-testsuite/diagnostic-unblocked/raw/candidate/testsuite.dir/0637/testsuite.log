@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+637. run_subscripts.at:542: testing CALL with OCCURS DEPENDING ON ...
+./run_subscripts.at:581: $COMPILE prog.cob
+./run_subscripts.at:582: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/637/stderr	2026-08-12 19:19:00.684728097 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: PARM-STR
+--- -	2026-08-12 19:19:00.686621658 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/637/stdout	2026-08-12 19:19:00.685728087 +0000
+@@ -1 +1 @@
+-Hi, there!
++
+./run_subscripts.at:582: exit code was 2, expected 0
+637. run_subscripts.at:542: 637. CALL with OCCURS DEPENDING ON (run_subscripts.at:542): FAILED (run_subscripts.at:582)

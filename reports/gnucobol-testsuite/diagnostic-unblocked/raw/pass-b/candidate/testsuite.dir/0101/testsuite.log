@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+101. syn_definition.at:828: testing Ambiguous reference with qualification ...
+./syn_definition.at:847: $COMPILE_ONLY prog.cob
+stderr:
+./syn_definition.at:847: exit code was 0, expected 1
+101. syn_definition.at:828: 101. Ambiguous reference with qualification (syn_definition.at:828): FAILED (syn_definition.at:847)

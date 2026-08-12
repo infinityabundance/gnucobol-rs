@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+232. syn_reportwriter.at:121: testing REPORT not positive integers in COL / LINE PLUS ...
+./syn_reportwriter.at:164: $COMPILE_ONLY prog.cob
+stderr:
+./syn_reportwriter.at:164: exit code was 0, expected 1
+232. syn_reportwriter.at:121: 232. REPORT not positive integers in COL / LINE PLUS (syn_reportwriter.at:121): FAILED (syn_reportwriter.at:164)

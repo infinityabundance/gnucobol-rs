@@ -1,0 +1,24 @@
+#                             -*- compilation -*-
+827. run_misc.at:12662: testing OSVS Arithmetic Test (2) ...
+./run_misc.at:12698: $COMPILE -std=ibm prog.cob
+stderr:
+./run_misc.at:12701: $COBCRUN_DIRECT ./prog
+--- -	2026-08-12 19:19:00.851352731 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/827/stdout	2026-08-12 19:19:00.850726320 +0000
+@@ -1,8 +1,8 @@
+-RES = +000068094
+-RES ROUNDED = +000068095
+-RES MULT1 = +000068094
+-RES MULT2 = +000068095
+-RES 1 = +002277777
+-RES F = +000068094
+-RES ROUNDED AWAY = +000068095
++RES = +0000680.95
++RES ROUNDED = +0000680.95
++RES MULT1 = +0000680.95
++RES MULT2 = +0000680.95
++RES 1 = +0022777.77
++RES F = +0000680.94
++RES ROUNDED AWAY = +0000680.96
+ 
+827. run_misc.at:12662: 827. OSVS Arithmetic Test (2) (run_misc.at:12662): FAILED (run_misc.at:12701)

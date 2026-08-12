@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+766. run_misc.at:4272: testing ALLOCATE / FREE with BASED item (2) ...
+./run_misc.at:4307: $COMPILE prog.cob
+./run_misc.at:4308: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/766/stderr	2026-08-12 19:19:37.248968940 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: condition: unrecognized relational operator (expected = > < >= <= <> GREATER LESS EQUAL)
+./run_misc.at:4308: exit code was 2, expected 0
+766. run_misc.at:4272: 766. ALLOCATE / FREE with BASED item (2) (run_misc.at:4272): FAILED (run_misc.at:4308)

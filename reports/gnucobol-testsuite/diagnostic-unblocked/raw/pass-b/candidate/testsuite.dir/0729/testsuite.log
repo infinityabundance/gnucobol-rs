@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+729. run_misc.at:2375: testing PERFORM VARYING BY phrase omitted ...
+./run_misc.at:2395: $COMPILE_ONLY -std=cobol85 prog.cob
+stderr:
+cobc-rs: unsupported: PERFORM VARYING: expected BY
+./run_misc.at:2397: $COMPILE prog.cob
+./run_misc.at:2398: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/729/stderr	2026-08-12 19:19:37.216332420 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: PERFORM VARYING: expected BY
+--- -	2026-08-12 19:19:37.217693607 +0000
++++ /work/trees/b/tests/testsuite.dir/at-groups/729/stdout	2026-08-12 19:19:37.216336833 +0000
+@@ -1 +1 @@
+-XXX
++
+./run_misc.at:2398: exit code was 2, expected 0
+729. run_misc.at:2375: 729. PERFORM VARYING BY phrase omitted (run_misc.at:2375): FAILED (run_misc.at:2398)

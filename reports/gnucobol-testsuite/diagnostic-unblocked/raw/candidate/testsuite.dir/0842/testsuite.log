@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+842. run_misc.at:13909: testing runtime checks within conditions ...
+./run_misc.at:13948: $COMPILE prog.cob
+./run_misc.at:13949: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/842/stderr	2026-08-12 19:19:00.866154094 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: 
+./run_misc.at:13949: exit code was 2, expected 0
+842. run_misc.at:13909: 842. runtime checks within conditions (run_misc.at:13909): FAILED (run_misc.at:13949)

@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+944. run_file.at:13096: testing File SORT, LINE SEQUENTIAL ...
+./run_file.at:13141: $COMPILE prog.cob
+./run_file.at:13142: $COBCRUN_DIRECT ./prog
+./run_file.at:13143: cat result.txt
+--- -	2026-08-12 19:19:00.954189239 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/944/stdout	2026-08-12 19:19:00.953177143 +0000
+@@ -1,8 +1 @@
+-
+-
+-
+-
+-
+-hello
+-world
+-
++                              hello world 
+944. run_file.at:13096: 944. File SORT, LINE SEQUENTIAL (run_file.at:13096): FAILED (run_file.at:13143)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1166. run_extensions.at:3313: testing System routine C$JUSTIFY ...
+./run_extensions.at:3332: $COMPILE prog.cob
+./run_extensions.at:3333: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/tests/testsuite.dir/at-groups/1166/stderr	2026-08-12 19:19:01.250722038 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "C$JUSTIFY": not a contained program (external CALL is a boundary)
+./run_extensions.at:3333: exit code was 2, expected 0
+1166. run_extensions.at:3313: 1166. System routine C$JUSTIFY (run_extensions.at:3313): FAILED (run_extensions.at:3333)

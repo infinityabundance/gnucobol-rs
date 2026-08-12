@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+161. syn_redefines.at:140: testing REDEFINES: lower level number ...
+./syn_redefines.at:157: $COMPILE_ONLY prog.cob
+stderr:
+./syn_redefines.at:157: exit code was 0, expected 1
+161. syn_redefines.at:140: 161. REDEFINES: lower level number (syn_redefines.at:140): FAILED (syn_redefines.at:157)
