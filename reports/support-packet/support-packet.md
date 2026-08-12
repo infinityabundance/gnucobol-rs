@@ -18,7 +18,7 @@
 | id | path | sha256 |
 |---|---|---|
 | `status` | [`STATUS.md`](../../STATUS.md) | `7ac6dc265ad73297…` |
-| `changelog` | [`CHANGELOG.md`](../../CHANGELOG.md) | `83b87a596dd8c4fc…` |
+| `changelog` | [`CHANGELOG.md`](../../CHANGELOG.md) | `9f8f2706c1f6f937…` |
 | `claim_ladder` | [`reports/claim-ladder.json`](../claim-ladder.json) | `a76179ffa8a30580…` |
 | `negative_capabilities` | [`reports/negative-capabilities.json`](../negative-capabilities.json) | `6c7c8795ffdccf85…` |
 | `dsse_verification` | [`reports/signing/verification-report.json`](../signing/verification-report.json) | `7568845289b62a56…` |
