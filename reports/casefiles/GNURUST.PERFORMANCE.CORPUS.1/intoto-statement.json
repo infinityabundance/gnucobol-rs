@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.PERFORMANCE.CORPUS.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.8.56",
+    "crate_version": "0.8.57",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "deb675a3315e8488e1fde0d24c45ed6c97c0b1b7f47d320c1eb2ed21efee8063",
-      "receipt_sha256": "71e4405584fd7c514b39c11b4376ccdd70be8a413ef8fe40ff703ebb27251d96"
+      "receipt_sha256": "dfbd4d90f499fbb54074281ae58afb2f39e61ecab1cee0ad08729fed2e390183"
     },
     "negative_claim_count": 3,
     "positive_claim_count": 2,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "d5ed8ff5a5ebbdb1d3a6dd665a174dd7243fbebd56d3c31675f895cdeab5e328"
+        "sha256": "7de97cc456b57d9227ba4a0c614ef3dd37d07b6a565b92ae8bfbf30c04c55775"
       },
       "name": "reports/casefiles/GNURUST.PERFORMANCE.CORPUS.1/casefile.json"
     }

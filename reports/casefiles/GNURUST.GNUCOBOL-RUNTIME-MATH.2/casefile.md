@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.GNUCOBOL-RUNTIME-MATH.2 (court-casefile)
 
-**Verdict: PASS** · reports/gnucobol-runtime-tests/* · crate `gnucobol-rs` 0.8.56
+**Verdict: PASS** · reports/gnucobol-runtime-tests/* · crate `gnucobol-rs` 0.8.57
 
 - **Oracle:** the TESTSUITE.1 baseline
 - **Byte domain(s):** math-correctness.{json,md} + math-performance.{json,csv,md} + raw-samples/

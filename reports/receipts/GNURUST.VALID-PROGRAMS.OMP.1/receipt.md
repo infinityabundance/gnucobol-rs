@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.VALID-PROGRAMS.OMP.1` |
 | court | valid-program corpus -- the Open Mainframe Project course repository is fully inventoried with platform dependencies typed (omp programs.json + inventory.json) |
-| crate_version | `0.8.56` |
+| crate_version | `0.8.57` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | omp programs.json + inventory.json |
 | replay command | `bash lab/oracle/../valid-corpus/corpus_court_sweep.sh valid-omp` |

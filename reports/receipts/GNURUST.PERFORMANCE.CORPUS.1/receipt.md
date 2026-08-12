@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.PERFORMANCE.CORPUS.1` |
 | court | performance corpus -- corpus throughput (View E: 10 workloads x 4 scales, one pass per lane) with peak memory and raw samples retained; unfavorable results are never discarded |
-| crate_version | `0.8.56` |
+| crate_version | `0.8.57` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | performance/views.json (View E) + raw/view_e.json |
 | replay command | `bash lab/oracle/../valid-corpus/corpus_court_sweep.sh performance` |

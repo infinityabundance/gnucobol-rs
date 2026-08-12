@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.CORPUS.DEDUP.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.56",
+  "crate_version": "0.8.57",
   "damage_if_overclaimed": "counting duplicate programs as independent evidence would inflate generalization claims",
   "hash_chain": {
-    "inputs_sha256": "b2a316949de39066a4c22687f872634de75b39370a05f7c6efcaa06385a46cdd"
+    "inputs_sha256": "60abbeb3a30331c6704e1d736c2778cb2f9fb9fe48f4a95a5985e594e5bd5f3d"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "5568ef1587d2b936824be24d79e49dc3bc9f316d34e0de9890c80679a6054110",
-    "receipt_sha256": "1675ddaaaa9e33db73530f3bb03e497f941ded19df77dba2b669dd9a68cfd700"
+    "receipt_sha256": "e4bc9b7a73a7580a74ece98cd012e331bb92030f22c44ac71e7e86360a222fc5"
   },
   "kind": "court-casefile",
   "lie_prevented": [

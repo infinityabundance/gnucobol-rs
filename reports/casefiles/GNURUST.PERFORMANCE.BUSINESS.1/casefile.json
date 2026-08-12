@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.PERFORMANCE.BUSINESS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.56",
+  "crate_version": "0.8.57",
   "damage_if_overclaimed": "benchmarking a workload whose correctness was not established would invalidate every timing",
   "hash_chain": {
-    "inputs_sha256": "a12501121a86bc967ca3e1fc47b388d81f41f89af596bd9c2e6f758533fccd46"
+    "inputs_sha256": "75b8a16544dda31765a1b3a0aa41f55d81fb8d797d49448e1f128a2158601427"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "923ab96310f6a83c53280cdea3f1e06f283cbbe5d317f31015f7c4357c39bbc1",
-    "receipt_sha256": "71e4405584fd7c514b39c11b4376ccdd70be8a413ef8fe40ff703ebb27251d96"
+    "receipt_sha256": "dfbd4d90f499fbb54074281ae58afb2f39e61ecab1cee0ad08729fed2e390183"
   },
   "kind": "court-casefile",
   "lie_prevented": [

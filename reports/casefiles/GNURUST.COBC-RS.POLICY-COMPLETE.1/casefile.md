@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.COBC-RS.POLICY-COMPLETE.1 (court-casefile)
 
-**Verdict: PASS** · docs/generated/cobc-rs-option-compatibility.md (freshness-gated) · crate `gnucobol-rs` 0.8.56
+**Verdict: PASS** · docs/generated/cobc-rs-option-compatibility.md (freshness-gated) · crate `gnucobol-rs` 0.8.57
 
 - **Oracle:** the real invocation census (argv boundaries preserved)
 - **Byte domain(s):** policy registry export + invocation census + the generated compatibility document

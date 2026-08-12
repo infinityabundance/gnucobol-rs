@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.PERFORMANCE.CORPUS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.56",
+  "crate_version": "0.8.57",
   "damage_if_overclaimed": "discarding slow candidate results would hide genuine performance characteristics",
   "hash_chain": {
-    "inputs_sha256": "9d1ae3f094510314f055fcb247d1ebb64729c5c3fcc7251cff109aa49fb42964"
+    "inputs_sha256": "25675c694fb130bc82693fb0337c56f827096cb892406e7ffcde9db6c6ef4380"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "deb675a3315e8488e1fde0d24c45ed6c97c0b1b7f47d320c1eb2ed21efee8063",
-    "receipt_sha256": "71e4405584fd7c514b39c11b4376ccdd70be8a413ef8fe40ff703ebb27251d96"
+    "receipt_sha256": "dfbd4d90f499fbb54074281ae58afb2f39e61ecab1cee0ad08729fed2e390183"
   },
   "kind": "court-casefile",
   "lie_prevented": [

@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.PERFORMANCE.FRONTEND.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.8.56",
+    "crate_version": "0.8.57",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "1564565c0bb5f61b9c190f5f49f65bb7e6375ca410bbac9b7ba4f75a38ebe6b4",
-      "receipt_sha256": "71e4405584fd7c514b39c11b4376ccdd70be8a413ef8fe40ff703ebb27251d96"
+      "receipt_sha256": "dfbd4d90f499fbb54074281ae58afb2f39e61ecab1cee0ad08729fed2e390183"
     },
     "negative_claim_count": 3,
     "positive_claim_count": 1,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "0f87ac719e562f66fc0edc2c836fe1166b7ec312e0d5924f7151a11cb8260e71"
+        "sha256": "7cfdf40832c83d6e43ac6fadd98208c2dabd65587403132db6f1cbc4fa0a70b0"
       },
       "name": "reports/casefiles/GNURUST.PERFORMANCE.FRONTEND.1/casefile.json"
     }

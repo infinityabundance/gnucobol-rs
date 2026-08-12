@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.MODULE.CALL.1 (court-casefile)
 
-**Verdict: PASS** · crates/cobc-rs/tests/module_courts.rs (separately_compiled_callee_is_called_through_the_module) · crate `gnucobol-rs` 0.8.56
+**Verdict: PASS** · crates/cobc-rs/tests/module_courts.rs (separately_compiled_callee_is_called_through_the_module) · crate `gnucobol-rs` 0.8.57
 
 - **Oracle:** the admitted suite's caller/callee module tests (baseline stdout)
 - **Byte domain(s):** caller/callee stdout, EXTERNAL storage flow, exit status

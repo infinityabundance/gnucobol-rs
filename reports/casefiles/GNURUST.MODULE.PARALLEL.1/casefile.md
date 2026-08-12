@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.MODULE.PARALLEL.1 (court-casefile)
 
-**Verdict: PASS** · crates/cobc-rs/tests/module_courts.rs (one_hundred_parallel_modules_with_colliding_basenames_stay_isolated) · crate `gnucobol-rs` 0.8.56
+**Verdict: PASS** · crates/cobc-rs/tests/module_courts.rs (one_hundred_parallel_modules_with_colliding_basenames_stay_isolated) · crate `gnucobol-rs` 0.8.57
 
 - **Oracle:** deterministic per-directory expectation (each dir's own output)
 - **Byte domain(s):** per-directory stdout correctness under concurrency

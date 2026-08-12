@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.VALID-PROGRAMS.MANUAL.1` |
 | court | valid-program corpus -- every GnuCOBOL manual code block is classified in both lanes (stable-3.2 + current examples.json + snippets.json) |
-| crate_version | `0.8.56` |
+| crate_version | `0.8.57` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | gnucobol-manual reports |
 | replay command | `bash lab/oracle/../valid-corpus/corpus_court_sweep.sh valid-manual` |

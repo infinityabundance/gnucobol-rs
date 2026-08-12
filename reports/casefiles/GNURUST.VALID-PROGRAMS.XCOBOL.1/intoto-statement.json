@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.VALID-PROGRAMS.XCOBOL.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.8.56",
+    "crate_version": "0.8.57",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "0fd89b55645d921b9a075f4541052e1f1d57195b267f0ed13c4a9af84b0992f8",
-      "receipt_sha256": "633e6e0a46bb121d9c72b6e862a8f736299779d0636fe51533dbbe15d0cac64a"
+      "receipt_sha256": "a0ce20e36f602943c8fbf5d6fd9677de23096f4d18ed189047981cfbebeb1fb8"
     },
     "negative_claim_count": 3,
     "positive_claim_count": 1,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "83502205fb17ec0323a64f27e4384163b34a01b70ce55697ad87d48f537d2b87"
+        "sha256": "d3d0ff67f397b5d6f45215eb7e936eff65681970d56d7d0295ec3e1ebe187ec2"
       },
       "name": "reports/casefiles/GNURUST.VALID-PROGRAMS.XCOBOL.1/casefile.json"
     }

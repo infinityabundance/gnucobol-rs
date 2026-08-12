@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.PERFORMANCE.PREPARED.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.56",
+  "crate_version": "0.8.57",
   "damage_if_overclaimed": "reporting timing for a wrong-output lane would benchmark an incorrect program",
   "hash_chain": {
-    "inputs_sha256": "ae2a8a86a1c33e52561c18bd046690587d98d6ea64cbbd43c5a2a246f799c8d3"
+    "inputs_sha256": "177bed9671d65489944b20a0f8a41caf9029804ce6b47192b486c36c7b3ceea2"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "370bf99445a72a9253883ab0e57af39655dd1c92390e7c2f84f622ea55ceb5a2",
-    "receipt_sha256": "71e4405584fd7c514b39c11b4376ccdd70be8a413ef8fe40ff703ebb27251d96"
+    "receipt_sha256": "dfbd4d90f499fbb54074281ae58afb2f39e61ecab1cee0ad08729fed2e390183"
   },
   "kind": "court-casefile",
   "lie_prevented": [

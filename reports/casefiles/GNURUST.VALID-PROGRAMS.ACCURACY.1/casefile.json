@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.VALID-PROGRAMS.ACCURACY.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.56",
+  "crate_version": "0.8.57",
   "damage_if_overclaimed": "reporting normalized output as byte parity would misstate the comparison",
   "hash_chain": {
-    "inputs_sha256": "00306b5bd9c40251486607425d0a14a737c3b9946131ccba782b208776725271"
+    "inputs_sha256": "44337607a3f91de687a3d915118b23639d506a035b46e4633e1f5e7b9a76bd30"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "1f3e541f2ae8a57b62eca9ccd2ca146e6d1fddb4f4e2f1e83403be1c37a65b82",
-    "receipt_sha256": "7925828bc7a50ff0023e8d171a5162d41f0ccda0dc7838fba692825455ea85a9"
+    "receipt_sha256": "3bb6c3d9ab47cf8798fd0e1da494ab0eaef2faea3bfb0ad479c7369a61aac0f8"
   },
   "kind": "court-casefile",
   "lie_prevented": [

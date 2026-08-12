@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FRONTEND.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.56",
+  "crate_version": "0.8.57",
   "damage_if_overclaimed": "treating this as a full COBOL compiler would imply the whole language parses + runs + compiles to native code, when only the listed subset is interpreted to oracle-identical output",
   "hash_chain": {
-    "inputs_sha256": "22173b65d5357730d911db83b431bae9746c59d96e4e51ac6f034b519f5f9889"
+    "inputs_sha256": "568b03dd3ef961e2655346bde8fcc8a4d87286413d82bc26be01a4b10a0aa4f6"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "2c6684f690760f65212a4a66cc0d82814a5e652b0ca773638a05080a33ed995f",
-    "receipt_sha256": "b061d25677099386a7a9a98f5a3391eefb2bdde507ee9ca32b1562c1e012760c"
+    "receipt_sha256": "a9030c639f7a6ab05fe40633cbb827f01d69f7982072777ad087e4be943a4311"
   },
   "kind": "court-casefile",
   "lie_prevented": [

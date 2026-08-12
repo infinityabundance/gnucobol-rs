@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.12B",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.56",
+  "crate_version": "0.8.57",
   "damage_if_overclaimed": "a wrong SET FALSE writes a status the program never intended",
   "hash_chain": {
-    "inputs_sha256": "ca24dc5cb0975f63aeda8651fc235c40fa4e0c2d53b12d0cab21bb3be6bdeee3"
+    "inputs_sha256": "7dad469750d2de9e5c8d191bb01f8e21702bc5cf54e23c522a8b7cf3dc4e65b6"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "3095bc7f78e4ebfde4dd63cba344ed92bf70dc9315c3e667e06d6e7aaf8cc4e9",
-    "receipt_sha256": "258ca605292847513753d33298385cd91f182bf782e59a0f369591edf1cad74b"
+    "receipt_sha256": "bb860196d0a8150e674e738b385c7d6550148496059cce82dc9719598b465e52"
   },
   "kind": "court-casefile",
   "lie_prevented": [

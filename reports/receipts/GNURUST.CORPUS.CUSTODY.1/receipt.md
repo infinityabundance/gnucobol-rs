@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.CORPUS.CUSTODY.1` |
 | court | valid-COBOL corpus custody -- every family report directory exists and the pre-change repository state was frozen (preflight-repository-state.json + before-state.json + integration-design.md) |
-| crate_version | `0.8.56` |
+| crate_version | `0.8.57` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | committed corpus evidence files under reports/valid-corpus/ |
 | replay command | `bash lab/oracle/../valid-corpus/corpus_court_sweep.sh custody` |

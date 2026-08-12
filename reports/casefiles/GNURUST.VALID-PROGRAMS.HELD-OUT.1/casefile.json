@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.VALID-PROGRAMS.HELD-OUT.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.56",
+  "crate_version": "0.8.57",
   "damage_if_overclaimed": "claiming held-out generalization after tuning on the held-out set would be circular",
   "hash_chain": {
-    "inputs_sha256": "41adf28b23112e8d2626370d35efb4a926ff4dc38d29ca276c565e071599316d"
+    "inputs_sha256": "58bde85f65e884e59bec5779e5e64de363dddf9c62106857e57cd48bc254be6d"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "4f4e47f85c14ea9d750bef44210a9d1be89fe22b58b5a4acb0db4c8d5451fc32",
-    "receipt_sha256": "b4989a5e737ae690ddd9770c9eb681ceac93b87e303f6a7171c5851e5fa5ca2a"
+    "receipt_sha256": "a9260da2b6189c45b5d74626e95787f1777a7088d6672e8e827891eed39f0891"
   },
   "kind": "court-casefile",
   "lie_prevented": [

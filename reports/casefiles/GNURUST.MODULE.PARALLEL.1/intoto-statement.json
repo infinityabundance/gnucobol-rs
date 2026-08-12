@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.MODULE.PARALLEL.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.8.56",
+    "crate_version": "0.8.57",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "a36b5de6acd03b45a219478aab885325151ab99bad4d885d93ff549bcee87b8a",
-      "receipt_sha256": "684915507af0a7733683ef736f73455d095f9d180b1c401e7302ade042e9ae21"
+      "receipt_sha256": "2bae5e895793a5cab5cd3fc80baf9e88905047943c23d20aa3fd1f1f8054b43a"
     },
     "negative_claim_count": 2,
     "positive_claim_count": 1,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "7b50b6e0c9eb98fbda5d8ec94561108bdfec2392fc997bab499c383e182a45f1"
+        "sha256": "f7c7fb69f58565517a2d69948a94a635136f9992f1c3c8f5e36d49ce04f09b7e"
       },
       "name": "reports/casefiles/GNURUST.MODULE.PARALLEL.1/casefile.json"
     }

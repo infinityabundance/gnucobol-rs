@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.CORPUS.LICENCE.1` |
 | court | valid-COBOL corpus licence decisions -- licences.json records a decision for every family; unknown-licence source is quarantined, never published |
-| crate_version | `0.8.56` |
+| crate_version | `0.8.57` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | licences.json decisions + the xcobol licence-quarantine report |
 | replay command | `bash lab/oracle/../valid-corpus/corpus_court_sweep.sh licence` |

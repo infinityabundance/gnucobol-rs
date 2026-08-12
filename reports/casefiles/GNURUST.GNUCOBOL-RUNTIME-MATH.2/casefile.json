@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.GNUCOBOL-RUNTIME-MATH.2",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.56",
+  "crate_version": "0.8.57",
   "damage_if_overclaimed": "claiming math parity from a non-reconciling ledger",
   "hash_chain": {
-    "inputs_sha256": "8fa59742372eceedc4661653a6ee884601238efcc59dde5e91f3881ac6acbccf"
+    "inputs_sha256": "1c13bf38bd0f12dd3d23c22026f8273faa1e9a49bc89506886e494c919f98023"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "012dcacde9b0379b02fe6762f38de6e792cc51996cbc5d804e67a171b9117970",
-    "receipt_sha256": "684915507af0a7733683ef736f73455d095f9d180b1c401e7302ade042e9ae21"
+    "receipt_sha256": "2bae5e895793a5cab5cd3fc80baf9e88905047943c23d20aa3fd1f1f8054b43a"
   },
   "kind": "court-casefile",
   "lie_prevented": [

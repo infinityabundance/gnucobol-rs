@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.VALID-PROGRAMS.GNUCOBOL-TESTSUITE.1` |
 | court | valid-program corpus -- the GnuCOBOL Autotest suite is classified at AT_CHECK-step level (valid-programs.json + discovered-steps.json + summary.md exist and reconcile) |
-| crate_version | `0.8.56` |
+| crate_version | `0.8.57` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | gnucobol-testsuite reports under reports/valid-corpus/ |
 | replay command | `bash lab/oracle/../valid-corpus/corpus_court_sweep.sh valid-testsuite` |

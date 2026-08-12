@@ -5,7 +5,7 @@
     "replay": "bash lab/oracle/../valid-corpus/corpus_court_sweep.sh performance"
   },
   "court": "performance corpus -- front-end only: per-phase candidate timings (preprocess/lex/parse/resolution/layout/check/prepare) vs oracle compile, measured separately (phase-metrics.json)",
-  "crate_version": "0.8.56",
+  "crate_version": "0.8.57",
   "current_authority": "STATUS.md",
   "generated_at": "unstamped",
   "git_commit": "unstamped",

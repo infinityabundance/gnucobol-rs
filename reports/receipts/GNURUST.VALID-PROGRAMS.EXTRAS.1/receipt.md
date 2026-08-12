@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.VALID-PROGRAMS.EXTRAS.1` |
 | court | valid-program corpus -- GnuCOBOL-shipped programs and official contributions are inventoried (extras programs.json) |
-| crate_version | `0.8.56` |
+| crate_version | `0.8.57` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | extras programs.json |
 | replay command | `bash lab/oracle/../valid-corpus/corpus_court_sweep.sh valid-extras` |

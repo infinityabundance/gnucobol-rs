@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.VALID-PROGRAMS.OMP.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.8.56",
+    "crate_version": "0.8.57",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "11261207f5aad7e346e0b461d7f2161bb927836855b5ebc6694862d4836cf9ec",
-      "receipt_sha256": "82865d2e223e830c705fa6214d63384c96f69f8e3d7ec2e5f36183dc58a114b6"
+      "receipt_sha256": "f0fae99029d24a82b1eddcf7b9918b85acc45002e363abd16cfe20784f04f1bb"
     },
     "negative_claim_count": 3,
     "positive_claim_count": 1,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "c351265c3476894cc041f47a78c822cab4804251975dae85bb93420d864f2eaa"
+        "sha256": "77eff8d1e43e4a7707a84a4c81263ed654ff00e483286425e44a088090d160d1"
       },
       "name": "reports/casefiles/GNURUST.VALID-PROGRAMS.OMP.1/casefile.json"
     }

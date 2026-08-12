@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.PERFORMANCE.FRONTEND.1` |
 | court | performance corpus -- front-end only: per-phase candidate timings (preprocess/lex/parse/resolution/layout/check/prepare) vs oracle compile, measured separately (phase-metrics.json) |
-| crate_version | `0.8.56` |
+| crate_version | `0.8.57` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | performance/phase-metrics.json + views.json (View B) |
 | replay command | `bash lab/oracle/../valid-corpus/corpus_court_sweep.sh performance` |

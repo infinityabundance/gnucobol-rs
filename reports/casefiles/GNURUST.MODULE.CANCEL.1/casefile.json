@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.MODULE.CANCEL.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.56",
+  "crate_version": "0.8.57",
   "damage_if_overclaimed": "overclaiming physical module unload",
   "hash_chain": {
-    "inputs_sha256": "c1cbe1a80ab597fa12260b63bd7452ec1a802bfbd1c81cced61e0b1b83d4c889"
+    "inputs_sha256": "e809b1e9b658c686551be19578546fe19930e683a503590480570f4053c89709"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "fc52bf15f8a92c9a856c334da912fede451f12ecf60f23a96f24da2698c9139c",
-    "receipt_sha256": "684915507af0a7733683ef736f73455d095f9d180b1c401e7302ade042e9ae21"
+    "receipt_sha256": "2bae5e895793a5cab5cd3fc80baf9e88905047943c23d20aa3fd1f1f8054b43a"
   },
   "kind": "court-casefile",
   "lie_prevented": [

@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.PERFORMANCE.PREPARED.1` |
 | court | performance corpus -- prepared-program execution (View C: already-compiled native binary vs already-prepared program, no candidate reparsing) with raw samples preserved |
-| crate_version | `0.8.56` |
+| crate_version | `0.8.57` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | performance/views.json (View C) + raw/view_c.json |
 | replay command | `bash lab/oracle/../valid-corpus/corpus_court_sweep.sh performance` |

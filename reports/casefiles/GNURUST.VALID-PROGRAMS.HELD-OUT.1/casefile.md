@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.VALID-PROGRAMS.HELD-OUT.1 (court-casefile)
 
-**Verdict: PASS** · 1/1 pass, 0 fail · crate `gnucobol-rs` 0.8.56
+**Verdict: PASS** · 1/1 pass, 0 fail · crate `gnucobol-rs` 0.8.57
 
 - **Oracle:** GnuCOBOL 3.2.0 (admitted lab/oracle build) + the committed corpus evidence under reports/valid-corpus/
 - **Byte domain(s):** reports/valid-corpus/held-out-results.json

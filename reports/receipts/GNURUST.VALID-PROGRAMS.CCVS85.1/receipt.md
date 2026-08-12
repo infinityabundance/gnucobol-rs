@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.VALID-PROGRAMS.CCVS85.1` |
 | court | valid-program corpus -- every CCVS85 unit is classified and the 512 units reconcile (programs.json) |
-| crate_version | `0.8.56` |
+| crate_version | `0.8.57` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | ccvs85 programs.json (512 units) |
 | replay command | `bash lab/oracle/../valid-corpus/corpus_court_sweep.sh valid-ccvs85` |

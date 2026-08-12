@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.PERFORMANCE.BUSINESS.1` |
 | court | performance corpus -- purpose-built scalable business workloads (payroll, invoice, seqfile, relative, tables, strings, modules, float, report, mixed) are correctness-gated before timing (benchmarks.json) |
-| crate_version | `0.8.56` |
+| crate_version | `0.8.57` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | performance/benchmarks.json |
 | replay command | `bash lab/oracle/../valid-corpus/corpus_court_sweep.sh performance` |

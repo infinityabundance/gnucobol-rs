@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.CORPUS.DEDUP.1` |
 | court | valid-COBOL corpus deduplication -- deduplication.json records exact + near-duplicate evidence; grouping is repository-level so partitions never split a repo |
-| crate_version | `0.8.56` |
+| crate_version | `0.8.57` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | deduplication.json + the xcobol dedup report |
 | replay command | `bash lab/oracle/../valid-corpus/corpus_court_sweep.sh dedup` |

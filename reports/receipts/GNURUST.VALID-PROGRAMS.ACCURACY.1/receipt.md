@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.VALID-PROGRAMS.ACCURACY.1` |
 | court | valid-program corpus -- accuracy.json records the raw-byte accuracy dimensions (compile status, execution status, report bytes, raw stdout/stderr, generated files, return status) |
-| crate_version | `0.8.56` |
+| crate_version | `0.8.57` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | accuracy.json |
 | replay command | `bash lab/oracle/../valid-corpus/corpus_court_sweep.sh accuracy` |

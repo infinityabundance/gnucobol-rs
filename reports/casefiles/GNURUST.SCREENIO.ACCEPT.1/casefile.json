@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SCREENIO.ACCEPT.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.56",
+  "crate_version": "0.8.57",
   "damage_if_overclaimed": "claiming 'screen ACCEPT works' would hide that only single width<=6 non-overflow alphanumeric input is proven -- the rep prompt, overflow/edit keys, numeric/USING validation, multi-field, and non-admitted terminals are not",
   "hash_chain": {
-    "inputs_sha256": "fd187ef6a7629c23f8533b29ef3dd2392984e39c95870ebdd5dc71f09d7f1b64"
+    "inputs_sha256": "60d961aafb7675adb2c79cf6c330127547072f8c3442ad08a09d60acf2cbaa90"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "4f36acb848a2e5d04db1ea6f69e28b45c42a0ef6f13bcac3fc3e90bdb6bd1dc6",
-    "receipt_sha256": "7436bc0b96935efd149e535d156233bee6bd5f6175553feebc9580504ecb10fa"
+    "receipt_sha256": "7549e2c72f2c1b475d5e3d6cb15528c32146136fea6b7315bac39014262cf472"
   },
   "kind": "court-casefile",
   "lie_prevented": [

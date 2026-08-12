@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.PERFORMANCE.BUSINESS.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.8.56",
+    "crate_version": "0.8.57",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "923ab96310f6a83c53280cdea3f1e06f283cbbe5d317f31015f7c4357c39bbc1",
-      "receipt_sha256": "71e4405584fd7c514b39c11b4376ccdd70be8a413ef8fe40ff703ebb27251d96"
+      "receipt_sha256": "dfbd4d90f499fbb54074281ae58afb2f39e61ecab1cee0ad08729fed2e390183"
     },
     "negative_claim_count": 3,
     "positive_claim_count": 1,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "43b4267a60f8bced8ff88b62f908e41ab512fd7ecc39c0ff605854b4d43cb757"
+        "sha256": "f890659721472d489713312e0a702fc9a434840a6e58f352233540ea2521c1b8"
       },
       "name": "reports/casefiles/GNURUST.PERFORMANCE.BUSINESS.1/casefile.json"
     }

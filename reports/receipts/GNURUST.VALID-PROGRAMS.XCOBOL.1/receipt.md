@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.VALID-PROGRAMS.XCOBOL.1` |
 | court | valid-program corpus -- X-COBOL is under immutable custody with structural classification, licence quarantine, frozen partitions and robustness measurement (programs.json + partitions.json + robustness.json + licence-quarantine.json) |
-| crate_version | `0.8.56` |
+| crate_version | `0.8.57` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | xcobol reports |
 | replay command | `bash lab/oracle/../valid-corpus/corpus_court_sweep.sh valid-xcobol` |
