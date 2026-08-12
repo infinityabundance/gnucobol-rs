@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.57",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "2dfb6a513830e6ad8e2afb8854f54bb094d9a0a968618ea5d4776c9c1e769395",
+      "receipt_sha256": "98407837744517050c8f3ccacfe7f186b709a3f3ae22dfd1b769e37608e070d1"
+    },
+    "negative_claim_count": 7,
+    "positive_claim_count": 5,
+    "replay": {
+      "command": "bash lab/gnucobol-testsuite/run-diagnostic-unblocked-docker.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "cd50032148aac69b331333068cb507c231ca7280434ccdd4f08053222b00ba79"
+      },
+      "name": "reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1/casefile.json"
+    }
+  ]
+}

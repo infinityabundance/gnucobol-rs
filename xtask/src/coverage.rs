@@ -6,7 +6,7 @@ use std::path::Path;
 const SURFACES_JSON: &str = include_str!("coverage_surfaces.json");
 const HEADER_JSON: &str = include_str!("coverage_header.json");
 const STATUSES: [&str; 4] = ["sealed", "observed", "negative", "missing"];
-const EXCLUDED: [&str; 38] = [
+const EXCLUDED: [&str; 39] = [
     "GNURUST.COVERAGE.1",
     "GNURUST.PUBLIC.CORPUS.1",
     "GNURUST.BUILD.PROFILE.1",
@@ -29,6 +29,7 @@ const EXCLUDED: [&str; 38] = [
     "GNURUST.MODULE.PARALLEL.1",
     "GNURUST.GNUCOBOL-TESTSUITE.4",
     "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1",
+    "GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1",
     "GNURUST.GNUCOBOL-RUNTIME-MATH.2",
     "GNURUST.CORPUS.CUSTODY.1",
     "GNURUST.CORPUS.LICENCE.1",

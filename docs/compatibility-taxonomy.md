@@ -59,5 +59,13 @@ current non-claim lives in [`../reports/negative-claims.md`](../reports/negative
 
 ### Boundary-reduction courts (0.8.54+)
 
+### Diagnostic-unblocked lane (0.8.58+)
+
+`GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1` -- a methodology court, not a compatibility
+axis: it measures how much later semantic work becomes reachable when exact compiler-diagnostic
+wording no longer gates groups. It claims no parse/check/runtime compatibility by itself (those
+claims come from the pristine suite + the extracted corpus); a diagnostic-only step that becomes
+reachable is never counted as a newly demonstrated language feature.
+
 The boundary-reduction work added: GNURUST.GNUCOBOL-TESTSUITE.4, GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1, GNURUST.MODULE.REGISTRY.1, GNURUST.MODULE.CALL.1, GNURUST.MODULE.CANCEL.1, GNURUST.MODULE.SEARCH.1, GNURUST.MODULE.PARALLEL.1, GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1, GNURUST.COBC-RS.POLICY-COMPLETE.1, GNURUST.GNUCOBOL-RUNTIME-MATH.2 -- the module lifecycle (GNURUST.MODULE.*), the native-mode/policy boundaries (GNURUST.COBC-RS.*), the re-measured suite court (GNURUST.GNUCOBOL-TESTSUITE.4), the before/after transition ledger (GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1) and the re-measured math campaign (GNURUST.GNUCOBOL-RUNTIME-MATH.2).
 

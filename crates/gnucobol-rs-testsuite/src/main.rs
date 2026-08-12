@@ -138,6 +138,20 @@ fn main() {
         "classify" => cmd_classify(&args),
         "determinism" => cmd_determinism(&args),
         "receipts-finalize" => cmd_receipts_finalize(&args),
+        "du-receipt" => {
+            let root = PathBuf::from(arg_val(&args, "--root").unwrap_or_else(|| ".".into()));
+            let du_rep = root.join("reports/gnucobol-testsuite/diagnostic-unblocked");
+            match receipts::write_diag_unblocked_receipt(&root.join("reports/receipts"), &du_rep) {
+                Ok((gate, sha)) => {
+                    println!("du-receipt: {gate} written (sha256 {sha})");
+                    0
+                }
+                Err(e) => {
+                    eprintln!("du-receipt: {e}");
+                    1
+                }
+            }
+        }
         "compat-doc" => {
             let policy = arg_val(&args, "--policy").unwrap_or_else(|| "policy.json".into());
             let census_path = arg_val(&args, "--census")
@@ -227,7 +241,7 @@ fn main() {
         }
         _ => {
             eprintln!(
-                "usage: gnucobol-rs-testsuite <census|classify|determinism|receipts-finalize|compat-doc|math [--check]|gate check> ..."
+                "usage: gnucobol-rs-testsuite <census|classify|determinism|receipts-finalize|du-receipt|compat-doc|math [--check]|gate check> ..."
             );
             2
         }

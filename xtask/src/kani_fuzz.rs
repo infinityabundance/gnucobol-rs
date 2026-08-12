@@ -24,6 +24,7 @@ fn na_reason(cid: &str) -> Option<&'static str> {
         "GNURUST.GNUCOBOL-TESTSUITE.3" => "meta: differential classification of the suite; no single byte kernel -- its own seal-grade gate is replay+classification-reconciliation",
         "GNURUST.GNUCOBOL-TESTSUITE.4" => "meta: full suite re-measured after the boundary reductions; no single byte kernel -- replay+reconciliation+determinism is its gate",
         "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1" => "meta: per-test before/after transition ledger over the rerun; no byte kernel -- ledger+raw-evidence is its gate",
+        "GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1" => "meta: mechanically restricted derivative lane (only proven compiler-diagnostic streams become ignore) measuring semantic reachability; no byte kernel -- its seal-grade gates are the independent patch-policy gate + two-pass determinism + reconciliation",
         "GNURUST.MODULE.REGISTRY.1" => "meta: interpreted module lifecycle (cobcrun-rs runner + module search + -m artifacts); end-to-end integration court, no single byte kernel -- crates/cobc-rs tests are its gate",
         "GNURUST.MODULE.CALL.1" => "meta: CALL across separately compiled modules; integration court -- cobc-rs module courts are its gate",
         "GNURUST.MODULE.CANCEL.1" => "meta: CANCEL semantics (state reset + active-program fatal); integration court -- cobc-rs module courts are its gate",
@@ -57,7 +58,7 @@ fn na_reason(cid: &str) -> Option<&'static str> {
     })
 }
 
-const IS_ATLAS_EXTRA: [&str; 46] = [
+const IS_ATLAS_EXTRA: [&str; 47] = [
     "GNURUST.COVERAGE.1",
     "GNURUST.FILE.STATUS.1",
     "GNURUST.PUBLIC.CORPUS.1",
@@ -75,6 +76,7 @@ const IS_ATLAS_EXTRA: [&str; 46] = [
     "GNURUST.GNUCOBOL-TESTSUITE.3",
     "GNURUST.GNUCOBOL-TESTSUITE.4",
     "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1",
+    "GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1",
     "GNURUST.MODULE.REGISTRY.1",
     "GNURUST.MODULE.CALL.1",
     "GNURUST.MODULE.CANCEL.1",

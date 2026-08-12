@@ -1,0 +1,68 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "diagnostic-ignore.patch + transformations.json + tree-manifest.json + semantic-reachability.{json,md} + pristine-vs-diagnostic-unblocked.{json,md} + corpus-cross-check.{json,md} + both passes' raw testsuite logs and per-group evidence under reports/gnucobol-testsuite/diagnostic-unblocked/raw/"
+  ],
+  "case_id": "GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.57",
+  "damage_if_overclaimed": "counting diagnostic-unblocked steps as pristine passes would certify coverage the candidate does not have and misstate the lane's purpose",
+  "hash_chain": {
+    "inputs_sha256": "a9ea534d914d0c273cb6ceb1ea9f0c91f21631dfef0cea72b9da3d4afeb55701"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "2dfb6a513830e6ad8e2afb8854f54bb094d9a0a968618ea5d4776c9c1e769395",
+    "receipt_sha256": "98407837744517050c8f3ccacfe7f186b709a3f3ae22dfd1b769e37608e070d1"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'the candidate passes the GnuCOBOL testsuite once diagnostics are ignored' is the lie this prevents -- the lane measures semantic REACHABILITY, not passes, and the 4 oracle XPASS groups prove the suite's own diagnostic text drifts from GnuCOBOL 3.2"
+  ],
+  "negative_capability_ids": [
+    "NEG.NOT-A-GNUCOBOL-TEST-SUITE-PARITY-CLAIM-A",
+    "NEG.IGNORED-DIAGNOSTIC-TEXT-IS-NOT-DIAGNOSTI",
+    "NEG.NO-CANDIDATE-PARSER-SUCCESS-CLAIM-FOR-ST",
+    "NEG.NO-NEW-LANGUAGE-RUNTIME-COMPATIBILITY-CL",
+    "NEG.NO-WEAKENING-OF-EXIT-STATUS-RUNTIME-OUTP",
+    "NEG.NO-SELF-VALIDATING-EVIDENCE-THE-TRANSFOR"
+  ],
+  "negative_claims": [
+    "NOT a GnuCOBOL test-suite parity claim and NOT 'tests passed after fixing the suite': the pristine suite remains the compatibility authority",
+    "ignored diagnostic text is NOT diagnostic compatibility",
+    "no candidate parser-success claim for steps validated only by the oracle",
+    "no new language/runtime compatibility claim from diagnostic-only steps",
+    "no weakening of exit-status, runtime-output or generated-file semantics",
+    "no self-validating evidence (the transformer never sees candidate behaviour)",
+    "lie prevented: 'the candidate passes the GnuCOBOL testsuite once diagnostics are ignored' is the lie this prevents -- the lane measures semantic REACHABILITY, not passes, and the 4 oracle XPASS groups prove the suite's own diagnostic text drifts from GnuCOBOL 3.2"
+  ],
+  "oracle": {
+    "detail": "the ADMITTED GnuCOBOL 3.2 in-tree build (identical configuration to the pristine testsuite lane); the pristine lane + its evidence are NEVER touched",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1"
+  },
+  "positive_claims": [
+    "the admitted stable suite source is transformed by gnurust-diag-unblocked-transform-v1 (deciding ONLY from upstream test structure, never candidate behaviour): 621 diagnostic expectations (stdout 1 / stderr 620) across 404 groups become Autotest 'ignore' while commands, exit statuses, COBOL source, runtime output, generated-file expectations, environment, ordering and skip/xfail stay identical",
+    "the real suite is regenerated with the upstream mechanism (make -C tests testsuite, autom4te) and run twice in fresh isolated containers with the oracle and the candidate",
+    "the patch regenerates byte-identically (sha256 712a0b172021c7ec650c6d97e348b465efd355699e309e956d95f99a2dc69230), AT_SETUP 1344==1344 and AT_CHECK 3422==3422 reconcile, the group index is identical across lanes (1282 groups), and the generated testsuite (sha256 9ef79a4baa6ca98386858a42b486e8e8b67d8d05bb0a73b0b17a0148b0e77049) is two-pass deterministic",
+    "measured semantic reachability: 377 of 404 affected groups progress further, 140 later semantic checks become reachable (27 runtime executions, 12 matched, 17 newly-exposed compile/check failures, 15 runtime failures)",
+    "the oracle itself is diagnostic-text-gated in 4 always-xfail groups (116/323/336/350): unblocked oracle XPASS 4 vs pristine 0, proving suite-vs-3.2 diagnostic drift independent of the candidate"
+  ],
+  "replay": {
+    "command": "bash lab/gnucobol-testsuite/run-diagnostic-unblocked-docker.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "lab/gnucobol-testsuite/run-diagnostic-unblocked-docker.sh (one-command two-pass replay) + lab/docker/gnucobol-testsuite-diag-unblocked + reports/gnucobol-testsuite/diagnostic-unblocked/*",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

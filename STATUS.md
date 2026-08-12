@@ -9,14 +9,14 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/docs/STATUS.md`._
 
-![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-175-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-175-blueviolet)
+![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-176-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-176-blueviolet)
 
 > [!IMPORTANT]
 > **This page wins.** README is orientation; receipts are evidence; historical close docs are seal
 > snapshots. **When any of them disagree with this page, this page is correct.** It answers one
 > question: *what may a user rely on today?*
 
-_gnucobol-rs 0.8.57 · 139 GNURUST courts (83 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
+_gnucobol-rs 0.8.57 · 140 GNURUST courts (83 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
 _(The git repo is the authority; crates.io may trail by a version under publish rate limits.)_
 
 ## What may be relied on today
@@ -158,6 +158,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `GNURUST.PERFORMANCE.PREPARED.1` | performance corpus — prepared-program execution (View C) | ✅ pass | [`reports/casefiles/GNURUST.PERFORMANCE.PREPARED.1/`](reports/casefiles/GNURUST.PERFORMANCE.PREPARED.1/) |
 | `GNURUST.PERFORMANCE.BUSINESS.1` | performance corpus — scalable business workloads (Phase 8) | ✅ pass | [`reports/casefiles/GNURUST.PERFORMANCE.BUSINESS.1/`](reports/casefiles/GNURUST.PERFORMANCE.BUSINESS.1/) |
 | `GNURUST.PERFORMANCE.CORPUS.1` | performance corpus — corpus throughput (View E) | ✅ pass | [`reports/casefiles/GNURUST.PERFORMANCE.CORPUS.1/`](reports/casefiles/GNURUST.PERFORMANCE.CORPUS.1/) |
+| `GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1` | diagnostic-unblocked testsuite lane: mechanically restricted derivative exposing later semantic checks hidden behind exact compiler-diagnostic wording | ✅ pass | [`reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1/`](reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1/) |
 | `GNURUST.2` | decimal MOVE | ✅ pass | [`reports/casefiles/GNURUST.2/`](reports/casefiles/GNURUST.2/) |
 | `GNURUST.ACCEPT.DISPLAY.2` | DISPLAY of signed and V-scaled numeric fields | ✅ pass | [`reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/`](reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/) |
 | `GNURUST.FILEIO.LINESEQ.2` | line-sequential READ config matrix | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.LINESEQ.2/`](reports/casefiles/GNURUST.FILEIO.LINESEQ.2/) |

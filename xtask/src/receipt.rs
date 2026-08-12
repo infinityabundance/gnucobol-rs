@@ -171,13 +171,14 @@ fn render_md(r: &Value) -> String {
 /// runner. The CCVS85 courts run a Docker-isolated full corpus pipeline (`gnucobol-rs-ccvs85
 /// receipts-finalize`) whose evidence cannot be reproduced by `bash lab/oracle/<sweep>`; they stay
 /// in the manifest for documentation but the xtask flow must not try to re-run their sweep.
-const NON_XTASK_COURTS: [&str; 6] = [
+const NON_XTASK_COURTS: [&str; 7] = [
     "GNURUST.CCVS85.2",
     "GNURUST.CCVS85.3",
     "GNURUST.CCVS85.4",
     "GNURUST.GNUCOBOL-TESTSUITE.1",
     "GNURUST.GNUCOBOL-TESTSUITE.2",
     "GNURUST.GNUCOBOL-TESTSUITE.3",
+    "GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1",
 ];
 
 fn campaigns(root: &str) -> Vec<String> {

@@ -266,6 +266,16 @@ if grep -RInE '/home/|/run/media/|/mnt/|/media/' "$DU_REP/meta.json" "$DU_REP/ra
 fi
 echo "privacy gate: committed diagnostic-unblocked evidence carries only symbolic storage aliases"
 
+# ---------------------------------------------------------------------------------------------
+# 8. receipt (GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1) — deterministic projection of
+#    the committed lane evidence (meta + reachability + reconciliation + cross-check)
+# ---------------------------------------------------------------------------------------------
+info "diagnostic-unblocked receipt"
+if ! ( cd "$ROOT" && cargo run -q -p gnucobol-rs-testsuite -- du-receipt ) 2>/tmp/du-receipt.err; then
+  cat /tmp/du-receipt.err >&2
+  fail "diagnostic-unblocked receipt generation failed"
+fi
+
 info "DONE — GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1 evidence run complete"
 echo "  run-id:      $RUN_ID"
 echo "  evidence:    $DU_REP"

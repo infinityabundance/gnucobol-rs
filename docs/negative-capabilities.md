@@ -11,7 +11,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 A serious reviewer trusts a project that says **"no"** as precisely as it says **"yes."** This registry states, as loudly as each sealed capability, exactly what gnucobol-rs does **not** claim — *what* is rejected, *where*, with *which guard*, *why*, and *how* a surface earns its way off this list. It is the negative half of the same trust surface that `COBOL-PARITY.md` covers positively; read the two together, because a non-claim here is only meaningful against the sealed subset there.
 
-**Accuracy rule (binding).** Nothing sealed may appear below as a non-claim. A surface with a court ID and a green receipt is a *capability*, not a gap; listing it here would be a lie of omission in the other direction. Every entry below has been cross-checked against the 175-court claim ladder so that no sealed surface is mis-stated as a gap. The four non-claim **types** are kept in distinct sections, each with its own departure semantics: §3a deliberate non-goals, §3b fail-closed-and-shrinking forms, §4 true oracle boundaries, §5 genuinely-open work.
+**Accuracy rule (binding).** Nothing sealed may appear below as a non-claim. A surface with a court ID and a green receipt is a *capability*, not a gap; listing it here would be a lie of omission in the other direction. Every entry below has been cross-checked against the 176-court claim ladder so that no sealed surface is mis-stated as a gap. The four non-claim **types** are kept in distinct sections, each with its own departure semantics: §3a deliberate non-goals, §3b fail-closed-and-shrinking forms, §4 true oracle boundaries, §5 genuinely-open work.
 
 ---
 
@@ -124,7 +124,7 @@ These are **not gaps and not latent tasks.** GnuCOBOL 3.2 itself does not run th
 
 ## 5. Genuinely-open data / runtime non-claims that remain
 
-These are the surfaces confirmed **NOT sealed** — the honest residue after the 175 courts. Each fails closed today; each leaves by sealing a court (§6 route 1).
+These are the surfaces confirmed **NOT sealed** — the honest residue after the 176 courts. Each fails closed today; each leaves by sealing a court (§6 route 1).
 
 | Open surface | Why still a non-claim | How it leaves |
 |---|---|---|

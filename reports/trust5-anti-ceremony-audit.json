@@ -1,6 +1,6 @@
 {
   "class_counts": {
-    "A": 128,
+    "A": 129,
     "B": 41,
     "C": 6,
     "D": 0,
@@ -72,6 +72,7 @@
       "GNURUST.GNUCOBOL-TESTSUITE.3",
       "GNURUST.GNUCOBOL-TESTSUITE.4",
       "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1",
+      "GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1",
       "GNURUST.IF.EVALUATE.SLICE.1",
       "GNURUST.IF.NUMERIC.SLICE.1",
       "GNURUST.INDEX.1",
@@ -1360,6 +1361,22 @@
       "negative_claims": 5,
       "negatives_ge_positives": true,
       "positive_claims": 4
+    },
+    {
+      "can_fail": true,
+      "can_fail_proof": "oracle sweep + receipt/casefile regen-equality (corrupt the receipt or sweep -> gate red)",
+      "ceremonial_flags": [],
+      "class": "A",
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "lab/gnucobol-testsuite/run-diagnostic-unblocked-docker.sh (one-command two-pass replay) + lab/docker/gnucobol-testsuite-diag-unblocked + reports/gnucobol-testsuite/diagnostic-unblocked/*",
+      "generated_from_named_evidence": true,
+      "has_casefile": true,
+      "has_receipt": true,
+      "id": "GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1",
+      "negative_claims": 7,
+      "negatives_ge_positives": true,
+      "positive_claims": 5
     },
     {
       "can_fail": true,

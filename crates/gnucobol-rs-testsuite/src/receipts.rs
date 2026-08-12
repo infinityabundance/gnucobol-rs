@@ -148,9 +148,12 @@ fn receipt_3(meta: &Value, summary: &Summary) -> Value {
 
 /// Render the receipt markdown (repo convention: `.md` is a rendering of `receipt.json`).
 pub fn render_receipt_md(r: &Value) -> String {
+    let replay = r["command"]["replay"]
+        .as_str()
+        .unwrap_or("bash lab/gnucobol-testsuite/run-docker.sh");
     let mut s = String::new();
     s.push_str(&format!(
-        "<!-- GENERATED from receipt.json by gnucobol-rs-testsuite — DO NOT EDIT BY HAND.\n     Regenerate: bash lab/gnucobol-testsuite/run-docker.sh -->\n\
+        "<!-- GENERATED from receipt.json by gnucobol-rs-testsuite — DO NOT EDIT BY HAND.\n     Regenerate: {replay} -->\n\
          # {} — {}\n\n\
          **Verdict: {}** · replay `{}`\n\n\
          | field | value |\n|-------|-------|\n\
@@ -209,4 +212,99 @@ pub fn write_receipts(
         written.push((gate.to_string(), file_sha(&jf)));
     }
     written
+}
+
+/// GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1 — the diagnostic-unblocked lane receipt.
+/// Built from the committed lane evidence (meta.json + the three Phase 7-9 reports) so the
+/// receipt is a deterministic projection of the same evidence the court binds.
+pub fn write_diag_unblocked_receipt(
+    receipts_dir: &Path,
+    du_rep: &Path,
+) -> Result<(String, String), String> {
+    let gate = "GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1";
+    let read = |name: &str| -> Result<Value, String> {
+        let p = du_rep.join(name);
+        let text = std::fs::read_to_string(&p).map_err(|e| format!("{}: {e}", p.display()))?;
+        serde_json::from_str(&text).map_err(|e| format!("{}: {e}", p.display()))
+    };
+    let meta = read("meta.json")?;
+    let reach = read("semantic-reachability.json")?;
+    let rec = read("pristine-vs-diagnostic-unblocked.json")?;
+    let cross = read("corpus-cross-check.json")?;
+    let t = &reach["totals"];
+    let mut r = json!({
+        "schema": "gnurust-replay-receipt-v1",
+        "campaign": gate,
+        "court": "diagnostic-unblocked testsuite lane: mechanically restricted derivative exposing later semantic checks hidden behind exact compiler-diagnostic wording",
+        "conformance_claim": "NONE — semantic-reachability observation over a mechanically restricted derivative of the admitted GnuCOBOL 3.2 Autotest suite; no test-suite parity claim, no diagnostic-compatibility claim, no COBOL conformance certification.",
+        "generated_at": reach["generated_at_utc"],
+        "git_commit": meta["git_commit"],
+        "crate_version": meta["crate_version"],
+        "oracle": {"name": "GnuCOBOL", "version": meta["cobc_version"]},
+        "command": {"replay": "bash lab/gnucobol-testsuite/run-diagnostic-unblocked-docker.sh"},
+        "receipt_status": "current",
+        "superseded_by": Value::Null,
+        "current_authority": "STATUS.md",
+        "environment": meta["environment"],
+    });
+    r["byte_domain"] = json!(
+        "diagnostic-ignore.patch + transformations.json + tree-manifest.json + semantic-reachability.{json,md} + pristine-vs-diagnostic-unblocked.{json,md} + corpus-cross-check.{json,md} + both passes' raw testsuite evidence under reports/gnucobol-testsuite/diagnostic-unblocked/raw/"
+    );
+    r["non_claims"] = json!([
+        "diagnostic-unblocked results are NOT pristine upstream testsuite passes",
+        "ignored compiler diagnostic text is NOT diagnostic compatibility",
+        "expected exit statuses, semantic runtime output and generated-file expectations are still enforced exactly",
+        "the pristine upstream testsuite remains the compatibility authority and is untouched",
+        "no new language/runtime compatibility claim from diagnostic-only steps",
+        "the transformer decides solely from upstream test structure, never from candidate behaviour",
+        "no candidate parser-success claim for steps validated only by the real cobc oracle",
+    ]);
+    r["results"] = json!({
+        "generated_testsuite_sha256": meta["generated_testsuite_sha256"],
+        "generated_testsuite_bytes": meta["generated_testsuite_bytes"],
+        "patch_sha256": meta["patch_sha256"],
+        "transformer_version": meta["transformer_version"],
+        "diagnostic_expectations_ignored": t["diagnostic_expectations_ignored"],
+        "stdout_ignored": t["stdout_ignored"],
+        "stderr_ignored": t["stderr_ignored"],
+        "groups_affected": t["groups_affected"],
+        "groups_progressed_further": t["groups_progressed_further"],
+        "groups_no_additional_step": t["groups_no_additional_step"],
+        "gate_lifted_no_progress": t["gate_lifted_no_progress"],
+        "groups_later_compile_reached": t["groups_later_compile_reached"],
+        "groups_execution_reached": t["groups_execution_reached"],
+        "newly_reached_checks": t["newly_reached_checks"],
+        "newly_reached_runtime_checks": t["newly_reached_runtime_checks"],
+        "newly_matched_runtime_checks": t["newly_matched_runtime_checks"],
+        "newly_exposed_compile_failures": t["newly_exposed_compile_failures"],
+        "newly_exposed_runtime_failures": t["newly_exposed_runtime_failures"],
+        "pristine_group_passes": t["pristine_group_passes"],
+        "unblocked_group_passes": t["unblocked_group_passes"],
+        "pristine_candidate_xpass": t["pristine_candidate_xpass"],
+        "unblocked_candidate_xpass": t["unblocked_candidate_xpass"],
+        "oracle_unblocked_xpass": reach["oracle"]["unblocked_xpass"],
+        "oracle_pristine_xpass": reach["oracle"]["pristine_xpass"],
+        "suite_groups": t["suite_groups"],
+        "at_setup_pristine": rec["at_setup_pristine"],
+        "at_setup_transformed": rec["at_setup_transformed"],
+        "at_check_pristine": rec["at_check_pristine"],
+        "at_check_transformed": rec["at_check_transformed"],
+        "patch_reproducible": rec["patch_reproducible"],
+        "transformations_reproducible": rec["transformations_reproducible"],
+        "group_index_identical": rec["group_index_identical"],
+        "gate_failures": rec["gate"]["failures"],
+        "cross_check_matched": cross["totals"]["matched_in_corpus"],
+        "cross_check_agreed": cross["totals"]["agreed"],
+        "cross_check_contract_contradictions": cross["totals"]["contract_contradictions"],
+        "cross_check_candidate_failures_on_valid_steps": cross["totals"]["candidate_failures_on_valid_steps"],
+    });
+    r["verdict"] = "pass".into();
+    let dir = receipts_dir.join(gate);
+    let _ = std::fs::create_dir_all(&dir);
+    let jf = dir.join("receipt.json");
+    let mf = dir.join("receipt.md");
+    std::fs::write(&jf, serde_json::to_string_pretty(&r).unwrap() + "\n")
+        .map_err(|e| e.to_string())?;
+    std::fs::write(&mf, render_receipt_md(&r)).map_err(|e| e.to_string())?;
+    Ok((gate.to_string(), file_sha(&jf)))
 }

@@ -131,5 +131,20 @@ the pinned GnuCOBOL 3.2 build; a raw-output match is evidence only about the tes
 
 ### Boundary-reduction courts (0.8.54+)
 
+### Diagnostic-unblocked lane (0.8.58+)
+
+The diagnostic-unblocked lane (`GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1`) is a mechanically
+restricted derivative of the admitted Autotest suite: ONLY proven compiler-diagnostic expected
+streams become Autotest `ignore` (commands, exit statuses, COBOL source, runtime output,
+generated-file expectations, environment, ordering and skip/xfail stay identical), the real suite
+is regenerated with the upstream mechanism, and the oracle + candidate run twice in fresh isolated
+containers. Its results are semantic-REACHABILITY observations only: 621 diagnostic expectations
+ignored across 404 groups, 377 groups progressing further, 140 later semantic checks reachable --
+never pristine passes, never diagnostic compatibility. The oracle itself is diagnostic-text-gated
+in 4 always-xfail groups (116/323/336/350) that it passes once text is ignored, proving the suite's
+exact diagnostic wording drifts from GnuCOBOL 3.2 independent of the candidate. The pristine suite
+remains the compatibility authority and is untouched; an independent patch-policy gate parses the
+actual diff and proves every hunk legal.
+
 The boundary-reduction work added: GNURUST.GNUCOBOL-TESTSUITE.4, GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1, GNURUST.MODULE.REGISTRY.1, GNURUST.MODULE.CALL.1, GNURUST.MODULE.CANCEL.1, GNURUST.MODULE.SEARCH.1, GNURUST.MODULE.PARALLEL.1, GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1, GNURUST.COBC-RS.POLICY-COMPLETE.1, GNURUST.GNUCOBOL-RUNTIME-MATH.2 -- the module lifecycle (GNURUST.MODULE.*), the native-mode/policy boundaries (GNURUST.COBC-RS.*), the re-measured suite court (GNURUST.GNUCOBOL-TESTSUITE.4), the before/after transition ledger (GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1) and the re-measured math campaign (GNURUST.GNUCOBOL-RUNTIME-MATH.2).
 

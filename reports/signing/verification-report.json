@@ -1,5 +1,5 @@
 {
-  "casefiles": 175,
+  "casefiles": 176,
   "court": "KOBOLD.ENTERPRISE.2",
   "entries": [
     {
@@ -292,6 +292,10 @@
     },
     {
       "court": "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1",
       "signature_status": "unsigned_no_key_configured"
     },
     {
@@ -715,7 +719,7 @@
   "selftest_passed": true,
   "signing_mode": "unsigned",
   "summary": {
-    "unsigned_no_key_configured": 175
+    "unsigned_no_key_configured": 176
   },
   "tool": "kobold-attest (rust, ed25519-compact)",
   "tool_available": true

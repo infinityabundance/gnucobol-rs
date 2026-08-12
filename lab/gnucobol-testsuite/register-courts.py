@@ -29,6 +29,15 @@ oracle = summ.get("oracle", {})
 cand = summ.get("candidate", {})
 first = summ.get("first_failure", {})
 
+# diagnostic-unblocked lane evidence (Phase 12 court: GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1)
+REACH = os.path.join(ROOT, "reports/gnucobol-testsuite/diagnostic-unblocked/semantic-reachability.json")
+REC = os.path.join(ROOT, "reports/gnucobol-testsuite/diagnostic-unblocked/pristine-vs-diagnostic-unblocked.json")
+META = os.path.join(ROOT, "reports/gnucobol-testsuite/diagnostic-unblocked/meta.json")
+reach = load(REACH) if os.path.exists(REACH) else {}
+rec = load(REC) if os.path.exists(REC) else {}
+meta = load(META) if os.path.exists(META) else {}
+rt = reach.get("totals", {}) if isinstance(reach, dict) else {}
+
 def add(court):
     if court["id"] in existing:
         print("already present:", court["id"])
@@ -231,6 +240,33 @@ add({
 })
 
 add({
+    "id": "GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1",
+    "name": "diagnostic-unblocked testsuite lane: mechanically restricted derivative exposing later semantic checks hidden behind exact compiler-diagnostic wording",
+    "proven": "the admitted stable suite source is transformed by gnurust-diag-unblocked-transform-v1 (deciding ONLY from upstream test structure, never candidate behaviour): %(ignored)d diagnostic expectations (stdout %(stdout)d / stderr %(stderr)d) across %(affected)d groups become Autotest 'ignore' while commands, exit statuses, COBOL source, runtime output, generated-file expectations, environment, ordering and skip/xfail stay identical; the real suite is regenerated with the upstream mechanism (make -C tests testsuite, autom4te) and run twice in fresh isolated containers with the oracle and the candidate; the patch regenerates byte-identically (sha256 %(patch)s), AT_SETUP %(setup)d==%(setup)d and AT_CHECK %(check)d==%(check)d reconcile, the group index is identical across lanes (%(groups)d groups), and the generated testsuite (sha256 %(testsuite)s) is two-pass deterministic; measured semantic reachability: %(progressed)d of %(affected)d affected groups progress further, %(newly)d later semantic checks become reachable (%(runtime)d runtime executions, %(matched)d matched, %(compile_fail)d newly-exposed compile/check failures, %(runtime_fail)d runtime failures); the oracle itself is diagnostic-text-gated in 4 always-xfail groups (116/323/336/350): unblocked oracle XPASS %(xpass)d vs pristine 0, proving suite-vs-3.2 diagnostic drift independent of the candidate" % {
+        "ignored": rt.get("diagnostic_expectations_ignored", 0),
+        "stdout": rt.get("stdout_ignored", 0), "stderr": rt.get("stderr_ignored", 0),
+        "affected": rt.get("groups_affected", 0), "progressed": rt.get("groups_progressed_further", 0),
+        "newly": rt.get("newly_reached_checks", 0), "runtime": rt.get("newly_reached_runtime_checks", 0),
+        "matched": rt.get("newly_matched_runtime_checks", 0),
+        "compile_fail": rt.get("newly_exposed_compile_failures", 0),
+        "runtime_fail": rt.get("newly_exposed_runtime_failures", 0),
+        "xpass": len(reach.get("oracle", {}).get("unblocked_xpass", [])),
+        "patch": meta.get("patch_sha256", ""), "testsuite": meta.get("generated_testsuite_sha256", ""),
+        "setup": rec.get("at_setup_pristine", 0), "check": rec.get("at_check_pristine", 0),
+        "groups": rec.get("suite_groups", 0),
+    },
+    "byte_domain": "diagnostic-ignore.patch + transformations.json + tree-manifest.json + semantic-reachability.{json,md} + pristine-vs-diagnostic-unblocked.{json,md} + corpus-cross-check.{json,md} + both passes' raw testsuite logs and per-group evidence under reports/gnucobol-testsuite/diagnostic-unblocked/raw/",
+    "oracle": "the ADMITTED GnuCOBOL 3.2 in-tree build (identical configuration to the pristine testsuite lane); the pristine lane + its evidence are NEVER touched",
+    "fixtures": "lab/gnucobol-testsuite/run-diagnostic-unblocked-docker.sh (one-command two-pass replay) + lab/docker/gnucobol-testsuite-diag-unblocked + reports/gnucobol-testsuite/diagnostic-unblocked/*",
+    "sealed_version": "0.8.57",
+    "not_proven": "NOT a GnuCOBOL test-suite parity claim and NOT 'tests passed after fixing the suite': the pristine suite remains the compatibility authority; ignored diagnostic text is NOT diagnostic compatibility; no candidate parser-success claim for steps validated only by the oracle; no new language/runtime compatibility claim from diagnostic-only steps; no weakening of exit-status, runtime-output or generated-file semantics; no self-validating evidence (the transformer never sees candidate behaviour)",
+    "breaks_claim": "any change to commands/statuses/source/runtime-output/generated-file expectations/skip/xfail/ordering/grouping (independently gated on the actual diff); a non-reproducible patch or transformations; non-deterministic two-pass evidence; touching the pristine lane or historical evidence",
+    "readiness": 1,
+    "lie_prevented": "'the candidate passes the GnuCOBOL testsuite once diagnostics are ignored' is the lie this prevents -- the lane measures semantic REACHABILITY, not passes, and the 4 oracle XPASS groups prove the suite's own diagnostic text drifts from GnuCOBOL 3.2",
+    "damage_if_overclaimed": "counting diagnostic-unblocked steps as pristine passes would certify coverage the candidate does not have and misstate the lane's purpose"
+})
+
+add({
     "id": "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1",
     "name": "three-boundary reduction ledger (module 407 / parser-check 439 / wrapper-option 173) -- before/after per test",
     "proven": "the boundary-reduction baseline (commit 25fb3410b) is bound to the suite/oracle/candidate identity + ledger + raw-evidence hashes; every v0.8.54 classification has a measured after-state from the rerun with its transition (MODULE_BOUNDARY_TO_MATCH / MODULE_BOUNDARY_TO_PARSER_REJECT / ...); no test is unaccounted; transitions are measured, never projected",
@@ -310,6 +346,7 @@ for cid in [
     "GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1",
     "GNURUST.COBC-RS.POLICY-COMPLETE.1",
     "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1",
+    "GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1",
     "GNURUST.GNUCOBOL-RUNTIME-MATH.2",
 ]:
     if cid in man["campaigns"]:
@@ -317,7 +354,9 @@ for cid in [
         continue
     man["campaigns"][cid] = {
         "court": [c["name"] for c in ladder["courts"] if c["id"] == cid][0],
-        "sweep": "gnucobol-testsuite/run-docker.sh",
+        "sweep": "gnucobol-testsuite/run-diagnostic-unblocked-docker.sh"
+        if cid == "GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1"
+        else "gnucobol-testsuite/run-docker.sh",
         "byte_domain": "see the claim-ladder entry; the receipts are generated by the gnucobol-rs-testsuite harness receipts-finalize (Docker court), not by the xtask sweep runner",
         "non_claims": [
             "no GnuCOBOL test-suite parity claim; no COBOL conformance certification",
@@ -325,12 +364,18 @@ for cid in [
             "the launcher artifact is an interpreter launch manifest, never a native COBOL executable",
             "candidate execution never invokes cobc/cobcrun and never links libcob (mechanically enforced)",
             "no performance claim from end-to-end interpreter-vs-native timing",
-        ],
+        ] + ([
+            "diagnostic-unblocked results are NOT pristine upstream testsuite passes",
+            "ignored compiler diagnostic text is NOT diagnostic compatibility",
+            "expected exit statuses, semantic runtime output and generated-file expectations are still enforced exactly",
+            "the pristine upstream testsuite remains the compatibility authority and is untouched",
+            "no new language/runtime compatibility claim from diagnostic-only steps",
+            "the transformer decides solely from upstream test structure, never from candidate behaviour",
+        ] if cid == "GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1" else []),
     }
 # the testsuite courts must NOT be re-run by the xtask sweep runner
-if "GNURUST.GNUCOBOL-TESTSUITE.1" not in man.get("non_xtask", []):
+if "GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1" not in man.get("non_xtask", []):
     man["non_xtask"] = man.get("non_xtask", []) + [
-        "GNURUST.GNUCOBOL-TESTSUITE.1", "GNURUST.GNUCOBOL-TESTSUITE.2", "GNURUST.GNUCOBOL-TESTSUITE.3",
-        "GNURUST.GNUCOBOL-TESTSUITE.4", "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1"]
+        "GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1"]
 save(MANIFEST, man)
 print("manifest campaigns:", len(man["campaigns"]))

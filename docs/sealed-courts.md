@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. No legacy source (bo
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Born generated (no legacy source)._
 
-The complete, machine-generated ledger of every sealed court — **175** total (139 `GNURUST.*` + 31 `KOBOLD.*` + framework courts). Each row links to its forensic case file (`casefile.json` + SARIF 2.1.0 + in-toto v1 + DSSE envelope). The machine-readable source is [`reports/claim-ladder.json`](../reports/claim-ladder.json); this page is generated from it and gated against drift.
+The complete, machine-generated ledger of every sealed court — **176** total (140 `GNURUST.*` + 31 `KOBOLD.*` + framework courts). Each row links to its forensic case file (`casefile.json` + SARIF 2.1.0 + in-toto v1 + DSSE envelope). The machine-readable source is [`reports/claim-ladder.json`](../reports/claim-ladder.json); this page is generated from it and gated against drift.
 
 ### Sealed courts (generated from `reports/claim-ladder.json`)
 
@@ -123,6 +123,7 @@ The complete, machine-generated ledger of every sealed court — **175** total (
 | `GNURUST.PERFORMANCE.PREPARED.1` | performance corpus — prepared-program execution (View C) | ✅ pass | [`reports/casefiles/GNURUST.PERFORMANCE.PREPARED.1/`](reports/casefiles/GNURUST.PERFORMANCE.PREPARED.1/) |
 | `GNURUST.PERFORMANCE.BUSINESS.1` | performance corpus — scalable business workloads (Phase 8) | ✅ pass | [`reports/casefiles/GNURUST.PERFORMANCE.BUSINESS.1/`](reports/casefiles/GNURUST.PERFORMANCE.BUSINESS.1/) |
 | `GNURUST.PERFORMANCE.CORPUS.1` | performance corpus — corpus throughput (View E) | ✅ pass | [`reports/casefiles/GNURUST.PERFORMANCE.CORPUS.1/`](reports/casefiles/GNURUST.PERFORMANCE.CORPUS.1/) |
+| `GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1` | diagnostic-unblocked testsuite lane: mechanically restricted derivative exposing later semantic checks hidden behind exact compiler-diagnostic wording | ✅ pass | [`reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1/`](reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1/) |
 | `GNURUST.2` | decimal MOVE | ✅ pass | [`reports/casefiles/GNURUST.2/`](reports/casefiles/GNURUST.2/) |
 | `GNURUST.ACCEPT.DISPLAY.2` | DISPLAY of signed and V-scaled numeric fields | ✅ pass | [`reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/`](reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/) |
 | `GNURUST.FILEIO.LINESEQ.2` | line-sequential READ config matrix | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.LINESEQ.2/`](reports/casefiles/GNURUST.FILEIO.LINESEQ.2/) |

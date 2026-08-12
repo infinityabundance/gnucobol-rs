@@ -5,21 +5,21 @@
       "kind": "generated_doc",
       "path": "STATUS.md",
       "present": true,
-      "sha256": "7ac6dc265ad732974a979e6348ad52fb8b165599934aaf1f757aad5bea47a04c"
+      "sha256": "8fbc39aff00ab838f7d6ca5bc56d9698ba7b5d4f7d5005a931ad7997891b5040"
     },
     {
       "id": "changelog",
       "kind": "generated_doc",
       "path": "CHANGELOG.md",
       "present": true,
-      "sha256": "9f8f2706c1f6f93746a8be78fd8825c4f5cc98ea8f1e8e74a0b6b666bc364930"
+      "sha256": "e1f2c67701a204680b1265774e65d8d64f48c651ff2a4186970b86ab7c06a975"
     },
     {
       "id": "claim_ladder",
       "kind": "machine_spine",
       "path": "reports/claim-ladder.json",
       "present": true,
-      "sha256": "a76179ffa8a3058047d09dfcdb237dcb4ebddda33ace20d54ca4d60cb875bede"
+      "sha256": "4ad089f2c0799db50e2afbdc23209152770271354c283460bd068de02ae45807"
     },
     {
       "id": "negative_capabilities",
@@ -33,7 +33,7 @@
       "kind": "attestation_report",
       "path": "reports/signing/verification-report.json",
       "present": true,
-      "sha256": "7568845289b62a568fd95e5bc11a849202977f0aeb6252faf312bdc7d99118f5"
+      "sha256": "220fc9c297bbbaea910343325a5ca4afb6017c3458c42e01e90e4799fc38cf80"
     },
     {
       "id": "size_error_atlas",
@@ -54,7 +54,7 @@
       "kind": "doctrine_doc",
       "path": "docs/future-risk-register.md",
       "present": true,
-      "sha256": "1e4dba251867d1db7fbd6c17270e476199803b6dbcb4fb8e8209292271c0bb5a"
+      "sha256": "de379bc11678e77f2cb9633e1b04af0454d4561d72f00770a2c5bcd8f24bdbc3"
     },
     {
       "casefiles": [
@@ -565,6 +565,13 @@
         {
           "casefile_sha256": "1e79f3c5ed832706124de0ddf459cdfead52ca473ac02a1a00b02b141a461fd0",
           "court": "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1",
+          "dsse": true,
+          "intoto": true,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "cd50032148aac69b331333068cb507c231ca7280434ccdd4f08053222b00ba79",
+          "court": "GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
@@ -1284,7 +1291,7 @@
           "sarif": true
         }
       ],
-      "count": 175,
+      "count": 176,
       "id": "casefile_index",
       "kind": "casefile_index",
       "present": true

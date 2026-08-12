@@ -617,6 +617,7 @@ COBOL-85 conformance, and no `cobc`-replacement claim**.
 - `GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1`: `-C`/`-S`/`-c` and listings remain typed boundaries; no C/assembly/object emission; listing shape-parity with cobc is NOT claimed.
 - `GNURUST.COBC-RS.POLICY-COMPLETE.1`: accepted no-op flags preserve semantics only inside the admitted tests; the allowlist is census-derived and versioned.
 - `GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1`: transitions are re-measured classifications, not passes; a boundary reduction never equals suite parity.
+- `GNURUST.GNUCOBOL-TESTSUITE.DIAGNOSTIC-UNBLOCKED.1`: diagnostic-unblocked results must never be read as pristine passes; ignored diagnostic text is not diagnostic compatibility; the 4 oracle XPASS groups (116/323/336/350) are suite-vs-3.2 diagnostic drift, not candidate properties.
 - `GNURUST.GNUCOBOL-TESTSUITE.4`: the re-measured suite court reflects the CURRENT candidate; the v0.8.54 baseline record remains authoritative for the starting state, and future reductions must re-run the full suite (no extrapolated totals).
 - `GNURUST.GNUCOBOL-RUNTIME-MATH.2`: math totals must always reconcile to 323 from the SAME ledger as the full suite; prose counts must not drift (generator-enforced).
 
