@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 123. syn_definition.at:1761: testing PICTURE string with control character ...
 ./syn_definition.at:1768: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:46.964424957 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/123/stderr	2026-08-12 01:52:46.963792696 +0000
+--- -	2026-08-12 22:05:23.555451141 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/123/stderr	2026-08-12 22:05:23.554647624 +0000
 @@ -1,7 +1,2 @@
 -prog.cob:2: error: 'P' is not defined
 -prog.cob:2: error: invalid PICTURE character ''

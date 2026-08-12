@@ -2,12 +2,12 @@
 894. run_file.at:4353: testing LINE SEQUENTIAL record truncation (1) ...
 ./run_file.at:4390: $COMPILE prog.cob
 ./run_file.at:4391: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/894/stderr	2026-08-12 01:52:47.458234075 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/894/stderr	2026-08-12 22:05:24.018640733 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: condition: missing left operand
---- -	2026-08-12 01:52:47.459510096 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/894/stdout	2026-08-12 01:52:47.458895840 +0000
+--- -	2026-08-12 22:05:24.020104558 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/894/stdout	2026-08-12 22:05:24.019395316 +0000
 @@ -1,9 +1 @@
 -(a   )
 -(ab  )

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 335. syn_misc.at:4582: testing USE FOR DEBUGGING syntax-checks (1) ...
 ./syn_misc.at:4614: $COMPILE_ONLY prog.cob
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/335/stderr	2026-08-12 01:52:47.073799375 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/335/stderr	2026-08-12 22:05:23.658028835 +0000
 @@ -0,0 +1 @@
 +cobc-rs: unsupported: verb USE
 ./syn_misc.at:4614: exit code was 1, expected 0

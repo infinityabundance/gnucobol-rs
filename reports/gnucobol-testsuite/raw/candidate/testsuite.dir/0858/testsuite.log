@@ -2,8 +2,8 @@
 858. run_file.at:601: testing REWRITE a RELATIVE file with RANDOM access ...
 ./run_file.at:662: $COMPILE prog.cob
 ./run_file.at:663: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/858/stdout	2026-08-12 01:52:47.429190825 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/858/stdout	2026-08-12 22:05:23.989641164 +0000
 @@ -0,0 +1 @@
 +Expected 'C' - Got B
 858. run_file.at:601: 858. REWRITE a RELATIVE file with RANDOM access (run_file.at:601): FAILED (run_file.at:663)

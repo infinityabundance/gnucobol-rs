@@ -2,8 +2,8 @@
 1223. run_ml.at:457: testing XML DPC-IN-DATA directive ...
 ./run_ml.at:483: $COMPILE prog.cob
 ./run_ml.at:484: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1223/stdout	2026-08-12 01:52:47.852125286 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1223/stdout	2026-08-12 22:05:24.368635534 +0000
 @@ -0,0 +1 @@
 +Failed: <NUM>1.1</NUM>
 1223. run_ml.at:457: 1223. XML DPC-IN-DATA directive (run_ml.at:457): FAILED (run_ml.at:484)

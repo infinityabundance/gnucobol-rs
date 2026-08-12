@@ -2,8 +2,8 @@
 1174. run_extensions.at:3539: testing System routine CBL_AND ...
 ./run_extensions.at:3560: $COMPILE prog.cob
 ./run_extensions.at:3561: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1174/stderr	2026-08-12 01:52:47.801106739 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1174/stderr	2026-08-12 22:05:24.324548150 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: CALL "CBL_AND": not a contained program (external CALL is a boundary)
 ./run_extensions.at:3561: exit code was 2, expected 0

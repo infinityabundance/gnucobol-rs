@@ -2,8 +2,8 @@
 387. syn_misc.at:7423: testing field-tree via COBC_GEN_DUMP_COMMENTS ...
 ./syn_misc.at:7524: COBC_GEN_DUMP_COMMENTS=1 \
   $COMPILE -C -fdump=all -w prog.cob
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/387/stderr	2026-08-12 01:52:47.101640601 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/387/stderr	2026-08-12 22:05:23.684747566 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -C: unsupported option (rejected-unsupported; generate C: the candidate is an interpreter, not a C emitter; reject honestly): 
 ./syn_misc.at:7524: exit code was 1, expected 0

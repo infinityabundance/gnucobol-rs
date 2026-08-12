@@ -2,12 +2,12 @@
 556. run_fundamental.at:2483: testing Context sensitive words (3) ...
 ./run_fundamental.at:2501: $COMPILE prog.cob
 ./run_fundamental.at:2502: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/556/stderr	2026-08-12 01:52:47.206564271 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/556/stderr	2026-08-12 22:05:23.779644283 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim)
---- -	2026-08-12 01:52:47.207911857 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/556/stdout	2026-08-12 01:52:47.207468659 +0000
+--- -	2026-08-12 22:05:23.780850001 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/556/stdout	2026-08-12 22:05:23.780245134 +0000
 @@ -1 +1 @@
 -0
 +

@@ -1,12 +1,12 @@
 #                             -*- compilation -*-
 492. listings.at:2038: testing command line ...
 ./listings.at:2055: $COBC $LISTING_FLAGS -q -fsyntax-only -t- -fno-theader -ftcmd prog.cob
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/492/stderr	2026-08-12 01:52:47.161284677 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/492/stderr	2026-08-12 22:05:23.737644907 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
---- -	2026-08-12 01:52:47.162374922 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/492/stdout	2026-08-12 01:52:47.161841085 +0000
+--- -	2026-08-12 22:05:23.739118027 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/492/stdout	2026-08-12 22:05:23.738715858 +0000
 @@ -1,19 +1 @@
  
 -000001

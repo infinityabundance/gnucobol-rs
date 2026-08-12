@@ -2,12 +2,12 @@
 750. run_misc.at:3305: testing SORT: table (2) ...
 ./run_misc.at:3403: $COMPILE prog.cob
 ./run_misc.at:3404: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/750/stderr	2026-08-12 01:52:47.347915885 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/750/stderr	2026-08-12 22:05:23.911588445 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: TAB1-NR(K),
---- -	2026-08-12 01:52:47.349537302 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/750/stdout	2026-08-12 01:52:47.348428642 +0000
+--- -	2026-08-12 22:05:23.912689918 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/750/stdout	2026-08-12 22:05:23.912104907 +0000
 @@ -1,22 +1 @@
 -SINGLE TABLE
 -04

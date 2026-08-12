@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 1240. data_binary.at:1215: testing BINARY: 64bit unsigned arithmetic notrunc ...
 ./data_binary.at:1232: $COMPILE -fnotrunc prog.cob
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1240/stderr	2026-08-12 01:52:47.867705466 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1240/stderr	2026-08-12 22:05:24.382635327 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fnotrunc: unsupported option (rejected-unsupported; no binary truncation: the candidate's arithmetic model is fixed; reject honestly): 
 ./data_binary.at:1232: exit code was 1, expected 0

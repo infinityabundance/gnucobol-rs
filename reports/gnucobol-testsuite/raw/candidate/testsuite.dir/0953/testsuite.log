@@ -2,8 +2,8 @@
 953. run_file.at:13774: testing OPEN / CLOSE with multiple filenames ...
 ./run_file.at:13893: $COMPILE prog1.cob
 ./run_file.at:13895: $COBCRUN_DIRECT ./prog1 > prog1.txt
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/953/stderr	2026-08-12 01:52:47.517485889 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/953/stderr	2026-08-12 22:05:24.067640005 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number TAT-FILE1
 ./run_file.at:13895: exit code was 2, expected 0

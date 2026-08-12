@@ -2,8 +2,8 @@
 958. run_reportwriter.at:327: testing PAGE LIMIT REPORT ...
 ./run_reportwriter.at:371: $COMPILE prog.cob
 ./run_reportwriter.at:373: DD_PRINTOUT=./report.txt $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/958/stderr	2026-08-12 01:52:47.518686560 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/958/stderr	2026-08-12 22:05:24.068639990 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: FOO,
 ./run_reportwriter.at:373: exit code was 2, expected 0

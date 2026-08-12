@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 237. syn_reportwriter.at:428: testing REPORT with PLUS RIGHT/CENTER ...
 ./syn_reportwriter.at:512: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.022652919 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/237/stderr	2026-08-12 01:52:47.021920693 +0000
+--- -	2026-08-12 22:05:23.609611480 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/237/stderr	2026-08-12 22:05:23.608646822 +0000
 @@ -1,4 +1,2 @@
 -prog.cob:46: warning: PLUS is ignored on first field of line
 -prog.cob:48: error: PLUS is not allowed with LEFT, RIGHT or CENTER

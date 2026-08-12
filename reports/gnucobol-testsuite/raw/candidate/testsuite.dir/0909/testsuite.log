@@ -2,12 +2,12 @@
 909. run_file.at:6007: testing RELATIVE SEQUENTIAL with variable records ...
 ./run_file.at:6063: $COMPILE prog.cob
 ./run_file.at:6064: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/909/stderr	2026-08-12 01:52:47.470721322 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/909/stderr	2026-08-12 22:05:24.029133567 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: RELATIVE file `F` has no RELATIVE KEY
---- -	2026-08-12 01:52:47.472709423 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/909/stdout	2026-08-12 01:52:47.471461113 +0000
+--- -	2026-08-12 22:05:24.030096021 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/909/stdout	2026-08-12 22:05:24.029133567 +0000
 @@ -1,12 +1 @@
 -20: >+12345678++12345678+<
 -19: >+12345678++12345678<

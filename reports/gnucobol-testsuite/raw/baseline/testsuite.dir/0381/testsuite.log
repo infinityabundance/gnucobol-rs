@@ -2,8 +2,8 @@
 381. syn_misc.at:7083: testing conditional directives with lvl 78 (1) ...
 ./syn_misc.at:7109: $COMPILE_ONLY -D X prog.cob
 ./syn_misc.at:7112: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:19.851657733 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/381/stdout	2026-08-12 01:52:19.850689115 +0000
+--- -	2026-08-12 22:04:53.920650902 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/381/stdout	2026-08-12 22:04:53.920166819 +0000
 @@ -1,2 +1,2 @@
 -X not defined, but Y via lvl 78
 +X not defined

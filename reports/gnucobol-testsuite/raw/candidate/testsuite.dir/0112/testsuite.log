@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 112. syn_definition.at:1212: testing CALL BY VALUE national item (extension) ...
 ./syn_definition.at:1227: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:46.959710457 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/112/stderr	2026-08-12 01:52:46.959224279 +0000
+--- -	2026-08-12 22:05:23.550726565 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/112/stderr	2026-08-12 22:05:23.549647699 +0000
 @@ -1,3 +1,2 @@
 -prog.cob:6: warning: handling of USAGE NATIONAL is unfinished; implementation is likely to be changed
 -prog.cob:8: warning: BY CONTENT assumed for national item 'N'

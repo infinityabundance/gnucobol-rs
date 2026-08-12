@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 179. syn_value.at:271: testing Alphabetic item ...
 ./syn_value.at:288: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:46.992834012 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/179/stderr	2026-08-12 01:52:46.992000817 +0000
+--- -	2026-08-12 22:05:23.581314938 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/179/stderr	2026-08-12 22:05:23.580647238 +0000
 @@ -1,6 +1 @@
 -prog.cob:6: warning: alphanumeric value is expected
 -prog.cob:7: error: invalid VALUE clause

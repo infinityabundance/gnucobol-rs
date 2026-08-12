@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 431. syn_screen.at:371: testing Referencing 88-level ...
 ./syn_screen.at:393: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.126990366 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/431/stderr	2026-08-12 01:52:47.126435210 +0000
+--- -	2026-08-12 22:05:23.707304410 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/431/stderr	2026-08-12 22:05:23.706725030 +0000
 @@ -1,4 +1,2 @@
 -prog.cob:12: error: condition-name not allowed here: 'blah'
 -prog.cob:12: error: condition-name not allowed here: 'blah'

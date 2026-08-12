@@ -11,8 +11,8 @@
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | per-test oracle-vs-candidate observable comparison, first-failure attribution, all-tests-accounted reconciliation, failure buckets |
 | replay command | `bash lab/gnucobol-testsuite/run-docker.sh` |
-| generated_at | 2026-08-12T01:54:13Z |
-| git_commit | `8980273cf6e75d7efaefaf32627586ce6d16fe78` |
+| generated_at | 2026-08-12T22:06:52Z |
+| git_commit | `03d8aaab3707ecbf88a41ba6ed0264d2fd0b87a0` |
 | receipt_status | current |
 
 **Conformance claim:** NONE — differential observation over the admitted GnuCOBOL 3.2 native Autotest suite in this environment; no GnuCOBOL test-suite parity claim, no COBOL conformance certification, no compiler-replacement claim.
@@ -25,11 +25,11 @@
   "determinism": {
     "note": "stable summary counts + per-test classifications must be identical across two fresh full runs (timestamps deliberately excluded)",
     "pass_a": {
-      "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260812T015206Z-8980273c/pass-a/summary.json",
+      "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260812T220440Z-03d8aaab/pass-a/summary.json",
       "summary_sha256": "008679ca0cda63b1a24e302e75985208ebd8a4d899312a81f708270e290e5a8a"
     },
     "pass_b": {
-      "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260812T015206Z-8980273c/pass-b/summary.json",
+      "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260812T220440Z-03d8aaab/pass-b/summary.json",
       "summary_sha256": "10eef9a01c80ce5676766333ac94a7042355474116d7a8d86b1e7d983b39d152"
     },
     "path_notation": "paths are symbolic: $GNURUST_GNUCOBOL_TEST_DOCKER_ROOT is the configured docker root at run time; the raw unsanitized record is preserved outside git under $GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/run-evidence/",

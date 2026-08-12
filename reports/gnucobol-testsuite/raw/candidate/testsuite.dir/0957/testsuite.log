@@ -2,8 +2,8 @@
 957. run_reportwriter.at:258: testing EMPTY REPORT ...
 ./run_reportwriter.at:313: $COMPILE prog.cob
 ./run_reportwriter.at:315: DD_PRINTOUT="./report.txt" $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/957/stderr	2026-08-12 01:52:47.519397908 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/957/stderr	2026-08-12 22:05:24.068345714 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: PIC : Empty
 ./run_reportwriter.at:315: exit code was 2, expected 0

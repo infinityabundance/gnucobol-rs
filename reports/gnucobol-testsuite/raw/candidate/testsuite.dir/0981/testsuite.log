@@ -2,12 +2,12 @@
 981. run_reportwriter.at:9519: testing BEFORE REPORTING ...
 ./run_reportwriter.at:9617: $COMPILE prog.cob
 ./run_reportwriter.at:9619: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/981/stderr	2026-08-12 01:52:47.545416291 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/981/stderr	2026-08-12 22:05:24.088951451 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: WS-TRANSPORT-PAY,
---- -	2026-08-12 01:52:47.547212995 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/981/stdout	2026-08-12 01:52:47.546214441 +0000
+--- -	2026-08-12 22:05:24.090215628 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/981/stdout	2026-08-12 22:05:24.089639679 +0000
 @@ -1,6 +1 @@
 -BEFORE DETAIL - SHOULD DISPLAY
 -==============================

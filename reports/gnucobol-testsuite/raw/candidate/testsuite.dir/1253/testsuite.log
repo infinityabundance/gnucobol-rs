@@ -2,12 +2,12 @@
 1253. data_display.at:172: testing DISPLAY: unsigned ...
 ./data_display.at:205: $COMPILE prog.cob
 ./data_display.at:206: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1253/stderr	2026-08-12 01:52:47.884935626 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1253/stderr	2026-08-12 22:05:24.397635104 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: a group MOVE is distributed across its leaves by write_field
---- -	2026-08-12 01:52:47.886424706 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1253/stdout	2026-08-12 01:52:47.885750587 +0000
+--- -	2026-08-12 22:05:24.398976777 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1253/stdout	2026-08-12 22:05:24.397635104 +0000
 @@ -1,15 +1 @@
 -127
 -128

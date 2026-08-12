@@ -2,12 +2,12 @@
 596. run_fundamental.at:5331: testing USE FOR DEBUGGING (COB_SET_DEBUG switched) ...
 ./run_fundamental.at:5363: $COMPILE prog.cob
 ./run_fundamental.at:5364: COB_SET_DEBUG=1 $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/596/stderr	2026-08-12 01:52:47.234486308 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/596/stderr	2026-08-12 22:05:23.805643897 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: ENVIRONMENT
---- -	2026-08-12 01:52:47.235937968 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/596/stdout	2026-08-12 01:52:47.235164825 +0000
+--- -	2026-08-12 22:05:23.806935462 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/596/stdout	2026-08-12 22:05:23.806378384 +0000
 @@ -1,11 +1 @@
 -       FIRST-PAR                                        START PROGRAM                 |
 -OK1

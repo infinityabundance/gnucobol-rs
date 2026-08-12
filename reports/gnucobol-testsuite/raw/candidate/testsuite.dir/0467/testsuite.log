@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 467. syn_literals.at:1252: testing binary-hexadecimal literals ...
 ./syn_literals.at:1267: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.147109579 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/467/stderr	2026-08-12 01:52:47.146265824 +0000
+--- -	2026-08-12 22:05:23.724734828 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/467/stderr	2026-08-12 22:05:23.723645114 +0000
 @@ -1,3 +1 @@
 -prog.cob:6: error: invalid BX literal: '0123456789ABCDEF0123456789ABCDEF01 ...'
 -prog.cob:6: note: literal length 192 exceeds 64 characters

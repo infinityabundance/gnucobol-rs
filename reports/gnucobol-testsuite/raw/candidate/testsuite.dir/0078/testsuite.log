@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 78. syn_definition.at:155: testing Undefined data name ...
 ./syn_definition.at:166: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:46.943204879 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/78/stderr	2026-08-12 01:52:46.942412139 +0000
+--- -	2026-08-12 22:05:23.535683346 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/78/stderr	2026-08-12 22:05:23.535062378 +0000
 @@ -1,2 +1 @@
 -prog.cob:5: error: 'X' cannot be used here
  

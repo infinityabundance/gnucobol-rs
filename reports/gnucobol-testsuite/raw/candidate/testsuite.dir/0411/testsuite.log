@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 411. syn_move.at:374: testing CORRESPONDING - Operands must be groups ...
 ./syn_move.at:394: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.116425206 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/411/stderr	2026-08-12 01:52:47.115757360 +0000
+--- -	2026-08-12 22:05:23.697924056 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/411/stderr	2026-08-12 22:05:23.697142028 +0000
 @@ -1,5 +1 @@
 -prog.cob:11: error: 'X' is not a group name
 -prog.cob:12: error: 'X' is not a group name

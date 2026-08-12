@@ -2,8 +2,8 @@
 1228. run_ml.at:693: testing JSON GENERATE record selection ...
 ./run_ml.at:732: $COMPILE prog.cob
 ./run_ml.at:733: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1228/stdout	2026-08-12 01:52:47.856725201 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1228/stdout	2026-08-12 22:05:24.372635475 +0000
 @@ -0,0 +1 @@
 +Failed 2: {"D":{"E":"abc000"}}
 1228. run_ml.at:693: 1228. JSON GENERATE record selection (run_ml.at:693): FAILED (run_ml.at:733)

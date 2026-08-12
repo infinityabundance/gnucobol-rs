@@ -2,12 +2,12 @@
 1276. data_packed.at:1971: testing PPP COMP-3 ...
 ./data_packed.at:2063: $COMPILE -Wno-typing prog.cob
 ./data_packed.at:2065: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1276/stderr	2026-08-12 01:52:47.917638076 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1276/stderr	2026-08-12 22:05:24.425395038 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: FENCE
---- -	2026-08-12 01:52:47.918825001 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1276/stdout	2026-08-12 01:52:47.917638076 +0000
+--- -	2026-08-12 22:05:24.426581049 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1276/stdout	2026-08-12 22:05:24.425634688 +0000
 @@ -1,13 +1 @@
 -MOVE 1P17: -100000000000000000 : 2.
 -MOVE A-E : 1 000/000/000/000/000 00.

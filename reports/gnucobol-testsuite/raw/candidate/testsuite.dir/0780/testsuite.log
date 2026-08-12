@@ -2,12 +2,12 @@
 780. run_misc.at:5157: testing ANY LENGTH (3) ...
 ./run_misc.at:5191: $COMPILE prog.cob
 ./run_misc.at:5192: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/780/stderr	2026-08-12 01:52:47.369514770 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/780/stderr	2026-08-12 22:05:23.932642010 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: 
---- -	2026-08-12 01:52:47.370847707 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/780/stdout	2026-08-12 01:52:47.370370878 +0000
+--- -	2026-08-12 22:05:23.933881477 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/780/stdout	2026-08-12 22:05:23.933042052 +0000
 @@ -1,4 +1 @@
 -abcd
 -abcdabcd

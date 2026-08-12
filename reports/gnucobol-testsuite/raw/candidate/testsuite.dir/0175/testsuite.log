@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 175. syn_value.at:162: testing Numeric item (integer) ...
 ./syn_value.at:179: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:46.990036340 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/175/stderr	2026-08-12 01:52:46.989247177 +0000
+--- -	2026-08-12 22:05:23.578457001 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/175/stderr	2026-08-12 22:05:23.577647283 +0000
 @@ -1,5 +1 @@
 -prog.cob:6: error: invalid VALUE clause
 -prog.cob:7: warning: numeric value is expected

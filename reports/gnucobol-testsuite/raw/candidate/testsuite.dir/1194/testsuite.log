@@ -2,8 +2,8 @@
 1194. run_extensions.at:4980: testing Conditional / define directives (4) ...
 ./run_extensions.at:5000: $COMPILE -DACTIVATE2 prog.cob
 ./run_extensions.at:5001: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1194/stdout	2026-08-12 01:52:47.824259053 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1194/stdout	2026-08-12 22:05:24.343589541 +0000
 @@ -0,0 +1 @@
 +NOTOK
 \ No newline at end of file

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 756. run_misc.at:3673: testing JUSTIFIED and VALUE clauses ...
 ./run_misc.at:3919: $COMPILE -std=ibm -DJUSTIFY=JUSTIFY -o prog  prog.cob
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/756/stderr	2026-08-12 01:52:47.351831273 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/756/stderr	2026-08-12 22:05:23.916245405 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -DJUSTIFY=JUSTIFY: unknown option (no explicit policy; failing closed — see --print-capabilities)
 ./run_misc.at:3919: exit code was 1, expected 0

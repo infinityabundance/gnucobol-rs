@@ -3,8 +3,8 @@
 ./listings.at:3023: $COMPILE_LISTING0 -t- -ftsymbols prog.cob
 stderr:
 cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
---- -	2026-08-12 01:52:47.167437130 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/499/stdout	2026-08-12 01:52:47.166991318 +0000
+--- -	2026-08-12 22:05:23.744467669 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/499/stdout	2026-08-12 22:05:23.743775578 +0000
 @@ -1,217 +1 @@
 -GnuCOBOL V.R.P               prog.cob
 -

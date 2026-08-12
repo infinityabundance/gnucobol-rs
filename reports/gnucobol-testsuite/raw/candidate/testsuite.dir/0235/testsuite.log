@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 235. syn_reportwriter.at:261: testing REPORT LINE PLUS ZERO ...
 ./syn_reportwriter.at:303: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.021457218 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/235/stderr	2026-08-12 01:52:47.020929994 +0000
+--- -	2026-08-12 22:05:23.607076365 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/235/stderr	2026-08-12 22:05:23.606033151 +0000
 @@ -1,3 +1 @@
 -prog.cob:20: warning: LINE PLUS 0 is not implemented
 -prog.cob:23: warning: LINE PLUS 0 is not implemented

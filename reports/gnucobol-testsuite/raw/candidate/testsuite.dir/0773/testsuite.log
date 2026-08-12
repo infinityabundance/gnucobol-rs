@@ -2,12 +2,12 @@
 773. run_misc.at:4700: testing CALL in from C, cob_call_params unknown ...
 ./run_misc.at:4747: $COMPILE -o caller caller.c callee.cob
 ./run_misc.at:4748: $COBCRUN_DIRECT ./caller
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/773/stderr	2026-08-12 01:52:47.364310957 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/773/stderr	2026-08-12 22:05:23.928340529 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: no PROCEDURE DIVISION
---- -	2026-08-12 01:52:47.365628606 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/773/stdout	2026-08-12 01:52:47.364720471 +0000
+--- -	2026-08-12 22:05:23.929533462 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/773/stdout	2026-08-12 22:05:23.929116014 +0000
 @@ -1 +1 @@
 -OK
 +

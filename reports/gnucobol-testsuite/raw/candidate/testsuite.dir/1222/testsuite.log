@@ -2,8 +2,8 @@
 1222. run_ml.at:360: testing XML GENERATE trimming ...
 ./run_ml.at:452: $COMPILE prog.cob
 ./run_ml.at:453: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1222/stderr	2026-08-12 01:52:47.851203725 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1222/stderr	2026-08-12 22:05:24.366146815 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: PIC VPP99: ScalingPDeferred
 ./run_ml.at:453: exit code was 2, expected 0

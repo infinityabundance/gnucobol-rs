@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 415. syn_move.at:552: testing invalid source for MOVE ...
 ./syn_move.at:572: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.118363865 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/415/stderr	2026-08-12 01:52:47.117597103 +0000
+--- -	2026-08-12 22:05:23.698683211 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/415/stderr	2026-08-12 22:05:23.698293234 +0000
 @@ -1,5 +1 @@
 -prog.cob:7: warning: no definition/prototype seen for PROGRAM 'repo-prog'
 -prog.cob: in paragraph 'MAIN':

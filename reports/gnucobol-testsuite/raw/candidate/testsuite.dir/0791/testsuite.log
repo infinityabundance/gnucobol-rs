@@ -2,8 +2,8 @@
 791. run_misc.at:6005: testing Computing of different USAGEs w/- decimal point ...
 ./run_misc.at:6479: $COMPILE prog.cob
 ./run_misc.at:6480: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/791/stderr	2026-08-12 01:52:47.379379963 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/791/stderr	2026-08-12 22:05:23.942641862 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: expected program name after PROGRAM-ID
 ./run_misc.at:6480: exit code was 2, expected 0

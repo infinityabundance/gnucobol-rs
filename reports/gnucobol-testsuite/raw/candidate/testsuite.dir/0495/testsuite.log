@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 495. listings.at:2320: testing Symbols: pointer ...
 ./listings.at:2372: $COMPILE_LISTING0 -t prog.lst -ftsymbols prog.cob
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/495/stderr	2026-08-12 01:52:47.163292154 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/495/stderr	2026-08-12 22:05:23.740268532 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
 ./listings.at:2372: exit code was 1, expected 0

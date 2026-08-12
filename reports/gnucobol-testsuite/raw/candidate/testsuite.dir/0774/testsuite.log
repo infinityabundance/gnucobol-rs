@@ -2,8 +2,8 @@
 774. run_misc.at:4753: testing CALL C with callback, PROCEDURE DIVISION EXTERN ...
 ./run_misc.at:4808: $COMPILE -Wno-unfinished -o prog prog.cob cprog.c
 ./run_misc.at:4809: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/774/stderr	2026-08-12 01:52:47.365824311 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/774/stderr	2026-08-12 22:05:23.929116014 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: SET CB TO <value>: target is not a numeric/index item
 ./run_misc.at:4809: exit code was 2, expected 0

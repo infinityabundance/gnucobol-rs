@@ -2,8 +2,8 @@
 883. run_file.at:3546: testing DECLARATIVES procedure referencing ...
 ./run_file.at:3580: $COMPILE prog.cob
 ./run_file.at:3581: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/883/stderr	2026-08-12 01:52:47.448898700 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/883/stderr	2026-08-12 22:05:24.008765573 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: verb END
 ./run_file.at:3581: exit code was 2, expected 0

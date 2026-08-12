@@ -3,12 +3,12 @@
 ./run_file.at:3999: mkdir -p sub
 ./run_file.at:4000: $COMPILE prog.cob
 ./run_file.at:4001: $COBCRUN_DIRECT ./prog notthere
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/888/stderr	2026-08-12 01:52:47.455740260 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/888/stderr	2026-08-12 22:05:24.016670537 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: verb CHAINING
---- -	2026-08-12 01:52:47.456811450 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/888/stdout	2026-08-12 01:52:47.455991469 +0000
+--- -	2026-08-12 22:05:24.017619726 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/888/stdout	2026-08-12 22:05:24.017175989 +0000
 @@ -1,3 +1 @@
 -RUN WITH notthere
 -error opening file ...

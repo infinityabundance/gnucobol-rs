@@ -3,8 +3,8 @@
 ./run_misc.at:5335: $COMPILE caller.cob
 ./run_misc.at:5336: $COMPILE_MODULE callee.cob
 ./run_misc.at:5338: $COBCRUN_DIRECT ./caller
---- -	2026-08-12 01:52:47.375644531 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/784/stderr	2026-08-12 01:52:47.374547193 +0000
+--- -	2026-08-12 22:05:23.939150127 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/784/stderr	2026-08-12 22:05:23.938628304 +0000
 @@ -1,2 +1,2 @@
 -libcob: callee.cob:9: error: LINKAGE item 'X' (accessed by 'Y') not passed by caller
 +cobrun: unsupported: CALL "callee": fewer USING args than the 2 parameters

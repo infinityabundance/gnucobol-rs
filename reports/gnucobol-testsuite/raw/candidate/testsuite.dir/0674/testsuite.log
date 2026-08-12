@@ -2,12 +2,12 @@
 674. run_misc.at:156: testing DECIMAL-POINT is COMMA (5) ...
 ./run_misc.at:181: $COMPILE prog.cob
 ./run_misc.at:182: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/674/stderr	2026-08-12 01:52:47.291010701 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/674/stderr	2026-08-12 22:05:23.859316465 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: COMPUTE without '='
---- -	2026-08-12 01:52:47.293034188 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/674/stdout	2026-08-12 01:52:47.292571945 +0000
+--- -	2026-08-12 22:05:23.860328762 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/674/stdout	2026-08-12 22:05:23.859643095 +0000
 @@ -1,3 +1 @@
 -01,10
 -00,10

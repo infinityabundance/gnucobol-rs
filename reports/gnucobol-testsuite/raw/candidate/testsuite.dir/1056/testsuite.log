@@ -2,12 +2,12 @@
 1056. run_functions.at:2539: testing FUNCTION NUMERIC-DECIMAL-POINT ...
 ./run_functions.at:2556: $COMPILE prog.cob
 ./run_functions.at:2557: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1056/stderr	2026-08-12 01:52:47.647088062 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1056/stderr	2026-08-12 22:05:24.190126111 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: FUNCTION NUMERIC-DECIMAL-POINT: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim
---- -	2026-08-12 01:52:47.648792674 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1056/stdout	2026-08-12 01:52:47.647088062 +0000
+--- -	2026-08-12 22:05:24.191110636 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1056/stdout	2026-08-12 22:05:24.190126111 +0000
 @@ -1 +1 @@
 -OK
 +

@@ -2,12 +2,12 @@
 1184. run_extensions.at:4387: testing System routine SYSTEM, parameter handling ...
 ./run_extensions.at:4454: $COMPILE prog.cob
 ./run_extensions.at:4455: PATH=.:$PATH $COBCRUN_DIRECT prog "start"
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1184/stderr	2026-08-12 01:52:47.812653711 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1184/stderr	2026-08-12 22:05:24.333514552 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: verb CHAINING
---- -	2026-08-12 01:52:47.814081226 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1184/stdout	2026-08-12 01:52:47.813099744 +0000
+--- -	2026-08-12 22:05:24.334652964 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1184/stdout	2026-08-12 22:05:24.333636054 +0000
 @@ -1,38 +1 @@
 -Test #1:
 -  CALL 'SYSTEM' with prog 1:

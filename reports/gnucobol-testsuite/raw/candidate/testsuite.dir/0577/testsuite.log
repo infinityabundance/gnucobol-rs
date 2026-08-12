@@ -2,8 +2,8 @@
 577. run_fundamental.at:4518: testing ADD CORRESPONDING ...
 ./run_fundamental.at:4560: $COMPILE prog.cob
 ./run_fundamental.at:4561: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/577/stdout	2026-08-12 01:52:47.223163023 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/577/stdout	2026-08-12 22:05:23.793644075 +0000
 @@ -0,0 +1 @@
 +BAD FIELD-C 0
 577. run_fundamental.at:4518: 577. ADD CORRESPONDING (run_fundamental.at:4518): FAILED (run_fundamental.at:4561)

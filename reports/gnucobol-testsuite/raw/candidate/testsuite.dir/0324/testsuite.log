@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 324. syn_misc.at:4115: testing invalid INSPECT/TRANSFORM operands ...
 ./syn_misc.at:4148: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.068621160 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/324/stderr	2026-08-12 01:52:47.068047589 +0000
+--- -	2026-08-12 22:05:23.653624286 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/324/stderr	2026-08-12 22:05:23.652646169 +0000
 @@ -1,15 +1,2 @@
 -prog.cob:20: error: 'f' is not a field
 -prog.cob:20: error: 'not-a-num' is not numeric

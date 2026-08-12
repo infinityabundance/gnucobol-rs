@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 300. syn_misc.at:2895: testing complete specified word list ...
 ./syn_misc.at:2907: $COMPILE_ONLY -std=ibm-strict prog.cob
---- -	2026-08-12 01:52:47.056350346 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/300/stderr	2026-08-12 01:52:47.055444485 +0000
+--- -	2026-08-12 22:05:23.641864226 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/300/stderr	2026-08-12 22:05:23.641316385 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:7: error: 'BINARY-LONG' is not defined, but is a reserved word in another dialect
 +cobc-rs: unsupported: no PROCEDURE DIVISION

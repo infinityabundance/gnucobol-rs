@@ -2,8 +2,8 @@
 1279. data_packed.at:2236: testing MOVE between several BCD fields ...
 ./data_packed.at:7277: $COMPILE prog.cob
 ./data_packed.at:7278: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1279/stderr	2026-08-12 01:52:47.926892684 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1279/stderr	2026-08-12 22:05:24.439634480 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number REPLACE
 ./data_packed.at:7278: exit code was 2, expected 0

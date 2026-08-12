@@ -2,8 +2,8 @@
 267. syn_misc.at:1104: testing maximum data size ...
 ./syn_misc.at:1126: test "$COB_HAS_64_BIT_POINTER" = "yes"
 ./syn_misc.at:1126: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.037416616 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/267/stderr	2026-08-12 01:52:47.036921762 +0000
+--- -	2026-08-12 22:05:23.625305352 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/267/stderr	2026-08-12 22:05:23.624646585 +0000
 @@ -1,5 +1,2 @@
 -prog.cob:6: error: 'SINGLE-ITEM' cannot be larger than 2147483646 bytes
 -prog.cob:8: error: 'FILLER 1' cannot be larger than 2147483646 bytes

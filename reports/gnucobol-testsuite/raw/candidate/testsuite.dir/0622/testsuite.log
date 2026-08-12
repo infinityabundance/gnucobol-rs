@@ -2,8 +2,8 @@
 622. run_fundamental.at:7238: testing MOVE between USAGEs ...
 ./run_fundamental.at:9015: $COMPILE prog.cob
 ./run_fundamental.at:9016: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/622/stdout	2026-08-12 01:52:47.263386110 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/622/stdout	2026-08-12 22:05:23.833092987 +0000
 @@ -0,0 +1,605 @@
 +PASS ONE: FIELD-02 <> != 1
 +PASS ONE: FIELD-03 <> != 1

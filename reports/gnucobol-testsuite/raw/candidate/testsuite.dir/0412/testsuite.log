@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 412. syn_move.at:404: testing CORRESPONDING - Target has no matching items ...
 ./syn_move.at:421: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.117062826 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/412/stderr	2026-08-12 01:52:47.116406672 +0000
+--- -	2026-08-12 22:05:23.697914829 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/412/stderr	2026-08-12 22:05:23.697142028 +0000
 @@ -1,2 +1 @@
 -prog.cob:11: warning: no CORRESPONDING items found
  

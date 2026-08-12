@@ -1,11 +1,11 @@
 {
  "note": "stable summary counts + per-test classifications must be identical across two fresh full runs (timestamps deliberately excluded)",
  "pass_a": {
-  "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260812T015206Z-8980273c/pass-a/summary.json",
+  "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260812T220440Z-03d8aaab/pass-a/summary.json",
   "summary_sha256": "008679ca0cda63b1a24e302e75985208ebd8a4d899312a81f708270e290e5a8a"
  },
  "pass_b": {
-  "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260812T015206Z-8980273c/pass-b/summary.json",
+  "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260812T220440Z-03d8aaab/pass-b/summary.json",
   "summary_sha256": "10eef9a01c80ce5676766333ac94a7042355474116d7a8d86b1e7d983b39d152"
  },
  "per_test_classifications_identical": true,

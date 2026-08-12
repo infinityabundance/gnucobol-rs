@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 329. syn_misc.at:4346: testing duplicate PROCEDURE DIVISION/ENTRY USING items ...
 ./syn_misc.at:4360: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.070323287 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/329/stderr	2026-08-12 01:52:47.069514056 +0000
+--- -	2026-08-12 22:05:23.656090432 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/329/stderr	2026-08-12 22:05:23.655081742 +0000
 @@ -1,3 +1 @@
 -prog.cob:8: error: duplicate USING BY REFERENCE item 'p'
 -prog.cob:9: error: duplicate USING BY REFERENCE item 'o'

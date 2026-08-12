@@ -2,8 +2,8 @@
 732. run_misc.at:2453: testing EXIT PARAGRAPH ...
 ./run_misc.at:2479: $COMPILE prog.cob
 ./run_misc.at:2480: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/732/stdout	2026-08-12 01:52:47.335307512 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/732/stdout	2026-08-12 22:05:23.900642485 +0000
 @@ -0,0 +1 @@
 +0011
 732. run_misc.at:2453: 732. EXIT PARAGRAPH (run_misc.at:2453): FAILED (run_misc.at:2480)

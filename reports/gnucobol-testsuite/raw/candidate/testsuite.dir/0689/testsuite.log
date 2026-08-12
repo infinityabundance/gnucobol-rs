@@ -2,12 +2,12 @@
 689. run_misc.at:746: testing MOVE Z'literal' ...
 ./run_misc.at:782: $COMPILE prog.cob
 ./run_misc.at:783: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/689/stderr	2026-08-12 01:52:47.301004164 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/689/stderr	2026-08-12 22:05:23.868699985 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: Z
---- -	2026-08-12 01:52:47.301966961 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/689/stdout	2026-08-12 01:52:47.301004164 +0000
+--- -	2026-08-12 22:05:23.870335023 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/689/stdout	2026-08-12 22:05:23.869042533 +0000
 @@ -1 +1 @@
 -OK
 +

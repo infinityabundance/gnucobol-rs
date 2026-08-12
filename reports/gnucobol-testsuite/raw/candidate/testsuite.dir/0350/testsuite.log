@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 350. syn_misc.at:5591: testing Fall-Through to WHEN OTHER ...
 ./syn_misc.at:5619: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.082736877 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/350/stderr	2026-08-12 01:52:47.081628137 +0000
+--- -	2026-08-12 22:05:23.666476872 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/350/stderr	2026-08-12 22:05:23.666009080 +0000
 @@ -1,2 +1 @@
 -prog.cob:12: error: fall-through to WHEN OTHER is not allowed
  

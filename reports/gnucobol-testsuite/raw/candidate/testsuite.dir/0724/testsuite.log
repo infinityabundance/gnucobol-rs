@@ -2,8 +2,8 @@
 724. run_misc.at:2183: testing INSPECT REPLACING figurative constant ...
 ./run_misc.at:2199: $COMPILE prog.cob
 ./run_misc.at:2200: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/724/stdout	2026-08-12 01:52:47.328715327 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/724/stdout	2026-08-12 22:05:23.893433155 +0000
 @@ -0,0 +1 @@
 +BCA
 724. run_misc.at:2183: 724. INSPECT REPLACING figurative constant (run_misc.at:2183): FAILED (run_misc.at:2200)

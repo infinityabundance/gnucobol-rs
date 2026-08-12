@@ -2,12 +2,12 @@
 1057. run_functions.at:2562: testing FUNCTION NUMERIC-THOUSANDS-SEPARATOR ...
 ./run_functions.at:2579: $COMPILE prog.cob
 ./run_functions.at:2580: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1057/stderr	2026-08-12 01:52:47.648639107 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1057/stderr	2026-08-12 22:05:24.190126111 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: FUNCTION NUMERIC-THOUSANDS-SEPARATOR: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim
---- -	2026-08-12 01:52:47.650340954 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1057/stdout	2026-08-12 01:52:47.648895020 +0000
+--- -	2026-08-12 22:05:24.191123369 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1057/stdout	2026-08-12 22:05:24.190126111 +0000
 @@ -1 +1 @@
 -OK
 +

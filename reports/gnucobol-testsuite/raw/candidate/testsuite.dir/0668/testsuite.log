@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 668. run_initialize.at:655: testing INITIALIZE to table-format VALUES ARE ...
 ./run_initialize.at:777: $COMPILE -fno-binary-truncate  -fcomplex-odo -frelax-syntax-checks -w prog.cob
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/668/stderr	2026-08-12 01:52:47.285513581 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/668/stderr	2026-08-12 22:05:23.852036576 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fno-binary-truncate: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): 
 ./run_initialize.at:777: exit code was 1, expected 0

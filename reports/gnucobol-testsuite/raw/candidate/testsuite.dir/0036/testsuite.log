@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 36. configuration.at:340: testing cobc configuration: conf missing ...
 ./configuration.at:351: $COMPILE_ONLY -conf=notthere.conf prog.cob
---- -	2026-08-12 01:52:46.920829074 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/36/stderr	2026-08-12 01:52:46.920196724 +0000
+--- -	2026-08-12 22:05:23.515168198 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/36/stderr	2026-08-12 22:05:23.514657526 +0000
 @@ -1,3 +1,2 @@
 -configuration error:
 -notthere.conf: No such file or directory

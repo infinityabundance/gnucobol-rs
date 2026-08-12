@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 452. syn_functions.at:324: testing Intrinsic functions: number of arguments ...
 ./syn_functions.at:351: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.138710241 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/452/stderr	2026-08-12 01:52:47.138258388 +0000
+--- -	2026-08-12 22:05:23.717405568 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/452/stderr	2026-08-12 22:05:23.716645218 +0000
 @@ -1,8 +1 @@
 -prog.cob:10: error: FUNCTION 'PI' has wrong number of arguments
 -prog.cob:11: error: FUNCTION 'ABS' has wrong number of arguments

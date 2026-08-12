@@ -3,8 +3,8 @@
 ./run_file.at:6871: $COMPILE prog1.cob
 ./run_file.at:6872: $COMPILE prog2.cob
 ./run_file.at:6873: $COBCRUN_DIRECT ./prog1
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/919/stdout	2026-08-12 01:52:25.279475700 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/919/stdout	2026-08-12 22:04:59.408006229 +0000
 @@ -0,0 +1 @@
 +FAILED 2::r 00
 919. run_file.at:6788: 919. INDEXED file with LOCK MANUAL (run_file.at:6788): expected failure (run_file.at:6873)

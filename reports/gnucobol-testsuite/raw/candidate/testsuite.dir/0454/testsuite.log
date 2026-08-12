@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 454. syn_functions.at:410: testing Intrinsic functions: argument type ...
 ./syn_functions.at:426: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.138609583 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/454/stderr	2026-08-12 01:52:47.137856838 +0000
+--- -	2026-08-12 22:05:23.718758599 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/454/stderr	2026-08-12 22:05:23.718315494 +0000
 @@ -1,2 +1 @@
 -prog.cob:8: error: FUNCTION 'ABS' has invalid argument
  

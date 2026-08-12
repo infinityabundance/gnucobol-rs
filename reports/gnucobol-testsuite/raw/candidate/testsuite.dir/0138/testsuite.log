@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 138. syn_subscripts.at:50: testing Subscript range check ...
 ./syn_subscripts.at:81: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:46.972080846 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/138/stderr	2026-08-12 01:52:46.970842385 +0000
+--- -	2026-08-12 22:05:23.561613407 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/138/stderr	2026-08-12 22:05:23.561102264 +0000
 @@ -1,5 +1 @@
 -prog.cob:10: error: subscript of 'X' out of bounds: 0
 -prog.cob:16: error: subscript of 'X' out of bounds: 3

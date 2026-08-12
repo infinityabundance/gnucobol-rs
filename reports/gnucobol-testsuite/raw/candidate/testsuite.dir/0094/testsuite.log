@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 94. syn_definition.at:666: testing Redefinition of function-prototype name ...
 ./syn_definition.at:683: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:46.950039656 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/94/stderr	2026-08-12 01:52:46.949246035 +0000
+--- -	2026-08-12 22:05:23.541931953 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/94/stderr	2026-08-12 22:05:23.541154884 +0000
 @@ -1,3 +1,2 @@
 -prog.cob:8: warning: no definition/prototype seen for FUNCTION 'func'
 -prog.cob:12: error: syntax error, unexpected user function name

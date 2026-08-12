@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 238. syn_reportwriter.at:521: testing PAGE LIMITS clause ...
 ./syn_reportwriter.at:548: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.023178420 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/238/stderr	2026-08-12 01:52:47.022435243 +0000
+--- -	2026-08-12 22:05:23.609191878 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/238/stderr	2026-08-12 22:05:23.607646837 +0000
 @@ -1,4 +1,2 @@
 -prog.cob:19: error: duplicate HEADING clause
 -prog.cob:19: error: duplicate LINE LIMIT clause

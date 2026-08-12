@@ -3,8 +3,8 @@
 ./run_fundamental.at:1557: $COMPILE prog.cob
 ./run_fundamental.at:1558: $COMPILE_MODULE module.c
 ./run_fundamental.at:1561: COB_DISABLE_WARNINGS=1 $COBCRUN_DIRECT ./prog
---- -	2026-08-12 01:52:47.197318404 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/537/stderr	2026-08-12 01:52:47.196826796 +0000
+--- -	2026-08-12 22:05:23.768973876 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/537/stderr	2026-08-12 22:05:23.767644461 +0000
 @@ -1,2 +1,2 @@
 -libcob: prog.cob:6: error: entry point 'module' not found
 +cobrun: unsupported: CALL "module": not a contained program (external CALL is a boundary)

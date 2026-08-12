@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 443. syn_functions.at:22: testing ANY LENGTH / NUMERIC as function RETURNING item ...
 ./syn_functions.at:39: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.133544399 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/443/stderr	2026-08-12 01:52:47.133071146 +0000
+--- -	2026-08-12 22:05:23.713050440 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/443/stderr	2026-08-12 22:05:23.712515202 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:9: error: function RETURNING item may not be ANY LENGTH
 +cobc-rs: unsupported: no PROGRAM-ID

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 226. syn_file.at:2066: testing ALTERNATE RECORD definition WITH NO DUPLICATES ...
 ./syn_file.at:2089: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.017544264 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/226/stderr	2026-08-12 01:52:47.017068436 +0000
+--- -	2026-08-12 22:05:23.603360850 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/226/stderr	2026-08-12 22:05:23.602646498 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:15: error: non-standard 'NO DUPLICATES'
 +cobc-rs: unsupported: no PROCEDURE DIVISION

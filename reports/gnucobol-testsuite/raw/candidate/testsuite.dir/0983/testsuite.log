@@ -4,8 +4,8 @@
 ./run_returncode.at:95: $COMPILE_MODULE mod2.cob
 ./run_returncode.at:96: $COMPILE prog.cob
 ./run_returncode.at:97: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/983/stdout	2026-08-12 01:52:47.552895826 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/983/stdout	2026-08-12 22:05:24.096450930 +0000
 @@ -0,0 +1 @@
 ++000000001
 \ No newline at end of file

@@ -2,8 +2,8 @@
 1144. run_extensions.at:2172: testing NUMBER-OF-CALL-PARAMETERS ...
 ./run_extensions.at:2210: $COMPILE caller.cob
 ./run_extensions.at:2213: $COMPILE_MODULE -fusing-optional=skip callee.cob
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1144/stderr	2026-08-12 01:52:47.764999585 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1144/stderr	2026-08-12 22:05:24.296956111 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fusing-optional=skip: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): skip
 ./run_extensions.at:2213: exit code was 1, expected 0

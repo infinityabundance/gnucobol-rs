@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 459. syn_literals.at:25: testing continuation Indicator - too many lines ...
 ./syn_literals.at:569: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.144454303 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/459/stderr	2026-08-12 01:52:47.143821121 +0000
+--- -	2026-08-12 22:05:23.722381252 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/459/stderr	2026-08-12 22:05:23.721697427 +0000
 @@ -1,2 +1 @@
 -prog.cob:538: error: buffer overrun - too many continuation lines
  

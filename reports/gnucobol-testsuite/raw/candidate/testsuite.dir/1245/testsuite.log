@@ -2,8 +2,8 @@
 1245. data_binary.at:1595: testing MOVE PACKED-DECIMAL to BINARY ...
 ./data_binary.at:1775: $COMPILE prog.cob
 ./data_binary.at:1776: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1245/stderr	2026-08-12 01:52:47.875528247 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1245/stderr	2026-08-12 22:05:24.390635208 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number REPLACE
 ./data_binary.at:1776: exit code was 2, expected 0

@@ -2,8 +2,8 @@
 649. run_accept.at:29: testing ACCEPT OMITTED (simple) ...
 ./run_accept.at:42: $COMPILE prog.cob
 ./run_accept.at:43: $COBCRUN_DIRECT ./prog < input.txt
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/649/stderr	2026-08-12 01:52:47.274204152 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/649/stderr	2026-08-12 22:05:23.842643347 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: ACCEPT FROM terminal/console: interactive input is a runtime non-claim (no deterministic oracle); the wired sources are DATE/DAY/TIME/DAY-OF-WEEK/ENVIRONMENT
 ./run_accept.at:43: exit code was 2, expected 0

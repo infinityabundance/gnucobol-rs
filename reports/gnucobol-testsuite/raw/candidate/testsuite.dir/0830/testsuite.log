@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 830. run_misc.at:12932: testing DEFINE Defaults ...
 ./run_misc.at:12983: $COMPILE prog.cob -fdefine-constant-directive=ok
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/830/stderr	2026-08-12 01:52:47.407959777 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/830/stderr	2026-08-12 22:05:23.971296535 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fdefine-constant-directive=ok: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ok
 ./run_misc.at:12983: exit code was 1, expected 0

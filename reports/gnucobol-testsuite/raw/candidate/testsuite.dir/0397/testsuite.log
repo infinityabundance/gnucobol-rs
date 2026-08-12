@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 397. syn_misc.at:8172: testing optional dots before PROCEDURE DIVISION ...
 ./syn_misc.at:8192: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.107249239 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/397/stderr	2026-08-12 01:52:47.106824426 +0000
+--- -	2026-08-12 22:05:23.688584979 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/397/stderr	2026-08-12 22:05:23.687753589 +0000
 @@ -1,4 +1 @@
 -prog.cob:3: warning: optional period used
 -prog.cob:5: warning: optional period used

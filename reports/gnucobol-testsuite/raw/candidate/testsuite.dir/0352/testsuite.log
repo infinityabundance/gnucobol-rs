@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 352. syn_misc.at:5653: testing ANY LENGTH/NUMERIC with incorrect PIC ...
 ./syn_misc.at:5676: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.083039021 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/352/stderr	2026-08-12 01:52:47.082269604 +0000
+--- -	2026-08-12 22:05:23.668331919 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/352/stderr	2026-08-12 22:05:23.666645961 +0000
 @@ -1,18 +1,2 @@
 -prog.cob:9: warning: handling of USAGE NATIONAL is unfinished; implementation is likely to be changed
 -prog.cob:18: warning: handling of USAGE NATIONAL is unfinished; implementation is likely to be changed

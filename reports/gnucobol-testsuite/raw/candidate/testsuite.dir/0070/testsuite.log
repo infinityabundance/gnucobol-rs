@@ -1,12 +1,12 @@
 #                             -*- compilation -*-
 70. syn_copy.at:923: testing COPY and REPLACE in same file ...
 ./syn_copy.at:949: $COMPILE_ONLY -P- prog.cob
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/70/stderr	2026-08-12 01:52:46.939436105 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/70/stderr	2026-08-12 22:05:23.531598231 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -P-: unsupported option (rejected-unsupported; suppress COPY output during -E: not supported): 
---- -	2026-08-12 01:52:46.940475625 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/70/stdout	2026-08-12 01:52:46.940008773 +0000
+--- -	2026-08-12 22:05:23.532597153 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/70/stdout	2026-08-12 22:05:23.532200003 +0000
 @@ -1,17 +1 @@
 -     1 
 -     2  IDENTIFICATION   DIVISION.

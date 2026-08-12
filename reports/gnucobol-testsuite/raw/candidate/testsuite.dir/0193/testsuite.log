@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 193. syn_file.at:326: testing ASSIGN to variable ...
 ./syn_file.at:416: $COMPILE_ONLY -fassign-variable=warning -fassign-using-variable=warning -fassign-ext-dyn=warning -fassign-disk-from=warning prog.cob
---- -	2026-08-12 01:52:47.000175415 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/193/stderr	2026-08-12 01:52:46.999007976 +0000
+--- -	2026-08-12 22:05:23.586925666 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/193/stderr	2026-08-12 22:05:23.586165569 +0000
 @@ -1,7 +1,2 @@
 -prog.cob:10: warning: ASSIGN USING/VARYING variable used
 -prog.cob:12: warning: ASSIGN USING/VARYING variable used

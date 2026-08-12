@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 811. run_misc.at:11370: testing REDEFINES values on FILLER and INITIALIZE ...
 ./run_misc.at:11409: $COMPILE prog.cob
---- -	2026-08-12 01:52:47.393193486 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/811/stderr	2026-08-12 01:52:47.392433628 +0000
+--- -	2026-08-12 22:05:23.955291132 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/811/stderr	2026-08-12 22:05:23.954809244 +0000
 @@ -1,4 +1 @@
 -prog.cob:9: warning: initial VALUE clause ignored for REDEFINES item 'WS-ASK-ID-DATE-YYYY'
 -prog.cob:10: warning: initial VALUE clause ignored for REDEFINES item 'FILLER'

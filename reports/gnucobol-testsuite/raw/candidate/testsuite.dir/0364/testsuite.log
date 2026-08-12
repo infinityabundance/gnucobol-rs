@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 364. syn_misc.at:6315: testing BASED clause, ALLOCATE / FREE statements ...
 ./syn_misc.at:6357: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.088890122 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/364/stderr	2026-08-12 01:52:47.087960747 +0000
+--- -	2026-08-12 22:05:23.675290068 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/364/stderr	2026-08-12 22:05:23.674658161 +0000
 @@ -1,16 +1,2 @@
 -prog.cob:8: error: BASED only allowed at 01/77 level
 -prog.cob:16: error: PROCEDURE DIVISION header missing

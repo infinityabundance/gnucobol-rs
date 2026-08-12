@@ -2,8 +2,8 @@
 301. syn_misc.at:2915: testing ANY LENGTH item as formal parameter ...
 ./syn_misc.at:2943: $COMPILE_ONLY prog.cob
 ./syn_misc.at:2944: $COMPILE_ONLY prog2.cob
---- -	2026-08-12 01:52:47.057536480 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/301/stderr	2026-08-12 01:52:47.056976054 +0000
+--- -	2026-08-12 22:05:23.643227166 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/301/stderr	2026-08-12 22:05:23.642525308 +0000
 @@ -1,2 +1 @@
 -prog2.cob:7: error: 'str' ANY LENGTH item must be a formal parameter
  

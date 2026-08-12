@@ -2,12 +2,12 @@
 1132. run_extensions.at:1463: testing DEPENDING ON with ODOSLIDE for IBM ...
 ./run_extensions.at:1556: $COBC -x -std=ibm prog.cob
 ./run_extensions.at:1558: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1132/stderr	2026-08-12 01:52:47.753315266 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1132/stderr	2026-08-12 22:05:24.281736654 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: L1-3-2(1,
---- -	2026-08-12 01:52:47.754336121 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1132/stdout	2026-08-12 01:52:47.753315266 +0000
+--- -	2026-08-12 22:05:24.283268248 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1132/stdout	2026-08-12 22:05:24.282636812 +0000
 @@ -1,5 +1 @@
 -Length is +0000000222 with 03, 04, 00, 06, 01
 -"01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567.901234567890123456789012345+++901234567890123456789--2345678901234567890123456789012345678901234567890123456789012345678901"

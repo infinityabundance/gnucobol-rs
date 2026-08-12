@@ -2,8 +2,8 @@
 615. run_fundamental.at:6770: testing MOVE with de-editting to USAGE DISPLAY ...
 ./run_fundamental.at:6816: $COMPILE prog.cob
 ./run_fundamental.at:6817: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/615/stderr	2026-08-12 01:52:47.248597306 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/615/stderr	2026-08-12 22:05:23.818643703 +0000
 @@ -0,0 +1 @@
 +cobrun: runtime error: UnsupportedSymbol('(')
 ./run_fundamental.at:6817: exit code was 2, expected 0

@@ -3,12 +3,12 @@
 ./run_misc.at:1659: $COMPILE_MODULE dump.c
 ./run_misc.at:1660: $COMPILE prog.cob
 ./run_misc.at:1661: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/710/stderr	2026-08-12 01:52:47.318936615 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/710/stderr	2026-08-12 22:05:23.884642723 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: CALL "dump": not a contained program (external CALL is a boundary)
---- -	2026-08-12 01:52:47.320292506 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/710/stdout	2026-08-12 01:52:47.319424225 +0000
+--- -	2026-08-12 22:05:23.886043171 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/710/stdout	2026-08-12 22:05:23.884642723 +0000
 @@ -1,4 +1 @@
 -00000001
 -00000009

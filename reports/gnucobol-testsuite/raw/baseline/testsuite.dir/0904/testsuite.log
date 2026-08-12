@@ -3,8 +3,8 @@
 ./run_file.at:5768: $COMPILE prog1.cob
 ./run_file.at:5769: $COMPILE prog2.cob
 ./run_file.at:5770: $COBCRUN_DIRECT ./prog1
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/904/stdout	2026-08-12 01:52:25.095083611 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/904/stdout	2026-08-12 22:04:59.234911091 +0000
 @@ -0,0 +1 @@
 +FAILED: 00
 904. run_file.at:5705: 904. SEQUENTIAL file with SHARING NO (run_file.at:5705): expected failure (run_file.at:5770)

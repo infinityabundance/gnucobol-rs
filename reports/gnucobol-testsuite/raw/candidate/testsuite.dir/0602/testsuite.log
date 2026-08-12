@@ -2,8 +2,8 @@
 602. run_fundamental.at:5639: testing USE FOR DEBUGGING file ...
 ./run_fundamental.at:5670: $COMPILE prog.cob
 ./run_fundamental.at:5671: COB_SET_DEBUG=1 $COBCRUN_DIRECT ./prog
---- -	2026-08-12 01:52:47.241400584 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/602/stdout	2026-08-12 01:52:47.240511815 +0000
+--- -	2026-08-12 22:05:23.811137264 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/602/stdout	2026-08-12 22:05:23.810084963 +0000
 @@ -1,6 +1 @@
 -    21 TEST-FILE                                                                                |
 -    23 TEST-FILE                                                                                |

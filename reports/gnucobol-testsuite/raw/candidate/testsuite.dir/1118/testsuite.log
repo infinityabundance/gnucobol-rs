@@ -2,12 +2,12 @@
 1118. run_extensions.at:287: testing LENGTH OF ...
 ./run_extensions.at:445: $COMPILE -Wno-constant-expression prog.cob
 ./run_extensions.at:446: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1118/stderr	2026-08-12 01:52:47.737947221 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1118/stderr	2026-08-12 22:05:24.267660166 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: LENGTH
---- -	2026-08-12 01:52:47.739504869 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1118/stdout	2026-08-12 01:52:47.738585232 +0000
+--- -	2026-08-12 22:05:24.269127762 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1118/stdout	2026-08-12 22:05:24.267660166 +0000
 @@ -1 +1 @@
 -165000
 +

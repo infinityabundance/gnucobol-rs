@@ -2,8 +2,8 @@
 620. run_fundamental.at:7035: testing MOVE with de-editting to NUMERIC DISPLAY (2) ...
 ./run_fundamental.at:7158: $COMPILE prog.cob
 ./run_fundamental.at:7159: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/620/stdout	2026-08-12 01:52:47.252899266 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/620/stdout	2026-08-12 22:05:23.820032093 +0000
 @@ -0,0 +1,13 @@
 +3: DST-FIELD-1 <0000000000.0000> != 3456007
 +4: DST-FIELD-1 <0000000000.0000> != 4567008

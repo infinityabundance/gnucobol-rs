@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 332. syn_misc.at:4436: testing USE FOR DEBUGGING invalid ref-mod / subscripts ...
 ./syn_misc.at:4471: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.072477718 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/332/stderr	2026-08-12 01:52:47.071581745 +0000
+--- -	2026-08-12 22:05:23.657668564 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/332/stderr	2026-08-12 22:05:23.657151620 +0000
 @@ -1,5 +1,2 @@
 -prog.cob: in section 'test-DEBUG':
 -prog.cob:19: error: DEBUGGING target may not be reference modified

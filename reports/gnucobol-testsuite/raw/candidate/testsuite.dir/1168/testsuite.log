@@ -2,8 +2,8 @@
 1168. run_extensions.at:3389: testing System routine C$MAKEDIR ...
 ./run_extensions.at:3403: $COMPILE prog.cob
 ./run_extensions.at:3404: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1168/stderr	2026-08-12 01:52:47.794558136 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1168/stderr	2026-08-12 22:05:24.319636262 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: CALL "C$MAKEDIR": not a contained program (external CALL is a boundary)
 ./run_extensions.at:3404: exit code was 2, expected 0

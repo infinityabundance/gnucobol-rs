@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 232. syn_reportwriter.at:124: testing REPORT not positive integers in COL / LINE PLUS ...
 ./syn_reportwriter.at:167: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.019104126 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/232/stderr	2026-08-12 01:52:47.018452750 +0000
+--- -	2026-08-12 22:05:23.604369931 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/232/stderr	2026-08-12 22:05:23.603646897 +0000
 @@ -1,5 +1 @@
 -prog.cob:18: error: invalid COLUMN integer; must be > 0
 -prog.cob:24: error: unsigned integer value expected

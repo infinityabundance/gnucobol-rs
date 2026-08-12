@@ -2,8 +2,8 @@
 633. run_subscripts.at:351: testing enable / disable subscript check ...
 ./run_subscripts.at:374: $COMPILE prog.cob -o badprog1
 ./run_subscripts.at:375: $COBCRUN_DIRECT ./badprog1
---- -	2026-08-12 01:52:47.261322488 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/633/stderr	2026-08-12 01:52:47.260428349 +0000
+--- -	2026-08-12 22:05:23.828878332 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/633/stderr	2026-08-12 22:05:23.828390793 +0000
 @@ -1,3 +1,2 @@
 -libcob: prog.cob:13: error: subscript of 'y' out of bounds: 6
 -note: maximum subscript for 'y': 5

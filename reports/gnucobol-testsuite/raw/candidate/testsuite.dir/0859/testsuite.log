@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 859. run_file.at:671: testing ASSIGN DYNAMIC and EXTERNAL ...
 ./run_file.at:699: $COMPILE -fassign-clause=external prog.cob
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/859/stderr	2026-08-12 01:52:47.428232316 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/859/stderr	2026-08-12 22:05:23.989641164 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fassign-clause=external: unsupported option (rejected-unsupported; ASSIGN clause dialect: reject honestly): external
 ./run_file.at:699: exit code was 1, expected 0

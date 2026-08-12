@@ -64,149 +64,149 @@ make[4]: Entering directory '/work/trees/a/baseline/tests'
 
   7: source file not found                           ok
  11: invalid cobc option                             ok
-  9: use of full path for cobc                       ok
  12: cobcrun help and information                    ok
+  9: use of full path for cobc                       ok
  13: cobcrun validation                              ok
+ 15: cobcrun -M directory/ default                   ok
   8: temporary path invalid                          ok
   6: compiler outputs (assembler)                    ok
- 15: cobcrun -M directory/ default                   ok
- 19: run job with unsuccessful compilation           ok
  14: cobcrun -M DSO entry argument                   ok
+ 19: run job with unsuccessful compilation           ok
+  1: compiler help and information                   ok
  16: cobcrun -M directory/dso alternate              ok
  17: cobcrun -M DSO entry multiple arguments         ok
  18: cobcrun error messages                          ok
+ 26: cobc with standard configuration file           ok
   5: compiler outputs (path specified)               ok
   3: compiler outputs (general)                      ok
-  1: compiler help and information                   ok
- 26: cobc with standard configuration file           ok
- 20: run job after compilation                       ok
- 28: cobc with configuration file via -std           ok
- 21: run job after compilation (path specified)      ok
+  2: compiler warnings                               ok
  29: cobc with standard configuration file via -conf ok
+ 28: cobc with configuration file via -std           ok
+ 20: run job after compilation                       ok
+ 21: run job after compilation (path specified)      ok
+ 23: compile from stdin                              ok
  31: cobc configuration: recursive include           ok
  25: cobc diagnostics show caret                     ok
- 23: compile from stdin                              ok
- 33: cobc compiler flag on command line              ok
- 32: cobc with -std and -conf                        ok
  30: cobc with own configuration file via -conf      ok
  24: run job after compilation from stdin            ok
+ 33: cobc compiler flag on command line              ok
+ 32: cobc with -std and -conf                        ok
  38: cobc configuration: incomplete                  ok
-  2: compiler warnings                               ok
  41: runtime configuration: recursive include        ok
  37: cobc configuration: conf optional               ok
+ 42: runtime configuration: environment priority     ok
  36: cobc configuration: conf missing                ok
  34: cobc compiler flag on command line (priority)   ok
-  4: compiler outputs (file specified)               ok
- 42: runtime configuration: environment priority     ok
- 39: runtime configuration                           ok
  43: runtime configuration: entries                  ok
  22: run job with optional arguments                 ok
+ 39: runtime configuration                           ok
+  4: compiler outputs (file specified)               ok
  45: runtime configuration: conf optional            ok
  47: validation of COB_CONFIG_DIR                    ok
  46: runtime configuration: strings and environment  ok
  51: COPY: relative copybooks                        expected failure (syn_copy.at:163)
- 35: cobc configuration: entries                     ok
  44: runtime configuration: conf missing             ok
- 55: COPY: recursive                                 ok
+ 35: cobc configuration: entries                     ok
  53: COPY: within comment                            ok
+ 55: COPY: recursive                                 ok
  40: runtime configuration file                      ok
  56: COPY: replacement order                         ok
- 54: COPY: file not found                            ok
  57: COPY: separators                                ok
- 10: C Compiler optimizations                        ok
+ 54: COPY: file not found                            ok
  58: COPY: partial replacement                       ok
- 60: COPY: TRAILING replacement                      ok
  59: COPY: LEADING replacement                       ok
- 52: COPY: extension                                 ok
+ 60: COPY: TRAILING replacement                      ok
  48: cobc configuration: source format               ok
+ 52: COPY: extension                                 ok
  50: COPY: IN / OF / -I                              ok
- 65: COPY: simple partial match                      ok
  66: COPY: with LEADING, multiple partial matches    ok
- 67: COPY: multiple partial matches with an error    ok
  68: COPY: Multiple partial matches (1)              ok
+ 65: COPY: simple partial match                      ok
+ 67: COPY: multiple partial matches with an error    ok
+ 10: C Compiler optimizations                        ok
  69: COPY: Multiple partial matches (2)              ok
  73: Invalid source name                             ok
- 72: COPY and REPLACE with reserved words            ok
- 71: COPY and REPLACE errors                         ok
- 63: COPY: fixed/free format                         ok
  62: COPY: recursive replacement                     ok
- 75: Invalid PROGRAM-ID type clause (1)              ok
+ 71: COPY and REPLACE errors                         ok
+ 72: COPY and REPLACE with reserved words            ok
+ 63: COPY: fixed/free format                         ok
  70: COPY and REPLACE in same file                   ok
+ 75: Invalid PROGRAM-ID type clause (1)              ok
  76: invalid PROGRAM-ID type clause (2)              ok
- 77: INITIAL / RECURSIVE before COMMON               ok
  78: Undefined data name                             ok
  79: Undefined group name                            ok
+ 77: INITIAL / RECURSIVE before COMMON               ok
  80: Undefined data name in group                    ok
  81: Reference not a group name                      ok
  82: Incomplete 01 definition                        ok
  83: error handling in conditions                    ok
  87: Redefinition of 01 and 02 items                 ok
- 88: Redefinition of 02 items                        ok
- 49: cobc configuration: ebcdic-table                ok
- 89: Redefinition of 77 items                        ok
- 84: Same paragraphs in different sections           ok
- 85: GO TO sections and foreign paragraphs           ok
  74: Invalid PROGRAM-ID                              ok
+ 85: GO TO sections and foreign paragraphs           ok
+ 84: Same paragraphs in different sections           ok
+ 49: cobc configuration: ebcdic-table                ok
+ 88: Redefinition of 02 items                        ok
+ 89: Redefinition of 77 items                        ok
  90: Redefinition of 01 and 77 items                 ok
- 61: COPY: partial replacement BY literal            ok
  91: Redefinition of 88 items                        ok
+ 61: COPY: partial replacement BY literal            ok
  64: REPLACE: partial replacement BY SPACE           ok
  94: Redefinition of function-prototype name         ok
  96: PROCEDURE DIVISION RETURNING OMITTED: FUNCTION  ok
  98: Data item with same name as program-name        ok
  99: Ambiguous reference to 02 items                 ok
-100: Ambiguous reference to 02 and 03 items          ok
  92: Redefinition of program-name by other programs  ok
-101: Ambiguous reference with qualification          ok
  93: Redefinition of program-name within program     ok
+100: Ambiguous reference to 02 and 03 items          ok
+101: Ambiguous reference with qualification          ok
 102: Unique reference with ambiguous qualifiers      ok
 104: Undefined procedure name                        ok
 105: Redefinition of section names                   ok
-107: Redefinition of label and variable names        expected failure (syn_definition.at:1095)
- 27: cobc dialect features for all -std              ok
-106: Redefinition of section and paragraph names     ok
  86: Redefinition of 01 items                        ok
-109: Ambiguous reference to paragraph name           ok
+107: Redefinition of label and variable names        expected failure (syn_definition.at:1095)
  95: PROCEDURE DIVISION RETURNING OMITTED: main      ok
 108: Redefinition of paragraph names                 ok
+106: Redefinition of section and paragraph names     ok
+109: Ambiguous reference to paragraph name           ok
+ 27: cobc dialect features for all -std              ok
 103: SYNCHRONIZED clause                             ok
 111: CALL BY VALUE alphanumeric item (extension)     ok
 113: CALL BY VALUE figurative constants              ok
 112: CALL BY VALUE national item (extension)         ok
 114: Duplicate identification division header        ok
 117: Invalid ENVIRONMENT DIVISION order              ok
+118: Function without END FUNCTION                   ok
 110: Non-matching level numbers (extension)          ok
 119: Nested programs without END PROGRAM             ok
-118: Function without END FUNCTION                   ok
-121: Screen section starts with 78-level             ok
 120: Nested programs not in procedure division       ok
-123: PICTURE string with control character           ok
+121: Screen section starts with 78-level             ok
  97: PROCEDURE DIVISION RETURNING item               ok
+123: PICTURE string with control character           ok
 124: PICTURE strings invalid with BLANK WHEN ZERO    ok
-126: Edited monetary PICTURE strings                 ok
 125: PICTURE strings invalid with USAGE              ok
 127: ALPHABET definition                             ok
-129: RENAMES item                                    ok
+126: Edited monetary PICTURE strings                 ok
 122: Invalid PICTURE strings                         ok
+129: RENAMES item                                    ok
 133: LIKE clause                                     expected failure (syn_definition.at:2617)
 134: APPLY COMMIT clause                             ok
 135: GLOBAL record-names                             ok
 130: RENAMES of 01-, 66- and 77-level items          ok
 136: Invalid USE BEFORE                              ok
 137: Non-numeric subscript                           ok
-128: PROGRAM COLLATING SEQUENCE                      ok
 139: Subscript bounds with OCCURS DEPENDING ON       ok
+128: PROGRAM COLLATING SEQUENCE                      ok
 140: Subscripted item requires OCCURS clause         ok
 142: SET SSRANGE syntax                              ok
-138: Subscript range check                           ok
 131: SAME AS clause                                  ok
+138: Subscript range check                           ok
 116: OSVS register CURRENT-DATE and TIME-OF-DAY      expected failure (syn_definition.at:1393)
 144: OCCURS with level 66                            ok
-145: OCCURS with level 78                            ok
 146: OCCURS with level 88                            ok
+145: OCCURS with level 78                            ok
 141: Number of subscripts                            ok
-150: Nested OCCURS clause                            ok
 149: OCCURS data-items for INDEXED and KEY           ok
+150: Nested OCCURS clause                            ok
 151: OCCURS DEPENDING with wrong size                ok
 115: RETURNING in STOP RUN / GOBACK / EXIT PROGRAM   ok
 143: OCCURS with level 01 and 77                     ok
@@ -214,47 +214,47 @@ make[4]: Entering directory '/work/trees/a/baseline/tests'
 158: REDEFINES: level 03 by 02                       ok
 157: REDEFINES: level 02 by 01                       ok
 159: REDEFINES: level 66                             ok
+155: OCCURS size check                               ok
 160: REDEFINES: level 88                             ok
 154: OCCURS INDEXED before KEY                       ok
-155: OCCURS size check                               ok
 156: REDEFINES: not following entry-name             ok
 161: REDEFINES: lower level number                   ok
-153: OCCURS with unmatched DEPENDING / TO phrases    ok
 162: REDEFINES: with OCCURS                          ok
 163: REDEFINES: with subscript                       ok
 164: REDEFINES: with variable occurrence             ok
+153: OCCURS with unmatched DEPENDING / TO phrases    ok
 165: REDEFINES: with qualification                   ok
 169: REDEFINES: with intervention                    ok
 170: REDEFINES: within REDEFINES                     ok
-171: REDEFINES: for ANY LENGTH item                  ok
 172: REDEFINES: non-referenced ambiguous item        ok
-174: OCCURS too many VALUEs                          ok
+171: REDEFINES: for ANY LENGTH item                  ok
 166: REDEFINES: multiple redefinition                ok
+174: OCCURS too many VALUEs                          ok
 132: TYPEDEF clause                                  ok
+176: Numeric item (non-integer)                      ok
 175: Numeric item (integer)                          ok
 173: bad VALUES / VALUES ARE in format-1             ok
-176: Numeric item (non-integer)                      ok
-177: Numeric item with picture P                     ok
 178: Signed numeric literal                          ok
+177: Numeric item with picture P                     ok
 148: OCCURS UNBOUNDED                                ok
-180: Alphanumeric item                               ok
 179: Alphabetic item                                 ok
+180: Alphanumeric item                               ok
 181: Alphanumeric group item                         ok
 182: National item                                   ok
+186: Missing SELECT                                  ok
 184: Alphanumeric-edited item                        ok
 168: REDEFINES: with VALUE                           ok
-186: Missing SELECT                                  ok
-147: OCCURS with variable-occurrence data item       ok
 187: Duplicated SELECT                               ok
 188: Missing FD                                      ok
 189: Duplicated FD                                   ok
-185: Implicit picture from value                     ok
+147: OCCURS with variable-occurrence data item       ok
 167: REDEFINES: size exceeds                         ok
+185: Implicit picture from value                     ok
 194: SELECT without ASSIGN                           ok
-192: ASSIGN to lsq-device-name                       ok
-198: valid key items                                 ok
-197: OPEN SEQUENTIAL file NO REWIND                  ok
 195: START on SEQUENTIAL file                        ok
+192: ASSIGN to lsq-device-name                       ok
+197: OPEN SEQUENTIAL file NO REWIND                  ok
+198: valid key items                                 ok
 183: Numeric-edited item                             ok
 199: INDEXED file invalid key items                  ok
 193: ASSIGN to variable                              ok
@@ -263,96 +263,96 @@ make[4]: Entering directory '/work/trees/a/baseline/tests'
 203: DECLARATIVES invalid procedure reference (2)    ok
 205: RECORDING MODE                                  ok
 206: CODE-SET clause                                 ok
-208: WRITE / REWRITE FROM clause and FILE            ok
 207: CODE-SET FOR clause                             ok
-191: ASSIGN to printer-name                          ok
+208: WRITE / REWRITE FROM clause and FILE            ok
 190: ASSIGN to device-name                           ok
 209: Clauses following invalid ACCESS clause         ok
-210: RELATIVE KEY type validation                    ok
+191: ASSIGN to printer-name                          ok
 211: Mismatched KEY clause                           ok
-212: RECORD DELIMITER                                ok
+210: RELATIVE KEY type validation                    ok
 213: FILE STATUS                                     ok
+212: RECORD DELIMITER                                ok
 215: INDEXED file PASSWORD clause                    ok
 216: RECORD clause equal limits                      ok
 218: WRITE / REWRITE on REPORT files                 ok
-219: SELECT without fd-name                          ok
 220: Undeclared FILE-ID variable                     ok
+219: SELECT without fd-name                          ok
 201: variable record length DEPENDING item           ok
 222: Undeclared ASSIGN variable                      ok
 223: ACCESS RANDOM with ORG SEQUENTIAL               ok
-221: ASSIGN external-name matching filename          ok
-225: RECORD definition with SOURCE IS / =            ok
-200: variable record length                          ok
 202: DECLARATIVES invalid procedure reference (1)    ok
+200: variable record length                          ok
+225: RECORD definition with SOURCE IS / =            ok
+221: ASSIGN external-name matching filename          ok
 224: ALTERNATE RECORD KEY SUPPRESS WHEN              ok
 226: ALTERNATE RECORD definition WITH NO DUPLICATES  expected failure (syn_file.at:2089)
 227: ALTERNATE RECORD definition omitting RECORD     expected failure (syn_file.at:2118)
 214: VSAM status                                     ok
 217: FILE ... FROM literal                           ok
 230: Invalid file name in SELECT                     ok
+231: REPORT error/warning                            ok
 232: REPORT not positive integers in COL / LINE PLUS ok
 233: Missing PICTURE for SOURCE                      ok
-234: Missing DETAIL line                             ok
-235: REPORT LINE PLUS ZERO                           ok
-231: REPORT error/warning                            ok
 237: REPORT with PLUS RIGHT/CENTER                   ok
+234: Missing DETAIL line                             ok
 228: SELECT/OPEN syntax extensions                   ok
+235: REPORT LINE PLUS ZERO                           ok
 238: PAGE LIMITS clause                              ok
 236: Incorrect REPORT NAME                           ok
-241: Incorrect USAGE clause                          ok
-244: Static out of bounds                            ok
-246: no static bound check for ANY LENGTH            ok
 243: invalid reference-modification                  ok
-239: Report FD without period                        ok
-247: ambiguous AND/OR                                ok
+241: Incorrect USAGE clause                          ok
 229: GLOBAL FD nested progam                         ok
+246: no static bound check for ANY LENGTH            ok
+247: ambiguous AND/OR                                ok
+244: Static out of bounds                            ok
+239: Report FD without period                        ok
 249: warn literal size                               ok
 245: constant-folding out of bounds                  ok
-253: Invalid conditional expression (3)              ok
 251: Invalid conditional expression (1)              ok
 250: warn literal size in constant expr. (level 88)  ok
 252: Invalid conditional expression (2)              ok
+253: Invalid conditional expression (3)              ok
 240: REPORT with unreferenced control field          ok
 242: valid reference-modification                    ok
 254: Valid conditional expression                    ok
 258: INITIALIZE constant                             ok
-255: missing headers                                 ok
-259: CLASS duplicate values                          ok
 260: INSPECT invalid size                            ok
+259: CLASS duplicate values                          ok
+255: missing headers                                 ok
 261: INSPECT invalid target                          ok
 262: INSPECT missing keyword                         ok
 256: one line program                                ok
 263: INSPECT repeated keywords                       ok
+264: INSPECT incomplete clause                       ok
 248: warn constant expressions                       ok
 265: INSPECT multiple BEFORE/AFTER clauses           ok
-264: INSPECT incomplete clause                       ok
+268: unreachable statement                           ok
 266: EXAMINE invalid literals                        ok
 267: maximum data size                               ok
-268: unreachable statement                           ok
 273: unexpected mnemonic-name location               ok
 274: wrong device for mnemonic-name                  ok
 269: CRT STATUS                                      ok
 275: missing mnemonic-name declaration               ok
-272: SWITCHES                                        ok
 277: ACCEPT WITH ( NO ) UPDATE / DEFAULT             ok
-279: ACCEPT WITH LOWER / UPPER                       ok
+272: SWITCHES                                        ok
 278: ACCEPT WITH AUTO / TAB                          ok
-280: ACCEPT WITH SIZE                                ok
+279: ACCEPT WITH LOWER / UPPER                       ok
 281: DISPLAY WITH SIZE                               ok
+280: ACCEPT WITH SIZE                                ok
 276: unknown device in dialect                       ok
 282: source text after program-text area             ok
-285: continuation of COBOL words                     ok
 289: ACCEPT FROM ESCAPE KEY                          ok
+285: continuation of COBOL words                     ok
 288: Segmentation Module                             ok
 291: ACUCOBOL USAGE HANDLE                           ok
 293: ACUCOBOL GRAPHICAL controls                     ok
-294: DISPLAY MESSAGE BOX                             ok
-270: SPECIAL-NAMES clause                            ok
 290: ACUCOBOL USAGE FLOAT / DOUBLE                   ok
-283: line overflow in fixed-form / free-form         ok
 292: ACUCOBOL WINDOW statements                      ok
-295: DISPLAY OMITTED                                 ok
+270: SPECIAL-NAMES clause                            ok
+294: DISPLAY MESSAGE BOX                             ok
 284: missing newline in fixed-form / free-form       ok
+283: line overflow in fixed-form / free-form         ok
+295: DISPLAY OMITTED                                 ok
 296: CGI: EXTERNAL-FORM                              ok
 271: CURRENCY SIGN                                   ok
 302: ANY LENGTH item as BY VALUE formal parameter    ok
@@ -360,188 +360,188 @@ make[4]: Entering directory '/work/trees/a/baseline/tests'
 299: overriding default words                        ok
 301: ANY LENGTH item as formal parameter             ok
 303: swapped SOURCE- and OBJECT-COMPUTER             ok
-307: wrong dialect hints                             ok
 300: complete specified word list                    ok
-287: word length                                     ok
+307: wrong dialect hints                             ok
 308: redundant periods                               ok
 306: NOT ON EXCEPTION phrases before ON EXCEPTION    ok
-304: CONF. SECTION paragraphs in wrong order         ok
+287: word length                                     ok
 298: adding aliases                                  ok
+304: CONF. SECTION paragraphs in wrong order         ok
 313: IF-ELSE statement list with invalid syntax      ok
 314: EVALUATE statement with invalid syntax          ok
 315: COBOL-WORDS directive                           ok
+317: TURN directive                                  ok
 316: MF reserved word directives                     ok
 305: NOT ON EXCEPTION with STATIC CALL convention    ok
-317: TURN directive                                  ok
 318: STRING / UNSTRING with invalid syntax           ok
 319: STRING / UNSTRING POINTER clause                ok
+320: STRING with non-DISPLAY                         ok
+311: statement in Area A                             ok
 322: use of program-prototype-names                  ok
 321: UNSTRING COUNT clause                           ok
 323: checking prototypes and definitions match       expected failure (syn_misc.at:4100)
-320: STRING with non-DISPLAY                         ok
-311: statement in Area A                             ok
-324: invalid INSPECT/TRANSFORM operands              ok
 325: SIGN clause checks                              ok
+324: invalid INSPECT/TRANSFORM operands              ok
 309: missing periods                                 ok
-328: dangling LINKAGE items                          ok
 312: pseudotext replacement with text in area A      ok
+328: dangling LINKAGE items                          ok
 329: duplicate PROCEDURE DIVISION/ENTRY USING items  ok
-257: empty program                                   ok
 330: duplicate CALL USING BY REFERENCE items         ok
-327: conflicting call conventions                    ok
+257: empty program                                   ok
+310: missing periods with COPYs                      ok
 331: ADD / SUBTRACT TABLE                            ok
 332: USE FOR DEBUGGING invalid ref-mod / subscripts  ok
-310: missing periods with COPYs                      ok
 333: USE FOR DEBUGGING duplicate targets             ok
 334: USE FOR DEBUGGING implicit statements           ok
+327: conflicting call conventions                    ok
 337: Empty PERFORM with DEBUGGING MODE               ok
 336: USE FOR DEBUGGING syntax-checks (2)             expected failure (syn_misc.at:4722)
 326: conflicting entry conventions                   ok
-342: level 78 NEXT / START OF                        ok
 344: Constant Expressions (1)                        ok
-338: whitespace handling                             ok
+342: level 78 NEXT / START OF                        ok
 339: STOP identifier                                 ok
+338: whitespace handling                             ok
 345: Constant Expressions (2)                        ok
 347: Constant Expressions (4)                        ok
-350: Fall-Through to WHEN OTHER                      expected failure (syn_misc.at:5619)
 351: CONSTANT LENGTH / BYTE-LENGTH                   ok
-352: ANY LENGTH/NUMERIC with incorrect PIC           ok
 341: 78 VALUE                                        ok
+350: Fall-Through to WHEN OTHER                      expected failure (syn_misc.at:5619)
+352: ANY LENGTH/NUMERIC with incorrect PIC           ok
 343: SYMBOLIC CONSTANT                               ok
 348: Constant Expressions (5)                        ok
-354: SET SOURCEFORMAT syntax checks                  ok
 349: Missing imperative statements                   ok
 340: 01 CONSTANT                                     ok
-353: VOLATILE clause                                 ok
+354: SET SOURCEFORMAT syntax checks                  ok
 357: tokens consisting of multiple words             ok
 358: @OPTIONS parsing                                ok
-335: USE FOR DEBUGGING syntax-checks (1)             ok
+353: VOLATILE clause                                 ok
 359: PROCESS / CBL parsing                           ok
-362: invalid use of condition-name                   ok
-361: system routines with wrong number of parameters ok
 360: *CONTROL / *CBL parsing                         ok
+361: system routines with wrong number of parameters ok
+362: invalid use of condition-name                   ok
+335: USE FOR DEBUGGING syntax-checks (1)             ok
 363: XML GENERATE syntax checks                      ok
 346: Constant Expressions (3)                        ok
 367: SORT syntax                                     ok
 368: OSVS I/O extensions                             ok
 370: SEARCH ALL checks                               ok
 365: CONTINUE statement                              ok
-364: BASED clause, ALLOCATE / FREE statements        ok
 371: Invalid parentheses around condition            ok
-286: line and floating comments                      ok
+364: BASED clause, ALLOCATE / FREE statements        ok
 372: DISPLAY directive (1)                           ok
 356: LIN / COL register                              ok
 366: conflict markers                                ok
 373: DISPLAY directive (2)                           ok
 374: DISPLAY directive (3)                           ok
+286: line and floating comments                      ok
 376: conditional / define directives (1)             ok
 378: conditional / define directives (3)             ok
-379: conditional / define directives (4)             ok
+369: EQUALS in expressions                           ok
 380: error handling in conditional directives        ok
+379: conditional / define directives (4)             ok
 383: Missing reserved word with DEBUGGING MODE       ok
 382: conditional directives with lvl 78 (2)          expected failure (syn_misc.at:7160)
-369: EQUALS in expressions                           ok
-377: conditional / define directives (2)             ok
 384: Invalid PERFORM statement                       ok
+377: conditional / define directives (2)             ok
 386: VALIDATE parsing                                ok
 355: WHEN-COMPILED register in dialect               ok
 381: conditional directives with lvl 78 (1)          expected failure (syn_misc.at:7112)
 385: PERFORM THRU syntax checks                      ok
 375: SET CONSTANT directive                          ok
 394: AREACHECK / NOAREACHECK directives              ok
-387: field-tree via COBC_GEN_DUMP_COMMENTS           ok
 396: optional dots                                   ok
+387: field-tree via COBC_GEN_DUMP_COMMENTS           ok
+392: CONTROL DIVISION & AREACHECK                    ok
 395: AREACHECK / NOAREACHECK directives (2)          ok
 397: optional dots before PROCEDURE DIVISION         ok
-392: CONTROL DIVISION & AREACHECK                    ok
-398: AREACHECK                                       ok
-390: CONTROL: default section                        ok
-401: MOVE SPACE TO numeric or numeric-edited item    ok
 389: CONTROL: empty default section                  ok
+390: CONTROL: default section                        ok
+398: AREACHECK                                       ok
 402: MOVE ZERO TO alphabetic item                    ok
+401: MOVE SPACE TO numeric or numeric-edited item    ok
 403: MOVE alphabetic TO x                            ok
 404: MOVE alphanumeric TO x                          ok
-406: MOVE numeric (integer) TO x                     ok
 405: MOVE alphanumeric-edited TO x                   ok
-407: MOVE numeric (non-integer) TO x                 ok
 393: PICTURE L                                       ok
+406: MOVE numeric (integer) TO x                     ok
+407: MOVE numeric (non-integer) TO x                 ok
 408: MOVE numeric-edited TO x                        ok
 409: MOVE national TO x                              ok
 410: MOVE national-edited TO x                       ok
 411: CORRESPONDING - Operands must be groups         ok
-400: context sensitive alias                         ok
 412: CORRESPONDING - Target has no matching items    ok
-413: MOVE to erroneous field                         ok
-415: invalid source for MOVE                         ok
-417: SET error                                       ok
+400: context sensitive alias                         ok
 416: invalid target for MOVE                         ok
+415: invalid source for MOVE                         ok
+413: MOVE to erroneous field                         ok
+417: SET error                                       ok
 419: Category check of Format 1                      ok
 420: Category check of Format 2                      ok
 421: Category check of literals                      ok
-422: Flexible ACCEPT/DISPLAY syntax                  ok
-423: Duplicate ACCEPT/DISPLAY clauses                ok
 424: AT clause                                       ok
-425: ACCEPT/DISPLAY extensions detection             ok
+422: Flexible ACCEPT/DISPLAY syntax                  ok
 388: CONTROL DIVISION                                ok
+423: Duplicate ACCEPT/DISPLAY clauses                ok
+425: ACCEPT/DISPLAY extensions detection             ok
 426: FROM clause                                     ok
 427: Incorrect USAGE clause                          ok
 428: SCREEN SECTION clause numbers                   ok
 399: autodetect format                               ok
 429: Screen clauses                                  ok
-431: Referencing 88-level                            ok
 430: ACCEPT ON EXCEPTION/ESCAPE                      ok
+431: Referencing 88-level                            ok
 433: Redundant screen clauses                        ok
-432: Conflicting screen clauses                      ok
-436: FULL on numeric item                            ok
-440: DISPLAY WITH CONVERSION                         ok
 418: MOVE FIGURATIVE to NUMERIC                      ok
-435: VALUE clause missing                            ok
+436: FULL on numeric item                            ok
+432: Conflicting screen clauses                      ok
+440: DISPLAY WITH CONVERSION                         ok
 441: SET ADDRESS OF item                             ok
-438: MS-COBOL position-spec                          ok
+435: VALUE clause missing                            ok
 442: SET item TO 88-level                            ok
+438: MS-COBOL position-spec                          ok
+434: Screen item OCCURS w-/wo relative LINE/COL      ok
 439: Screen with invalid FROM clause                 ok
 444: REPOSITORY INTRINSIC phrase                     ok
-434: Screen item OCCURS w-/wo relative LINE/COL      ok
 445: REPOSITORY FUNCTION phrase                      ok
-447: Missing prototype/definition                    ok
 446: Redundant REPOSITORY entries                    ok
+447: Missing prototype/definition                    ok
 391: CONTROL: substitution & default section         ok
-448: Empty function                                  ok
 443: ANY LENGTH / NUMERIC as function RETURNING item ok
+448: Empty function                                  ok
 449: Function definition inside program              ok
-452: Intrinsic functions: number of arguments        ok
 453: Intrinsic functions: reference modification     ok
+452: Intrinsic functions: number of arguments        ok
 454: Intrinsic functions: argument type              ok
 455: invalid formatted date/time args                ok
-450: Intrinsic functions: dialect                    ok
 456: invalid formats w/ DECIMAL-POINT IS COMMA       ok
 457: Specified offset and SYSTEM-OFFSET              ok
-451: Intrinsic functions: replaced                   ok
+450: Intrinsic functions: dialect                    ok
 458: FUNCTION LENGTH / BYTE-LENGTH                   ok
+451: Intrinsic functions: replaced                   ok
 437: Compiler-specific SCREEN SECTION clause rules   ok
 462: floating-point literals                         ok
 463: X literals                                      ok
-465: NX literals                                     ok
 464: national literals                               ok
-470: ACUCOBOL 32bit literal size                     skipped (syn_literals.at:1383)
 467: binary-hexadecimal literals                     ok
+465: NX literals                                     ok
+470: ACUCOBOL 32bit literal size                     skipped (syn_literals.at:1383)
 468: HP COBOL octal literals                         ok
 414: Overlapping MOVE                                ok
 466: binary literals                                 ok
 461: numeric literals                                ok
 472: long literal in error message                   ok
 473: literal missing terminating character           ok
-475: Minimal lines per listing pages                 ok
 477: Replacement w/o strings                         ok
+475: Minimal lines per listing pages                 ok
 478: Partial replacement with literals               ok
 479: COPY replacement with partial match             ok
-469: ACUCOBOL literals                               ok
 471: zero-length literals                            ok
-476: COPY within comment                             ok
+469: ACUCOBOL literals                               ok
 459: continuation Indicator - too many lines         ok
+476: COPY within comment                             ok
 482: COPY separators                                 ok
-484: COPY LEADING replacement                        ok
 460: literal too long                                ok
+484: COPY LEADING replacement                        ok
 485: COPY TRAILING replacement                       ok
 486: COPY recursive replacement                      ok
 487: COPY multiple files                             ok
@@ -550,322 +550,322 @@ make[4]: Entering directory '/work/trees/a/baseline/tests'
 481: COPY replacement order                          ok
 480: COPY replacement with multiple partial matches  ok
 495: Symbols: pointer                                ok
-496: Symbols: multiple programs/functions            ok
 497: Symbols: OCCURS and REDEFINES                   ok
+496: Symbols: multiple programs/functions            ok
 492: command line                                    ok
 493: Wide listing                                    ok
 499: File descriptions                               ok
-500: Invalid PICTURE strings                         ok
-503: LISTING directive                               ok
-501: Variable format                                 ok
 498: Conditional compilation                         ok
-504: LISTING directive free-form reference-format    ok
+500: Invalid PICTURE strings                         ok
+501: Variable format                                 ok
+503: LISTING directive                               ok
 505: Listing-directive statements                    ok
+504: LISTING directive free-form reference-format    ok
 502: MFCOMMENT                                       ok
 508: Report Writer                                   ok
-510: Long concatenated literal                       ok
 491: Multiple programs in one compilation group      ok
+510: Long concatenated literal                       ok
 488: Error/Warning messages                          ok
 474: GCOS literals with EBCDIC symbols (syntax)      ok
-509: huge REPLACE                                    ok
 507: Cross reference                                 ok
+509: huge REPLACE                                    ok
 494: Symbols: simple                                 ok
-506: Eject page                                      ok
 511: DISPLAY literals                                ok
+506: Eject page                                      ok
 512: DISPLAY literals, DECIMAL-POINT is COMMA        ok
-514: DISPLAY data items with VALUE clause            ok
-515: DISPLAY data items with MOVE statement          ok
 517: MOVE to edited item (2)                         ok
+515: DISPLAY data items with MOVE statement          ok
+514: DISPLAY data items with VALUE clause            ok
 516: MOVE to edited item (1)                         ok
 519: MOVE to item with simple and floating insertion ok
 518: MOVE to edited item (3)                         ok
 513: Hexadecimal literal                             ok
 520: MOVE to JUSTIFIED item                          ok
 490: Multiple programs in one file                   ok
-522: Compare FLOAT-LONG with floating-point literal  ok
 523: equality of FLOAT-SHORT / FLOAT-LONG            ok
+522: Compare FLOAT-LONG with floating-point literal  ok
+527: ALPHABETIC test                                 ok
 524: equality of FLOAT-SHORT / FLOAT-EXTENDED        ok
 535: function with variable-length RETURNING item    skipped (run_fundamental.at:1426)
-527: ALPHABETIC test                                 ok
-529: ALPHABETIC-LOWER test                           ok
 528: ALPHABETIC-UPPER test                           ok
+529: ALPHABETIC-LOWER test                           ok
 530: GLOBAL at same level                            ok
-531: GLOBAL at lower level                           ok
 521: MOVE integer literal to alphanumeric            ok
+531: GLOBAL at lower level                           ok
 532: GLOBAL CONSTANT                                 ok
-533: GLOBAL identifiers from ENVIRONMENT DIVISION    ok
 534: GLOBAL REDEFINES                                ok
+533: GLOBAL identifiers from ENVIRONMENT DIVISION    ok
 538: Contained program visibility (1)                ok
 539: Contained program visibility (2)                ok
 540: Contained program visibility (3)                ok
-525: Overlapping MOVE (GnuCOBOL)                     ok
-537: Entry point visibility (2)                      ok
 541: Contained program visibility (4)                ok
+525: Overlapping MOVE (GnuCOBOL)                     ok
 526: Overlapping MOVE (IBM)                          ok
 536: Entry point visibility (1)                      ok
+537: Entry point visibility (2)                      ok
 542: CALL alphanumeric data-name                     ok
+544: CALL/CANCEL/SET ADDRESS program-prototype-name  ok
 543: CALL program-pointer                            ok
 545: GLOBAL FD (1)                                   ok
-544: CALL/CANCEL/SET ADDRESS program-prototype-name  ok
-547: GLOBAL FD (3)                                   ok
 546: GLOBAL FD (2)                                   ok
 548: GLOBAL FD (4)                                   ok
 549: CANCEL test (1)                                 ok
+547: GLOBAL FD (3)                                   ok
 552: Separate sign positions (1)                     ok
 554: Context sensitive words (1)                     ok
 555: Context sensitive words (2)                     ok
-556: Context sensitive words (3)                     ok
 557: Context sensitive words (4)                     ok
+556: Context sensitive words (3)                     ok
 550: CANCEL test (2)                                 ok
 551: CANCEL test (3)                                 ok
 558: Context sensitive words (5)                     ok
-559: Context sensitive words (6)                     ok
 560: Context sensitive words (7)                     ok
+559: Context sensitive words (6)                     ok
 553: Separate sign positions (2)                     ok
 561: Context sensitive words (8)                     ok
 562: ROUNDED AWAY-FROM-ZERO                          ok
 563: ROUNDED NEAREST-AWAY-FROM-ZERO                  ok
-566: ROUNDED TOWARD-GREATER                          ok
 565: ROUNDED NEAREST-TOWARD-ZERO                     ok
+566: ROUNDED TOWARD-GREATER                          ok
 564: ROUNDED NEAREST-EVEN                            ok
-567: ROUNDED TOWARD-LESSER                           ok
 568: ROUNDED TRUNCATION                              ok
+567: ROUNDED TOWARD-LESSER                           ok
 569: Numeric operations (1)                          ok
 570: Numeric operations (2) DISPLAY                  ok
+573: Numeric operations (5) COMP-5                   ok
 572: Numeric operations (4) BINARY                   ok
 571: Numeric operations (3) PACKED-DECIMAL           ok
-573: Numeric operations (5) COMP-5                   ok
-577: ADD CORRESPONDING                               ok
 575: Numeric operations (7)                          ok
-578: ADD CORRESPONDING no match                      ok
 576: Numeric operations (8)                          ok
-574: Numeric operations (6)                          ok
+577: ADD CORRESPONDING                               ok
+578: ADD CORRESPONDING no match                      ok
 579: SYNC in OCCURS                                  ok
 580: 88 level with THRU                              ok
+574: Numeric operations (6)                          ok
 581: 88 level with FILLER                            ok
 582: 88 level with FALSE IS clause                   ok
-584: MULTIPLY BY literal in INITIAL program          ok
 583: BLANK WHEN ZERO                                 ok
-588: debugging lines (-fdebugging-line)              ok
+584: MULTIPLY BY literal in INITIAL program          ok
 585: DIVIDE complex                                  ok
-589: debugging lines (WITH DEBUGGING MODE)           ok
-586: COMPUTE with decimal constants                  ok
-587: debugging lines (not active)                    ok
 590: debugging lines, free format (not active)       ok
-593: USE FOR DEBUGGING (COB_SET_DEBUG deactivated)   ok
+588: debugging lines (-fdebugging-line)              ok
+586: COMPUTE with decimal constants                  ok
 591: debugging lines, free format (-fdebugging-line) ok
+587: debugging lines (not active)                    ok
+589: debugging lines (WITH DEBUGGING MODE)           ok
 592: USE FOR DEBUGGING (no DEBUGGING MODE)           ok
-594: USE FOR DEBUGGING ON ALL PROCEDURES             ok
+593: USE FOR DEBUGGING (COB_SET_DEBUG deactivated)   ok
 595: USE FOR DEBUGGING ON procedure                  ok
+594: USE FOR DEBUGGING ON ALL PROCEDURES             ok
 596: USE FOR DEBUGGING (COB_SET_DEBUG switched)      ok
-599: USE FOR DEBUGGING, time of execution            expected failure (run_fundamental.at:5539)
-598: USE FOR DEBUGGING, reference within DEBUGGING   ok
-597: USE FOR DEBUGGING ON [ALL] REFERENCES OF field  ok
 600: USE FOR DEBUGGING, reference with OCCURS        ok
-601: USE FOR DEBUGGING, referencing BASED item       ok
+597: USE FOR DEBUGGING ON [ALL] REFERENCES OF field  ok
+598: USE FOR DEBUGGING, reference within DEBUGGING   ok
+599: USE FOR DEBUGGING, time of execution            expected failure (run_fundamental.at:5539)
 602: USE FOR DEBUGGING file                          ok
+601: USE FOR DEBUGGING, referencing BASED item       ok
 612: abbreviated conditions with multiple words operators ok
 606: integer arithmetic on floating-point var        ok
 608: Alphanumeric VALUE longer than PIC              ok
-610: condition IS ZERO AND                           ok
 611: abbreviated conditions with multiple words operators ok
+613: MOVE with JUSTIFIED clause                      ok
+610: condition IS ZERO AND                           ok
 604: Expression numeric vs. DISPLAY                  ok
 607: TYPEDEF application                             ok
-613: MOVE with JUSTIFIED clause                      ok
 614: MOVE with PICTURE P                             ok
-605: Abbreviated Expressions                         ok
 615: MOVE with de-editting to USAGE DISPLAY          ok
 616: MOVE with de-editting to DECIMAL IS COMMA       ok
+605: Abbreviated Expressions                         ok
 617: MOVE with de-editting to BINARY                 ok
-618: MOVE with de-editting to COMP-3                 ok
 619: MOVE with de-editting to COMP-5                 ok
-620: MOVE with de-editting to NUMERIC DISPLAY (2)    ok
+618: MOVE with de-editting to COMP-3                 ok
 621: MOVE misc. edited                               ok
+620: MOVE with de-editting to NUMERIC DISPLAY (2)    ok
 623: MOVE to editted ZERO                            ok
 624: SPECIAL-NAMES CLASS                             ok
 627: Subscript bounds with OCCURS DEPENDING ON (1)   ok
-628: Subscript bounds with OCCURS DEPENDING ON (2)   ok
-622: MOVE between USAGEs                             ok
 629: Subscript bounds with OCCURS DEPENDING ON (3)   ok
-631: length of ODO w/- reference-modification        ok
 630: Subscript by arithmetic expression              ok
-625: Subscript out of bounds                         ok
-632: SEARCH ALL with OCCURS DEPENDING ON             ok
-626: Value of DEPENDING ON N out of bounds           ok
+622: MOVE between USAGEs                             ok
+628: Subscript bounds with OCCURS DEPENDING ON (2)   ok
+631: length of ODO w/- reference-modification        ok
 603: Simple Expressions with figurative constants    ok
+632: SEARCH ALL with OCCURS DEPENDING ON             ok
+625: Subscript out of bounds                         ok
+626: Value of DEPENDING ON N out of bounds           ok
 609: DISPLAY with P fields                           ok
-636: SSRANGE and NOSSRANGE directives                ok
-639: Dynamic reference-modification                  ok
 638: Static reference-modification                   ok
+636: SSRANGE and NOSSRANGE directives                ok
 637: CALL with OCCURS DEPENDING ON                   ok
+639: Dynamic reference-modification                  ok
 640: Offset underflow                                ok
 644: Length overflow with offset (1)                 ok
 645: Length overflow with offset (2)                 ok
 646: Length overflow with offset (3)                 ok
-649: ACCEPT OMITTED (simple)                         ok
-641: Offset overflow                                 ok
-643: Length overflow                                 ok
 642: Length underflow                                ok
+641: Offset overflow                                 ok
+649: ACCEPT OMITTED (simple)                         ok
+643: Length overflow                                 ok
 635: BOUND and NOBOUND directives                    ok
-650: ACCEPT FROM TIME / DATE / DAY / DAY-OF-WEEK (1) ok
 652: ACCEPT DATE / DAY and intrinsic functions (1)   ok
+650: ACCEPT FROM TIME / DATE / DAY / DAY-OF-WEEK (1) ok
 653: ACCEPT DATE / DAY and intrinsic functions (2)   ok
-634: enable / disable subscript check with ODO       ok
 654: ACCEPT OMITTED (SCREEN)                         ok
 655: INITIALIZE group entry with OCCURS              ok
+634: enable / disable subscript check with ODO       ok
 656: INITIALIZE OCCURS with numeric edited           ok
 657: INITIALIZE OCCURS with SIGN LEADING / TRAILING  ok
 658: INITIALIZE complex group (1)                    ok
 659: INITIALIZE complex group (2)                    ok
+633: enable / disable subscript check                ok
 651: ACCEPT FROM TIME / DATE / DAY / DAY-OF-WEEK (2) ok
 660: initial value for group item with VALUE         ok
 661: Value for group item with VALUE                 ok
-633: enable / disable subscript check                ok
 663: INITIALIZE with REDEFINES                       ok
 664: INITIALIZE with FILLER                          ok
 665: INITIALIZE of EXTERNAL data items               ok
 666: INITIALIZE with reference-modification          ok
-671: DECIMAL-POINT is COMMA (2)                      ok
 669: Comma separator without space                   ok
 670: DECIMAL-POINT is COMMA (1)                      ok
+671: DECIMAL-POINT is COMMA (2)                      ok
+676: CURRENCY SIGN WITH PICTURE SYMBOL               expected failure (run_misc.at:258)
 662: INITIALIZE group item                           ok
 672: DECIMAL-POINT is COMMA (3)                      ok
-673: DECIMAL-POINT is COMMA (4)                      ok
 668: INITIALIZE to table-format VALUES ARE           ok
-676: CURRENCY SIGN WITH PICTURE SYMBOL               expected failure (run_misc.at:258)
+673: DECIMAL-POINT is COMMA (4)                      ok
 674: DECIMAL-POINT is COMMA (5)                      ok
 675: CURRENCY SIGN                                   ok
+647: enable / disable ref-mod check                  ok
 648: MF SSRANGE and NOSSRANGE directives             ok
 683: MOVE to itself                                  ok
-684: MOVE with refmod                                ok
-685: MOVE with refmod (variable)                     ok
 667: INITIALIZE big table with VALUE                 ok
-647: enable / disable ref-mod check                  ok
+684: MOVE with refmod                                ok
 677: LOCAL-STORAGE (1)                               ok
-686: MOVE with group refmod                          ok
-681: EXTERNAL AS data item                           ok
 680: EXTERNAL data item                              ok
+681: EXTERNAL AS data item                           ok
+685: MOVE with refmod (variable)                     ok
 678: LOCAL-STORAGE (2)                               ok
 687: MOVE indexes                                    ok
+686: MOVE with group refmod                          ok
 689: MOVE Z'literal'                                 ok
 690: Floating continuation indicator                 ok
 691: Fixed continuation indicator                    ok
-688: MOVE X'00'                                      ok
 693: SOURCE FIXED/FREE directives                    ok
-682: EXTERNAL data item size mismatch                expected failure (run_misc.at:579)
 692: Concatenation operator                          ok
 694: TURN directive                                  ok
 679: LOCAL-STORAGE (3)                               ok
+688: MOVE X'00'                                      ok
+682: EXTERNAL data item size mismatch                expected failure (run_misc.at:579)
 696: Class check with reference-modification         ok
 697: Index and parenthesized expression              ok
 698: Alphanumeric and binary numeric                 ok
 702: Dynamic CALL with ON EXCEPTION                  ok
-709: Multiple calls of INITIAL program               ok
+705: Recursive CALL of RECURSIVE program             ok
 704: CALL m1. CALL m2. CALL m1.                      ok
 706: Recursive CALL of INITIAL program               ok
-705: Recursive CALL of RECURSIVE program             ok
-708: Recursive CALL with ON EXCEPTION                ok
+709: Multiple calls of INITIAL program               ok
 707: Recursive CALL with RECURSIVE assumed           ok
 700: Dynamic call with static linking                ok
-711: INSPECT REPLACING LEADING ZEROS BY SPACES       ok
+708: Recursive CALL with ON EXCEPTION                ok
 712: INSPECT: no repeat conversion                   ok
+711: INSPECT REPLACING LEADING ZEROS BY SPACES       ok
 713: TRANSFORM statement                             ok
 699: Non-numeric data in numeric items               ok
-715: INSPECT CONVERTING TO figurative constant       ok
 716: INSPECT CONVERTING NULL                         ok
 701: Static call with static linking                 ok
+715: INSPECT CONVERTING TO figurative constant       ok
 717: INSPECT CONVERTING TO NULL                      ok
 710: CALL binary literal parameter/LENGTH OF         ok
 703: Static CALL with ON EXCEPTION                   ok
 695: OCCURS on level 01                              ok
 718: INSPECT CONVERTING complex                      ok
-719: INSPECT numeric signed                          ok
 720: INSPECT TALLYING BEFORE                         ok
+719: INSPECT numeric signed                          ok
 721: INSPECT TALLYING AFTER                          ok
+724: INSPECT REPLACING figurative constant           ok
 722: INSPECT TALLYING BEFORE and AFTER               ok
 723: INSPECT TALLYING REPLACING BEFORE and AFTER     ok
-724: INSPECT REPLACING figurative constant           ok
 725: SWITCHES (environment COB_SWITCH_n and SET)     ok
 726: Nested PERFORM                                  ok
 727: PERFORM VARYING BY -0.2 decimal                 ok
 728: PERFORM VARYING Float                           ok
-714: INSPECT CONVERTING alphabet                     ok
 730: EXIT PERFORM                                    ok
-732: EXIT PARAGRAPH                                  ok
-731: EXIT PERFORM CYCLE                              ok
+714: INSPECT CONVERTING alphabet                     ok
 739: PERFORM ... CONTINUE                            ok
+731: EXIT PERFORM CYCLE                              ok
+732: EXIT PARAGRAPH                                  ok
+735: PERFORM FOREVER / PERFORM UNTIL EXIT            ok
 729: PERFORM VARYING BY phrase omitted               ok
 736: PERFORM inline (1)                              ok
-735: PERFORM FOREVER / PERFORM UNTIL EXIT            ok
-737: PERFORM inline (2)                              ok
 738: Non-overflow after overflow                     ok
+737: PERFORM inline (2)                              ok
+734: implicit GOBACK at end of PROCEDURE DIVISION    ok
+744: UNSTRING DELIMITED ALL SPACE-2                  ok
 740: STRING with subscript reference                 ok
-741: STRING WITH POINTER ON OVERFLOW with DELIMITER  ok
 743: UNSTRING DELIMITED ALL LOW-VALUE                ok
 742: STRING / UNSTRING [NOT] ON OVERFLOW             ok
-744: UNSTRING DELIMITED ALL SPACE-2                  ok
+741: STRING WITH POINTER ON OVERFLOW with DELIMITER  ok
+746: UNSTRING DELIMITER IN                           ok
 733: EXIT SECTION                                    ok
 745: UNSTRING DELIMITED POINTER                      ok
-734: implicit GOBACK at end of PROCEDURE DIVISION    ok
-746: UNSTRING DELIMITER IN                           ok
 747: UNSTRING combined                               ok
-748: UNSTRING with FUNCTION / literal                ok
 749: SORT: table                                     ok
+748: UNSTRING with FUNCTION / literal                ok
 750: SORT: table (2)                                 ok
-752: SORT: table (toplevel)                          ok
 758: PIC ZZZ-, ZZZ+                                  ok
+752: SORT: table (toplevel)                          ok
 759: PERFORM type OSVS                               ok
-754: Alphanum comparison with default COLLATING SEQUENCE ok
 753: SORT: EBCDIC table                              ok
 751: SORT: table (3)                                 ok
-763: Lookup ENTRY from main executable               ok
 757: SEARCH ALL: table with default COLLATING SEQUENCE ok
-756: JUSTIFIED and VALUE clauses                     ok
 761: COB_PRE_LOAD                                    ok
 760: Sticky LINKAGE                                  ok
+754: Alphanum comparison with default COLLATING SEQUENCE ok
+756: JUSTIFIED and VALUE clauses                     ok
+763: Lookup ENTRY from main executable               ok
 765: ALLOCATE / FREE with BASED item (1)             ok
 764: COB_LOAD_CASE=UPPER                             ok
 755: SORT: table with default COLLATING SEQUENCE     ok
 767: ALLOCATE CHARACTERS INITIALIZED (TO)            ok
 768: Initialized value with defaultbyte              ok
-772: CALL in from C, cob_call_params explicitly set  ok
 762: COB_PRE_LOAD with entry points                  ok
+772: CALL in from C, cob_call_params explicitly set  ok
 773: CALL in from C, cob_call_params unknown         ok
-769: CALL with OMITTED parameter                     ok
 766: ALLOCATE / FREE with BASED item (2)             ok
+769: CALL with OMITTED parameter                     ok
 770: direct CALL in from C w/wo error                ok
 777: CALL STATIC C from COBOL                        ok
 771: direct CALL in from C w/wo error; no exit       ok
 780: ANY LENGTH (3)                                  ok
 781: ANY LENGTH (4)                                  ok
-778: ANY LENGTH (1)                                  ok
 782: ANY LENGTH (5)                                  ok
+778: ANY LENGTH (1)                                  ok
 779: ANY LENGTH (2)                                  ok
 776: CALL in from C with init missing / implicit     ok
-785: STOP RUN WITH NORMAL STATUS                     ok
 786: STOP RUN WITH ERROR STATUS                      ok
+785: STOP RUN WITH NORMAL STATUS                     ok
 787: STOP ERROR                                      ok
-788: SYMBOLIC clause                                 ok
-789: OCCURS clause with 1 entry                      ok
 784: access to OPTIONAL LINKAGE item not passed      ok
 783: access to BASED item without allocation         ok
-792: compilation-group with decimal                  ok
+788: SYMBOLIC clause                                 ok
+789: OCCURS clause with 1 entry                      ok
 775: CALL C with callback, ENTRY-CONVENTION EXTERN   ok
-795: POINTER                                         ok
+792: compilation-group with decimal                  ok
 794: PICTURE with Edit mask                          ok
+795: POINTER                                         ok
 797: ON EXCEPTION clause of DISPLAY                  ok
 798: EC-SCREEN-LINE-NUMBER and -STARTING-COLUMN      ok
 799: LINE/COLUMN 0 exceptions                        ok
 774: CALL C with callback, PROCEDURE DIVISION EXTERN ok
 800: SET LAST EXCEPTION TO OFF                       ok
-803: MF FIGURATIVE to NUMERIC                        ok
-793: C/C++ reserved words/predefined identifiers     ok
-796: CALL RETURNING POINTER                          ok
 801: void PROCEDURE                                  ok
+793: C/C++ reserved words/predefined identifiers     ok
+803: MF FIGURATIVE to NUMERIC                        ok
+796: CALL RETURNING POINTER                          ok
 802: Figurative constants to numeric field           ok
 791: Computing of different USAGEs w/- decimal point ok
-809: dump feature with NULL address                  ok
 811: REDEFINES values on FILLER and INITIALIZE       ok
+809: dump feature with NULL address                  ok
 790: Computing of different USAGEs w/o decimal point ok
 804: CALL RETURNING                                  ok
 805: void PROCEDURE, NOTHING return                  ok
@@ -874,136 +874,136 @@ make[4]: Entering directory '/work/trees/a/baseline/tests'
 815: Alphanumeric MOVE with truncation               ok
 816: PROGRAM-ID / CALL literal/variable with spaces  ok
 813: Quote marks in comment paragraphs               ok
-819: C-API (param based)                             ok
 821: OPTIONS paragraph, DEFAULT ROUNDED MODE         ok
-817: PROGRAM-ID / CALL with hyphen and underscore    ok
 820: C-API (field based)                             ok
-818: CALL with directory                             ok
+819: C-API (param based)                             ok
+817: PROGRAM-ID / CALL with hyphen and underscore    ok
 822: OCCURS INDEXED ASCENDING                        ok
+818: CALL with directory                             ok
 824: Default Arithmetic (1)                          ok
-825: Default Arithmetic Test (2)                     ok
 807: Trace feature with subroutine                   ok
 814: Numeric MOVE with/without -fbinary-truncate     ok
+825: Default Arithmetic Test (2)                     ok
 827: OSVS Arithmetic Test (2)                        ok
+830: DEFINE Defaults                                 ok
 826: OSVS Arithmetic (1)                             ok
 829: DEFINE OVERRIDE                                 ok
-830: DEFINE Defaults                                 ok
 823: ZERO unsigned and negative binary subscript     ok
 831: 78 VALUE                                        ok
 832: 01 CONSTANT                                     ok
 836: FLOAT-SHORT with SIZE ERROR                     ok
-833: DISPLAY UPON                                    ok
 837: FLOAT-LONG with SIZE ERROR                      ok
 835: FLOAT-SHORT / FLOAT-LONG w/o SIZE ERROR         ok
 838: EC-SIZE-ZERO-DIVIDE                             ok
+833: DISPLAY UPON                                    ok
 839: EC-SIZE-OVERFLOW                                ok
 840: Constant Expressions                            ok
+841: ENTRY FOR GO TO / GO TO ENTRY                   ok
 828: SET CONSTANT directive                          ok
 844: runtime check: write to internal storage (2)    skipped (run_misc.at:14283)
-841: ENTRY FOR GO TO / GO TO ENTRY                   ok
 846: assorted math                                   ok
-848: OPEN EXTEND and CLOSE, SEQUENTIAL               ok
-849: variable-length SEQUENTIAL data integrity       ok
 806: READY TRACE / RESET TRACE                       ok
+848: OPEN EXTEND and CLOSE, SEQUENTIAL               ok
 834: FLOAT-DECIMAL w/o SIZE ERROR                    ok
 850: DELETE FILE, SEQUENTIAL                         ok
+849: variable-length SEQUENTIAL data integrity       ok
 851: OUTPUT on SEQUENTIAL file to missing directory  ok
 852: OPEN EXTEND and CLOSE, INDEXED                  ok
 847: compare numeric DISPLAY SPACE with ZERO         ok
-854: OUTPUT on INDEXED file to missing directory     ok
 853: DELETE FILE, INDEXED                            ok
-855: READ INTO data item AT-END sequence             ok
+854: OUTPUT on INDEXED file to missing directory     ok
 856: First READ on empty SEQUENTIAL INDEXED file     ok
-858: REWRITE a RELATIVE file with RANDOM access      ok
+855: READ INTO data item AT-END sequence             ok
 857: READ NEXT without previous START                ok
+858: REWRITE a RELATIVE file with RANDOM access      ok
 860: ASSIGN EXTERNAL parsing                         ok
-808: stack and dump feature                          ok
 861: ASSIGN directive                                ok
 862: ASSIGN filename expansion                       ok
+808: stack and dump feature                          ok
+865: ASSIGN DYNAMIC with LOCAL-STORAGE item          ok
 864: ASSIGN with COB_FILE_PATH                       ok
 866: ASSIGN DYNAMIC with LOCAL-STORAGE item, INITIAL ok
-865: ASSIGN DYNAMIC with LOCAL-STORAGE item          ok
 842: runtime checks within conditions                ok
 869: ASSIGN DYNAMIC with empty data item             ok
-843: runtime check: write to internal storage (1)    ok
 870: ASSIGN DYNAMIC with unset implicit data item    ok
+843: runtime check: write to internal storage (1)    ok
+871: INDEXED file key-name                           ok
 845: libcob version check                            ok
 859: ASSIGN DYNAMIC and EXTERNAL                     ok
-871: INDEXED file key-name                           ok
 872: INDEXED file sparse/split keys                  ok
-877: START RELATIVE (1)                              ok
-874: INDEXED file variable length record             ok
-868: ASSIGN DYNAMIC with data item in LINKAGE        ok
 876: WRITE + REWRITE FILE name                       ok
+868: ASSIGN DYNAMIC with data item in LINKAGE        ok
+877: START RELATIVE (1)                              ok
 878: START RELATIVE (2)                              ok
-880: READ on OPTIONAL missing RELATIVE / SEQUENTIAL  ok
 879: START RELATIVE (3)                              ok
+874: INDEXED file variable length record             ok
 875: INDEXED sample                                  ok
-881: READ on OPTIONAL missing INDEXED file           ok
+880: READ on OPTIONAL missing RELATIVE / SEQUENTIAL  ok
 867: ASSIGN DYNAMIC with BASED data item             ok
 873: INDEXED file split keys WITH DUPLICATES         ok
+881: READ on OPTIONAL missing INDEXED file           ok
 883: DECLARATIVES procedure referencing              ok
-884: DECLARATIVES procedure referencing (multiple)   ok
 863: ASSIGN filename mapping                         ok
+884: DECLARATIVES procedure referencing (multiple)   ok
 885: System routines for directories (1)             ok
 886: System routines for directories (2)             ok
 889: System routine CBL_COPY_FILE                    ok
-891: SEQUENTIAL basic I/O                            ok
 882: EXTERNAL RELATIVE file                          ok
+891: SEQUENTIAL basic I/O                            ok
 892: LINE SEQUENTIAL basic I/O                       ok
 888: System routines for files - filename mapping    ok
-893: LINE SEQUENTIAL WRITE AFTER                     ok
 890: Default file external name                      ok
+893: LINE SEQUENTIAL WRITE AFTER                     ok
 895: LINE SEQUENTIAL record truncation (2)           ok
 896: LINE SEQUENTIAL standard record overflow        ok
+898: EXTFH: LINAGE and LINAGE-COUNTER sample         expected failure (run_file.at:5301)
 887: System routines for files                       ok
 897: LINAGE and LINAGE-COUNTER sample                ok
-898: EXTFH: LINAGE and LINAGE-COUNTER sample         expected failure (run_file.at:5301)
 899: SEQUENTIAL file I/O with variable records       ok
 900: LINE SEQUENTIAL file I/O with variable records  ok
 901: SEQUENTIAL file REWRITE                         ok
 894: LINE SEQUENTIAL record truncation (1)           ok
-909: RELATIVE SEQUENTIAL with variable records       ok
 907: RELATIVE SEQUENTIAL basic I/O                   ok
 908: RELATIVE RANDOM basic I/O                       ok
 902: SEQUENTIAL file with LOCK MODE EXCLUSIVE        expected failure (run_file.at:5632)
+909: RELATIVE SEQUENTIAL with variable records       ok
 910: INDEXED SEQUENTIAL basic I/O                    ok
-911: INDEXED SEQUENTIAL with variable records        ok
 903: SEQUENTIAL file with OPEN WITH LOCK             expected failure (run_file.at:5700)
+911: INDEXED SEQUENTIAL with variable records        ok
 904: SEQUENTIAL file with SHARING NO                 expected failure (run_file.at:5770)
-906: SEQUENTIAL file with blocked lock               expected failure (run_file.at:5918)
 905: SEQUENTIAL file with SHARING READ ONLY          ok
+906: SEQUENTIAL file with blocked lock               expected failure (run_file.at:5918)
 922: INDEXED undeclared keys                         skipped (run_file.at:7112)
 912: INDEXED file with LOCK MODE EXCLUSIVE           expected failure (run_file.at:6275)
 913: INDEXED file with OPEN WITH LOCK                expected failure (run_file.at:6353)
 920: START INDEXED                                   ok
 921: INDEXED partial keys                            ok
 923: READ INPUT pipe & WRITE OUTPUT pipe             expected failure (run_file.at:7362)
-914: INDEXED file with SHARING NO                    expected failure (run_file.at:6432)
 915: INDEXED file with SHARING READ ONLY             expected failure (run_file.at:6517)
+914: INDEXED file with SHARING NO                    expected failure (run_file.at:6432)
 930: EXTFH: operation OP_GETINFO / QUERY-FILE        skipped (run_file.at:9669)
-916: INDEXED file with blocked lock                  expected failure (run_file.at:6600)
 917: INDEXED file with LOCK AUTOMATIC (1)            expected failure (run_file.at:6690)
 918: INDEXED file with LOCK AUTOMATIC (2)            ok
+916: INDEXED file with blocked lock                  expected failure (run_file.at:6600)
 935: EXTFH: auto-conversion FCD2 <-> FCD3 on 32bit   skipped (run_file.at:10874)
 919: INDEXED file with LOCK MANUAL                   expected failure (run_file.at:6873)
 924: EXTFH: using ISAM callback                      ok
 927: EXTFH: LINE SEQUENTIAL files, direct EXTFH      ok
-929: EXTFH: FIXED SEQUENTIAL                         ok
 926: EXTFH: SEQUENTIAL files                         ok
 928: EXTFH: LINE SEQUENTIAL files (2)                ok
+929: EXTFH: FIXED SEQUENTIAL                         ok
 933: EXTFH: RELATIVE files                           ok
 934: EXTFH: reading two files with one FCD           ok
-932: EXTFH: INDEXED with multiple keys               ok
 936: RELATIVE Multi-Record                           ok
+932: EXTFH: INDEXED with multiple keys               ok
 938: TURN EC-I-O                                     expected failure (run_file.at:12370)
-931: EXTFH: changing record address                  ok
-942: File SORT, SEQUENTIAL                           ok
 940: LINE SEQUENTIAL data                            ok
+942: File SORT, SEQUENTIAL                           ok
 939: LINE SEQUENTIAL REWRITE                         ok
-943: File SORT, SEQUENTIAL variable records          ok
+931: EXTFH: changing record address                  ok
 941: Concatenated Files                              ok
 925: EXTFH: Indexed with FH--FCD                     ok
+943: File SORT, SEQUENTIAL variable records          ok
 944: File SORT, LINE SEQUENTIAL                      ok
 945: File SORT, LINE SEQUENTIAL same file            ok
 946: File SORT, LINE SEQUENTIAL variable records     ok
@@ -1012,329 +1012,329 @@ make[4]: Entering directory '/work/trees/a/baseline/tests'
 949: SORT nonexistent file                           ok
 951: SORT with key1 ASCENDING, key2 DESCENDING       ok
 950: SORT with INPUT/OUTPUT PROCEDUREs               ok
-954: Report Line Order                               ok
 955: REPORT COL PLUS                                 ok
-957: EMPTY REPORT                                    ok
-958: PAGE LIMIT REPORT                               ok
+954: Report Line Order                               ok
 956: Report Overlapping Fields                       ok
-959: PAGE LIMIT REPORT 2                             ok
-953: OPEN / CLOSE with multiple filenames            ok
-960: Sample Customer Report                          ok
-961: Sample Charge Report                            ok
-962: Sample Charge Report 2                          ok
-952: Scope of FD GLOBAL in nested programs           ok
+958: PAGE LIMIT REPORT                               ok
+957: EMPTY REPORT                                    ok
 937: INDEXED File READ/DELETE/READ                   ok
+959: PAGE LIMIT REPORT 2                             ok
+960: Sample Customer Report                          ok
+962: Sample Charge Report 2                          ok
+961: Sample Charge Report                            ok
+952: Scope of FD GLOBAL in nested programs           ok
+953: OPEN / CLOSE with multiple filenames            ok
 963: Sample Charge Report 3                          ok
 964: Sample Charge Report 4                          ok
 967: STUDENT REPORT with INITIAL                     ok
-968: ORDER REPORT; Test substring                    ok
 966: Sample REPORT with RIGHT/CENTER                 ok
-965: Sample Payroll Report                           ok
-971: Duplicate Detail Line                           ok
+968: ORDER REPORT; Test substring                    ok
 969: Sample Control Break                            ok
 970: Sample Inventory Report                         ok
+965: Sample Payroll Report                           ok
 972: Report with OCCURS                              ok
+971: Duplicate Detail Line                           ok
 974: Test Report dump DECLARATIVES                   ok
 975: Duplicate INITIATE                              ok
 976: Missing INITIATE and GENERATE                   ok
 977: Missing INITIATE and TERMINATE                  ok
 979: Report PRESENT AFTER                            ok
-978: Next Group Next Page                            ok
-984: RETURN-CODE nested                              ok
-982: RETURN-CODE moving                              ok
-981: BEFORE REPORTING                                ok
 980: Varying and Nested OCCURS                       expected failure (run_reportwriter.at:9469)
+978: Next Group Next Page                            ok
+981: BEFORE REPORTING                                ok
+982: RETURN-CODE moving                              ok
 973: Report CODE and LIMIT COLUMNS                   ok
 985: FUNCTION ABS                                    ok
-987: FUNCTION ANNUITY                                ok
+984: RETURN-CODE nested                              ok
 986: FUNCTION ACOS                                   ok
+987: FUNCTION ANNUITY                                ok
 988: FUNCTION ASIN                                   ok
-989: FUNCTION ATAN                                   ok
-994: FUNCTION CONCATENATE with reference modding     ok
-990: FUNCTION BYTE-LENGTH                            ok
 991: FUNCTION CHAR                                   ok
-993: FUNCTION CONCAT / CONCATENATE                   ok
+989: FUNCTION ATAN                                   ok
+990: FUNCTION BYTE-LENGTH                            ok
 992: FUNCTION COMBINED-DATETIME                      ok
 983: RETURN-CODE passing                             ok
-998: FUNCTION CONTENT-OF                             ok
+993: FUNCTION CONCAT / CONCATENATE                   ok
+994: FUNCTION CONCATENATE with reference modding     ok
 995: FUNCTION BIT-OF and BIT-TO-CHAR                 ok
-997: FUNCTION CONTENT-LENGTH                         ok
 996: FUNCTION HEX-OF and HEX-TO-CHAR                 ok
+997: FUNCTION CONTENT-LENGTH                         ok
 999: FUNCTION as CALL parameter BY CONTENT           ok
+998: FUNCTION CONTENT-OF                             ok
+1003: FUNCTION DATE-OF-INTEGER                        ok
 1000: FUNCTION COS                                    ok
 1001: FUNCTION CURRENCY-SYMBOL                        ok
-1002: FUNCTION CURRENT-DATE                           ok
-1003: FUNCTION DATE-OF-INTEGER                        ok
 1004: FUNCTION DATE-TO-YYYYMMDD                       ok
+1002: FUNCTION CURRENT-DATE                           ok
 1005: FUNCTION DAY-OF-INTEGER                         ok
-1007: FUNCTION E                                      ok
 1006: FUNCTION DAY-TO-YYYYDDD                         ok
+1007: FUNCTION E                                      ok
 1008: FUNCTION EXCEPTION-FILE                         ok
-1010: FUNCTION EXCEPTION-STATEMENT                    ok
 1011: FUNCTION EXCEPTION-STATUS                       ok
-1013: FUNCTION EXP10                                  ok
-1012: FUNCTION EXP                                    ok
-1015: FUNCTION FORMATTED-CURRENT-DATE                 ok
+1010: FUNCTION EXCEPTION-STATEMENT                    ok
 1014: FUNCTION FACTORIAL                              ok
+1013: FUNCTION EXP10                                  ok
+1015: FUNCTION FORMATTED-CURRENT-DATE                 ok
 1016: FUNCTION FORMATTED-DATE                         ok
+1012: FUNCTION EXP                                    ok
 1017: FUNCTION FORMATTED-DATE with ref modding        ok
-1019: FUNCTION FORMATTED-DATETIME with ref modding    ok
 1018: FUNCTION FORMATTED-DATETIME                     ok
+1019: FUNCTION FORMATTED-DATETIME with ref modding    ok
 1020: FUNCTION FORMATTED-TIME                         ok
 1021: FUNCTION FORMATTED-TIME DP.COMMA                ok
 1022: FUNCTION FORMATTED-TIME with ref modding        ok
-1009: FUNCTION EXCEPTION-LOCATION                     ok
-1026: FUNCTION INTEGER-OF-DATE                        ok
-1024: FUNCTION HIGHEST-ALGEBRAIC                      ok
-1023: FUNCTION FRACTION-PART                          ok
 1025: FUNCTION INTEGER                                ok
-1027: FUNCTION INTEGER-OF-DAY                         ok
+1023: FUNCTION FRACTION-PART                          ok
+1009: FUNCTION EXCEPTION-LOCATION                     ok
+1024: FUNCTION HIGHEST-ALGEBRAIC                      ok
+1026: FUNCTION INTEGER-OF-DATE                        ok
 1028: FUNCTION INTEGER-OF-FORMATTED-DATE              ok
-1031: FUNCTION LOCALE-COMPARE                         ok
-1030: FUNCTION LENGTH                                 ok
+1027: FUNCTION INTEGER-OF-DAY                         ok
 1029: FUNCTION INTEGER-PART                           ok
-1032: FUNCTION LOCALE-DATE                            ok
+1030: FUNCTION LENGTH                                 ok
+1031: FUNCTION LOCALE-COMPARE                         ok
 1033: FUNCTION LOCALE-TIME                            ok
-1034: FUNCTION LOCALE-TIME-FROM-SECONDS               ok
+1032: FUNCTION LOCALE-DATE                            ok
 1036: FUNCTION LOG10                                  ok
-1035: FUNCTION LOG                                    ok
 1037: FUNCTION LOWER-CASE                             ok
+1034: FUNCTION LOCALE-TIME-FROM-SECONDS               ok
 1038: FUNCTION LOWER-CASE with reference modding      ok
-1039: FUNCTION LOWEST-ALGEBRAIC                       ok
+1035: FUNCTION LOG                                    ok
 1040: FUNCTION MAX                                    ok
-1041: FUNCTION MEAN                                   ok
+1039: FUNCTION LOWEST-ALGEBRAIC                       ok
 1042: FUNCTION MEDIAN                                 ok
+1041: FUNCTION MEAN                                   ok
 1043: FUNCTION MIDRANGE                               ok
-1044: FUNCTION MIN                                    ok
 1045: FUNCTION MOD (valid)                            ok
+1044: FUNCTION MIN                                    ok
 1046: FUNCTION MOD (invalid)                          ok
-1050: FUNCTION MODULE-ID                              ok
-1049: FUNCTION MODULE-FORMATTED-DATE                  ok
 1048: FUNCTION MODULE-DATE                            ok
-1052: FUNCTION MODULE-SOURCE                          ok
+1049: FUNCTION MODULE-FORMATTED-DATE                  ok
 1051: FUNCTION MODULE-PATH                            ok
+1050: FUNCTION MODULE-ID                              ok
+1052: FUNCTION MODULE-SOURCE                          ok
+1054: FUNCTION MONETARY-DECIMAL-POINT                 ok
 1053: FUNCTION MODULE-TIME                            ok
 1055: FUNCTION MONETARY-THOUSANDS-SEPARATOR           ok
-1056: FUNCTION NUMERIC-DECIMAL-POINT                  ok
-1054: FUNCTION MONETARY-DECIMAL-POINT                 ok
-1047: FUNCTION MODULE-CALLER-ID                       ok
 1057: FUNCTION NUMERIC-THOUSANDS-SEPARATOR            ok
+1056: FUNCTION NUMERIC-DECIMAL-POINT                  ok
+1047: FUNCTION MODULE-CALLER-ID                       ok
+1060: FUNCTION NUMVAL-C DP.COMMA                      ok
 1058: FUNCTION NUMVAL                                 ok
 1059: FUNCTION NUMVAL-C                               ok
-1061: FUNCTION NUMVAL-F                               ok
-1060: FUNCTION NUMVAL-C DP.COMMA                      ok
-1063: FUNCTION ORD-MAX                                ok
 1062: FUNCTION ORD                                    ok
+1063: FUNCTION ORD-MAX                                ok
+1061: FUNCTION NUMVAL-F                               ok
 1064: FUNCTION ORD-MIN                                ok
 1065: FUNCTION PI                                     ok
 1066: FUNCTION PRESENT-VALUE                          ok
-1067: FUNCTION RANDOM                                 ok
-1068: FUNCTION RANGE                                  ok
 1069: FUNCTION REM (valid)                            ok
+1068: FUNCTION RANGE                                  ok
+1067: FUNCTION RANDOM                                 ok
 1070: FUNCTION REM (invalid)                          ok
-1072: FUNCTION REVERSE with reference modding         ok
-1071: FUNCTION REVERSE                                ok
-1073: FUNCTION SECONDS-FROM-FORMATTED-TIME            ok
 1075: FUNCTION SIGN                                   ok
+1071: FUNCTION REVERSE                                ok
+1072: FUNCTION REVERSE with reference modding         ok
+1073: FUNCTION SECONDS-FROM-FORMATTED-TIME            ok
 1074: FUNCTION SECONDS-PAST-MIDNIGHT                  ok
-1076: FUNCTION SIN                                    ok
-1079: FUNCTION STORED-CHAR-LENGTH                     ok
 1077: FUNCTION SQRT                                   ok
+1076: FUNCTION SIN                                    ok
 1078: FUNCTION STANDARD-DEVIATION                     ok
 1080: FUNCTION SUBSTITUTE                             ok
+1079: FUNCTION STORED-CHAR-LENGTH                     ok
 1081: FUNCTION SUBSTITUTE with reference modding      ok
-1082: FUNCTION SUBSTITUTE-CASE                        ok
-1085: FUNCTION TAN                                    ok
-1083: FUNCTION SUBSTITUTE-CASE with reference mod     ok
 1084: FUNCTION SUM                                    ok
-1087: FUNCTION TEST-DAY-YYYYDDD                       ok
+1082: FUNCTION SUBSTITUTE-CASE                        ok
 1086: FUNCTION TEST-DATE-YYYYMMDD                     ok
-1090: FUNCTION TEST-FORMATTED-DATETIME with datetimes ok
+1083: FUNCTION SUBSTITUTE-CASE with reference mod     ok
+1085: FUNCTION TAN                                    ok
+1087: FUNCTION TEST-DAY-YYYYDDD                       ok
 1088: FUNCTION TEST-FORMATTED-DATETIME with dates     ok
-1089: FUNCTION TEST-FORMATTED-DATETIME with times     ok
+1090: FUNCTION TEST-FORMATTED-DATETIME with datetimes ok
 1091: FUNCTION TEST-FORMATTED-DATETIME DP.COMMA       ok
-1092: FUNCTION TEST-NUMVAL                            ok
+1089: FUNCTION TEST-FORMATTED-DATETIME with times     ok
 1093: FUNCTION TEST-NUMVAL-C                          ok
+1092: FUNCTION TEST-NUMVAL                            ok
+1094: FUNCTION TEST-NUMVAL-F                          ok
 1095: FUNCTION TRIM                                   ok
 1096: FUNCTION TRIM with reference modding            ok
-1094: FUNCTION TEST-NUMVAL-F                          ok
+1098: FUNCTION UPPER-CASE                             ok
 1097: FUNCTION TRIM zero length                       ok
 1099: FUNCTION UPPER-CASE with reference modding      ok
-1098: FUNCTION UPPER-CASE                             ok
-1110: UDF with recursion                              skipped (run_functions.at:4597)
-1100: FUNCTION VARIANCE                               ok
-1101: FUNCTION WHEN-COMPILED                          ok
-1102: FUNCTION YEAR-TO-YYYY                           ok
 1103: Formatted funcs w/ invalid variable format      ok
+1110: UDF with recursion                              skipped (run_functions.at:4597)
 1104: FORMATTED-(DATE)TIME with SYSTEM-OFFSET         ok
+1101: FUNCTION WHEN-COMPILED                          ok
+1100: FUNCTION VARIANCE                               ok
+1102: FUNCTION YEAR-TO-YYYY                           ok
 1105: Intrinsics without FUNCTION keyword (1)         ok
 1106: Intrinsics without FUNCTION keyword (2)         ok
-1108: UDF in COMPUTE                                  ok
 1109: UDF replacing intrinsic function                ok
 1107: User-Defined FUNCTION with/without parameter    ok
-1112: Numeric Boolean literals                        ok
-1113: ACUCOBOL literals                               ok
-1114: HP COBOL octal literals                         expected failure (run_extensions.at:180)
+1108: UDF in COMPUTE                                  ok
 1116: Semi-parenthesized condition                    ok
+1114: HP COBOL octal literals                         expected failure (run_extensions.at:180)
+1113: ACUCOBOL literals                               ok
 1115: Hexadecimal numeric literals                    ok
+1112: Numeric Boolean literals                        ok
 1117: ADDRESS OF                                      ok
+1118: LENGTH OF                                       ok
 1111: CALL BY CONTENT binary and literal              ok
 1119: SET TO SIZE OF                                  ok
 1120: WHEN-COMPILED                                   ok
-1118: LENGTH OF                                       ok
 1121: Complex OCCURS DEPENDING ON (1)                 ok
 1122: Complex OCCURS DEPENDING ON (2)                 ok
-1124: Complex OCCURS DEPENDING ON (4)                 ok
-1126: Complex OCCURS DEPENDING ON (6)                 ok
 1123: Complex OCCURS DEPENDING ON (3)                 ok
+1126: Complex OCCURS DEPENDING ON (6)                 ok
+1124: Complex OCCURS DEPENDING ON (4)                 ok
 1125: Complex OCCURS DEPENDING ON (5)                 ok
 1128: OCCURS UNBOUNDED (2)                            ok
 1129: INITIALIZE OCCURS UNBOUNDED                     ok
 1130: INITIALIZE OCCURS ODOSLIDE                      ok
 1133: INITIALIZE level 01 OCCURS                      ok
-1131: DEPENDING ON with ODOSLIDE                      ok
 1132: DEPENDING ON with ODOSLIDE for IBM              ok
-1134: MOVE of non-integer to alphanumeric             ok
+1131: DEPENDING ON with ODOSLIDE                      ok
 1127: OCCURS UNBOUNDED (1)                            ok
+1134: MOVE of non-integer to alphanumeric             ok
 1138: CALL BY VALUE alphanumeric item                 ok
 1139: CALL BY VALUE numeric literal with SIZE IS      ok
-1141: Case-sensitive PROGRAM-ID                       ok
 1135: CALL USING file-name                            ok
-1143: PROGRAM-ID AS clause                            ok
+1141: Case-sensitive PROGRAM-ID                       ok
 1137: CALL / GOBACK with LOCAL-STORAGE                ok
+1143: PROGRAM-ID AS clause                            ok
 1142: Quoted PROGRAM-ID                               ok
-1145: TALLY register                                  ok
-1153: SORT ASSIGN KEYBOARD to ASSIGN DISPLAY          expected failure (run_extensions.at:2760)
 1140: CALL BY VALUE to C                              ok
+1153: SORT ASSIGN KEYBOARD to ASSIGN DISPLAY          expected failure (run_extensions.at:2760)
 1146: Redefining TALLY                                ok
-1152: ASSIGN to KEYBOARD/DISPLAY                      ok
+1145: TALLY register                                  ok
 1147: PROCEDURE DIVISION USING BY ...                 ok
 1150: GOBACK/EXIT PROGRAM RETURNING/GIVING            ok
+1152: ASSIGN to KEYBOARD/DISPLAY                      ok
 1154: Environment/Argument variable                   ok
-1155: 78 Level (1)                                    ok
 1136: CALL unusual PROGRAM-ID.                        ok
+1155: 78 Level (1)                                    ok
 1156: 78 Level (2)                                    ok
 1157: 78 Level (3)                                    ok
-1158: SWITCHES with non-standard names                ok
-1151: ENTRY                                           ok
 1159: Larger REDEFINES lengths                        ok
+1151: ENTRY                                           ok
+1158: SWITCHES with non-standard names                ok
 1160: REDEFINES: non-referenced ambiguous item        ok
-1144: NUMBER-OF-CALL-PARAMETERS                       ok
 1161: Obsolete 2002 keywords with COBOL2014           ok
+1144: NUMBER-OF-CALL-PARAMETERS                       ok
 1162: System routine with wrong number of parameters  ok
-1164: System routine C$PARAMSIZE                      ok
 1166: System routine C$JUSTIFY                        ok
+1164: System routine C$PARAMSIZE                      ok
+1165: System routine C$CALLEDBY                       ok
 1168: System routine C$MAKEDIR                        ok
 1167: System routine C$PRINTABLE                      ok
 1169: System routine C$GETPID                         ok
-1165: System routine C$CALLEDBY                       ok
-1170: System routine C$TOUPPER                        ok
 1149: STOP RUN RETURNING/GIVING                       ok
+1170: System routine C$TOUPPER                        ok
 1171: System routine C$TOLOWER                        ok
 1172: System routine CBL_OR                           ok
-1163: System routine C$NARG                           ok
-1174: System routine CBL_AND                          ok
 1173: System routine CBL_NOR                          ok
-1176: System routine CBL_IMP                          ok
-1179: System routine CBL_EQ                           ok
-1177: System routine CBL_NIMP                         ok
+1163: System routine C$NARG                           ok
 1175: System routine CBL_XOR                          ok
+1176: System routine CBL_IMP                          ok
+1174: System routine CBL_AND                          ok
+1177: System routine CBL_NIMP                         ok
 1178: System routine CBL_NOT                          ok
 1188: System routine x'91' function NN                skipped (run_extensions.at:4792)
-1148: PROCEDURE DIVISION CHAINING                     ok
+1179: System routine CBL_EQ                           ok
 1182: System routine CBL_GC_WAITPID                   skipped (run_extensions.at:4249)
+1148: PROCEDURE DIVISION CHAINING                     ok
 1185: System routine CBL_EXIT_PROC                    ok
-1187: System routine CBL_ERROR_PROC (2)               ok
 1190: DISPLAY DIRECTIVE and $DISPLAY                  ok
+1187: System routine CBL_ERROR_PROC (2)               ok
 1184: System routine SYSTEM, parameter handling       ok
 1191: Conditional / define directives (1)             ok
-1193: Conditional / define directives (3)             ok
 1192: Conditional / define directives (2)             ok
 1195: Invalid source format                           ok
+1193: Conditional / define directives (3)             ok
 1183: System routine CBL_GC_HOSTED                    ok
-1186: System routine CBL_ERROR_PROC (1)               ok
 1194: Conditional / define directives (4)             ok
+1186: System routine CBL_ERROR_PROC (1)               ok
 1197: COBOLX format                                   ok
-1203: EXHIBIT statement                               ok
 1189: CALL own PROGRAM-ID and RECURSIVE attribute     ok
+1203: EXHIBIT statement                               ok
 1204: Bit Operations                                  ok
 1201: Binary COMP-1 (1)                               ok
-1202: Binary COMP-1 (2)                               ok
-1196: Variable format                                 ok
-1206: GCOS floating-point usages                      ok
 1180: System routine CBL_GC_GETOPT                    ok
+1196: Variable format                                 ok
+1202: Binary COMP-1 (2)                               ok
+1206: GCOS floating-point usages                      ok
 1205: Bit Shift Operations                            ok
 1198: X/Open free-form format                         ok
 1212: INSPECT TRAILING                                ok
-1213: INSPECT REPLACING TRAILING ZEROS BY SPACES      ok
 1214: INSPECT REPLACING complex                       ok
+1213: INSPECT REPLACING TRAILING ZEROS BY SPACES      ok
 1199: TERMINAL format                                 ok
 1207: PICTURE L (basic)                               ok
 1209: PICTURE L (MOVE CORRESPONDING)                  ok
 1210: PICTURE L (OCCURS ... PIC L)                    ok
-1215: EXAMINE TALLYING                                ok
-1211: PICTURE L (REDEFINES)                           ok
 1216: EXAMINE REPLACING                               ok
-1218: XML GENERATE general                            ok
+1211: PICTURE L (REDEFINES)                           ok
+1215: EXAMINE TALLYING                                ok
 1217: GCOS literals with EBCDIC symbols (run)         ok
-1200: MF FREE format (X/Open)                         ok
+1218: XML GENERATE general                            ok
 1219: XML GENERATE SUPPRESS                           ok
-1221: XML GENERATE record selection                   ok
+1200: MF FREE format (X/Open)                         ok
 1220: XML GENERATE exceptions                         ok
-1223: XML DPC-IN-DATA directive                       ok
+1221: XML GENERATE record selection                   ok
 1225: JSON GENERATE general                           ok
 1208: PICTURE L (under/over shoot)                    ok
+1223: XML DPC-IN-DATA directive                       ok
 1222: XML GENERATE trimming                           ok
-1226: JSON GENERATE SUPPRESS                          ok
 1227: JSON GENERATE exceptions                        ok
 1228: JSON GENERATE record selection                  ok
-1230: JSON DPC-IN-DATA directive                      ok
+1226: JSON GENERATE SUPPRESS                          ok
 1229: JSON GENERATE trimming                          ok
+1230: JSON DPC-IN-DATA directive                      ok
 1238: BINARY: full-print                              ok
 1240: BINARY: 64bit unsigned arithmetic notrunc       ok
 1241: BINARY: 64bit signed negative constant range    ok
-1242: COMP-4 Truncate                                 ok
 1239: BINARY: 64bit unsigned compare                  ok
 1224: XML dpc-in-data config option                   ok
-1231: JSON dpc-in-data config option                  ok
+1242: COMP-4 Truncate                                 ok
 1243: COMP-4 No Truncate                              ok
-1232: BINARY: 2-4-8 big-endian                        ok
-1234: BINARY: 1-2-4-8 big-endian                      ok
-1245: MOVE PACKED-DECIMAL to BINARY                   ok
+1231: JSON dpc-in-data config option                  ok
 1244: MOVE DISPLAY to BINARY                          ok
 1246: MOVE BINARY to PACKED-DECIMAL                   ok
 1233: BINARY: 2-4-8 native                            ok
-1235: BINARY: 1-2-4-8 native                          ok
-1236: BINARY: 1--8 big-endian                         ok
-1237: BINARY: 1--8 native                             ok
+1245: MOVE PACKED-DECIMAL to BINARY                   ok
+1234: BINARY: 1-2-4-8 big-endian                      ok
 1247: MOVE BINARY to BINARY                           ok
+1236: BINARY: 1--8 big-endian                         ok
+1232: BINARY: 2-4-8 big-endian                        ok
+1237: BINARY: 1--8 native                             ok
+1235: BINARY: 1-2-4-8 native                          ok
 1248: PPP COMP-5                                      ok
 1249: arithmetic truncation with USAGE BINARY         ok
 1250: DISPLAY: Sign ASCII                             ok
-1251: DISPLAY: Sign ASCII (2)                         ok
-1253: DISPLAY: unsigned                               ok
-1255: PPP DISPLAY                                     ok
 1252: DISPLAY: Sign EBCDIC                            ok
-1254: MOVE DISPLAY to DISPLAY                         ok
+1253: DISPLAY: unsigned                               ok
+1251: DISPLAY: Sign ASCII (2)                         ok
+1255: PPP DISPLAY                                     ok
 1256: arithmetic truncation with USAGE DISPLAY        ok
+1254: MOVE DISPLAY to DISPLAY                         ok
 1260: PACKED-DECIMAL used with DISPLAY                ok
 1261: PACKED-DECIMAL used with MOVE                   ok
-1265: PACKED-DECIMAL used with INITIALIZE             ok
-1262: MOVE PACKED-DECIMAL to PACKED-DECIMAL           ok
 1263: MOVE PACKED-DECIMAL to DISPLAY                  ok
-1266: PACKED-DECIMAL arithmetic                       ok
+1262: MOVE PACKED-DECIMAL to PACKED-DECIMAL           ok
 1264: MOVE DISPLAY to PACKED-DECIMAL                  ok
+1265: PACKED-DECIMAL used with INITIALIZE             ok
+1266: PACKED-DECIMAL arithmetic                       ok
 1268: PACKED-DECIMAL numeric test (1)                 ok
-1270: COMP-6 used with DISPLAY                        ok
 1269: PACKED-DECIMAL numeric test (2)                 ok
-1273: COMP-6 numeric                                  ok
+1270: COMP-6 used with DISPLAY                        ok
 1272: COMP-6 arithmetic                               ok
+1273: COMP-6 numeric                                  ok
 1267: PACKED-DECIMAL comparison                       ok
-1259: PACKED-DECIMAL dump                             ok
 1276: PPP COMP-3                                      ok
-1277: PPP COMP-6                                      ok
 1278: arithmetic truncation with USAGE PACKED-DECIMAL ok
 1271: COMP-6 used with MOVE                           ok
+1277: PPP COMP-6                                      ok
+1259: PACKED-DECIMAL dump                             ok
 1274: COMP-6 comparison                               ok
 1282: POINTER: display                                ok
 1275: COMP-3 vs. COMP-6 - BCD comparison              ok

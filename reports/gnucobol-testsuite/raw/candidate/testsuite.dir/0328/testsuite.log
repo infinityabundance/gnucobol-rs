@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 328. syn_misc.at:4290: testing dangling LINKAGE items ...
 ./syn_misc.at:4337: $COMPILE_ONLY -Wlinkage prog.cob
---- -	2026-08-12 01:52:47.070552665 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/328/stderr	2026-08-12 01:52:47.069964477 +0000
+--- -	2026-08-12 22:05:23.655058719 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/328/stderr	2026-08-12 22:05:23.654263217 +0000
 @@ -1,5 +1 @@
 -prog.cob:17: warning: LINKAGE item 'D' is not a PROCEDURE USING parameter
 -prog.cob:22: warning: LINKAGE item 'E' is not a PROCEDURE USING parameter

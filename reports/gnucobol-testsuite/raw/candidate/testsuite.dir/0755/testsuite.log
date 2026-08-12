@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 755. run_misc.at:3637: testing SORT: table with default COLLATING SEQUENCE ...
 ./run_misc.at:3663: $COMPILE -fdefault-colseq=ascii -DEXPECT-ORDER=ASCII -o ascii prog.cob
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/755/stderr	2026-08-12 01:52:47.351831273 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/755/stderr	2026-08-12 22:05:23.915279965 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fdefault-colseq=ascii: unsupported option (rejected-unsupported; default collating sequence: reject honestly): ascii
 ./run_misc.at:3663: exit code was 1, expected 0

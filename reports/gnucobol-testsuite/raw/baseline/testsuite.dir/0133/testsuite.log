@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 133. syn_definition.at:2571: testing LIKE clause ...
 ./syn_definition.at:2617: $COMPILE_ONLY prog.cob
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/133/stderr	2026-08-12 01:52:18.669136998 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/133/stderr	2026-08-12 22:04:52.818164164 +0000
 @@ -0,0 +1,14 @@
 +prog.cob:13: warning: LIKE clause is not implemented
 +prog.cob:13: error: PICTURE clause required for 'FILLER'

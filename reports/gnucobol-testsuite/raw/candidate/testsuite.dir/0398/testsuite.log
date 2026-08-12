@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 398. syn_misc.at:8209: testing AREACHECK ...
 ./syn_misc.at:8235: $COMPILE_ONLY -std=mvs pgm1.cob
---- -	2026-08-12 01:52:47.108632301 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/398/stderr	2026-08-12 01:52:47.107824593 +0000
+--- -	2026-08-12 22:05:23.690979542 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/398/stderr	2026-08-12 22:05:23.690334279 +0000
 @@ -1,4 +1 @@
 -pgm1.cob:7: warning: start of statement in Area A
 -pgm1.cob: in paragraph 'MAIN-PROCEDURE':

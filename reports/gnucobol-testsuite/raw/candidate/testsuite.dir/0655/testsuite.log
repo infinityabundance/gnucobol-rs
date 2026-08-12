@@ -2,8 +2,8 @@
 655. run_initialize.at:29: testing INITIALIZE group entry with OCCURS ...
 ./run_initialize.at:51: $COMPILE prog.cob
 ./run_initialize.at:52: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/655/stdout	2026-08-12 01:52:47.275139497 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/655/stdout	2026-08-12 22:05:23.844334651 +0000
 @@ -0,0 +1 @@
 +    
 \ No newline at end of file

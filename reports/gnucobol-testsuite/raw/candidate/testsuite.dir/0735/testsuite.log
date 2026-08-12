@@ -2,8 +2,8 @@
 735. run_misc.at:2551: testing PERFORM FOREVER / PERFORM UNTIL EXIT ...
 ./run_misc.at:2586: $COMPILE prog.cob
 ./run_misc.at:2587: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/735/stderr	2026-08-12 01:52:47.336622185 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/735/stderr	2026-08-12 22:05:23.902642456 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: condition: missing left operand
 ./run_misc.at:2587: exit code was 2, expected 0

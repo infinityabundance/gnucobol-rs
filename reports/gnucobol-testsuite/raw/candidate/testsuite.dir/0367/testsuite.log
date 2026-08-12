@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 367. syn_misc.at:6499: testing SORT syntax ...
 ./syn_misc.at:6543: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.091129131 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/367/stderr	2026-08-12 01:52:47.090143361 +0000
+--- -	2026-08-12 22:05:23.674138612 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/367/stderr	2026-08-12 22:05:23.673320317 +0000
 @@ -1,6 +1,2 @@
 -prog.cob:32: error: table SORT requires KEY phrase
 -prog.cob:35: error: file SORT requires USING or INPUT PROCEDURE

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 152. syn_occurs.at:475: testing OCCURS DEPENDING followed by another field ...
 ./syn_occurs.at:497: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:46.978937624 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/152/stderr	2026-08-12 01:52:46.977931727 +0000
+--- -	2026-08-12 22:05:23.568096350 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/152/stderr	2026-08-12 22:05:23.567649898 +0000
 @@ -1,4 +1,2 @@
 -prog.cob:7: error: 'X' cannot have OCCURS DEPENDING because of 'Y'
 -prog.cob:10: error: 'G-3' cannot have OCCURS DEPENDING because of 'Y'

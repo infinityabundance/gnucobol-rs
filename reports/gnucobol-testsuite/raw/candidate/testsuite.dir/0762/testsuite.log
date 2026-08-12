@@ -4,12 +4,12 @@
 ./run_misc.at:4171: $COMPILE_MODULE prog1.cob
 ./run_misc.at:4172: $COMPILE main-prog.cob
 ./run_misc.at:4173: COB_PRE_LOAD="prog"$PATHSEP"prog1" $COBCRUN_DIRECT ./main-prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/762/stderr	2026-08-12 01:52:47.359689240 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/762/stderr	2026-08-12 22:05:23.922072356 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: CALL "ent1": not a contained program (external CALL is a boundary)
---- -	2026-08-12 01:52:47.361191083 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/762/stdout	2026-08-12 01:52:47.360140222 +0000
+--- -	2026-08-12 22:05:23.923331723 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/762/stdout	2026-08-12 22:05:23.922642159 +0000
 @@ -1,4 +1 @@
 -12abc
 -11

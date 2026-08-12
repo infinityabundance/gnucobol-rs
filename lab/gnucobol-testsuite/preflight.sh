@@ -134,8 +134,10 @@ if [ -n "${DOCKER_HOST:-}" ]; then
         esac ;;
     esac
     # 9. no production resources selected: only images/containers in the project namespace
+    #    (the gnucobol-testsuite lane + the sibling diag-unblocked lane share this daemon;
+    #    both use the gnucobol-rs-gnucobol-testsuite* project image namespace)
     PROD_IMAGES=$(docker images --format '{{.Repository}}:{{.Tag}}' 2>/dev/null \
-      | grep -vE '^gnucobol-rs-gnucobol-testsuite/' | grep -vE '^<none>' | wc -l)
+      | grep -vE '^gnucobol-rs-gnucobol-testsuite' | grep -vE '^<none>' | wc -l)
     if [ "$PROD_IMAGES" -gt 0 ]; then
       die "non-project images present in the isolated daemon (refusing to touch): $PROD_IMAGES"
     fi

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 322. syn_misc.at:3951: testing use of program-prototype-names ...
 ./syn_misc.at:3969: $COMPILE_ONLY -fprogram-prototypes=warning prog.cob
---- -	2026-08-12 01:52:47.068190957 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/322/stderr	2026-08-12 01:52:47.067502031 +0000
+--- -	2026-08-12 22:05:23.652176537 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/322/stderr	2026-08-12 22:05:23.651488575 +0000
 @@ -1,5 +1,2 @@
 -prog.cob:9: warning: PROGRAM phrase used
 -prog.cob:8: warning: no definition/prototype seen for PROGRAM 'test-prog'

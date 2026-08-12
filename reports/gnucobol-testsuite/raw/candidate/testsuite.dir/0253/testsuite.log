@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 253. syn_misc.at:619: testing Invalid conditional expression (3) ...
 ./syn_misc.at:673: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.030809564 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/253/stderr	2026-08-12 01:52:47.030218150 +0000
+--- -	2026-08-12 22:05:23.618026134 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/253/stderr	2026-08-12 22:05:23.617128832 +0000
 @@ -1,5 +1 @@
 -prog.cob:15: error: invalid conditional expression
 -prog.cob:20: error: invalid conditional expression

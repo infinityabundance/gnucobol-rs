@@ -3,8 +3,8 @@
 ./data_binary.at:1137: sed -e 's/@USAGE@/BINARY/' "${TEMPLATE}/numeric-display.cob" > prog.cob
 ./data_binary.at:1139: $COMPILE -fbinary-size=1--8 \
                    -fno-pretty-display prog.cob
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1238/stderr	2026-08-12 01:52:47.867705466 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1238/stderr	2026-08-12 22:05:24.381762041 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fbinary-size=1--8: unsupported option (rejected-unsupported; binary size model: the dialect's binary-size knob is set by -std/-conf; a bare override is rejected): 1--8
 ./data_binary.at:1139: exit code was 1, expected 0

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 370. syn_misc.at:6646: testing SEARCH ALL checks ...
 ./syn_misc.at:6748: $COMPILE prog.cob
---- -	2026-08-12 01:52:47.092199178 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/370/stderr	2026-08-12 01:52:47.091278279 +0000
+--- -	2026-08-12 22:05:23.676304670 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/370/stderr	2026-08-12 22:05:23.675645827 +0000
 @@ -1,14 +1 @@
 -prog.cob: in section 'TESTING':
 -prog.cob:27: error: 'TAB-1-KEY' requires one subscript

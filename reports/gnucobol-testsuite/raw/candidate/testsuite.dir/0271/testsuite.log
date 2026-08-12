@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 271. syn_misc.at:1345: testing CURRENCY SIGN ...
 ./syn_misc.at:1429: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.043791395 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/271/stderr	2026-08-12 01:52:47.042666275 +0000
+--- -	2026-08-12 22:05:23.629258490 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/271/stderr	2026-08-12 22:05:23.628646525 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:7: error: invalid character '*' in currency symbol
 +cobc-rs: unsupported: no PROCEDURE DIVISION

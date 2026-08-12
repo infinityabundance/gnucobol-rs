@@ -2,8 +2,8 @@
 991. run_functions.at:221: testing FUNCTION CHAR ...
 ./run_functions.at:253: $COMPILE prog.cob
 ./run_functions.at:254: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/991/stderr	2026-08-12 01:52:47.557817628 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/991/stderr	2026-08-12 22:05:24.097639560 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: FUNCTION
 ./run_functions.at:254: exit code was 2, expected 0

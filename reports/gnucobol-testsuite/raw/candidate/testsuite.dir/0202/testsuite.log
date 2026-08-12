@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 202. syn_file.at:910: testing DECLARATIVES invalid procedure reference (1) ...
 ./syn_file.at:962: $COMPILE_ONLY -Wno-dialect -Wno-goto-different-section prog.cob
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/202/stderr	2026-08-12 01:52:47.004541945 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/202/stderr	2026-08-12 22:05:23.591749938 +0000
 @@ -0,0 +1 @@
 +cobc-rs: unsupported: verb USE
 ./syn_file.at:962: exit code was 1, expected 0

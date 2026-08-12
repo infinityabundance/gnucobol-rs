@@ -2,8 +2,8 @@
 1226. run_ml.at:589: testing JSON GENERATE SUPPRESS ...
 ./run_ml.at:623: $COMPILE prog.cob
 ./run_ml.at:624: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1226/stdout	2026-08-12 01:52:47.855733430 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1226/stdout	2026-08-12 22:05:24.371433910 +0000
 @@ -0,0 +1,2 @@
 +Test 1 failed: {"A":{"C":" "}}                                                                                     
 +Test 2 failed: {"X":{"Y":{}}}                                                                                      

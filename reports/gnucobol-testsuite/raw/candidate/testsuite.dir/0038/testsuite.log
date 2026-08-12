@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 38. configuration.at:404: testing cobc configuration: incomplete ...
 ./configuration.at:412: $COMPILE_ONLY -conf=test.conf prog.cob
---- -	2026-08-12 01:52:46.920132775 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/38/stderr	2026-08-12 01:52:46.919633052 +0000
+--- -	2026-08-12 22:05:23.515405760 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/38/stderr	2026-08-12 22:05:23.514657526 +0000
 @@ -1,129 +1,2 @@
 -configuration error:
 -test.conf: missing definitions:

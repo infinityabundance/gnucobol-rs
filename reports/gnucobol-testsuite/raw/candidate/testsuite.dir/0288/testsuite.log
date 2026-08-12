@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 288. syn_misc.at:2264: testing Segmentation Module ...
 ./syn_misc.at:2307: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.049204248 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/288/stderr	2026-08-12 01:52:47.048678096 +0000
+--- -	2026-08-12 22:05:23.634739096 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/288/stderr	2026-08-12 22:05:23.634032449 +0000
 @@ -1,20 +1,2 @@
 -prog.cob: in section 'DEC-1':
 -prog.cob:9: warning: section segments ignored

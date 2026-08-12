@@ -2,8 +2,8 @@
 582. run_fundamental.at:4780: testing 88 level with FALSE IS clause ...
 ./run_fundamental.at:4802: $COMPILE prog.cob
 ./run_fundamental.at:4803: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/582/stderr	2026-08-12 01:52:47.226228074 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/582/stderr	2026-08-12 22:05:23.796644030 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: SET MYFLD88 TO FALSE: the 88 has no `WHEN SET TO FALSE` value
 ./run_fundamental.at:4803: exit code was 2, expected 0

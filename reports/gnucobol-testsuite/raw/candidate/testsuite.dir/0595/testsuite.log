@@ -2,8 +2,8 @@
 595. run_fundamental.at:5283: testing USE FOR DEBUGGING ON procedure ...
 ./run_fundamental.at:5313: $COMPILE prog.cob
 ./run_fundamental.at:5314: COB_SET_DEBUG=1 $COBCRUN_DIRECT ./prog
---- -	2026-08-12 01:52:47.235791194 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/595/stdout	2026-08-12 01:52:47.235164825 +0000
+--- -	2026-08-12 22:05:23.806359729 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/595/stdout	2026-08-12 22:05:23.805643897 +0000
 @@ -1,12 +1,9 @@
  OK1
 -    16 SECOND-PAR                                                                     |

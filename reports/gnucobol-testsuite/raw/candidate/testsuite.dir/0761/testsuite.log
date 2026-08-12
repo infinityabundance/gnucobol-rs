@@ -3,8 +3,8 @@
 ./run_misc.at:4104: $COMPILE_MODULE callee.cob
 ./run_misc.at:4105: $COMPILE caller.cob
 ./run_misc.at:4106: COB_PRE_LOAD=callee $COBCRUN_DIRECT ./caller
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/761/stderr	2026-08-12 01:52:47.355968836 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/761/stderr	2026-08-12 22:05:23.919609305 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: CALL "callee2": not a contained program (external CALL is a boundary)
 ./run_misc.at:4106: exit code was 2, expected 0

@@ -2,8 +2,8 @@
 993. run_functions.at:284: testing FUNCTION CONCAT / CONCATENATE ...
 ./run_functions.at:325: $COMPILE prog.cob
 ./run_functions.at:326: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/993/stderr	2026-08-12 01:52:47.560895759 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/993/stderr	2026-08-12 22:05:24.105393177 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: FUNCTION
 ./run_functions.at:326: exit code was 2, expected 0

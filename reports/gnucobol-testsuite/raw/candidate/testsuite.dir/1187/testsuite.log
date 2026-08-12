@@ -2,12 +2,12 @@
 1187. run_extensions.at:4707: testing System routine CBL_ERROR_PROC (2) ...
 ./run_extensions.at:4767: $COMPILE -std=mf prog.cob
 ./run_extensions.at:4768: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1187/stderr	2026-08-12 01:52:47.813611068 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1187/stderr	2026-08-12 22:05:24.335636025 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number LOCAL-STORAGE
---- -	2026-08-12 01:52:47.815135644 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1187/stdout	2026-08-12 01:52:47.813611068 +0000
+--- -	2026-08-12 22:05:24.337193579 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1187/stdout	2026-08-12 22:05:24.336635660 +0000
 @@ -1,7 +1 @@
 -Program is starting
 -Error (interal): DemoErrProc; S1; 20-

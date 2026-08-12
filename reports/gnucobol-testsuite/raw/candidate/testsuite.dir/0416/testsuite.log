@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 416. syn_move.at:582: testing invalid target for MOVE ...
 ./syn_move.at:606: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.118501361 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/416/stderr	2026-08-12 01:52:47.118025844 +0000
+--- -	2026-08-12 22:05:23.699081083 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/416/stderr	2026-08-12 22:05:23.698293234 +0000
 @@ -1,7 +1 @@
 -prog.cob:7: warning: no definition/prototype seen for PROGRAM 'repo-prog'
 -prog.cob: in paragraph 'MAIN':

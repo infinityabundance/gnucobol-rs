@@ -2,12 +2,12 @@
 697. run_misc.at:1060: testing Index and parenthesized expression ...
 ./run_misc.at:1076: $COMPILE prog.cob
 ./run_misc.at:1077: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/697/stderr	2026-08-12 01:52:47.307758641 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/697/stderr	2026-08-12 22:05:23.875730379 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: trailing tokens in condition at +
---- -	2026-08-12 01:52:47.308914248 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/697/stdout	2026-08-12 01:52:47.308383768 +0000
+--- -	2026-08-12 22:05:23.876926689 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/697/stdout	2026-08-12 22:05:23.876477962 +0000
 @@ -1 +1 @@
 -OK
 +

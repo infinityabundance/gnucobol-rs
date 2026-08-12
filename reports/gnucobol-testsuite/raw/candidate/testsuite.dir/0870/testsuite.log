@@ -2,13 +2,13 @@
 870. run_file.at:1411: testing ASSIGN DYNAMIC with unset implicit data item ...
 ./run_file.at:1432: $COMPILE prog.cob
 ./run_file.at:1433: $COBCRUN_DIRECT ./prog
---- -	2026-08-12 01:52:47.439663523 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/870/stderr	2026-08-12 01:52:47.439022597 +0000
+--- -	2026-08-12 22:05:23.998290308 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/870/stderr	2026-08-12 22:05:23.997641045 +0000
 @@ -1,2 +1 @@
 -libcob: prog.cob:14: error: file does not exist (status = 35) for file test-file ('fpath') on OPEN
  
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/870/stdout	2026-08-12 01:52:47.439022597 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/870/stdout	2026-08-12 22:05:23.997480729 +0000
 @@ -0,0 +1 @@
 +Hello
 ./run_file.at:1433: exit code was 0, expected 1

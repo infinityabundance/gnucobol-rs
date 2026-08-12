@@ -2,12 +2,12 @@
 936. run_file.at:11235: testing RELATIVE Multi-Record ...
 ./run_file.at:11443: $COMPILE prog.cob
 ./run_file.at:11445: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/936/stderr	2026-08-12 01:52:47.503487010 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/936/stderr	2026-08-12 22:05:24.054640198 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: OCCURS count MAX-SUB is not an integer
---- -	2026-08-12 01:52:47.504574249 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/936/stdout	2026-08-12 01:52:47.503487010 +0000
+--- -	2026-08-12 22:05:24.056018939 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/936/stdout	2026-08-12 22:05:24.055463303 +0000
 @@ -1,35 +1 @@
 -Loading sample program data file.
 -Sample program data file load complete.

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 219. syn_file.at:1790: testing SELECT without fd-name ...
 ./syn_file.at:1803: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.012663194 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/219/stderr	2026-08-12 01:52:47.012189309 +0000
+--- -	2026-08-12 22:05:23.598571844 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/219/stderr	2026-08-12 22:05:23.597646986 +0000
 @@ -1,4 +1,2 @@
 -prog.cob:8: error: syntax error, unexpected ASSIGN, expecting Identifier
 -prog.cob:8: error: syntax error, unexpected Literal

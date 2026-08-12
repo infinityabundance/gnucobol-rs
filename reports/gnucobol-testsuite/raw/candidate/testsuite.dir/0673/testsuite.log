@@ -2,8 +2,8 @@
 673. run_misc.at:128: testing DECIMAL-POINT is COMMA (4) ...
 ./run_misc.at:148: $COMPILE prog.cob
 ./run_misc.at:149: $COBCRUN_DIRECT ./prog
---- -	2026-08-12 01:52:47.291164899 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/673/stdout	2026-08-12 01:52:47.290630011 +0000
+--- -	2026-08-12 22:05:23.859038176 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/673/stdout	2026-08-12 22:05:23.858377495 +0000
 @@ -1,2 +1,2 @@
 -00,10
 +01,00

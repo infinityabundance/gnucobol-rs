@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 110. syn_definition.at:1158: testing Non-matching level numbers (extension) ...
 ./syn_definition.at:1180: $COMPILE_ONLY -frelax-level-hierarchy prog.cob
---- -	2026-08-12 01:52:46.958394761 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/110/stderr	2026-08-12 01:52:46.957790663 +0000
+--- -	2026-08-12 22:05:23.550222375 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/110/stderr	2026-08-12 22:05:23.549647699 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:9: warning: no previous data item of level 04
 +cobc-rs: -frelax-level-hierarchy: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob

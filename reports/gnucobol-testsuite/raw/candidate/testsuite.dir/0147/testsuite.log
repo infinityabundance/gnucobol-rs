@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 147. syn_occurs.at:143: testing OCCURS with variable-occurrence data item ...
 ./syn_occurs.at:215: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:46.978025362 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/147/stderr	2026-08-12 01:52:46.977419080 +0000
+--- -	2026-08-12 22:05:23.568866706 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/147/stderr	2026-08-12 22:05:23.568422869 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:7: error: 'G-2' cannot have an OCCURS clause due to 'X'
 +cobc-rs: unsupported: no PROCEDURE DIVISION

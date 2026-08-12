@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 71. syn_copy.at:997: testing COPY and REPLACE errors ...
 ./syn_copy.at:1027: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:46.939976293 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/71/stderr	2026-08-12 01:52:46.939436105 +0000
+--- -	2026-08-12 22:05:23.532488461 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/71/stderr	2026-08-12 22:05:23.531647966 +0000
 @@ -1,9 +1,2 @@
 -prog.cob:6: error: syntax error, unexpected Word or Literal, expecting .
 -prog.cob:7: error: syntax error, unexpected ==, expecting .

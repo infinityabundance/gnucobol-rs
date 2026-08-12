@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 106. syn_definition.at:1043: testing Redefinition of section and paragraph names ...
 ./syn_definition.at:1055: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:46.955451047 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/106/stderr	2026-08-12 01:52:46.954492087 +0000
+--- -	2026-08-12 22:05:23.546705971 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/106/stderr	2026-08-12 22:05:23.546210557 +0000
 @@ -1,4 +1 @@
 -prog.cob: in section 'L':
 -prog.cob:6: error: redefinition of 'L'

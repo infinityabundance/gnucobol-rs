@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 160. syn_redefines.at:118: testing REDEFINES: level 88 ...
 ./syn_redefines.at:133: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:46.983258219 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/160/stderr	2026-08-12 01:52:46.982191137 +0000
+--- -	2026-08-12 22:05:23.572787174 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/160/stderr	2026-08-12 22:05:23.572254000 +0000
 @@ -1,2 +1 @@
 -prog.cob:8: error: syntax error, unexpected REDEFINES, expecting VALUE or VALUES
  

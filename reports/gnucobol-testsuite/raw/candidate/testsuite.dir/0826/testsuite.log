@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 826. run_misc.at:12589: testing OSVS Arithmetic (1) ...
 ./run_misc.at:12666: $COMPILE -farithmetic-osvs prog.cob
---- -	2026-08-12 01:52:47.403421927 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/826/stderr	2026-08-12 01:52:47.402773317 +0000
+--- -	2026-08-12 22:05:23.965026999 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/826/stderr	2026-08-12 22:05:23.964456796 +0000
 @@ -1,12 +1,2 @@
 -prog.cob: in paragraph 'MAIN':
 -prog.cob:19: warning: precision of result may change with arithmetic-osvs

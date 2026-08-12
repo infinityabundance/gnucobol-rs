@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 130. syn_definition.at:2129: testing RENAMES of 01-, 66- and 77-level items ...
 ./syn_definition.at:2145: $COMPILE_ONLY -std=cobol2014 prog.cob
---- -	2026-08-12 01:52:46.967937533 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/130/stderr	2026-08-12 01:52:46.967293360 +0000
+--- -	2026-08-12 22:05:23.557430120 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/130/stderr	2026-08-12 22:05:23.556647595 +0000
 @@ -1,4 +1,2 @@
 -prog.cob:7: error: RENAMES of 01-, 66- and 77-level items does not conform to COBOL 2014
 -prog.cob:8: error: RENAMES of 01-, 66- and 77-level items does not conform to COBOL 2014

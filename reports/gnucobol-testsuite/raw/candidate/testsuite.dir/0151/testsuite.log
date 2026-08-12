@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 151. syn_occurs.at:436: testing OCCURS DEPENDING with wrong size ...
 ./syn_occurs.at:455: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:46.978599634 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/151/stderr	2026-08-12 01:52:46.977419080 +0000
+--- -	2026-08-12 22:05:23.568803779 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/151/stderr	2026-08-12 22:05:23.568422869 +0000
 @@ -1,4 +1,2 @@
 -prog.cob:7: error: OCCURS TO must be greater than OCCURS FROM
 -prog.cob:9: error: unsigned integer value expected

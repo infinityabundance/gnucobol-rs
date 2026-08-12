@@ -2,12 +2,12 @@
 1248. data_binary.at:2143: testing PPP COMP-5 ...
 ./data_binary.at:2196: $COMPILE prog.cob
 ./data_binary.at:2201: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1248/stderr	2026-08-12 01:52:47.878338543 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1248/stderr	2026-08-12 22:05:24.391635193 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: PIC VPPP999: ScalingPDeferred
---- -	2026-08-12 01:52:47.880464481 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1248/stdout	2026-08-12 01:52:47.879526891 +0000
+--- -	2026-08-12 22:05:24.393159514 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1248/stdout	2026-08-12 22:05:24.392471742 +0000
 @@ -1,11 +1 @@
 -INIT X-1 : 00091 .
 -INIT X-2 : 00092 .

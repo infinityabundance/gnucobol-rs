@@ -4,13 +4,13 @@
 ./run_misc.at:1558: $COMPILE_MODULE callee.cob
 ./run_misc.at:1559: $COMPILE_MODULE callee2.cob
 ./run_misc.at:1560: $COBCRUN_DIRECT ./caller
---- -	2026-08-12 01:52:47.319733532 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/708/stderr	2026-08-12 01:52:47.318936615 +0000
+--- -	2026-08-12 22:05:23.885258639 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/708/stderr	2026-08-12 22:05:23.884370443 +0000
 @@ -1,2 +1 @@
 -Exception EC-PROGRAM-RECURSIVE-CALL      ;
  
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/708/stdout	2026-08-12 01:52:47.318936615 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/708/stdout	2026-08-12 22:05:23.884370443 +0000
 @@ -0,0 +1 @@
 +INITIAL prog was called RECURSIVE
 708. run_misc.at:1510: 708. Recursive CALL with ON EXCEPTION (run_misc.at:1510): FAILED (run_misc.at:1560)

@@ -3,12 +3,12 @@
 ./run_extensions.at:2060: $COMPILE -Wno-unfinished caller.cob
 ./run_extensions.at:2086: $COMPILE_MODULE callee32.c callee64.c
 ./run_extensions.at:2088: $COBCRUN_DIRECT ./caller
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1140/stderr	2026-08-12 01:52:47.764224779 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1140/stderr	2026-08-12 22:05:24.291636678 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: expected data name after a level number
---- -	2026-08-12 01:52:47.766028525 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1140/stdout	2026-08-12 01:52:47.764999585 +0000
+--- -	2026-08-12 22:05:24.292780288 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1140/stdout	2026-08-12 22:05:24.291636678 +0000
 @@ -1,6 +1 @@
 -VAL received: 12345678
 -VAL received: 12345678

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 321. syn_misc.at:3903: testing UNSTRING COUNT clause ...
 ./syn_misc.at:3940: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.066502325 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/321/stderr	2026-08-12 01:52:47.065888309 +0000
+--- -	2026-08-12 22:05:23.651627273 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/321/stderr	2026-08-12 22:05:23.651098658 +0000
 @@ -1,7 +1,2 @@
 -prog.cob:26: error: COUNT item 'invalid-1' must be an integer
 -prog.cob:27: error: COUNT item 'invalid-2' must be an integer

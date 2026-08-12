@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 460. syn_literals.at:583: testing literal too long ...
 ./syn_literals.at:787: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.145017384 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/460/stderr	2026-08-12 01:52:47.143821121 +0000
+--- -	2026-08-12 22:05:23.722382344 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/460/stderr	2026-08-12 22:05:23.721697427 +0000
 @@ -1,3 +1 @@
 -prog.cob:9: error: invalid literal: '                                   ...'
 -prog.cob:9: note: literal length exceeds 8191 characters

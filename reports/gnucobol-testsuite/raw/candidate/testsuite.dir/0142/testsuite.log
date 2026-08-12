@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 142. syn_subscripts.at:195: testing SET SSRANGE syntax ...
 ./syn_subscripts.at:217: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:46.974319855 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/142/stderr	2026-08-12 01:52:46.973330769 +0000
+--- -	2026-08-12 22:05:23.563413071 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/142/stderr	2026-08-12 22:05:23.562658945 +0000
 @@ -1,4 +1 @@
 -prog.cob:9: error: invalid SSRANGE directive option '0'
 -prog.cob:10: error: invalid SSRANGE directive option '4'

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 353. syn_misc.at:5699: testing VOLATILE clause ...
 ./syn_misc.at:5735: $COMPILE_ONLY -Wno-unfinished prog.cob
---- -	2026-08-12 01:52:47.083799410 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/353/stderr	2026-08-12 01:52:47.083205742 +0000
+--- -	2026-08-12 22:05:23.667905825 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/353/stderr	2026-08-12 22:05:23.667110773 +0000
 @@ -1,2 +1 @@
 -prog.cob:18: warning: initial VALUE clause ignored for EXTERNAL item 'STEP'
  

@@ -3,12 +3,12 @@
 ./run_misc.at:297: $COMPILE_MODULE callee.cob
 ./run_misc.at:298: $COMPILE -o prog caller.cob
 ./run_misc.at:299: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/677/stderr	2026-08-12 01:52:47.292571945 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/677/stderr	2026-08-12 22:05:23.860643080 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number LOCAL-STORAGE
---- -	2026-08-12 01:52:47.293945619 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/677/stdout	2026-08-12 01:52:47.293375325 +0000
+--- -	2026-08-12 22:05:23.862177257 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/677/stdout	2026-08-12 22:05:23.861696531 +0000
 @@ -1 +1 @@
 -abcabc000abc
 +

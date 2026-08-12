@@ -2,8 +2,8 @@
 908. run_file.at:5957: testing RELATIVE RANDOM basic I/O ...
 ./run_file.at:6001: $COMPILE prog.cob
 ./run_file.at:6002: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/908/stderr	2026-08-12 01:52:47.469299549 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/908/stderr	2026-08-12 22:05:24.028640584 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: DELETE: `FILE` is not a declared file
 ./run_file.at:6002: exit code was 2, expected 0

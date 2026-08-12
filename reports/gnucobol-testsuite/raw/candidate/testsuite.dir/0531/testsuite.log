@@ -2,12 +2,12 @@
 531. run_fundamental.at:1184: testing GLOBAL at lower level ...
 ./run_fundamental.at:1223: $COMPILE prog.cob
 ./run_fundamental.at:1224: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/531/stderr	2026-08-12 01:52:47.189664899 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/531/stderr	2026-08-12 22:05:23.763124443 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: X
---- -	2026-08-12 01:52:47.191101330 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/531/stdout	2026-08-12 01:52:47.190485681 +0000
+--- -	2026-08-12 22:05:23.764054957 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/531/stdout	2026-08-12 22:05:23.763574622 +0000
 @@ -1,4 +1 @@
 -prog1
 -prog2

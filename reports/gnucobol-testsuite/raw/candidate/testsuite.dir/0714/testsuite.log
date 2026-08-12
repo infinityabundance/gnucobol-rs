@@ -2,12 +2,12 @@
 714. run_misc.at:1759: testing INSPECT CONVERTING alphabet ...
 ./run_misc.at:1787: $COMPILE prog.cob
 ./run_misc.at:1788: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/714/stderr	2026-08-12 01:52:47.320308876 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/714/stderr	2026-08-12 22:05:23.884642723 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: X
---- -	2026-08-12 01:52:47.321453042 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/714/stdout	2026-08-12 01:52:47.320593818 +0000
+--- -	2026-08-12 22:05:23.886218378 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/714/stdout	2026-08-12 22:05:23.884642723 +0000
 @@ -1 +1 @@
 -Converted: "A#O2018 |!"
 +

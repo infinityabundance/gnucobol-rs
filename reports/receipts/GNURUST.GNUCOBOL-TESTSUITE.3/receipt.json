@@ -6,15 +6,15 @@
   },
   "conformance_claim": "NONE — differential observation over the admitted GnuCOBOL 3.2 native Autotest suite in this environment; no GnuCOBOL test-suite parity claim, no COBOL conformance certification, no compiler-replacement claim.",
   "court": "GnuCOBOL testsuite differential comparison + per-test classification",
-  "crate_version": "0.8.56",
+  "crate_version": "0.8.57",
   "current_authority": "STATUS.md",
   "docker": {
     "base_image": "gnucobol-rs-gnucobol-testsuite/ubuntu-base:18a42173dc0c9a02c8230212c978b14cc3bbcff173f95dfa954cdaaa04f4a172",
     "containers": {
-      "pass_a": "gnucobol-testsuite-20260812T015206Z-8980273c-a",
-      "pass_b": "gnucobol-testsuite-20260812T015206Z-8980273c-b"
+      "pass_a": "gnucobol-testsuite-20260812T220440Z-03d8aaab-a",
+      "pass_b": "gnucobol-testsuite-20260812T220440Z-03d8aaab-b"
     },
-    "court_image": "gnucobol-rs-gnucobol-testsuite/court:8980273cf6e75d7efaefaf32627586ce6d16fe78",
+    "court_image": "gnucobol-rs-gnucobol-testsuite/court:03d8aaab3707ecbf88a41ba6ed0264d2fd0b87a0",
     "daemon_root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/daemon-data",
     "docker_storage": {
       "configured_root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT",
@@ -27,12 +27,12 @@
     "host_storage_root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT",
     "isolated_daemon": true,
     "production_daemon_untouched": true,
-    "run_id": "20260812T015206Z-8980273c",
+    "run_id": "20260812T220440Z-03d8aaab",
     "socket": "unix://$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/run/docker.sock",
     "storage_driver": "overlay2",
     "storage_filesystem": {
-      "available_bytes_at_start": 158909255680,
-      "device_identity_sha256": "e04a485e543ed37f4964472825ad1ff15fdb40a6c26604daf39fc5e585fd63bc",
+      "available_bytes_at_start": 201792966656,
+      "device_identity_sha256": "aaa6eb86797c980aae4fa3d4ceba116641c822ce97f22478e1dfce2417fb48fb",
       "different_from_root": true,
       "filesystem_type": "ext4"
     }
@@ -46,14 +46,14 @@
     "arch": "x86_64",
     "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
     "jobs": "12",
-    "kernel": "7.1.6-1-cachyos",
+    "kernel": "7.1.8-1-cachyos",
     "libc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.7) 2.39",
     "nproc": "16",
     "os": "?",
     "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)"
   },
-  "generated_at": "2026-08-12T01:54:13Z",
-  "git_commit": "8980273cf6e75d7efaefaf32627586ce6d16fe78",
+  "generated_at": "2026-08-12T22:06:52Z",
+  "git_commit": "03d8aaab3707ecbf88a41ba6ed0264d2fd0b87a0",
   "non_claims": [
     "no full GnuCOBOL test-suite parity claim",
     "no native-code-generation comparison (cobrun interprets; cobc emits C/native)",
@@ -87,7 +87,7 @@
       "2_images_dir_readonly_source": true,
       "3_base_artifact_verified": true,
       "4_project_layout_present": true,
-      "5_free_space_ok_gb": 148,
+      "5_free_space_ok_gb": 196,
       "6_isolated_socket_used": true,
       "7_docker_root_beneath_project": true,
       "8_no_primary_drive_state": true,
@@ -108,12 +108,12 @@
     },
     "schema": "gnurust-gnucobol-testsuite-preflight-v1",
     "storage": {
-      "free_gb": 148,
+      "free_gb": 196,
       "root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT"
     },
     "storage_filesystem": {
-      "available_bytes_at_start": 158909255680,
-      "device_identity_sha256": "e04a485e543ed37f4964472825ad1ff15fdb40a6c26604daf39fc5e585fd63bc",
+      "available_bytes_at_start": 201792966656,
+      "device_identity_sha256": "aaa6eb86797c980aae4fa3d4ceba116641c822ce97f22478e1dfce2417fb48fb",
       "different_from_root": true,
       "filesystem_type": "ext4"
     }
@@ -124,11 +124,11 @@
     "determinism": {
       "note": "stable summary counts + per-test classifications must be identical across two fresh full runs (timestamps deliberately excluded)",
       "pass_a": {
-        "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260812T015206Z-8980273c/pass-a/summary.json",
+        "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260812T220440Z-03d8aaab/pass-a/summary.json",
         "summary_sha256": "008679ca0cda63b1a24e302e75985208ebd8a4d899312a81f708270e290e5a8a"
       },
       "pass_b": {
-        "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260812T015206Z-8980273c/pass-b/summary.json",
+        "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260812T220440Z-03d8aaab/pass-b/summary.json",
         "summary_sha256": "10eef9a01c80ce5676766333ac94a7042355474116d7a8d86b1e7d983b39d152"
       },
       "path_notation": "paths are symbolic: $GNURUST_GNUCOBOL_TEST_DOCKER_ROOT is the configured docker root at run time; the raw unsanitized record is preserved outside git under $GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/run-evidence/",

@@ -2,8 +2,8 @@
 741. run_misc.at:2712: testing STRING WITH POINTER ON OVERFLOW with DELIMITER ...
 ./run_misc.at:2790: $COMPILE prog.cob
 ./run_misc.at:2791: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/741/stdout	2026-08-12 01:52:47.340845147 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/741/stdout	2026-08-12 22:05:23.905642411 +0000
 @@ -0,0 +1,3 @@
 +Case B: Should overflow
 +B: TRTG-STRING <ABC> != SPACES

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 234. syn_reportwriter.at:218: testing Missing DETAIL line ...
 ./syn_reportwriter.at:253: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.019706430 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/234/stderr	2026-08-12 01:52:47.018872223 +0000
+--- -	2026-08-12 22:05:23.605449232 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/234/stderr	2026-08-12 22:05:23.604646882 +0000
 @@ -1,3 +1 @@
 -prog.cob:13: warning: no DETAIL line defined in report rp
 -prog.cob:27: error: 'rp-detail' is not defined

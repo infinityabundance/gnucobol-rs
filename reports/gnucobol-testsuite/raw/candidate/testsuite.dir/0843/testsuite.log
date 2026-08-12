@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 843. run_misc.at:14097: testing runtime check: write to internal storage (1) ...
 ./run_misc.at:14173: $COMPILE -fno-ec=program-arg-mismatch -fmemory-check=pointer caller.cob
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/843/stderr	2026-08-12 01:52:47.417947860 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/843/stderr	2026-08-12 22:05:23.980392679 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fno-ec=program-arg-mismatch: unsupported option (rejected-unsupported; exception-code checking: the candidate checks a fixed sealed set; reject honestly): program-arg-mismatch
 ./run_misc.at:14173: exit code was 1, expected 0

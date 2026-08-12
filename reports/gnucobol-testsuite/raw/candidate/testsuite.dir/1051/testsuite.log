@@ -2,12 +2,12 @@
 1051. run_functions.at:2422: testing FUNCTION MODULE-PATH ...
 ./run_functions.at:2441: $COMPILE prog.cob
 ./run_functions.at:2442: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1051/stderr	2026-08-12 01:52:47.642149895 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1051/stderr	2026-08-12 22:05:24.179671705 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: FUNCTION MODULE-PATH: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim
---- -	2026-08-12 01:52:47.643896154 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1051/stdout	2026-08-12 01:52:47.643122450 +0000
+--- -	2026-08-12 22:05:24.181361434 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1051/stdout	2026-08-12 22:05:24.180638327 +0000
 @@ -1 +1 @@
 -OK
 +

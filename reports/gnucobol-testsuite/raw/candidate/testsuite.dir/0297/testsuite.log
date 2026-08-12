@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 297. syn_misc.at:2800: testing adding/removing reserved words ...
 ./syn_misc.at:2820: $COMPILE_ONLY -freserved=hello,foo,bars,background-color -fnot-reserved=file prog.cob
---- -	2026-08-12 01:52:47.054487870 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/297/stderr	2026-08-12 01:52:47.053571569 +0000
+--- -	2026-08-12 22:05:23.639983561 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/297/stderr	2026-08-12 22:05:23.639304305 +0000
 @@ -1,5 +1,2 @@
 -prog.cob:7: error: 'hello' is a reserved word, but isn't supported
 -prog.cob:8: error: 'foo' is a reserved word, but isn't supported

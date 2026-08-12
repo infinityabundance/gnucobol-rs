@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 424. syn_screen.at:121: testing AT clause ...
 ./syn_screen.at:165: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.123705084 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/424/stderr	2026-08-12 01:52:47.123059649 +0000
+--- -	2026-08-12 22:05:23.704473714 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/424/stderr	2026-08-12 22:05:23.703989221 +0000
 @@ -1,6 +1 @@
 -prog.cob:34: error: value in AT clause must have 4 or 6 digits
 -prog.cob:35: error: value in AT clause must have 4 or 6 digits

@@ -2,12 +2,12 @@
 1203. run_extensions.at:5363: testing EXHIBIT statement ...
 ./run_extensions.at:5383: $COMPILE -std=mvs -Wno-strict-typing -Wno-pending prog.cob
 ./run_extensions.at:5384: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1203/stderr	2026-08-12 01:52:47.832765781 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1203/stderr	2026-08-12 22:05:24.350635802 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: SORT-RETURN
---- -	2026-08-12 01:52:47.834760163 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1203/stdout	2026-08-12 01:52:47.832893474 +0000
+--- -	2026-08-12 22:05:24.352147091 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1203/stdout	2026-08-12 22:05:24.351189336 +0000
 @@ -1,5 +1 @@
 -         X
 -VAR-1 = 123XXXXX VAR-2 = 000 Y

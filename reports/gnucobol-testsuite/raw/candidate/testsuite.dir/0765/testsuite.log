@@ -2,8 +2,8 @@
 765. run_misc.at:4249: testing ALLOCATE / FREE with BASED item (1) ...
 ./run_misc.at:4269: $COMPILE prog.cob
 ./run_misc.at:4270: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/765/stderr	2026-08-12 01:52:47.357814060 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/765/stderr	2026-08-12 22:05:23.920642189 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: MYFLD
 ./run_misc.at:4270: exit code was 2, expected 0

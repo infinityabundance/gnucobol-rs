@@ -2,8 +2,8 @@
 664. run_initialize.at:442: testing INITIALIZE with FILLER ...
 ./run_initialize.at:503: $COMPILE prog.cob
 ./run_initialize.at:504: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/664/stderr	2026-08-12 01:52:47.283462102 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/664/stderr	2026-08-12 22:05:23.852036576 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: MY-FILLER(2:3)
 ./run_initialize.at:504: exit code was 2, expected 0

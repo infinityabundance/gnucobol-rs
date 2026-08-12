@@ -2,8 +2,8 @@
 789. run_misc.at:5439: testing OCCURS clause with 1 entry ...
 ./run_misc.at:5474: $COMPILE prog.cob
 ./run_misc.at:5475: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/789/stdout	2026-08-12 01:52:47.378984134 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/789/stdout	2026-08-12 22:05:23.941269617 +0000
 @@ -0,0 +1 @@
 +   
 789. run_misc.at:5439: 789. OCCURS clause with 1 entry (run_misc.at:5439): FAILED (run_misc.at:5475)

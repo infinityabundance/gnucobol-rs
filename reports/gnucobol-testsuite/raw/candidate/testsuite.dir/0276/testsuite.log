@@ -2,8 +2,8 @@
 276. syn_misc.at:1656: testing unknown device in dialect ...
 ./syn_misc.at:1671: $COMPILE_ONLY prog.cob
 ./syn_misc.at:1679: $COMPILE_ONLY -fnot-reserved=COMMAND-LINE prog.cob
---- -	2026-08-12 01:52:47.043329733 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/276/stderr	2026-08-12 01:52:47.042666275 +0000
+--- -	2026-08-12 22:05:23.629649599 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/276/stderr	2026-08-12 22:05:23.629081009 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:8: error: unknown device 'COMMAND-LINE'; it may exist in another dialect
 +cobc-rs: -fnot-reserved=COMMAND-LINE: unsupported option (rejected-unsupported; reserved-word changes: reject honestly): COMMAND-LINE

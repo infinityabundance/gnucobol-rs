@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 171. syn_redefines.at:467: testing REDEFINES: for ANY LENGTH item ...
 ./syn_redefines.at:483: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:46.988028012 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/171/stderr	2026-08-12 01:52:46.987460523 +0000
+--- -	2026-08-12 22:05:23.577375686 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/171/stderr	2026-08-12 22:05:23.576647298 +0000
 @@ -1,3 +1 @@
 -prog.cob:7: error: the original definition 'X' should not have an ANY LENGTH clause
 -prog.cob:9: error: the original definition 'N' should not have an ANY LENGTH clause

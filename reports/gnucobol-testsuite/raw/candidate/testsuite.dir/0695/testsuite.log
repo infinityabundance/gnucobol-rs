@@ -2,8 +2,8 @@
 695. run_misc.at:953: testing OCCURS on level 01 ...
 ./run_misc.at:974: $COMPILE prog.cob
 ./run_misc.at:975: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/695/stderr	2026-08-12 01:52:47.306067545 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/695/stderr	2026-08-12 22:05:23.873337188 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: X-ALL
 ./run_misc.at:975: exit code was 2, expected 0

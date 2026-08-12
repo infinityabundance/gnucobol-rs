@@ -2,12 +2,12 @@
 800. run_misc.at:7273: testing SET LAST EXCEPTION TO OFF ...
 ./run_misc.at:7296: $COMPILE prog.cob
 ./run_misc.at:7297: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/800/stderr	2026-08-12 01:52:47.382805347 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/800/stderr	2026-08-12 22:05:23.946641802 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: FUNCTION
---- -	2026-08-12 01:52:47.384302110 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/800/stdout	2026-08-12 01:52:47.383516203 +0000
+--- -	2026-08-12 22:05:23.948182252 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/800/stdout	2026-08-12 22:05:23.947730249 +0000
 @@ -1,7 +1 @@
 -EC-SIZE-OVERFLOW
 -prog; ; 10

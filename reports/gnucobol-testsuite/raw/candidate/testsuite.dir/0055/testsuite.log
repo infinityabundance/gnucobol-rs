@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 55. syn_copy.at:342: testing COPY: recursive ...
 ./syn_copy.at:371: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:46.932831607 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/55/stderr	2026-08-12 01:52:46.932219384 +0000
+--- -	2026-08-12 22:05:23.526068485 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/55/stderr	2026-08-12 22:05:23.525576077 +0000
 @@ -1,6 +1,2 @@
 -in file included from prog.cob:6:
 -in file included from copy1.CPY:2:

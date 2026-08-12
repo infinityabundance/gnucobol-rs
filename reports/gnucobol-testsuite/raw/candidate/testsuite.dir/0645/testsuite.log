@@ -2,13 +2,13 @@
 645. run_refmod.at:254: testing Length overflow with offset (2) ...
 ./run_refmod.at:272: $COMPILE prog.cob
 ./run_refmod.at:273: $COBCRUN_DIRECT ./prog
---- -	2026-08-12 01:52:47.270888503 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/645/stderr	2026-08-12 01:52:47.270017778 +0000
+--- -	2026-08-12 22:05:23.837654429 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/645/stderr	2026-08-12 22:05:23.837043871 +0000
 @@ -1,2 +1 @@
 -libcob: prog.cob:9: error: length of 'X' out of bounds: 3, starting at: 3, maximum: 4
  
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/645/stdout	2026-08-12 01:52:47.270017778 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/645/stdout	2026-08-12 22:05:23.837043871 +0000
 @@ -0,0 +1 @@
 +cd
 \ No newline at end of file

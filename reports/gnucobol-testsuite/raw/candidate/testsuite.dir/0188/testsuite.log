@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 188. syn_file.at:82: testing Missing FD ...
 ./syn_file.at:102: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:46.996916182 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/188/stderr	2026-08-12 01:52:46.996331400 +0000
+--- -	2026-08-12 22:05:23.583854061 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/188/stderr	2026-08-12 22:05:23.583490293 +0000
 @@ -1,2 +1 @@
 -prog.cob:7: error: missing file description for FILE file1
  

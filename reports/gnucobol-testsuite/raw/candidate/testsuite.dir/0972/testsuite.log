@@ -2,8 +2,8 @@
 972. run_reportwriter.at:4113: testing Report with OCCURS ...
 ./run_reportwriter.at:4193: $COMPILE prog.cob
 ./run_reportwriter.at:4195: DD_PRINTOUT=./report.txt $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/972/stderr	2026-08-12 01:52:47.539555332 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/972/stderr	2026-08-12 22:05:24.085118026 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: NUMS
 ./run_reportwriter.at:4195: exit code was 2, expected 0

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 270. syn_misc.at:1244: testing SPECIAL-NAMES clause ...
 ./syn_misc.at:1329: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.042254947 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/270/stderr	2026-08-12 01:52:47.041729807 +0000
+--- -	2026-08-12 22:05:23.627626088 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/270/stderr	2026-08-12 22:05:23.627059021 +0000
 @@ -1,2 +1 @@
 -prog.cob:14: error: duplicate CRT STATUS clause
  

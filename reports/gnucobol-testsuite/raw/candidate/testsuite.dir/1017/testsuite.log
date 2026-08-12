@@ -2,8 +2,8 @@
 1017. run_functions.at:1292: testing FUNCTION FORMATTED-DATE with ref modding ...
 ./run_functions.at:1311: $COMPILE prog.cob
 ./run_functions.at:1312: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1017/stdout	2026-08-12 01:52:47.592658569 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1017/stdout	2026-08-12 22:05:24.129639084 +0000
 @@ -0,0 +1 @@
 +1601
 1017. run_functions.at:1292: 1017. FUNCTION FORMATTED-DATE with ref modding (run_functions.at:1292): FAILED (run_functions.at:1312)

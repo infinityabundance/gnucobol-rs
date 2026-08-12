@@ -2,12 +2,12 @@
 676. run_misc.at:221: testing CURRENCY SIGN WITH PICTURE SYMBOL ...
 ./run_misc.at:258: $COMPILE prog.cob
 ./run_misc.at:259: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/676/stderr	2026-08-12 01:52:47.291528257 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/676/stderr	2026-08-12 22:05:23.859643095 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: PIC U99V99: UnsupportedSymbol('U')
---- -	2026-08-12 01:52:47.292704893 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/676/stdout	2026-08-12 01:52:47.291894391 +0000
+--- -	2026-08-12 22:05:23.860865683 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/676/stdout	2026-08-12 22:05:23.860281844 +0000
 @@ -1,4 +1 @@
 -#EUR 12.34# equal #1,234 ct (EUR)#
 -Invoice amount #1 is  $US1,500.00.

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 860. run_file.at:719: testing ASSIGN EXTERNAL parsing ...
 ./run_file.at:744: $COMPILE -fassign-clause=external prog.cob
---- -	2026-08-12 01:52:47.429482780 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/860/stderr	2026-08-12 01:52:47.428232316 +0000
+--- -	2026-08-12 22:05:23.991541639 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/860/stderr	2026-08-12 22:05:23.990641149 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:8: warning: ASSIGN DA-S-FILENAME interpreted as 'FILENAME'
 +cobc-rs: -fassign-clause=external: unsupported option (rejected-unsupported; ASSIGN clause dialect: reject honestly): external

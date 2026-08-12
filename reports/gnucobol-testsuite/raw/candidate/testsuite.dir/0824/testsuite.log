@@ -2,12 +2,12 @@
 824. run_misc.at:12434: testing Default Arithmetic (1) ...
 ./run_misc.at:12510: $COMPILE prog.cob
 ./run_misc.at:12512: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/824/stderr	2026-08-12 01:52:47.402773317 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/824/stderr	2026-08-12 22:05:23.962641565 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: RSLTV2,
---- -	2026-08-12 01:52:47.404458763 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/824/stdout	2026-08-12 01:52:47.403940004 +0000
+--- -	2026-08-12 22:05:23.964895003 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/824/stdout	2026-08-12 22:05:23.964456796 +0000
 @@ -1,21 +1 @@
 -Simple Compute  RSLT IS 400
 -Single Variable RSLT IS 188

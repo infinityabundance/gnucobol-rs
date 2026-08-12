@@ -2,8 +2,8 @@
 892. run_file.at:4241: testing LINE SEQUENTIAL basic I/O ...
 ./run_file.at:4301: $COMPILE prog.cob
 ./run_file.at:4302: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/892/stderr	2026-08-12 01:52:47.457401561 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/892/stderr	2026-08-12 22:05:24.018082920 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: DELETE: `FILE` is not a declared file
 ./run_file.at:4302: exit code was 2, expected 0

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 61. syn_copy.at:528: testing COPY: partial replacement BY literal ...
 ./syn_copy.at:569: $COMPILE -fpartial-replace-when-literal-src=skip -o prog-skip prog.cob
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/61/stderr	2026-08-12 01:52:46.935013309 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/61/stderr	2026-08-12 22:05:23.526759122 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fpartial-replace-when-literal-src=skip: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): skip
 ./syn_copy.at:569: exit code was 1, expected 0

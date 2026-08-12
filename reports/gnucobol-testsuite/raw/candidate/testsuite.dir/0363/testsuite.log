@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 363. syn_misc.at:6097: testing XML GENERATE syntax checks ...
 ./syn_misc.at:6257: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.089606869 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/363/stderr	2026-08-12 01:52:47.088436515 +0000
+--- -	2026-08-12 22:05:23.673148447 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/363/stderr	2026-08-12 22:05:23.672350650 +0000
 @@ -1,54 +1,2 @@
 -prog.cob:12: warning: USAGE BIT is not implemented
 -prog.cob:37: warning: USAGE BIT is not implemented

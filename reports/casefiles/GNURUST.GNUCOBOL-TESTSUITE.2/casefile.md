@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.GNUCOBOL-TESTSUITE.2 (court-casefile)
 
-**Verdict: PASS** · crates/cobc-rs (the driver) + crates/gnucobol-rs-testsuite (the harness) + lab/gnucobol-testsuite · crate `gnucobol-rs` 0.8.56
+**Verdict: PASS** · crates/cobc-rs (the driver) + crates/gnucobol-rs-testsuite (the harness) + lab/gnucobol-testsuite · crate `gnucobol-rs` 0.8.57
 
 - **Oracle:** none used during the candidate phase (isolation is mechanically enforced); the baseline is TESTSUITE.1
 - **Byte domain(s):** per-test candidate outcomes (parse/check/prepare/run), raw stdout+stderr, candidate census, execve trace, launcher manifests

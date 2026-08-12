@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 258. syn_misc.at:842: testing INITIALIZE constant ...
 ./syn_misc.at:860: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.032472778 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/258/stderr	2026-08-12 01:52:47.031742896 +0000
+--- -	2026-08-12 22:05:23.618892569 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/258/stderr	2026-08-12 22:05:23.617646689 +0000
 @@ -1,4 +1 @@
 -prog.cob:10: error: invalid INITIALIZE statement
 -prog.cob:12: error: invalid INITIALIZE statement

@@ -2,12 +2,12 @@
 872. run_file.at:1485: testing INDEXED file sparse/split keys ...
 ./run_file.at:1956: $COMPILE prog.cob
 ./run_file.at:1958: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/872/stderr	2026-08-12 01:52:47.439654235 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/872/stderr	2026-08-12 22:05:24.000073362 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: OCCURS count MAX-SUB is not an integer
---- -	2026-08-12 01:52:47.440871167 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/872/stdout	2026-08-12 01:52:47.439654235 +0000
+--- -	2026-08-12 22:05:24.001265043 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/872/stdout	2026-08-12 22:05:24.000641000 +0000
 @@ -1,42 +1 @@
 -Loading sample data file.
 -Sample data file load complete.

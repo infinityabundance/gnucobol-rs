@@ -2,12 +2,12 @@
 512. run_fundamental.at:72: testing DISPLAY literals, DECIMAL-POINT is COMMA ...
 ./run_fundamental.at:92: $COMPILE prog.cob
 ./run_fundamental.at:93: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/512/stderr	2026-08-12 01:52:47.177499532 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/512/stderr	2026-08-12 22:05:23.751453049 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: 1,23E0
---- -	2026-08-12 01:52:47.179208872 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/512/stdout	2026-08-12 01:52:47.178502694 +0000
+--- -	2026-08-12 22:05:23.752610857 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/512/stdout	2026-08-12 22:05:23.752021719 +0000
 @@ -1,7 +1 @@
 -12,3
 -+12,3

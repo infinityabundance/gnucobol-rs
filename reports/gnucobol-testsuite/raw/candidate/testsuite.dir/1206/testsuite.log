@@ -2,12 +2,12 @@
 1206. run_extensions.at:5571: testing GCOS floating-point usages ...
 ./run_extensions.at:5599: $COMPILE -std=gcos-strict prog.cob -Wno-unfinished
 ./run_extensions.at:5600: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1206/stderr	2026-08-12 01:52:47.836772790 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1206/stderr	2026-08-12 22:05:24.353335306 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unrecognized USAGE COMPUTATIONAL-9
---- -	2026-08-12 01:52:47.838143248 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1206/stdout	2026-08-12 01:52:47.836772790 +0000
+--- -	2026-08-12 22:05:24.354291048 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1206/stdout	2026-08-12 22:05:24.353664991 +0000
 @@ -1,5 +1 @@
 --42
 -0

@@ -1,14 +1,14 @@
 #                             -*- compilation -*-
 380. syn_misc.at:7055: testing error handling in conditional directives ...
 ./syn_misc.at:7074: $COMPILE_ONLY -D X prog.cob
---- -	2026-08-12 01:52:47.098283274 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/380/stderr	2026-08-12 01:52:47.097378435 +0000
+--- -	2026-08-12 22:05:23.681038202 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/380/stderr	2026-08-12 22:05:23.680207544 +0000
 @@ -1,3 +1 @@
 -prog.cob:5: error: invalid IF directive
 -prog.cob:9: error: duplicate DEFINE directive 'X'
  
---- -	2026-08-12 01:52:47.098828141 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/380/stdout	2026-08-12 01:52:47.098082089 +0000
+--- -	2026-08-12 22:05:23.681556689 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/380/stdout	2026-08-12 22:05:23.681116699 +0000
 @@ -1,2 +1 @@
 -No BANANA here.
  

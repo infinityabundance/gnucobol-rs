@@ -4,12 +4,12 @@
 ./run_misc.at:11746: mkdir DIR
 ./run_misc.at:11747: $COMPILE_MODULE sub.cob -o DIR/SUB.$COB_MODULE_EXT
 ./run_misc.at:11748: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/818/stderr	2026-08-12 01:52:47.401757411 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/818/stderr	2026-08-12 22:05:23.962641565 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: expected program name after PROGRAM-ID
---- -	2026-08-12 01:52:47.403077625 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/818/stdout	2026-08-12 01:52:47.402246844 +0000
+--- -	2026-08-12 22:05:23.964495348 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/818/stdout	2026-08-12 22:05:23.963794762 +0000
 @@ -1,5 +1 @@
 -SUB GOT X
 -SUB GOT Y

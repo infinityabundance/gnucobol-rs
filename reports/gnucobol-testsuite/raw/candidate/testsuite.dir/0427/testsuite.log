@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 427. syn_screen.at:250: testing Incorrect USAGE clause ...
 ./syn_screen.at:273: $COMPILE prog.cob
---- -	2026-08-12 01:52:47.124978731 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/427/stderr	2026-08-12 01:52:47.124027185 +0000
+--- -	2026-08-12 22:05:23.705279706 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/427/stderr	2026-08-12 22:05:23.704645397 +0000
 @@ -1,5 +1 @@
 -prog.cob:12: error: syntax error, unexpected BINARY
 -prog.cob:13: error: syntax error, unexpected BINARY, expecting DISPLAY or DISPLAY-1 or NATIONAL or UTF-8

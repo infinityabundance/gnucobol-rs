@@ -2,12 +2,12 @@
 748. run_misc.at:3201: testing UNSTRING with FUNCTION / literal ...
 ./run_misc.at:3245: $COMPILE prog.cob
 ./run_misc.at:3246: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/748/stderr	2026-08-12 01:52:47.345135826 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/748/stderr	2026-08-12 22:05:23.909642352 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: PRM(1),
---- -	2026-08-12 01:52:47.346325517 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/748/stdout	2026-08-12 01:52:47.345135826 +0000
+--- -	2026-08-12 22:05:23.910944454 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/748/stdout	2026-08-12 22:05:23.910224122 +0000
 @@ -1,20 +1 @@
 -PRM(1) is The             :
 -PRM(2) is Quick           :

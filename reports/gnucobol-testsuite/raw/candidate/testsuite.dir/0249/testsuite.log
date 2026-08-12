@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 249. syn_misc.at:120: testing warn literal size ...
 ./syn_misc.at:292: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.028670862 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/249/stderr	2026-08-12 01:52:47.027563184 +0000
+--- -	2026-08-12 22:05:23.615593250 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/249/stderr	2026-08-12 22:05:23.615140135 +0000
 @@ -1,91 +1 @@
 -prog.cob: in paragraph 'MAIN':
 -prog.cob:23: warning: literal '1234567' is longer than 'GROUP-ITEM-X6'

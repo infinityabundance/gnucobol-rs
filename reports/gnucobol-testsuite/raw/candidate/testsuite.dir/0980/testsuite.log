@@ -3,12 +3,12 @@
 ./run_reportwriter.at:9469: $COMPILE -std=cobol2002 prog.cob
 ./run_reportwriter.at:9471: PRINTOUT=tstdmrp.txt \
 $COBCRUN_DIRECT ./prog
---- /dev/null	2026-08-10 23:42:27.635770647 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/980/stderr	2026-08-12 01:52:47.544694213 +0000
+--- /dev/null	2026-08-12 20:59:20.939804588 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/980/stderr	2026-08-12 22:05:24.088657033 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: NNNS
---- -	2026-08-12 01:52:47.546143368 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/980/stdout	2026-08-12 01:52:47.545416291 +0000
+--- -	2026-08-12 22:05:24.089589250 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/980/stdout	2026-08-12 22:05:24.088951451 +0000
 @@ -1,5 +1 @@
 -Hello World 1
 -Hello World 2

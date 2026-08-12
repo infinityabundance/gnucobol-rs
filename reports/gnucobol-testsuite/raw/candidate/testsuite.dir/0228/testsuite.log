@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 228. syn_file.at:2125: testing SELECT/OPEN syntax extensions ...
 ./syn_file.at:2203: $COMPILE_ONLY prog.cob
---- -	2026-08-12 01:52:47.017989245 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/228/stderr	2026-08-12 01:52:47.017351564 +0000
+--- -	2026-08-12 22:05:23.604466190 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/228/stderr	2026-08-12 22:05:23.604051457 +0000
 @@ -1,5 +1 @@
 -prog.cob:13: warning: DUPLICATES for primary keys is not implemented
 -prog.cob:16: warning: WITH MASS-UPDATE is not implemented
