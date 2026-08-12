@@ -93,16 +93,23 @@ log "measurement views A-E (correctness-gated)"
 # 4. determinism snapshot
 # ---------------------------------------------------------------------------------------------
 log "determinism snapshot"
+# The machine authority for View E is the per-row ledger in views.json. Each pass snapshots
+# the FULL views.json into $OUT/views.json (the host lane copies pass-A back over the repo so
+# the committed views.json, performance-docker-summary.json and performance.json all derive
+# from ONE pass). The snapshot totals are computed from the rows -- never copied from a
+# summary field -- so they can never disagree with the authoritative rows.
+cp "$REPO/reports/valid-corpus/performance/views.json" "$OUT/views.json"
 python3 - "$REPO/reports/valid-corpus/performance" "$OUT" <<'PYEOF'
 import json, os, sys
 perf, out = sys.argv[1], sys.argv[2]
 views = json.load(open(os.path.join(perf, "views.json")))
+rows = views.get("view_e", {}).get("entries", [])
 snap = {
     "crate_version": None,
     "oracle": views.get("control", {}).get("cobc_version"),
-    "view_e_oracle_total_ms": views.get("view_e", {}).get("oracle_total_ms"),
-    "view_e_candidate_total_ms": views.get("view_e", {}).get("candidate_total_ms"),
-    "view_e_entries": len(views.get("view_e", {}).get("entries", [])),
+    "view_e_oracle_total_ms": sum(r.get("oracle_ms", 0.0) for r in rows),
+    "view_e_candidate_total_ms": sum(r.get("candidate_ms", 0.0) for r in rows),
+    "view_e_entries": len(rows),
     "view_c_entries": len(views.get("view_c", [])),
     "view_d_entries": len(views.get("view_d", [])),
 }

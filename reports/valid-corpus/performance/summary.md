@@ -49,7 +49,7 @@ independently in Rust -- never by the candidate.
 | tables | stress | 500000 | 84 | 335 | true |
 ## Phase 9 — performance views
 
-Control: host_cpu=AMD Ryzen 7 9800X3D 8-Core Processor · cobc_version=cobc (GnuCOBOL) 3.2.0 · compiler_flags=`cobc -x -O2 -o <artifact> <sources...>` · iters=3 · warmup=1 · outlier_policy: min = best-case, median = typical, no samples discarded · candidate_compat=prepared-v1 · generated_at_utc=2026-08-12T00:51:57Z
+Control: host_cpu=AMD Ryzen 7 9800X3D 8-Core Processor · cobc_version=cobc (GnuCOBOL) 3.2.0 · compiler_flags=`cobc -x -O2 -o <artifact> <sources...>` · iters=3 · warmup=1 · outlier_policy: min = best-case, median = typical, no samples discarded · candidate_compat=prepared-v1 · generated_at_utc=2026-08-12T14:48:19Z
 
 ### View A — end-to-end one-shot (compile+run vs prepare+run)
 
@@ -58,76 +58,76 @@ is interpreted — these are NOT equivalent runtime work.
 
 | workload | scale | oracle total ms (median) | candidate total ms (median) | ratio |
 |---|---|---|---|---|
-| payroll | small | 77.16 | 10.24 | 7.5x |
-| invoice | small | 64.81 | 8.42 | 7.7x |
-| seqfile | small | 64.62 | 4.89 | 13.2x |
-| tables | small | 84.86 | 2089.04 | 0.0x |
-| strings | small | 61.11 | 6.69 | 9.1x |
-| float | small | 62.37 | 6.88 | 9.1x |
-| report | small | 64.01 | 5.26 | 12.2x |
-| relative | small | 72.26 | 17.81 | 4.1x |
-| modules | small | 80.46 | 9.45 | 8.5x |
-| mixed | small | 98.27 | 16.09 | 6.1x |
+| payroll | small | 73.70 | 10.15 | 7.3x |
+| invoice | small | 63.18 | 8.25 | 7.7x |
+| seqfile | small | 61.94 | 4.73 | 13.1x |
+| tables | small | 81.51 | 2718.29 | 0.0x |
+| strings | small | 57.96 | 6.61 | 8.8x |
+| float | small | 59.98 | 6.87 | 8.7x |
+| report | small | 62.20 | 5.29 | 11.8x |
+| relative | small | 70.40 | 17.75 | 4.0x |
+| modules | small | 83.52 | 9.70 | 8.6x |
+| mixed | small | 94.21 | 16.39 | 5.7x |
 
 ### View B — front-end only (oracle compile vs candidate per-phase prepare)
 
 | workload | scale | oracle compile ms (median) | preprocess | lex | parse | resolution | layout | check | prepare | bytes/sec | lines/sec |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| payroll | small | 75.79 | 0.007 | 0.060 | 0.068 | 0.005 | 0.027 | 0.028 | 0.200 | 19753580 | 509834 |
-| invoice | small | 64.09 | 0.006 | 0.046 | 0.053 | 0.005 | 0.022 | 0.023 | 0.159 | 19278892 | 470370 |
-| seqfile | small | 64.07 | 0.006 | 0.048 | 0.051 | 0.005 | 0.022 | 0.023 | 0.161 | 18741725 | 491077 |
-| tables | small | 79.88 | 0.007 | 0.056 | 0.070 | 0.005 | 0.271 | 0.548 | 1.263 | 3393020 | 88706 |
-| strings | small | 59.23 | 0.005 | 0.039 | 0.047 | 0.004 | 0.016 | 0.021 | 0.139 | 17520692 | 425750 |
-| float | small | 61.03 | 0.005 | 0.033 | 0.045 | 0.005 | 0.017 | 0.019 | 0.129 | 15050388 | 404037 |
-| report | small | 62.12 | 0.006 | 0.039 | 0.051 | 0.005 | 0.020 | 0.024 | 0.151 | 19007903 | 483982 |
-| relative | small | 70.05 | 0.008 | 0.069 | 0.069 | 0.005 | 0.024 | 0.036 | 0.217 | 23093275 | 602753 |
-| modules | small | 77.87 | 0.006 | 0.038 | 0.053 | 0.005 | 0.015 | 0.024 | 0.146 | 16370648 | 438377 |
-| mixed | small | 95.66 | 0.008 | 0.065 | 0.075 | 0.005 | 0.022 | 0.032 | 0.213 | 20726972 | 535921 |
+| payroll | small | 71.97 | 0.007 | 0.060 | 0.063 | 0.006 | 0.028 | 0.026 | 0.196 | 20206049 | 521512 |
+| invoice | small | 61.54 | 0.006 | 0.046 | 0.049 | 0.005 | 0.023 | 0.021 | 0.155 | 19814489 | 483437 |
+| seqfile | small | 63.43 | 0.006 | 0.047 | 0.051 | 0.005 | 0.021 | 0.025 | 0.161 | 18753499 | 491385 |
+| tables | small | 78.68 | 0.007 | 0.056 | 0.071 | 0.005 | 0.229 | 0.550 | 1.012 | 4233921 | 110691 |
+| strings | small | 57.58 | 0.005 | 0.038 | 0.047 | 0.005 | 0.016 | 0.020 | 0.135 | 17958314 | 436384 |
+| float | small | 58.19 | 0.005 | 0.032 | 0.041 | 0.005 | 0.018 | 0.019 | 0.125 | 15478169 | 415521 |
+| report | small | 60.42 | 0.006 | 0.038 | 0.049 | 0.005 | 0.021 | 0.024 | 0.149 | 19274338 | 490766 |
+| relative | small | 67.35 | 0.009 | 0.070 | 0.065 | 0.005 | 0.024 | 0.029 | 0.209 | 24036205 | 627365 |
+| modules | small | 75.99 | 0.005 | 0.038 | 0.046 | 0.005 | 0.015 | 0.024 | 0.140 | 17120344 | 458453 |
+| mixed | small | 91.22 | 0.008 | 0.065 | 0.077 | 0.005 | 0.023 | 0.030 | 0.213 | 20746673 | 536430 |
 
 ### View C — repeated execution (compiled binary vs prepared program, no reparse)
 
 | workload | scale | native median (min/p95) | candidate median (min/p95) | candidate prepare ms | outputs agree |
 |---|---|---|---|---|---|
-| payroll | small | 1.34 (min 1.34, IQR 0.12, p95 1.47) | 9.80 (min 9.70, IQR 0.13, p95 9.83) | 0 | true |
-| invoice | small | 1.45 (min 1.37, IQR 0.19, p95 1.56) | 7.89 (min 7.89, IQR 0.02, p95 7.90) | 0 | true |
-| seqfile | small | 1.11 (min 1.11, IQR 0.03, p95 1.13) | 4.42 (min 4.40, IQR 0.16, p95 4.56) | 0 | true |
-| tables | small | 1.85 (min 1.67, IQR 0.26, p95 1.92) | 2103.53 (min 2097.59, IQR 15.12, p95 2112.72) | 2 | true |
-| strings | small | 1.16 (min 1.13, IQR 0.10, p95 1.23) | 6.42 (min 6.40, IQR 0.06, p95 6.45) | 0 | true |
-| float | small | 1.31 (min 1.26, IQR 0.09, p95 1.36) | 6.53 (min 6.50, IQR 0.08, p95 6.58) | 0 | true |
-| report | small | 1.09 (min 1.04, IQR 0.06, p95 1.10) | 4.90 (min 4.90, IQR 0.13, p95 5.03) | 0 | true |
-| relative | small | 1.62 (min 1.55, IQR 0.11, p95 1.66) | 17.41 (min 17.38, IQR 0.04, p95 17.42) | 0 | true |
-| modules | small | 1.15 (min 1.09, IQR 0.11, p95 1.20) | 9.23 (min 9.19, IQR 0.04, p95 9.23) | 0 | true |
-| mixed | small | 1.41 (min 1.37, IQR 0.07, p95 1.44) | 15.74 (min 15.62, IQR 0.15, p95 15.76) | 0 | true |
+| payroll | small | 1.34 (min 1.31, IQR 0.08, p95 1.39) | 10.14 (min 10.00, IQR 0.33, p95 10.32) | 0 | true |
+| invoice | small | 1.36 (min 1.27, IQR 0.10, p95 1.37) | 8.02 (min 8.01, IQR 0.09, p95 8.10) | 0 | true |
+| seqfile | small | 1.08 (min 1.05, IQR 0.07, p95 1.12) | 4.53 (min 4.48, IQR 0.14, p95 4.62) | 0 | true |
+| tables | small | 1.82 (min 1.65, IQR 0.57, p95 2.22) | 2145.13 (min 2143.90, IQR 14.23, p95 2158.13) | 2 | true |
+| strings | small | 1.15 (min 1.14, IQR 0.04, p95 1.17) | 6.24 (min 6.20, IQR 0.04, p95 6.24) | 0 | true |
+| float | small | 1.28 (min 1.27, IQR 0.08, p95 1.35) | 6.46 (min 6.43, IQR 0.05, p95 6.47) | 0 | true |
+| report | small | 1.08 (min 1.07, IQR 0.15, p95 1.22) | 4.90 (min 4.90, IQR 0.02, p95 4.92) | 0 | true |
+| relative | small | 1.58 (min 1.54, IQR 0.04, p95 1.58) | 17.36 (min 17.22, IQR 0.51, p95 17.73) | 0 | true |
+| modules | small | 1.12 (min 1.10, IQR 0.08, p95 1.18) | 9.28 (min 9.19, IQR 0.27, p95 9.45) | 0 | true |
+| mixed | small | 1.35 (min 1.31, IQR 0.03, p95 1.35) | 15.76 (min 15.71, IQR 0.04, p95 15.76) | 0 | true |
 
 ### View D — runtime-operation microbenchmarks (50_000 iterations, correctness-gated)
 
 | op | native median (min/p95) ms | candidate median (min/p95) ms | candidate prepare ms | byte-exact |
 |---|---|---|---|---|
-| move (decimal MOVE (display -> display)) | 3.19 (min 3.12, IQR 0.13, p95 3.25) | 78.09 (min 78.04, IQR 0.07, p95 78.11) | 0 | true |
-| packed_add (packed-decimal ADD (COMP-3 accumulator)) | 3.33 (min 3.27, IQR 0.83, p95 4.10) | 95.32 (min 95.19, IQR 0.43, p95 95.62) | 0 | true |
-| binary_add (binary ADD (COMP accumulator)) | 3.51 (min 3.44, IQR 0.08, p95 3.52) | 87.18 (min 87.14, IQR 0.13, p95 87.27) | 0 | true |
-| float_add (float ADD (COMP-1 f32 + COMP-2 f64)) | 21.91 (min 21.48, IQR 0.50, p95 21.98) | 1708.26 (min 1694.20, IQR 16.95, p95 1711.14) | 0 | true |
-| compare (alphanumeric comparison (IF A = B)) | 3.67 (min 3.56, IQR 0.13, p95 3.69) | 171.88 (min 170.37, IQR 1.53, p95 171.90) | 0 | true |
-| intrinsic (FUNCTION intrinsic dispatch (NUMVAL + INTEGER)) | 12.71 (min 12.66, IQR 0.22, p95 12.88) | 295.62 (min 295.17, IQR 0.50, p95 295.67) | 0 | true |
-| call (module CALL dispatch (contained subprogram)) | 7.05 (min 6.96, IQR 0.16, p95 7.12) | 195.29 (min 194.54, IQR 1.46, p95 195.99) | 0 | true |
-| seqfile (sequential-file read/write (50_000 fixed records)) | 20.24 (min 19.94, IQR 0.39, p95 20.33) | 266.08 (min 265.86, IQR 0.62, p95 266.48) | 0 | true |
+| move (decimal MOVE (display -> display)) | 3.21 (min 3.12, IQR 0.11, p95 3.23) | 78.28 (min 78.12, IQR 0.24, p95 78.36) | 0 | true |
+| packed_add (packed-decimal ADD (COMP-3 accumulator)) | 3.30 (min 3.22, IQR 0.09, p95 3.31) | 94.80 (min 94.12, IQR 1.20, p95 95.33) | 0 | true |
+| binary_add (binary ADD (COMP accumulator)) | 3.52 (min 3.51, IQR 0.13, p95 3.64) | 87.10 (min 87.07, IQR 0.12, p95 87.19) | 0 | true |
+| float_add (float ADD (COMP-1 f32 + COMP-2 f64)) | 21.49 (min 21.39, IQR 0.42, p95 21.81) | 1707.63 (min 1706.87, IQR 3.38, p95 1710.26) | 0 | true |
+| compare (alphanumeric comparison (IF A = B)) | 3.54 (min 3.51, IQR 0.05, p95 3.56) | 168.13 (min 168.07, IQR 0.13, p95 168.19) | 0 | true |
+| intrinsic (FUNCTION intrinsic dispatch (NUMVAL + INTEGER)) | 12.48 (min 12.44, IQR 0.23, p95 12.66) | 297.30 (min 295.47, IQR 11.27, p95 306.74) | 0 | true |
+| call (module CALL dispatch (contained subprogram)) | 7.00 (min 6.98, IQR 0.16, p95 7.14) | 198.13 (min 197.71, IQR 0.77, p95 198.49) | 0 | true |
+| seqfile (sequential-file read/write (50_000 fixed records)) | 20.13 (min 20.04, IQR 0.49, p95 20.53) | 266.02 (min 265.32, IQR 0.71, p95 266.03) | 0 | true |
 
 ### View E — corpus throughput (10 workloads x 4 scales, one pass)
 
-- oracle (compile+run) total: 6497.0 ms
-- candidate (prepare+run) total: 779984.4 ms
-- peak memory: 195488 kB (VmHWM of the bench process (candidate runs in-process; oracle cobc/run are child processes, not included))
+- oracle (compile+run) total: 6308.3 ms
+- candidate (prepare+run) total: 753471.5 ms
+- peak memory: 194472 kB (VmHWM of the bench process (candidate runs in-process; oracle cobc/run are child processes, not included))
 
 | workload | oracle total ms | candidate total ms |
 |---|---|---|
-| payroll | 769.7 | 10821.4 |
-| invoice | 663.5 | 8787.7 |
-| seqfile | 415.7 | 4802.5 |
-| tables | 709.7 | 687856.6 |
-| strings | 485.0 | 7189.9 |
-| float | 657.5 | 7248.8 |
-| report | 416.9 | 5493.3 |
-| relative | 988.2 | 19928.3 |
-| modules | 548.2 | 10537.5 |
-| mixed | 842.7 | 17318.4 |
+| payroll | 759.9 | 10782.0 |
+| invoice | 663.3 | 8739.2 |
+| seqfile | 407.4 | 4785.6 |
+| tables | 699.1 | 662768.1 |
+| strings | 453.3 | 7020.6 |
+| float | 636.9 | 7122.9 |
+| report | 399.1 | 5397.1 |
+| relative | 970.6 | 19557.9 |
+| modules | 523.4 | 10386.7 |
+| mixed | 795.2 | 16911.5 |
 

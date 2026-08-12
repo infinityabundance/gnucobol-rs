@@ -18,6 +18,12 @@ use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 
+/// Read a JSON file as a serde Value; `None` when absent or unparseable.
+fn read_json(p: &Path) -> Option<serde_json::Value> {
+    let text = std::fs::read_to_string(p).ok()?;
+    serde_json::from_str(&text).ok()
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub enum Command {
     Discover {
@@ -1291,6 +1297,97 @@ pub fn cmd_gate(ms: &ManifestStore) -> Result<Vec<String>, String> {
             if !vc.join(needed).is_file() {
                 fails.push(format!("gate: {needed} missing"));
             }
+        }
+
+        // View-E machine authority: the 40 workload x scale rows in views.json are the single
+        // source of truth. The gate enforces the chain the final report must quote:
+        //   final-report View-E candidate/oracle total
+        //     == reports/valid-corpus/performance.json total
+        //     == sum(authoritative views.json view_e.entries[] rows)
+        // A stale performance.json (copied totals from an older run) fails here.
+        if let (Some(views), Some(perf)) = (
+            read_json(&vc.join("performance/views.json")),
+            read_json(&vc.join("performance.json")),
+        ) {
+            let rows = views
+                .get("view_e")
+                .and_then(|e| e.get("entries"))
+                .and_then(|a| a.as_array());
+            match rows {
+                None => fails.push(
+                    "gate: performance/views.json has no view_e.entries[] authority rows"
+                        .to_string(),
+                ),
+                Some(rows) => {
+                    let sum = |key: &str| -> f64 {
+                        rows.iter()
+                            .filter_map(|r| r.get(key).and_then(|n| n.as_f64()))
+                            .sum()
+                    };
+                    let cand = sum("candidate_ms");
+                    let orac = sum("oracle_ms");
+                    // views.json's own totals must equal its rows (authority self-consistency)
+                    let field_cand = views
+                        .get("view_e")
+                        .and_then(|e| e.get("candidate_total_ms"))
+                        .and_then(|n| n.as_f64());
+                    let field_orac = views
+                        .get("view_e")
+                        .and_then(|e| e.get("oracle_total_ms"))
+                        .and_then(|n| n.as_f64());
+                    if let Some(f) = field_cand {
+                        if (f - cand).abs() > 1e-6 {
+                            fails.push(format!(
+                                "gate: views.json view_e.candidate_total_ms ({f:.3}) != sum(rows) ({cand:.3})"
+                            ));
+                        }
+                    }
+                    if let Some(f) = field_orac {
+                        if (f - orac).abs() > 1e-6 {
+                            fails.push(format!(
+                                "gate: views.json view_e.oracle_total_ms ({f:.3}) != sum(rows) ({orac:.3})"
+                            ));
+                        }
+                    }
+                    // performance.json must be the row-derived totals, not a stale copy
+                    let pj = perf.get("phase9_views");
+                    let pj_cand = pj
+                        .and_then(|p| p.get("view_e_candidate_total_ms"))
+                        .and_then(|n| n.as_f64());
+                    let pj_orac = pj
+                        .and_then(|p| p.get("view_e_oracle_total_ms"))
+                        .and_then(|n| n.as_f64());
+                    if let Some(f) = pj_cand {
+                        if (f - cand).abs() > 1e-6 {
+                            fails.push(format!(
+                                "gate: performance.json view_e_candidate_total_ms ({f:.3}) != sum(rows) ({cand:.3}) — regenerate with `cargo run -p gnucobol-rs-corpus -- unify`"
+                            ));
+                        }
+                    } else {
+                        fails.push(
+                            "gate: performance.json phase9_views.view_e_candidate_total_ms missing"
+                                .to_string(),
+                        );
+                    }
+                    if let Some(f) = pj_orac {
+                        if (f - orac).abs() > 1e-6 {
+                            fails.push(format!(
+                                "gate: performance.json view_e_oracle_total_ms ({f:.3}) != sum(rows) ({orac:.3}) — regenerate with `cargo run -p gnucobol-rs-corpus -- unify`"
+                            ));
+                        }
+                    } else {
+                        fails.push(
+                            "gate: performance.json phase9_views.view_e_oracle_total_ms missing"
+                                .to_string(),
+                        );
+                    }
+                }
+            }
+        } else {
+            fails.push(
+                "gate: performance evidence missing (performance/views.json or performance.json)"
+                    .to_string(),
+            );
         }
     }
     Ok(fails)

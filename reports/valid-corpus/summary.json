@@ -1,4 +1,13 @@
 {
+  "by_candidate_outcome": {
+    "CANDIDATE_ALL_PHASES_OK": 2917,
+    "CANDIDATE_CHECK_REJECT": 719,
+    "CANDIDATE_LAYOUT_REJECT": 272,
+    "CANDIDATE_NOT_PROBED": 655,
+    "CANDIDATE_PARSE_REJECT": 1040,
+    "CANDIDATE_PREPROCESS_REJECT": 433,
+    "CANDIDATE_RUN_REJECT": 406
+  },
   "by_first_failure_phase": {
     "check": 187,
     "layout": 25,
@@ -21,29 +30,15 @@
     "CompleteExecutable": 16,
     "DATA_ONLY": 2,
     "FRAGMENT": 84,
-    "GNUCOBOL_REJECT|ZOS_DATASET_REQUIRED": 4,
-    "GnuCOBOL_PORTABLE_UNMODIFIED|VALID_EXECUTABLE_PROGRAM": 7,
-    "INVALID_EXPECTED_REJECT": 28,
-    "INVALID_EXPECTED_REJECT|COURSE_ERROR_EXERCISE": 1,
-    "PLATFORM_BOUNDED|DB2_REQUIRED": 3,
-    "PLATFORM_BOUNDED|VSAM_OR_INDEXED_REQUIRED": 2,
-    "PLATFORM_BOUNDED|ZOS_DATASET_REQUIRED": 13,
+    "GNUCOBOL_REJECT": 4,
+    "GnuCOBOL_PORTABLE_UNMODIFIED": 7,
+    "INVALID_EXPECTED_REJECT": 29,
+    "PLATFORM_BOUNDED": 18,
     "PROGRAM_FRAGMENT": 72,
     "QUARANTINED": 16,
-    "VALID_COMPILE_ONLY_PROGRAM": 50,
-    "VALID_COMPILE_ONLY_PROGRAM|CANDIDATE_ALL_PHASES_OK": 2126,
-    "VALID_COMPILE_ONLY_PROGRAM|CANDIDATE_CHECK_REJECT": 385,
-    "VALID_COMPILE_ONLY_PROGRAM|CANDIDATE_LAYOUT_REJECT": 144,
-    "VALID_COMPILE_ONLY_PROGRAM|CANDIDATE_PARSE_REJECT": 357,
-    "VALID_COMPILE_ONLY_PROGRAM|CANDIDATE_PREPROCESS_REJECT": 160,
+    "VALID_COMPILE_ONLY_PROGRAM": 3222,
     "VALID_COPYBOOK": 51,
-    "VALID_EXECUTABLE_PROGRAM": 431,
-    "VALID_EXECUTABLE_PROGRAM|CANDIDATE_ALL_PHASES_OK": 660,
-    "VALID_EXECUTABLE_PROGRAM|CANDIDATE_CHECK_REJECT": 147,
-    "VALID_EXECUTABLE_PROGRAM|CANDIDATE_LAYOUT_REJECT": 103,
-    "VALID_EXECUTABLE_PROGRAM|CANDIDATE_PARSE_REJECT": 130,
-    "VALID_EXECUTABLE_PROGRAM|CANDIDATE_PREPROCESS_REJECT": 33,
-    "VALID_EXECUTABLE_PROGRAM|CANDIDATE_RUN_REJECT": 406,
+    "VALID_EXECUTABLE_PROGRAM": 1910,
     "VALID_MODULE_PROGRAM": 70
   },
   "families_aggregated": [
@@ -55,6 +50,79 @@
     "xcobol",
     "performance"
   ],
-  "note": "aggregated from the committed per-family reports (spec 12.2: report separately by corpus class, source family, dialect, format, validity class, first failing phase, partition)",
-  "total_units": 6442
+  "note": "aggregated from the committed per-family reports (spec 12.2: report separately by corpus class, source family, dialect, format, validity class, first failing phase, partition). validity and candidate outcome are two independent dimensions: a family row that fuses them (VALID_X|CANDIDATE_Y) is decomposed here, so the summary never mixes validity with candidate outcome.",
+  "total_units": 6442,
+  "validity_x_candidate_outcome": {
+    "COMPLETE_PROGRAM": {
+      "CANDIDATE_ALL_PHASES_OK": 121,
+      "CANDIDATE_CHECK_REJECT": 149,
+      "CANDIDATE_LAYOUT_REJECT": 25,
+      "CANDIDATE_PARSE_REJECT": 230,
+      "CANDIDATE_PREPROCESS_REJECT": 166
+    },
+    "COPYBOOK_OR_DATA": {
+      "CANDIDATE_CHECK_REJECT": 1,
+      "CANDIDATE_PARSE_REJECT": 238,
+      "CANDIDATE_PREPROCESS_REJECT": 9
+    },
+    "CompleteCompileOnly": {
+      "CANDIDATE_NOT_PROBED": 2
+    },
+    "CompleteExecutable": {
+      "CANDIDATE_NOT_PROBED": 16
+    },
+    "DATA_ONLY": {
+      "CANDIDATE_NOT_PROBED": 2
+    },
+    "FRAGMENT": {
+      "CANDIDATE_PARSE_REJECT": 84
+    },
+    "GNUCOBOL_REJECT": {
+      "CANDIDATE_NOT_PROBED": 4
+    },
+    "GnuCOBOL_PORTABLE_UNMODIFIED": {
+      "CANDIDATE_NOT_PROBED": 7
+    },
+    "INVALID_EXPECTED_REJECT": {
+      "CANDIDATE_NOT_PROBED": 29
+    },
+    "PLATFORM_BOUNDED": {
+      "CANDIDATE_NOT_PROBED": 18
+    },
+    "PROGRAM_FRAGMENT": {
+      "CANDIDATE_ALL_PHASES_OK": 4,
+      "CANDIDATE_CHECK_REJECT": 2,
+      "CANDIDATE_PARSE_REJECT": 1,
+      "CANDIDATE_PREPROCESS_REJECT": 65
+    },
+    "QUARANTINED": {
+      "CANDIDATE_ALL_PHASES_OK": 1,
+      "CANDIDATE_CHECK_REJECT": 8,
+      "CANDIDATE_NOT_PROBED": 7
+    },
+    "VALID_COMPILE_ONLY_PROGRAM": {
+      "CANDIDATE_ALL_PHASES_OK": 2126,
+      "CANDIDATE_CHECK_REJECT": 385,
+      "CANDIDATE_LAYOUT_REJECT": 144,
+      "CANDIDATE_NOT_PROBED": 50,
+      "CANDIDATE_PARSE_REJECT": 357,
+      "CANDIDATE_PREPROCESS_REJECT": 160
+    },
+    "VALID_COPYBOOK": {
+      "CANDIDATE_NOT_PROBED": 51
+    },
+    "VALID_EXECUTABLE_PROGRAM": {
+      "CANDIDATE_ALL_PHASES_OK": 663,
+      "CANDIDATE_CHECK_REJECT": 174,
+      "CANDIDATE_LAYOUT_REJECT": 103,
+      "CANDIDATE_NOT_PROBED": 401,
+      "CANDIDATE_PARSE_REJECT": 130,
+      "CANDIDATE_PREPROCESS_REJECT": 33,
+      "CANDIDATE_RUN_REJECT": 406
+    },
+    "VALID_MODULE_PROGRAM": {
+      "CANDIDATE_ALL_PHASES_OK": 2,
+      "CANDIDATE_NOT_PROBED": 68
+    }
+  }
 }

@@ -3,37 +3,37 @@
     "candidate_compat": "prepared-v1",
     "cobc_version": "cobc (GnuCOBOL) 3.2.0",
     "compiler_flags": "cobc -x -O2 -o <artifact> <sources...>",
-    "generated_at_utc": "2026-08-12T00:51:57Z",
+    "generated_at_utc": "2026-08-12T14:48:19Z",
     "host_cpu": "AMD Ryzen 7 9800X3D 8-Core Processor",
     "iters": 3,
     "outlier_policy": "min = best-case, median = typical, no samples discarded",
-    "peak_memory_kb": 195488,
+    "peak_memory_kb": 194472,
     "warmup": 1
   },
   "entries": [
     {
       "candidate_total_ms": {
-        "iqr_ms": 0.23558000000000057,
-        "median_ms": 10.243449,
-        "min_ms": 10.159642999999999,
-        "p95_ms": 10.395223,
+        "iqr_ms": 0.10163000000000011,
+        "median_ms": 10.148856,
+        "min_ms": 10.115242,
+        "p95_ms": 10.216872,
         "samples_ms": [
-          10.159642999999999,
-          10.243449,
-          10.395223
+          10.115242,
+          10.148856,
+          10.216872
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 2.0916019999999946,
-        "median_ms": 77.158026,
-        "min_ms": 75.328854,
-        "p95_ms": 77.420456,
+        "iqr_ms": 1.1319009999999992,
+        "median_ms": 73.69511700000001,
+        "min_ms": 73.042109,
+        "p95_ms": 74.17401,
         "samples_ms": [
-          75.328854,
-          77.158026,
-          77.420456
+          73.042109,
+          73.69511700000001,
+          74.17401
         ]
       },
       "records": 500,
@@ -42,27 +42,27 @@
     },
     {
       "candidate_total_ms": {
-        "iqr_ms": 0.24290500000000037,
-        "median_ms": 8.421011,
-        "min_ms": 8.279145,
-        "p95_ms": 8.52205,
+        "iqr_ms": 0.030898000000002313,
+        "median_ms": 8.25394,
+        "min_ms": 8.231466999999999,
+        "p95_ms": 8.262365,
         "samples_ms": [
-          8.279145,
-          8.421011,
-          8.52205
+          8.231466999999999,
+          8.25394,
+          8.262365
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 1.8185310000000072,
-        "median_ms": 64.80972899999999,
-        "min_ms": 64.770095,
-        "p95_ms": 66.588626,
+        "iqr_ms": 1.4170129999999972,
+        "median_ms": 63.184266,
+        "min_ms": 62.011519,
+        "p95_ms": 63.428532,
         "samples_ms": [
-          64.770095,
-          64.80972899999999,
-          66.588626
+          62.011519,
+          63.184266,
+          63.428532
         ]
       },
       "records": 500,
@@ -71,27 +71,27 @@
     },
     {
       "candidate_total_ms": {
-        "iqr_ms": 0.07252499999999973,
-        "median_ms": 4.8861490000000005,
-        "min_ms": 4.864529,
-        "p95_ms": 4.937054,
+        "iqr_ms": 0.046005000000000074,
+        "median_ms": 4.729915,
+        "min_ms": 4.693187,
+        "p95_ms": 4.739192,
         "samples_ms": [
-          4.864529,
-          4.8861490000000005,
-          4.937054
+          4.693187,
+          4.729915,
+          4.739192
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 1.3688400000000058,
-        "median_ms": 64.61631700000001,
-        "min_ms": 64.433376,
-        "p95_ms": 65.802216,
+        "iqr_ms": 1.0883399999999952,
+        "median_ms": 61.936298,
+        "min_ms": 61.364401,
+        "p95_ms": 62.452740999999996,
         "samples_ms": [
-          64.433376,
-          64.61631700000001,
-          65.802216
+          61.364401,
+          61.936298,
+          62.452740999999996
         ]
       },
       "records": 500,
@@ -100,27 +100,27 @@
     },
     {
       "candidate_total_ms": {
-        "iqr_ms": 1.4550890000000436,
-        "median_ms": 2089.0351809999997,
-        "min_ms": 2087.755064,
-        "p95_ms": 2089.210153,
+        "iqr_ms": 17.701648000000205,
+        "median_ms": 2718.288581,
+        "min_ms": 2711.1907669999996,
+        "p95_ms": 2728.892415,
         "samples_ms": [
-          2087.755064,
-          2089.0351809999997,
-          2089.210153
+          2711.1907669999996,
+          2718.288581,
+          2728.892415
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 3.9738200000000035,
-        "median_ms": 84.85636000000001,
-        "min_ms": 81.511738,
-        "p95_ms": 85.485558,
+        "iqr_ms": 2.3975130000000036,
+        "median_ms": 81.514626,
+        "min_ms": 79.81629699999999,
+        "p95_ms": 82.21381,
         "samples_ms": [
-          81.511738,
-          84.85636000000001,
-          85.485558
+          79.81629699999999,
+          81.514626,
+          82.21381
         ]
       },
       "records": 500,
@@ -129,27 +129,27 @@
     },
     {
       "candidate_total_ms": {
-        "iqr_ms": 0.05688699999999969,
-        "median_ms": 6.6903429999999995,
-        "min_ms": 6.664855,
-        "p95_ms": 6.721742,
+        "iqr_ms": 0.2034079999999996,
+        "median_ms": 6.610804,
+        "min_ms": 6.609142,
+        "p95_ms": 6.81255,
         "samples_ms": [
-          6.664855,
-          6.6903429999999995,
-          6.721742
+          6.609142,
+          6.610804,
+          6.81255
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 1.0448439999999977,
-        "median_ms": 61.111137,
-        "min_ms": 60.774698,
-        "p95_ms": 61.819542,
+        "iqr_ms": 2.2392970000000005,
+        "median_ms": 57.963976,
+        "min_ms": 57.742964,
+        "p95_ms": 59.982261,
         "samples_ms": [
-          60.774698,
-          61.111137,
-          61.819542
+          57.742964,
+          57.963976,
+          59.982261
         ]
       },
       "records": 500,
@@ -158,27 +158,27 @@
     },
     {
       "candidate_total_ms": {
-        "iqr_ms": 0.11041599999999985,
-        "median_ms": 6.880579,
-        "min_ms": 6.829554,
-        "p95_ms": 6.93997,
+        "iqr_ms": 0.25302199999999964,
+        "median_ms": 6.874396,
+        "min_ms": 6.768098,
+        "p95_ms": 7.02112,
         "samples_ms": [
-          6.829554,
-          6.880579,
-          6.93997
+          6.768098,
+          6.874396,
+          7.02112
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 1.7837569999999943,
-        "median_ms": 62.366584,
-        "min_ms": 61.580895,
-        "p95_ms": 63.36465199999999,
+        "iqr_ms": 1.5860699999999923,
+        "median_ms": 59.980799000000005,
+        "min_ms": 59.833043,
+        "p95_ms": 61.419112999999996,
         "samples_ms": [
-          61.580895,
-          62.366584,
-          63.36465199999999
+          59.833043,
+          59.980799000000005,
+          61.419112999999996
         ]
       },
       "records": 500,
@@ -187,27 +187,27 @@
     },
     {
       "candidate_total_ms": {
-        "iqr_ms": 0.19525599999999965,
-        "median_ms": 5.258735,
-        "min_ms": 5.215985,
-        "p95_ms": 5.4112409999999995,
+        "iqr_ms": 0.1365539999999994,
+        "median_ms": 5.2907910000000005,
+        "min_ms": 5.250727,
+        "p95_ms": 5.387281,
         "samples_ms": [
-          5.215985,
-          5.258735,
-          5.4112409999999995
+          5.250727,
+          5.2907910000000005,
+          5.387281
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 1.0802299999999931,
-        "median_ms": 64.011901,
-        "min_ms": 63.522487000000005,
-        "p95_ms": 64.602717,
+        "iqr_ms": 0.3930530000000019,
+        "median_ms": 62.198636,
+        "min_ms": 62.144867,
+        "p95_ms": 62.53792,
         "samples_ms": [
-          63.522487000000005,
-          64.011901,
-          64.602717
+          62.144867,
+          62.198636,
+          62.53792
         ]
       },
       "records": 500,
@@ -216,27 +216,27 @@
     },
     {
       "candidate_total_ms": {
-        "iqr_ms": 0.28667599999999993,
-        "median_ms": 17.805612,
-        "min_ms": 17.613533,
-        "p95_ms": 17.900209,
+        "iqr_ms": 0.3294440000000023,
+        "median_ms": 17.749626,
+        "min_ms": 17.480605,
+        "p95_ms": 17.810049000000003,
         "samples_ms": [
-          17.613533,
-          17.805612,
-          17.900209
+          17.480605,
+          17.749626,
+          17.810049000000003
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 0.7071719999999857,
-        "median_ms": 72.256642,
-        "min_ms": 71.582772,
-        "p95_ms": 72.28994399999999,
+        "iqr_ms": 3.322240000000008,
+        "median_ms": 70.402603,
+        "min_ms": 69.916696,
+        "p95_ms": 73.23893600000001,
         "samples_ms": [
-          71.582772,
-          72.256642,
-          72.28994399999999
+          69.916696,
+          70.402603,
+          73.23893600000001
         ]
       },
       "records": 500,
@@ -245,27 +245,27 @@
     },
     {
       "candidate_total_ms": {
-        "iqr_ms": 0.059803000000000495,
-        "median_ms": 9.448201,
-        "min_ms": 9.402565,
-        "p95_ms": 9.462368,
+        "iqr_ms": 0.10307200000000094,
+        "median_ms": 9.696531,
+        "min_ms": 9.65831,
+        "p95_ms": 9.761382000000001,
         "samples_ms": [
-          9.402565,
-          9.448201,
-          9.462368
+          9.65831,
+          9.696531,
+          9.761382000000001
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 0.9384460000000132,
-        "median_ms": 80.45938199999999,
-        "min_ms": 79.697728,
-        "p95_ms": 80.63617400000001,
+        "iqr_ms": 3.042595999999989,
+        "median_ms": 83.519256,
+        "min_ms": 82.176471,
+        "p95_ms": 85.219067,
         "samples_ms": [
-          79.697728,
-          80.45938199999999,
-          80.63617400000001
+          82.176471,
+          83.519256,
+          85.219067
         ]
       },
       "records": 500,
@@ -274,27 +274,27 @@
     },
     {
       "candidate_total_ms": {
-        "iqr_ms": 0.26073700000000244,
-        "median_ms": 16.086015,
-        "min_ms": 16.066589999999998,
-        "p95_ms": 16.327327,
+        "iqr_ms": 0.16233300000000028,
+        "median_ms": 16.385732,
+        "min_ms": 16.373618999999998,
+        "p95_ms": 16.535951999999998,
         "samples_ms": [
-          16.066589999999998,
-          16.086015,
-          16.327327
+          16.373618999999998,
+          16.385732,
+          16.535951999999998
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 0.9674890000000005,
-        "median_ms": 98.26791,
-        "min_ms": 97.419323,
-        "p95_ms": 98.386812,
+        "iqr_ms": 5.515650999999991,
+        "median_ms": 94.21456,
+        "min_ms": 93.193916,
+        "p95_ms": 98.70956699999999,
         "samples_ms": [
-          97.419323,
-          98.26791,
-          98.386812
+          93.193916,
+          94.21456,
+          98.70956699999999
         ]
       },
       "records": 500,

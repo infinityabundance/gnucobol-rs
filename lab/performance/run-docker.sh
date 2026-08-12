@@ -232,11 +232,31 @@ cp "$PROJECT_DOCKER_ROOT/logs/preflight.json" "$PROJECT_DOCKER_ROOT/run-evidence
 cp "$OUT_DIR/pass-a/summary.json" "$PROJECT_DOCKER_ROOT/run-evidence/performance-a.raw.json"
 cp "$OUT_DIR/pass-b/summary.json" "$PROJECT_DOCKER_ROOT/run-evidence/performance-b.raw.json"
 
+# View-E machine authority: the committed views.json must be ONE pass (pass A), so that
+# views.json, performance-docker-summary.json (pass-A summary) and the unify-derived
+# performance.json all derive from the same authoritative rows. The container writes the
+# repo's views.json on every pass; pass B's write wins on the bind mount, so restore the
+# pass-A snapshot here before unify/gate.
+if [ -f "$OUT_DIR/pass-a/views.json" ]; then
+  cp "$OUT_DIR/pass-a/views.json" "$ROOT/reports/valid-corpus/performance/views.json"
+  echo "committed views.json restored to pass-A snapshot (single authority)"
+else
+  fail "pass-A views.json snapshot missing: $OUT_DIR/pass-a/views.json"
+fi
+
 cp "$OUT_DIR/pass-a/summary.json" "$ROOT/reports/valid-corpus/performance-docker-summary.json" 2>/dev/null || true
 if grep -RInE '/home/|/run/media/|/mnt/|/media/' "$ROOT/reports/valid-corpus/performance-docker-summary.json" 2>/dev/null; then
   fail "PRIVACY GATE: a host path leaked into the committed performance evidence"
 fi
 echo "privacy gate: committed performance evidence carries only symbolic storage aliases"
+
+# regenerate the unified performance.json from the committed (pass-A) views.json, so the
+# report total == performance.json total == sum(authoritative rows) -- the gate enforces it.
+set +e
+( cd "$ROOT" && cargo run -q -p gnucobol-rs-corpus -- unify ) 2>&1 | tee "$PROJECT_DOCKER_ROOT/logs/unify.log"
+UNIFY_RC=${PIPESTATUS[0]}
+set -e
+[ "$UNIFY_RC" = "0" ] || fail "unify failed after the performance lane (see unify.log)"
 
 set +e
 ( cd "$ROOT" && cargo run -q -p gnucobol-rs-corpus -- gate ) 2>&1 | tee "$PROJECT_DOCKER_ROOT/logs/gate.log"

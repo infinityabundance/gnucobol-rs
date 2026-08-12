@@ -3,304 +3,304 @@
     "candidate_compat": "prepared-v1",
     "cobc_version": "cobc (GnuCOBOL) 3.2.0",
     "compiler_flags": "cobc -x -O2 -o <artifact> <sources...>",
-    "generated_at_utc": "2026-08-12T00:51:57Z",
+    "generated_at_utc": "2026-08-12T14:48:19Z",
     "host_cpu": "AMD Ryzen 7 9800X3D 8-Core Processor",
     "iters": 3,
     "outlier_policy": "min = best-case, median = typical, no samples discarded",
-    "peak_memory_kb": 195488,
+    "peak_memory_kb": 194472,
     "warmup": 1
   },
   "entries": {
     "candidate_per_workload_ms": {
-      "float": 7248.827869000001,
-      "invoice": 8787.704656,
-      "mixed": 17318.441281,
-      "modules": 10537.511073,
-      "payroll": 10821.422970000001,
-      "relative": 19928.322049000002,
-      "report": 5493.254161,
-      "seqfile": 4802.464612000001,
-      "strings": 7189.881412,
-      "tables": 687856.6180739999
+      "float": 7122.851777,
+      "invoice": 8739.230238,
+      "mixed": 16911.486171,
+      "modules": 10386.66985,
+      "payroll": 10781.963703,
+      "relative": 19557.897996999996,
+      "report": 5397.133576,
+      "seqfile": 4785.59144,
+      "strings": 7020.6190560000005,
+      "tables": 662768.072939
     },
-    "candidate_total_ms": 779984.4481569998,
+    "candidate_total_ms": 753471.516747,
     "entries": [
       {
-        "candidate_ms": 10.606173,
-        "oracle_ms": 78.134769,
+        "candidate_ms": 10.374205,
+        "oracle_ms": 76.975794,
         "records": 500,
         "scale": "small",
         "workload": "payroll"
       },
       {
-        "candidate_ms": 96.845285,
-        "oracle_ms": 79.127685,
+        "candidate_ms": 97.837906,
+        "oracle_ms": 78.133514,
         "records": 5000,
         "scale": "medium",
         "workload": "payroll"
       },
       {
-        "candidate_ms": 970.26423,
-        "oracle_ms": 119.21197,
+        "candidate_ms": 970.921167,
+        "oracle_ms": 115.284386,
         "records": 50000,
         "scale": "large",
         "workload": "payroll"
       },
       {
-        "candidate_ms": 9743.707282000001,
-        "oracle_ms": 493.187431,
+        "candidate_ms": 9702.830425,
+        "oracle_ms": 489.522021,
         "records": 500000,
         "scale": "stress",
         "workload": "payroll"
       },
       {
-        "candidate_ms": 8.481679000000002,
-        "oracle_ms": 67.698254,
+        "candidate_ms": 8.470172999999999,
+        "oracle_ms": 65.96743400000001,
         "records": 500,
         "scale": "small",
         "workload": "invoice"
       },
       {
-        "candidate_ms": 80.064667,
-        "oracle_ms": 67.92074,
+        "candidate_ms": 80.31197700000001,
+        "oracle_ms": 66.251544,
         "records": 5000,
         "scale": "medium",
         "workload": "invoice"
       },
       {
-        "candidate_ms": 801.412748,
-        "oracle_ms": 101.03552,
+        "candidate_ms": 780.972529,
+        "oracle_ms": 101.08505199999999,
         "records": 50000,
         "scale": "large",
         "workload": "invoice"
       },
       {
-        "candidate_ms": 7897.745562,
-        "oracle_ms": 426.841389,
+        "candidate_ms": 7869.4755589999995,
+        "oracle_ms": 430.02629199999996,
         "records": 500000,
         "scale": "stress",
         "workload": "invoice"
       },
       {
-        "candidate_ms": 4.791018,
-        "oracle_ms": 65.807764,
+        "candidate_ms": 4.799314,
+        "oracle_ms": 65.119172,
         "records": 500,
         "scale": "small",
         "workload": "seqfile"
       },
       {
-        "candidate_ms": 44.024124,
-        "oracle_ms": 65.822682,
+        "candidate_ms": 43.885926999999995,
+        "oracle_ms": 64.981584,
         "records": 5000,
         "scale": "medium",
         "workload": "seqfile"
       },
       {
-        "candidate_ms": 442.73023099999995,
-        "oracle_ms": 79.132949,
+        "candidate_ms": 434.18600899999996,
+        "oracle_ms": 76.68021,
         "records": 50000,
         "scale": "large",
         "workload": "seqfile"
       },
       {
-        "candidate_ms": 4310.919239000001,
-        "oracle_ms": 204.90013000000002,
+        "candidate_ms": 4302.72019,
+        "oracle_ms": 200.619591,
         "records": 500000,
         "scale": "stress",
         "workload": "seqfile"
       },
       {
-        "candidate_ms": 642.905587,
-        "oracle_ms": 85.360518,
+        "candidate_ms": 601.0152039999999,
+        "oracle_ms": 82.42079,
         "records": 500,
         "scale": "small",
         "workload": "tables"
       },
       {
-        "candidate_ms": 6132.920499,
-        "oracle_ms": 87.302138,
+        "candidate_ms": 5989.271167,
+        "oracle_ms": 85.050385,
         "records": 5000,
         "scale": "medium",
         "workload": "tables"
       },
       {
-        "candidate_ms": 61276.039993,
-        "oracle_ms": 114.189923,
+        "candidate_ms": 59944.389916,
+        "oracle_ms": 111.994294,
         "records": 50000,
         "scale": "large",
         "workload": "tables"
       },
       {
-        "candidate_ms": 619804.7519949999,
-        "oracle_ms": 422.82881100000003,
+        "candidate_ms": 596233.396652,
+        "oracle_ms": 419.608719,
         "records": 500000,
         "scale": "stress",
         "workload": "tables"
       },
       {
-        "candidate_ms": 6.663385,
-        "oracle_ms": 66.069349,
+        "candidate_ms": 6.539728,
+        "oracle_ms": 61.920314999999995,
         "records": 500,
         "scale": "small",
         "workload": "strings"
       },
       {
-        "candidate_ms": 64.51168200000001,
-        "oracle_ms": 69.036445,
+        "candidate_ms": 63.24313300000001,
+        "oracle_ms": 61.201845,
         "records": 5000,
         "scale": "medium",
         "workload": "strings"
       },
       {
-        "candidate_ms": 654.3365660000001,
-        "oracle_ms": 83.90304,
+        "candidate_ms": 627.35325,
+        "oracle_ms": 78.356803,
         "records": 50000,
         "scale": "large",
         "workload": "strings"
       },
       {
-        "candidate_ms": 6464.369779,
-        "oracle_ms": 265.994927,
+        "candidate_ms": 6323.482945000001,
+        "oracle_ms": 251.831364,
         "records": 500000,
         "scale": "stress",
         "workload": "strings"
       },
       {
-        "candidate_ms": 7.250279999999999,
-        "oracle_ms": 66.553561,
+        "candidate_ms": 6.717931,
+        "oracle_ms": 63.358808,
         "records": 500,
         "scale": "small",
         "workload": "float"
       },
       {
-        "candidate_ms": 66.050782,
-        "oracle_ms": 69.158592,
+        "candidate_ms": 66.023178,
+        "oracle_ms": 63.846068,
         "records": 5000,
         "scale": "medium",
         "workload": "float"
       },
       {
-        "candidate_ms": 652.5545390000001,
-        "oracle_ms": 100.782568,
+        "candidate_ms": 658.829188,
+        "oracle_ms": 94.19385199999999,
         "records": 50000,
         "scale": "large",
         "workload": "float"
       },
       {
-        "candidate_ms": 6522.972268,
-        "oracle_ms": 421.047156,
+        "candidate_ms": 6391.28148,
+        "oracle_ms": 415.515562,
         "records": 500000,
         "scale": "stress",
         "workload": "float"
       },
       {
-        "candidate_ms": 5.372364999999999,
-        "oracle_ms": 68.941436,
+        "candidate_ms": 5.214767,
+        "oracle_ms": 64.038006,
         "records": 500,
         "scale": "small",
         "workload": "report"
       },
       {
-        "candidate_ms": 51.746016,
-        "oracle_ms": 69.68614600000001,
+        "candidate_ms": 48.474166,
+        "oracle_ms": 62.827328,
         "records": 5000,
         "scale": "medium",
         "workload": "report"
       },
       {
-        "candidate_ms": 493.98915900000003,
-        "oracle_ms": 81.61597900000001,
+        "candidate_ms": 484.465007,
+        "oracle_ms": 75.151435,
         "records": 50000,
         "scale": "large",
         "workload": "report"
       },
       {
-        "candidate_ms": 4942.146621,
-        "oracle_ms": 196.658104,
+        "candidate_ms": 4858.979636,
+        "oracle_ms": 197.06895799999998,
         "records": 500000,
         "scale": "stress",
         "workload": "report"
       },
       {
-        "candidate_ms": 17.628988000000003,
-        "oracle_ms": 74.937744,
+        "candidate_ms": 17.525638999999998,
+        "oracle_ms": 71.91133099999999,
         "records": 500,
         "scale": "small",
         "workload": "relative"
       },
       {
-        "candidate_ms": 175.910774,
-        "oracle_ms": 79.824383,
+        "candidate_ms": 171.632654,
+        "oracle_ms": 74.84000400000001,
         "records": 5000,
         "scale": "medium",
         "workload": "relative"
       },
       {
-        "candidate_ms": 1771.8383640000002,
-        "oracle_ms": 137.067256,
+        "candidate_ms": 1750.54472,
+        "oracle_ms": 131.417102,
         "records": 50000,
         "scale": "large",
         "workload": "relative"
       },
       {
-        "candidate_ms": 17962.943923000003,
-        "oracle_ms": 696.345915,
+        "candidate_ms": 17618.194983999998,
+        "oracle_ms": 692.4231749999999,
         "records": 500000,
         "scale": "stress",
         "workload": "relative"
       },
       {
-        "candidate_ms": 9.512561,
-        "oracle_ms": 85.009496,
+        "candidate_ms": 9.422806000000001,
+        "oracle_ms": 80.24779,
         "records": 500,
         "scale": "small",
         "workload": "modules"
       },
       {
-        "candidate_ms": 95.550045,
-        "oracle_ms": 87.97545,
+        "candidate_ms": 91.473378,
+        "oracle_ms": 78.540064,
         "records": 5000,
         "scale": "medium",
         "workload": "modules"
       },
       {
-        "candidate_ms": 962.966053,
-        "oracle_ms": 105.31478700000001,
+        "candidate_ms": 936.0533949999999,
+        "oracle_ms": 95.37743999999999,
         "records": 50000,
         "scale": "large",
         "workload": "modules"
       },
       {
-        "candidate_ms": 9469.482414,
-        "oracle_ms": 269.852689,
+        "candidate_ms": 9349.720271,
+        "oracle_ms": 269.26874499999997,
         "records": 500000,
         "scale": "stress",
         "workload": "modules"
       },
       {
-        "candidate_ms": 16.193398000000002,
-        "oracle_ms": 104.52467,
+        "candidate_ms": 16.095021000000003,
+        "oracle_ms": 95.63076199999999,
         "records": 500,
         "scale": "small",
         "workload": "mixed"
       },
       {
-        "candidate_ms": 152.579834,
-        "oracle_ms": 104.914358,
+        "candidate_ms": 153.358777,
+        "oracle_ms": 96.694015,
         "records": 5000,
         "scale": "medium",
         "workload": "mixed"
       },
       {
-        "candidate_ms": 1559.5102590000001,
-        "oracle_ms": 151.705593,
+        "candidate_ms": 1524.345213,
+        "oracle_ms": 130.02449299999998,
         "records": 50000,
         "scale": "large",
         "workload": "mixed"
       },
       {
-        "candidate_ms": 15590.15779,
-        "oracle_ms": 481.603413,
+        "candidate_ms": 15217.687160000001,
+        "oracle_ms": 472.86272099999996,
         "records": 500000,
         "scale": "stress",
         "workload": "mixed"
@@ -309,20 +309,20 @@
     "memory_note": "VmHWM of the bench process (candidate runs in-process; oracle cobc/run are child processes, not included)",
     "note": "one full pass over the corpus: 10 workloads x 4 scales, compile+run (oracle) vs prepare+run (candidate), correctness-gated",
     "oracle_per_workload_ms": {
-      "float": 657.541877,
-      "invoice": 663.495903,
-      "mixed": 842.748034,
-      "modules": 548.152422,
-      "payroll": 769.6618550000001,
-      "relative": 988.175298,
-      "report": 416.90166500000004,
-      "seqfile": 415.66352500000005,
-      "strings": 485.00376100000005,
-      "tables": 709.68139
+      "float": 636.9142899999999,
+      "invoice": 663.3303219999999,
+      "mixed": 795.2119909999999,
+      "modules": 523.434039,
+      "payroll": 759.915715,
+      "relative": 970.5916119999999,
+      "report": 399.085727,
+      "seqfile": 407.400557,
+      "strings": 453.31032700000003,
+      "tables": 699.074188
     },
-    "oracle_total_ms": 6497.02573,
+    "oracle_total_ms": 6308.268768,
     "passes": 1,
-    "peak_memory_kb": 195488
+    "peak_memory_kb": 194472
   },
   "view": "view_e"
 }

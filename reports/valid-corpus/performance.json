@@ -8,8 +8,12 @@
   "phase9_views": {
     "evidence": "reports/valid-corpus/performance/views.json",
     "raw_samples": "reports/valid-corpus/performance/raw/",
-    "view_e_candidate_total_ms": 1396725.143118,
-    "view_e_oracle_total_ms": 6175.782875999999
+    "view_e_authority": "sum of views.json view_e.entries[] (candidate_ms/oracle_ms); totals are derived from the rows, never copied from a separate summary",
+    "view_e_candidate_total_ms": 755164.127855,
+    "view_e_entries": 40,
+    "view_e_field_candidate_total_ms": 755164.127855,
+    "view_e_field_oracle_total_ms": 6346.156055000001,
+    "view_e_oracle_total_ms": 6346.156055000001
   },
   "phase_metrics": {
     "evidence": "reports/valid-corpus/performance/phase-metrics.json",

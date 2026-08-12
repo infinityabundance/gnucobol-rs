@@ -110,28 +110,88 @@ fn family_file(root: &Path, family: &str, file: &str) -> Option<serde_json::Valu
 
 fn build_summary(root: &Path) -> serde_json::Value {
     let mut by_family: BTreeMap<String, usize> = BTreeMap::new();
-    let mut by_classification: BTreeMap<String, usize> = BTreeMap::new();
+    // Two independent dimensions per unit (spec 12.2 presentation):
+    //   VALIDITY  = the oracle/admission class (never a candidate outcome);
+    //   CANDIDATE = the candidate phase outcome (ALL_PHASES_OK / phase REJECT / not probed).
+    // Family rows sometimes fuse the two with '|' (extract/mod.rs stores `VALID_X|CANDIDATE_Y`
+    // in classification for the testsuite lane); this projection splits them so the summary
+    // never mixes validity with candidate outcome.
+    let mut by_validity: BTreeMap<String, usize> = BTreeMap::new();
+    let mut by_candidate: BTreeMap<String, usize> = BTreeMap::new();
     let mut by_first_failure: BTreeMap<String, usize> = BTreeMap::new();
+    // cross-tab: validity x candidate outcome (the fused-string rows land here decomposed)
+    let mut x_validity_candidate: BTreeMap<String, BTreeMap<String, usize>> = BTreeMap::new();
     let mut total = 0usize;
+
+    // record one unit: decompose the fused classification, count both dimensions + cross-tab.
+    let mut record = |row: &serde_json::Value,
+                      family: &str,
+                      class_of: fn(&serde_json::Value) -> Option<String>,
+                      candidate_of: fn(&serde_json::Value) -> Option<String>,
+                      first_failure_of: fn(&serde_json::Value) -> Option<String>|
+     -> bool {
+        let Some(c) = class_of(row) else {
+            return false;
+        };
+        total += 1;
+        *by_family.entry(family.to_string()).or_default() += 1;
+        // validity = the primary (first) component; candidate = the CANDIDATE_* suffix when the
+        // family fused it, else the row's own candidate-phase field, else "not probed".
+        let parts: Vec<&str> = c.split('|').collect();
+        let validity = parts[0].trim().to_string();
+        *by_validity.entry(validity.clone()).or_default() += 1;
+        let fused_candidate = parts
+            .get(1)
+            .map(|s| s.trim())
+            .filter(|s| s.starts_with("CANDIDATE_"))
+            .map(|s| s.to_string());
+        let cand = fused_candidate
+            .or_else(|| candidate_of(row))
+            .unwrap_or_else(|| "CANDIDATE_NOT_PROBED".to_string());
+        *by_candidate.entry(cand.clone()).or_default() += 1;
+        x_validity_candidate
+            .entry(validity.clone())
+            .or_default()
+            .entry(cand.clone())
+            .and_modify(|n| *n += 1)
+            .or_insert(1);
+        if let Some(ff) = first_failure_of(row) {
+            *by_first_failure.entry(ff).or_default() += 1;
+        }
+        true
+    };
 
     // testsuite: valid-programs.json rows carry classification + first_failure
     if let Some(progs) = family_file(root, "gnucobol-testsuite", "valid-programs.json") {
         if let Some(arr) = progs.as_array() {
             for r in arr {
-                total += 1;
-                *by_family
-                    .entry("gnucobol-testsuite".to_string())
-                    .or_default() += 1;
-                let c = r
-                    .get("classification")
-                    .and_then(|c| c.as_str())
-                    .unwrap_or("UNKNOWN");
-                *by_classification.entry(c.to_string()).or_default() += 1;
-                let ff = r
-                    .get("first_failure")
-                    .and_then(|f| f.as_str())
-                    .unwrap_or("none");
-                *by_first_failure.entry(ff.to_string()).or_default() += 1;
+                record(
+                    r,
+                    "gnucobol-testsuite",
+                    |row| {
+                        row.get("classification")
+                            .and_then(|c| c.as_str())
+                            .map(|s| s.to_string())
+                    },
+                    // candidate suffix already fused into classification; fall back to first_failure tuple
+                    |row| {
+                        row.get("first_failure")
+                            .and_then(|f| f.as_array())
+                            .and_then(|a| a.first())
+                            .and_then(|p| p.as_str())
+                            .map(|p| format!("CANDIDATE_{}_REJECT", p.to_uppercase()))
+                    },
+                    |row| {
+                        // preserve the committed projection: every testsuite row contributes
+                        // (tuple first_failure -> "none", matching the legacy summary exactly)
+                        Some(
+                            row.get("first_failure")
+                                .and_then(|f| f.as_str())
+                                .unwrap_or("none")
+                                .to_string(),
+                        )
+                    },
+                );
             }
         }
     }
@@ -139,19 +199,17 @@ fn build_summary(root: &Path) -> serde_json::Value {
     if let Some(progs) = family_file(root, "ccvs85", "programs.json") {
         if let Some(arr) = progs.as_array() {
             for r in arr {
-                total += 1;
-                *by_family.entry("ccvs85".to_string()).or_default() += 1;
-                let c = r
-                    .get("classification")
-                    .and_then(|c| c.as_str())
-                    .unwrap_or("UNKNOWN");
-                *by_classification.entry(c.to_string()).or_default() += 1;
-                let ff = r
-                    .get("final_classification")
-                    .or_else(|| r.get("classification"))
-                    .and_then(|f| f.as_str())
-                    .unwrap_or("UNKNOWN");
-                let _ = ff;
+                record(
+                    r,
+                    "ccvs85",
+                    |row| {
+                        row.get("classification")
+                            .and_then(|c| c.as_str())
+                            .map(|s| s.to_string())
+                    },
+                    |_row| None, // ccvs85 rows carry accuracy verdicts, not candidate phase probes
+                    |_row| None,
+                );
             }
         }
     }
@@ -160,13 +218,17 @@ fn build_summary(root: &Path) -> serde_json::Value {
         if let Some(ex) = family_file(root, "gnucobol-manual", &format!("{lane}/examples.json")) {
             if let Some(arr) = ex.as_array() {
                 for r in arr {
-                    total += 1;
-                    *by_family.entry("gnucobol-manual".to_string()).or_default() += 1;
-                    let c = r
-                        .get("classification")
-                        .and_then(|c| c.as_str())
-                        .unwrap_or("UNKNOWN");
-                    *by_classification.entry(c.to_string()).or_default() += 1;
+                    record(
+                        r,
+                        "gnucobol-manual",
+                        |row| {
+                            row.get("classification")
+                                .and_then(|c| c.as_str())
+                                .map(|s| s.to_string())
+                        },
+                        |_row| None,
+                        |_row| None,
+                    );
                 }
             }
         }
@@ -175,17 +237,46 @@ fn build_summary(root: &Path) -> serde_json::Value {
     if let Some(progs) = family_file(root, "extras", "programs.json") {
         if let Some(arr) = progs.as_array() {
             for r in arr {
-                total += 1;
-                *by_family.entry("extras".to_string()).or_default() += 1;
-                let c = r
-                    .get("classification")
-                    .and_then(|c| c.as_str())
-                    .unwrap_or("UNKNOWN");
-                *by_classification.entry(c.to_string()).or_default() += 1;
-                let ff = first_failure_phase(r);
-                if ff != "none" {
-                    *by_first_failure.entry(ff).or_default() += 1;
-                }
+                record(
+                    r,
+                    "extras",
+                    |row| {
+                        row.get("classification")
+                            .and_then(|c| c.as_str())
+                            .map(|s| s.to_string())
+                    },
+                    |row| {
+                        // all candidate phases present and ok -> ALL_PHASES_OK (module/no-run rows)
+                        let all_ok = row
+                            .get("candidate_phases")
+                            .and_then(|a| a.as_array())
+                            .map(|a| {
+                                !a.is_empty()
+                                    && a.iter().all(|p| {
+                                        p.get("ok").and_then(|o| o.as_bool()) == Some(true)
+                                    })
+                            })
+                            .unwrap_or(false);
+                        if all_ok {
+                            return Some("CANDIDATE_ALL_PHASES_OK".to_string());
+                        }
+                        row.get("candidate_first_failure")
+                            .and_then(|f| f.as_array())
+                            .and_then(|a| a.first())
+                            .and_then(|p| p.as_str())
+                            .map(|p| format!("CANDIDATE_{}_REJECT", p.to_uppercase()))
+                    },
+                    |row| {
+                        // preserve the committed projection: extras contributes its non-none
+                        // candidate phases only (old code: first_failure_phase != "none")
+                        let ff = first_failure_phase(row);
+                        if ff != "none" {
+                            Some(ff)
+                        } else {
+                            None
+                        }
+                    },
+                );
             }
         }
     }
@@ -193,32 +284,61 @@ fn build_summary(root: &Path) -> serde_json::Value {
     if let Some(progs) = family_file(root, "omp", "programs.json") {
         if let Some(arr) = progs.as_array() {
             for r in arr {
-                total += 1;
-                *by_family.entry("omp".to_string()).or_default() += 1;
-                let c = r
-                    .get("admission")
-                    .or_else(|| r.get("classification"))
-                    .and_then(|c| c.as_str())
-                    .unwrap_or("UNKNOWN");
-                *by_classification.entry(c.to_string()).or_default() += 1;
+                record(
+                    r,
+                    "omp",
+                    |row| {
+                        row.get("admission")
+                            .or_else(|| row.get("classification"))
+                            .and_then(|c| c.as_str())
+                            .map(|s| s.to_string())
+                    },
+                    |_row| None,
+                    |_row| None,
+                );
             }
         }
     }
-    // xcobol (only the structural COMPLETE_PROGRAM + fragment classes; all files are units)
+    // xcobol
     if let Some(progs) = family_file(root, "xcobol", "programs.json") {
         if let Some(arr) = progs.as_array() {
             for r in arr {
-                total += 1;
-                *by_family.entry("xcobol".to_string()).or_default() += 1;
-                let c = r
-                    .get("structural_class")
-                    .and_then(|c| c.as_str())
-                    .unwrap_or("UNKNOWN");
-                *by_classification.entry(c.to_string()).or_default() += 1;
-                let ff = first_failure_phase(r);
-                if ff != "none" {
-                    *by_first_failure.entry(ff).or_default() += 1;
-                }
+                record(
+                    r,
+                    "xcobol",
+                    |row| {
+                        row.get("structural_class")
+                            .and_then(|c| c.as_str())
+                            .map(|s| s.to_string())
+                    },
+                    |row| {
+                        if row.get("candidate_phases_ok").and_then(|v| v.as_bool()) == Some(true) {
+                            Some("CANDIDATE_ALL_PHASES_OK".to_string())
+                        } else {
+                            row.get("candidate_first_failure")
+                                .and_then(|f| match f {
+                                    serde_json::Value::String(s) => {
+                                        s.split(':').next().map(|s| s.to_string())
+                                    }
+                                    serde_json::Value::Array(a) => {
+                                        a.first().and_then(|p| p.as_str()).map(|p| p.to_string())
+                                    }
+                                    _ => None,
+                                })
+                                .map(|p| format!("CANDIDATE_{}_REJECT", p.to_uppercase()))
+                        }
+                    },
+                    |row| {
+                        // preserve the committed projection: xcobol contributes its non-none
+                        // candidate phases only (old code: first_failure_phase != "none")
+                        let ff = first_failure_phase(row);
+                        if ff != "none" {
+                            Some(ff)
+                        } else {
+                            None
+                        }
+                    },
+                );
             }
         }
     }
@@ -226,10 +346,12 @@ fn build_summary(root: &Path) -> serde_json::Value {
     serde_json::json!({
         "total_units": total,
         "by_source_family": by_family,
-        "by_validity_class": by_classification,
+        "by_validity_class": by_validity,
+        "by_candidate_outcome": by_candidate,
+        "validity_x_candidate_outcome": x_validity_candidate,
         "by_first_failure_phase": by_first_failure,
         "families_aggregated": FAMILIES,
-        "note": "aggregated from the committed per-family reports (spec 12.2: report separately by corpus class, source family, dialect, format, validity class, first failing phase, partition)",
+        "note": "aggregated from the committed per-family reports (spec 12.2: report separately by corpus class, source family, dialect, format, validity class, first failing phase, partition). validity and candidate outcome are two independent dimensions: a family row that fuses them (VALID_X|CANDIDATE_Y) is decomposed here, so the summary never mixes validity with candidate outcome.",
     })
 }
 
@@ -593,12 +715,32 @@ fn build_performance(root: &Path) -> serde_json::Value {
             }
         }
     }
-    let view_e_total_candidate = views
+    // The machine authority for View E is the per-row ledger inside views.json: the 40
+    // workload x scale rows. Totals here are DERIVED from the rows (never copied from a
+    // summary field), so performance.json can never disagree with the authoritative rows.
+    let view_e_rows = views
+        .as_ref()
+        .and_then(|v| v.get("view_e"))
+        .and_then(|e| e.get("entries"))
+        .and_then(|a| a.as_array());
+    let view_e_entries = view_e_rows.map(|a| a.len()).unwrap_or(0);
+    let sum_rows = |key: &str| -> Option<f64> {
+        view_e_rows.map(|rows| {
+            rows.iter()
+                .filter_map(|r| r.get(key).and_then(|n| n.as_f64()))
+                .sum()
+        })
+    };
+    let view_e_total_candidate = sum_rows("candidate_ms");
+    let view_e_total_oracle = sum_rows("oracle_ms");
+    // Cross-check: views.json's own totals must equal the row sum (the gate enforces this;
+    // recording both makes any drift visible in this file).
+    let view_e_field_candidate = views
         .as_ref()
         .and_then(|v| v.get("view_e"))
         .and_then(|e| e.get("candidate_total_ms"))
         .and_then(|n| n.as_f64());
-    let view_e_total_oracle = views
+    let view_e_field_oracle = views
         .as_ref()
         .and_then(|v| v.get("view_e"))
         .and_then(|e| e.get("oracle_total_ms"))
@@ -612,8 +754,12 @@ fn build_performance(root: &Path) -> serde_json::Value {
         },
         "phase9_views": {
             "evidence": "reports/valid-corpus/performance/views.json",
+            "view_e_authority": "sum of views.json view_e.entries[] (candidate_ms/oracle_ms); totals are derived from the rows, never copied from a separate summary",
+            "view_e_entries": view_e_entries,
             "view_e_oracle_total_ms": view_e_total_oracle,
             "view_e_candidate_total_ms": view_e_total_candidate,
+            "view_e_field_oracle_total_ms": view_e_field_oracle,
+            "view_e_field_candidate_total_ms": view_e_field_candidate,
             "raw_samples": "reports/valid-corpus/performance/raw/",
         },
         "phase_metrics": if phase_metrics.is_some() {
@@ -849,7 +995,7 @@ pub fn unify(root: &Path) -> Result<UnifiedReports, String> {
             md.push_str(&format!("- {k}: {v}\n"));
         }
     }
-    md.push_str("\n## by validity class\n");
+    md.push_str("## by validity class\n");
     if let Some(by_class) = unified
         .summary
         .get("by_validity_class")
@@ -857,6 +1003,31 @@ pub fn unify(root: &Path) -> Result<UnifiedReports, String> {
     {
         for (k, v) in by_class {
             md.push_str(&format!("- {k}: {v}\n"));
+        }
+    }
+    md.push_str("\n## by candidate outcome\n");
+    if let Some(by_cand) = unified
+        .summary
+        .get("by_candidate_outcome")
+        .and_then(|v| v.as_object())
+    {
+        for (k, v) in by_cand {
+            md.push_str(&format!("- {k}: {v}\n"));
+        }
+    }
+    md.push_str("\n## validity × candidate outcome (cross-tab)\n");
+    md.push_str("\n| validity | candidate outcome | units |\n|---|---|---|\n");
+    if let Some(x) = unified
+        .summary
+        .get("validity_x_candidate_outcome")
+        .and_then(|v| v.as_object())
+    {
+        for (vclass, inner) in x {
+            if let Some(inner) = inner.as_object() {
+                for (cand, n) in inner {
+                    md.push_str(&format!("| {vclass} | {cand} | {n} |\n"));
+                }
+            }
         }
     }
     md.push_str("\n## by first-failure phase\n");

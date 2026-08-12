@@ -3,37 +3,37 @@
     "candidate_compat": "prepared-v1",
     "cobc_version": "cobc (GnuCOBOL) 3.2.0",
     "compiler_flags": "cobc -x -O2 -o <artifact> <sources...>",
-    "generated_at_utc": "2026-08-12T00:51:57Z",
+    "generated_at_utc": "2026-08-12T14:34:44Z",
     "host_cpu": "AMD Ryzen 7 9800X3D 8-Core Processor",
     "iters": 3,
     "outlier_policy": "min = best-case, median = typical, no samples discarded",
-    "peak_memory_kb": 195488,
+    "peak_memory_kb": 194656,
     "warmup": 1
   },
   "view_a": [
     {
       "candidate_total_ms": {
-        "iqr_ms": 0.23558000000000057,
-        "median_ms": 10.243449,
-        "min_ms": 10.159642999999999,
-        "p95_ms": 10.395223,
+        "iqr_ms": 0.028843999999999426,
+        "median_ms": 10.206751,
+        "min_ms": 10.195269,
+        "p95_ms": 10.224113,
         "samples_ms": [
-          10.159642999999999,
-          10.243449,
-          10.395223
+          10.195269,
+          10.206751,
+          10.224113
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 2.0916019999999946,
-        "median_ms": 77.158026,
-        "min_ms": 75.328854,
-        "p95_ms": 77.420456,
+        "iqr_ms": 1.6513569999999902,
+        "median_ms": 75.871874,
+        "min_ms": 75.07360100000001,
+        "p95_ms": 76.724958,
         "samples_ms": [
-          75.328854,
-          77.158026,
-          77.420456
+          75.07360100000001,
+          75.871874,
+          76.724958
         ]
       },
       "records": 500,
@@ -42,27 +42,27 @@
     },
     {
       "candidate_total_ms": {
-        "iqr_ms": 0.24290500000000037,
-        "median_ms": 8.421011,
-        "min_ms": 8.279145,
-        "p95_ms": 8.52205,
+        "iqr_ms": 0.03806200000000004,
+        "median_ms": 8.330535,
+        "min_ms": 8.328871999999999,
+        "p95_ms": 8.366933999999999,
         "samples_ms": [
-          8.279145,
-          8.421011,
-          8.52205
+          8.328871999999999,
+          8.330535,
+          8.366933999999999
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 1.8185310000000072,
-        "median_ms": 64.80972899999999,
-        "min_ms": 64.770095,
-        "p95_ms": 66.588626,
+        "iqr_ms": 0.9908710000000127,
+        "median_ms": 64.40047,
+        "min_ms": 64.289762,
+        "p95_ms": 65.28063300000001,
         "samples_ms": [
-          64.770095,
-          64.80972899999999,
-          66.588626
+          64.289762,
+          64.40047,
+          65.28063300000001
         ]
       },
       "records": 500,
@@ -71,27 +71,27 @@
     },
     {
       "candidate_total_ms": {
-        "iqr_ms": 0.07252499999999973,
-        "median_ms": 4.8861490000000005,
-        "min_ms": 4.864529,
-        "p95_ms": 4.937054,
+        "iqr_ms": 0.02347299999999919,
+        "median_ms": 4.788006,
+        "min_ms": 4.785372000000001,
+        "p95_ms": 4.808845,
         "samples_ms": [
-          4.864529,
-          4.8861490000000005,
-          4.937054
+          4.785372000000001,
+          4.788006,
+          4.808845
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 1.3688400000000058,
-        "median_ms": 64.61631700000001,
-        "min_ms": 64.433376,
-        "p95_ms": 65.802216,
+        "iqr_ms": 1.3325789999999955,
+        "median_ms": 64.42191899999999,
+        "min_ms": 63.428112999999996,
+        "p95_ms": 64.76069199999999,
         "samples_ms": [
-          64.433376,
-          64.61631700000001,
-          65.802216
+          63.428112999999996,
+          64.42191899999999,
+          64.76069199999999
         ]
       },
       "records": 500,
@@ -100,27 +100,27 @@
     },
     {
       "candidate_total_ms": {
-        "iqr_ms": 1.4550890000000436,
-        "median_ms": 2089.0351809999997,
-        "min_ms": 2087.755064,
-        "p95_ms": 2089.210153,
+        "iqr_ms": 64.14005100000031,
+        "median_ms": 2086.562356,
+        "min_ms": 2057.277819,
+        "p95_ms": 2121.41787,
         "samples_ms": [
-          2087.755064,
-          2089.0351809999997,
-          2089.210153
+          2057.277819,
+          2086.562356,
+          2121.41787
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 3.9738200000000035,
-        "median_ms": 84.85636000000001,
-        "min_ms": 81.511738,
-        "p95_ms": 85.485558,
+        "iqr_ms": 1.1162549999999953,
+        "median_ms": 83.370982,
+        "min_ms": 82.272672,
+        "p95_ms": 83.388927,
         "samples_ms": [
-          81.511738,
-          84.85636000000001,
-          85.485558
+          82.272672,
+          83.370982,
+          83.388927
         ]
       },
       "records": 500,
@@ -129,27 +129,27 @@
     },
     {
       "candidate_total_ms": {
-        "iqr_ms": 0.05688699999999969,
-        "median_ms": 6.6903429999999995,
-        "min_ms": 6.664855,
-        "p95_ms": 6.721742,
+        "iqr_ms": 0.15583999999999953,
+        "median_ms": 6.710108,
+        "min_ms": 6.616683,
+        "p95_ms": 6.772523,
         "samples_ms": [
-          6.664855,
-          6.6903429999999995,
-          6.721742
+          6.616683,
+          6.710108,
+          6.772523
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 1.0448439999999977,
-        "median_ms": 61.111137,
-        "min_ms": 60.774698,
-        "p95_ms": 61.819542,
+        "iqr_ms": 0.7006190000000032,
+        "median_ms": 59.679897000000004,
+        "min_ms": 59.526119,
+        "p95_ms": 60.226738000000005,
         "samples_ms": [
-          60.774698,
-          61.111137,
-          61.819542
+          59.526119,
+          59.679897000000004,
+          60.226738000000005
         ]
       },
       "records": 500,
@@ -158,27 +158,27 @@
     },
     {
       "candidate_total_ms": {
-        "iqr_ms": 0.11041599999999985,
-        "median_ms": 6.880579,
-        "min_ms": 6.829554,
-        "p95_ms": 6.93997,
+        "iqr_ms": 0.18489599999999928,
+        "median_ms": 6.821815999999999,
+        "min_ms": 6.752316,
+        "p95_ms": 6.937212,
         "samples_ms": [
-          6.829554,
-          6.880579,
-          6.93997
+          6.752316,
+          6.821815999999999,
+          6.937212
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 1.7837569999999943,
-        "median_ms": 62.366584,
-        "min_ms": 61.580895,
-        "p95_ms": 63.36465199999999,
+        "iqr_ms": 1.4860569999999953,
+        "median_ms": 61.42631,
+        "min_ms": 61.166584,
+        "p95_ms": 62.652640999999996,
         "samples_ms": [
-          61.580895,
-          62.366584,
-          63.36465199999999
+          61.166584,
+          61.42631,
+          62.652640999999996
         ]
       },
       "records": 500,
@@ -187,27 +187,27 @@
     },
     {
       "candidate_total_ms": {
-        "iqr_ms": 0.19525599999999965,
-        "median_ms": 5.258735,
-        "min_ms": 5.215985,
-        "p95_ms": 5.4112409999999995,
+        "iqr_ms": 0.11300199999999982,
+        "median_ms": 5.297638,
+        "min_ms": 5.271709,
+        "p95_ms": 5.384711,
         "samples_ms": [
-          5.215985,
-          5.258735,
-          5.4112409999999995
+          5.271709,
+          5.297638,
+          5.384711
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 1.0802299999999931,
-        "median_ms": 64.011901,
-        "min_ms": 63.522487000000005,
-        "p95_ms": 64.602717,
+        "iqr_ms": 1.2330930000000038,
+        "median_ms": 61.997045,
+        "min_ms": 61.963513,
+        "p95_ms": 63.196606,
         "samples_ms": [
-          63.522487000000005,
-          64.011901,
-          64.602717
+          61.963513,
+          61.997045,
+          63.196606
         ]
       },
       "records": 500,
@@ -216,27 +216,27 @@
     },
     {
       "candidate_total_ms": {
-        "iqr_ms": 0.28667599999999993,
-        "median_ms": 17.805612,
-        "min_ms": 17.613533,
-        "p95_ms": 17.900209,
+        "iqr_ms": 0.1443310000000011,
+        "median_ms": 17.563575,
+        "min_ms": 17.525554,
+        "p95_ms": 17.669885,
         "samples_ms": [
-          17.613533,
-          17.805612,
-          17.900209
+          17.525554,
+          17.563575,
+          17.669885
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 0.7071719999999857,
-        "median_ms": 72.256642,
-        "min_ms": 71.582772,
-        "p95_ms": 72.28994399999999,
+        "iqr_ms": 1.1014079999999922,
+        "median_ms": 70.724833,
+        "min_ms": 70.600941,
+        "p95_ms": 71.702349,
         "samples_ms": [
-          71.582772,
-          72.256642,
-          72.28994399999999
+          70.600941,
+          70.724833,
+          71.702349
         ]
       },
       "records": 500,
@@ -245,27 +245,27 @@
     },
     {
       "candidate_total_ms": {
-        "iqr_ms": 0.059803000000000495,
-        "median_ms": 9.448201,
-        "min_ms": 9.402565,
-        "p95_ms": 9.462368,
+        "iqr_ms": 0.046827000000000396,
+        "median_ms": 9.459703999999999,
+        "min_ms": 9.452221,
+        "p95_ms": 9.499048,
         "samples_ms": [
-          9.402565,
-          9.448201,
-          9.462368
+          9.452221,
+          9.459703999999999,
+          9.499048
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 0.9384460000000132,
-        "median_ms": 80.45938199999999,
-        "min_ms": 79.697728,
-        "p95_ms": 80.63617400000001,
+        "iqr_ms": 3.673923000000002,
+        "median_ms": 77.914015,
+        "min_ms": 77.698042,
+        "p95_ms": 81.371965,
         "samples_ms": [
-          79.697728,
-          80.45938199999999,
-          80.63617400000001
+          77.698042,
+          77.914015,
+          81.371965
         ]
       },
       "records": 500,
@@ -274,27 +274,27 @@
     },
     {
       "candidate_total_ms": {
-        "iqr_ms": 0.26073700000000244,
-        "median_ms": 16.086015,
-        "min_ms": 16.066589999999998,
-        "p95_ms": 16.327327,
+        "iqr_ms": 0.0936450000000022,
+        "median_ms": 16.295777,
+        "min_ms": 16.264238,
+        "p95_ms": 16.357883,
         "samples_ms": [
-          16.066589999999998,
-          16.086015,
-          16.327327
+          16.264238,
+          16.295777,
+          16.357883
         ]
       },
       "label": "unlike workflows: native lane is a compiled binary (compile+run); candidate lane is interpreted (parse/check/prepare+run) -- NOT equivalent runtime work",
       "note": "byte-exact match",
       "oracle_total_ms": {
-        "iqr_ms": 0.9674890000000005,
-        "median_ms": 98.26791,
-        "min_ms": 97.419323,
-        "p95_ms": 98.386812,
+        "iqr_ms": 2.313502999999997,
+        "median_ms": 94.99709200000001,
+        "min_ms": 93.303588,
+        "p95_ms": 95.617091,
         "samples_ms": [
-          97.419323,
-          98.26791,
-          98.386812
+          93.303588,
+          94.99709200000001,
+          95.617091
         ]
       },
       "records": 500,
@@ -305,28 +305,28 @@
   "view_b": [
     {
       "candidate": {
-        "bytes_per_sec": 19753580.086471897,
-        "check_ms": 0.027571000000000002,
-        "layout_ms": 0.02656,
-        "lex_ms": 0.060171999999999996,
-        "lines_per_sec": 509834.30385124835,
-        "parse_ms": 0.067567,
-        "prepare_ms": 0.200065,
-        "preprocess_ms": 0.007474,
-        "resolution_ms": 0.004719,
+        "bytes_per_sec": 19461269.512975823,
+        "check_ms": 0.026559,
+        "layout_ms": 0.030648,
+        "lex_ms": 0.061214,
+        "lines_per_sec": 502289.85079036787,
+        "parse_ms": 0.066324,
+        "prepare_ms": 0.20307,
+        "preprocess_ms": 0.006953,
+        "resolution_ms": 0.00535,
         "source_bytes": 3952,
         "source_lines": 102
       },
       "note": "byte-exact match",
       "oracle_compile_ms": {
-        "iqr_ms": 1.057507000000001,
-        "median_ms": 75.786432,
-        "min_ms": 75.38356999999999,
-        "p95_ms": 76.44107699999999,
+        "iqr_ms": 1.0089050000000128,
+        "median_ms": 74.899642,
+        "min_ms": 74.134322,
+        "p95_ms": 75.14322700000001,
         "samples_ms": [
-          75.38356999999999,
-          75.786432,
-          76.44107699999999
+          74.134322,
+          74.899642,
+          75.14322700000001
         ]
       },
       "records": 500,
@@ -335,28 +335,28 @@
     },
     {
       "candidate": {
-        "bytes_per_sec": 19278891.683234137,
-        "check_ms": 0.022693,
-        "layout_ms": 0.021861,
-        "lex_ms": 0.045575000000000004,
-        "lines_per_sec": 470369.8361231491,
-        "parse_ms": 0.05302900000000001,
-        "prepare_ms": 0.159449,
-        "preprocess_ms": 0.006032,
-        "resolution_ms": 0.0046689999999999995,
+        "bytes_per_sec": 19203018.50961088,
+        "check_ms": 0.021761,
+        "layout_ms": 0.022011,
+        "lex_ms": 0.046337,
+        "lines_per_sec": 468518.66890722705,
+        "parse_ms": 0.053109,
+        "prepare_ms": 0.160079,
+        "preprocess_ms": 0.0059510000000000006,
+        "resolution_ms": 0.004919,
         "source_bytes": 3074,
         "source_lines": 75
       },
       "note": "byte-exact match",
       "oracle_compile_ms": {
-        "iqr_ms": 1.3201800000000077,
-        "median_ms": 64.092932,
-        "min_ms": 63.390027,
-        "p95_ms": 64.71020700000001,
+        "iqr_ms": 1.3348339999999936,
+        "median_ms": 63.854244,
+        "min_ms": 63.014575,
+        "p95_ms": 64.349409,
         "samples_ms": [
-          63.390027,
-          64.092932,
-          64.71020700000001
+          63.014575,
+          63.854244,
+          64.349409
         ]
       },
       "records": 500,
@@ -365,28 +365,28 @@
     },
     {
       "candidate": {
-        "bytes_per_sec": 18741724.73596857,
-        "check_ms": 0.023292999999999998,
-        "layout_ms": 0.021759999999999998,
-        "lex_ms": 0.047979,
-        "lines_per_sec": 491076.7012078,
-        "parse_ms": 0.050644,
-        "prepare_ms": 0.16087100000000001,
-        "preprocess_ms": 0.0064930000000000005,
-        "resolution_ms": 0.0048790000000000005,
+        "bytes_per_sec": 18669655.462809302,
+        "check_ms": 0.023414,
+        "layout_ms": 0.022272,
+        "lex_ms": 0.048351,
+        "lines_per_sec": 489188.3189260149,
+        "parse_ms": 0.050404,
+        "prepare_ms": 0.161492,
+        "preprocess_ms": 0.0059510000000000006,
+        "resolution_ms": 0.00516,
         "source_bytes": 3015,
         "source_lines": 79
       },
       "note": "byte-exact match",
       "oracle_compile_ms": {
-        "iqr_ms": 1.667108000000006,
-        "median_ms": 64.066893,
-        "min_ms": 62.932341,
-        "p95_ms": 64.599449,
+        "iqr_ms": 0.2622610000000023,
+        "median_ms": 63.767132000000004,
+        "min_ms": 63.73722599999999,
+        "p95_ms": 63.999486999999995,
         "samples_ms": [
-          62.932341,
-          64.066893,
-          64.599449
+          63.73722599999999,
+          63.767132000000004,
+          63.999486999999995
         ]
       },
       "records": 500,
@@ -395,28 +395,28 @@
     },
     {
       "candidate": {
-        "bytes_per_sec": 3393020.0729927006,
-        "check_ms": 0.547774,
-        "layout_ms": 0.270776,
-        "lex_ms": 0.056125,
-        "lines_per_sec": 88706.40713706406,
-        "parse_ms": 0.06981,
-        "prepare_ms": 1.2625920000000002,
-        "preprocess_ms": 0.007234,
-        "resolution_ms": 0.00531,
+        "bytes_per_sec": 3716962.502407696,
+        "check_ms": 0.5608380000000001,
+        "layout_ms": 0.29746599999999995,
+        "lex_ms": 0.057006999999999995,
+        "lines_per_sec": 97175.49025902474,
+        "parse_ms": 0.071974,
+        "prepare_ms": 1.152554,
+        "preprocess_ms": 0.007083,
+        "resolution_ms": 0.005531,
         "source_bytes": 4284,
         "source_lines": 112
       },
       "note": "byte-exact match",
       "oracle_compile_ms": {
-        "iqr_ms": 1.081982999999994,
-        "median_ms": 79.881951,
-        "min_ms": 79.532038,
-        "p95_ms": 80.614021,
+        "iqr_ms": 1.036877000000004,
+        "median_ms": 81.610591,
+        "min_ms": 80.66986299999999,
+        "p95_ms": 81.70674,
         "samples_ms": [
-          79.532038,
-          79.881951,
-          80.614021
+          80.66986299999999,
+          81.610591,
+          81.70674
         ]
       },
       "records": 500,
@@ -425,28 +425,28 @@
     },
     {
       "candidate": {
-        "bytes_per_sec": 17520692.16836606,
-        "check_ms": 0.021019,
-        "layout_ms": 0.0159,
-        "lex_ms": 0.039002999999999996,
-        "lines_per_sec": 425749.9332510698,
-        "parse_ms": 0.047348999999999995,
-        "prepare_ms": 0.138579,
-        "preprocess_ms": 0.00531,
-        "resolution_ms": 0.004398,
+        "bytes_per_sec": 17551088.268673334,
+        "check_ms": 0.019968,
+        "layout_ms": 0.015368,
+        "lex_ms": 0.038923,
+        "lines_per_sec": 426488.55348094174,
+        "parse_ms": 0.048451,
+        "prepare_ms": 0.138339,
+        "preprocess_ms": 0.004789,
+        "resolution_ms": 0.004869,
         "source_bytes": 2428,
         "source_lines": 59
       },
       "note": "byte-exact match",
       "oracle_compile_ms": {
-        "iqr_ms": 1.3830560000000034,
-        "median_ms": 59.225648,
-        "min_ms": 58.255584,
-        "p95_ms": 59.63864,
+        "iqr_ms": 0.5505899999999997,
+        "median_ms": 58.796134,
+        "min_ms": 58.547749,
+        "p95_ms": 59.098339,
         "samples_ms": [
-          58.255584,
-          59.225648,
-          59.63864
+          58.547749,
+          58.796134,
+          59.098339
         ]
       },
       "records": 500,
@@ -455,28 +455,28 @@
     },
     {
       "candidate": {
-        "bytes_per_sec": 15050388.108872503,
-        "check_ms": 0.018795,
-        "layout_ms": 0.016792,
-        "lex_ms": 0.032641,
-        "lines_per_sec": 404037.2646677182,
-        "parse_ms": 0.044764,
-        "prepare_ms": 0.128701,
-        "preprocess_ms": 0.0046689999999999995,
-        "resolution_ms": 0.00506,
+        "bytes_per_sec": 15372283.859498752,
+        "check_ms": 0.017853,
+        "layout_ms": 0.018434,
+        "lex_ms": 0.032912,
+        "lines_per_sec": 412678.76132882555,
+        "parse_ms": 0.041526999999999994,
+        "prepare_ms": 0.126006,
+        "preprocess_ms": 0.004658,
+        "resolution_ms": 0.0052,
         "source_bytes": 1937,
         "source_lines": 52
       },
       "note": "byte-exact match",
       "oracle_compile_ms": {
-        "iqr_ms": 0.35476400000000297,
-        "median_ms": 61.026266,
-        "min_ms": 60.680849,
-        "p95_ms": 61.035613000000005,
+        "iqr_ms": 0.8026699999999991,
+        "median_ms": 59.983793,
+        "min_ms": 59.744606,
+        "p95_ms": 60.547276,
         "samples_ms": [
-          60.680849,
-          61.026266,
-          61.035613000000005
+          59.744606,
+          59.983793,
+          60.547276
         ]
       },
       "records": 500,
@@ -485,28 +485,28 @@
     },
     {
       "candidate": {
-        "bytes_per_sec": 19007902.832290232,
-        "check_ms": 0.023564,
-        "layout_ms": 0.020488000000000003,
-        "lex_ms": 0.038803000000000004,
-        "lines_per_sec": 483982.1788479898,
-        "parse_ms": 0.051336,
-        "prepare_ms": 0.150832,
-        "preprocess_ms": 0.006311000000000001,
-        "resolution_ms": 0.004769000000000001,
+        "bytes_per_sec": 18971301.522600796,
+        "check_ms": 0.02631,
+        "layout_ms": 0.019616,
+        "lex_ms": 0.039373,
+        "lines_per_sec": 483050.2306068567,
+        "parse_ms": 0.049132,
+        "prepare_ms": 0.151123,
+        "preprocess_ms": 0.00586,
+        "resolution_ms": 0.00514,
         "source_bytes": 2867,
         "source_lines": 73
       },
       "note": "byte-exact match",
       "oracle_compile_ms": {
-        "iqr_ms": 0.7423789999999997,
-        "median_ms": 62.120202,
-        "min_ms": 62.024873,
-        "p95_ms": 62.767252,
+        "iqr_ms": 1.4770389999999907,
+        "median_ms": 62.683217,
+        "min_ms": 62.002515,
+        "p95_ms": 63.47955399999999,
         "samples_ms": [
-          62.024873,
-          62.120202,
-          62.767252
+          62.002515,
+          62.683217,
+          63.47955399999999
         ]
       },
       "records": 500,
@@ -515,28 +515,28 @@
     },
     {
       "candidate": {
-        "bytes_per_sec": 23093274.929141976,
-        "check_ms": 0.035847,
-        "layout_ms": 0.024295999999999998,
-        "lex_ms": 0.068608,
-        "lines_per_sec": 602753.3404498105,
-        "parse_ms": 0.06927000000000001,
-        "prepare_ms": 0.217336,
-        "preprocess_ms": 0.008486,
-        "resolution_ms": 0.005029,
+        "bytes_per_sec": 24415753.73119807,
+        "check_ms": 0.027592,
+        "layout_ms": 0.022732,
+        "lex_ms": 0.069981,
+        "lines_per_sec": 637271.1175108482,
+        "parse_ms": 0.06438,
+        "prepare_ms": 0.20556400000000002,
+        "preprocess_ms": 0.009217,
+        "resolution_ms": 0.00531,
         "source_bytes": 5019,
         "source_lines": 131
       },
       "note": "byte-exact match",
       "oracle_compile_ms": {
-        "iqr_ms": 0.730677,
-        "median_ms": 70.051574,
-        "min_ms": 69.549496,
-        "p95_ms": 70.280173,
+        "iqr_ms": 0.8180590000000052,
+        "median_ms": 69.38086,
+        "min_ms": 69.307873,
+        "p95_ms": 70.125932,
         "samples_ms": [
-          69.549496,
-          70.051574,
-          70.280173
+          69.307873,
+          69.38086,
+          70.125932
         ]
       },
       "records": 500,
@@ -545,28 +545,28 @@
     },
     {
       "candidate": {
-        "bytes_per_sec": 16370647.9077764,
-        "check_ms": 0.024346,
-        "layout_ms": 0.015198,
-        "lex_ms": 0.037651000000000004,
-        "lines_per_sec": 438377.18246765254,
-        "parse_ms": 0.053219,
-        "prepare_ms": 0.14599299999999998,
-        "preprocess_ms": 0.00556,
-        "resolution_ms": 0.004579,
+        "bytes_per_sec": 16731305.04179326,
+        "check_ms": 0.024646,
+        "layout_ms": 0.014817,
+        "lex_ms": 0.041267000000000005,
+        "lines_per_sec": 448034.94672584464,
+        "parse_ms": 0.046897999999999995,
+        "prepare_ms": 0.142846,
+        "preprocess_ms": 0.005029,
+        "resolution_ms": 0.0048389999999999996,
         "source_bytes": 2390,
         "source_lines": 64
       },
       "note": "byte-exact match",
       "oracle_compile_ms": {
-        "iqr_ms": 0.9639729999999815,
-        "median_ms": 77.87321299999999,
-        "min_ms": 77.86515800000001,
-        "p95_ms": 78.82913099999999,
+        "iqr_ms": 0.8835409999999939,
+        "median_ms": 78.489928,
+        "min_ms": 77.741741,
+        "p95_ms": 78.625282,
         "samples_ms": [
-          77.86515800000001,
-          77.87321299999999,
-          78.82913099999999
+          77.741741,
+          78.489928,
+          78.625282
         ]
       },
       "records": 500,
@@ -575,28 +575,28 @@
     },
     {
       "candidate": {
-        "bytes_per_sec": 20726971.85945712,
-        "check_ms": 0.031639,
-        "layout_ms": 0.022132000000000002,
-        "lex_ms": 0.065162,
-        "lines_per_sec": 535920.7965475419,
-        "parse_ms": 0.07517,
-        "prepare_ms": 0.21271800000000002,
-        "preprocess_ms": 0.008106,
-        "resolution_ms": 0.004779,
+        "bytes_per_sec": 20806395.288476966,
+        "check_ms": 0.031539,
+        "layout_ms": 0.022933,
+        "lex_ms": 0.064941,
+        "lines_per_sec": 537974.3848687626,
+        "parse_ms": 0.073978,
+        "prepare_ms": 0.21190599999999998,
+        "preprocess_ms": 0.007424,
+        "resolution_ms": 0.00524,
         "source_bytes": 4409,
         "source_lines": 114
       },
       "note": "byte-exact match",
       "oracle_compile_ms": {
-        "iqr_ms": 1.9596540000000005,
-        "median_ms": 95.65583,
-        "min_ms": 94.299385,
-        "p95_ms": 96.259039,
+        "iqr_ms": 0.5252109999999988,
+        "median_ms": 94.346654,
+        "min_ms": 94.10687700000001,
+        "p95_ms": 94.63208800000001,
         "samples_ms": [
-          94.299385,
-          95.65583,
-          96.259039
+          94.10687700000001,
+          94.346654,
+          94.63208800000001
         ]
       },
       "records": 500,
@@ -607,27 +607,27 @@
   "view_c": [
     {
       "candidate": {
-        "iqr_ms": 0.12550500000000042,
-        "median_ms": 9.796681999999999,
-        "min_ms": 9.699641,
-        "p95_ms": 9.825146,
+        "iqr_ms": 0.07392899999999969,
+        "median_ms": 9.835557,
+        "min_ms": 9.826369,
+        "p95_ms": 9.900298,
         "samples_ms": [
-          9.699641,
-          9.796681999999999,
-          9.825146
+          9.826369,
+          9.835557,
+          9.900298
         ]
       },
       "candidate_output_sha256": "b82d347d646a5fc8825a1312f1b02ebcf93af0a88b6b8b4154648a91974fab91",
       "candidate_prepare_ms": 0,
       "native": {
-        "iqr_ms": 0.12303999999999982,
-        "median_ms": 1.344214,
-        "min_ms": 1.3442040000000002,
-        "p95_ms": 1.467244,
+        "iqr_ms": 0.07757600000000009,
+        "median_ms": 1.365402,
+        "min_ms": 1.348409,
+        "p95_ms": 1.425985,
         "samples_ms": [
-          1.3442040000000002,
-          1.344214,
-          1.467244
+          1.348409,
+          1.365402,
+          1.425985
         ]
       },
       "note": "byte-exact match",
@@ -639,27 +639,27 @@
     },
     {
       "candidate": {
-        "iqr_ms": 0.015348000000000361,
-        "median_ms": 7.894794999999999,
-        "min_ms": 7.889556000000001,
-        "p95_ms": 7.904904000000001,
+        "iqr_ms": 0.029143999999998726,
+        "median_ms": 8.112797,
+        "min_ms": 8.091117,
+        "p95_ms": 8.120261,
         "samples_ms": [
-          7.889556000000001,
-          7.894794999999999,
-          7.904904000000001
+          8.091117,
+          8.112797,
+          8.120261
         ]
       },
       "candidate_output_sha256": "0d93ad77a77478c2c7c54d908c3b3313fc4de3053026aefb6fed993e2c6d2ba9",
       "candidate_prepare_ms": 0,
       "native": {
-        "iqr_ms": 0.19191899999999995,
-        "median_ms": 1.449451,
-        "min_ms": 1.369842,
-        "p95_ms": 1.561761,
+        "iqr_ms": 0.07774499999999995,
+        "median_ms": 1.28995,
+        "min_ms": 1.242181,
+        "p95_ms": 1.319926,
         "samples_ms": [
-          1.369842,
-          1.449451,
-          1.561761
+          1.242181,
+          1.28995,
+          1.319926
         ]
       },
       "note": "byte-exact match",
@@ -671,27 +671,27 @@
     },
     {
       "candidate": {
-        "iqr_ms": 0.15620099999999937,
-        "median_ms": 4.421198,
-        "min_ms": 4.399078,
-        "p95_ms": 4.555279,
+        "iqr_ms": 0.06187500000000057,
+        "median_ms": 4.406793,
+        "min_ms": 4.398649,
+        "p95_ms": 4.460524,
         "samples_ms": [
-          4.399078,
-          4.421198,
-          4.555279
+          4.398649,
+          4.406793,
+          4.460524
         ]
       },
       "candidate_output_sha256": "71f22937ad4031670fd3185b5e8756adad24787d35c356f438af9442bc244b77",
       "candidate_prepare_ms": 0,
       "native": {
-        "iqr_ms": 0.026429000000000036,
-        "median_ms": 1.111369,
-        "min_ms": 1.10682,
-        "p95_ms": 1.133249,
+        "iqr_ms": 0.05134599999999989,
+        "median_ms": 1.0997050000000002,
+        "min_ms": 1.079547,
+        "p95_ms": 1.130893,
         "samples_ms": [
-          1.10682,
-          1.111369,
-          1.133249
+          1.079547,
+          1.0997050000000002,
+          1.130893
         ]
       },
       "note": "byte-exact match",
@@ -703,27 +703,27 @@
     },
     {
       "candidate": {
-        "iqr_ms": 15.123489000000063,
-        "median_ms": 2103.530841,
-        "min_ms": 2097.5936819999997,
-        "p95_ms": 2112.717171,
+        "iqr_ms": 2.374926000000414,
+        "median_ms": 2105.5028899999998,
+        "min_ms": 2104.9819749999997,
+        "p95_ms": 2107.356901,
         "samples_ms": [
-          2097.5936819999997,
-          2103.530841,
-          2112.717171
+          2104.9819749999997,
+          2105.5028899999998,
+          2107.356901
         ]
       },
       "candidate_output_sha256": "d29d4204c8e9a1955ddf503317120264ba2503be63cfac59061b6035b5103a22",
       "candidate_prepare_ms": 2,
       "native": {
-        "iqr_ms": 0.2559389999999999,
-        "median_ms": 1.852214,
-        "min_ms": 1.668721,
-        "p95_ms": 1.9246599999999998,
+        "iqr_ms": 0.18381399999999992,
+        "median_ms": 1.851559,
+        "min_ms": 1.743227,
+        "p95_ms": 1.927041,
         "samples_ms": [
-          1.668721,
-          1.852214,
-          1.9246599999999998
+          1.743227,
+          1.851559,
+          1.927041
         ]
       },
       "note": "byte-exact match",
@@ -735,27 +735,27 @@
     },
     {
       "candidate": {
-        "iqr_ms": 0.055432999999999844,
-        "median_ms": 6.41626,
-        "min_ms": 6.3987169999999995,
-        "p95_ms": 6.454149999999999,
+        "iqr_ms": 0.06567200000000017,
+        "median_ms": 6.228286000000001,
+        "min_ms": 6.2136190000000004,
+        "p95_ms": 6.279291000000001,
         "samples_ms": [
-          6.3987169999999995,
-          6.41626,
-          6.454149999999999
+          6.2136190000000004,
+          6.228286000000001,
+          6.279291000000001
         ]
       },
       "candidate_output_sha256": "5c640a12a1ea3c9b8c797e673505fb2564ee6733e9c14784b93c900370c68dea",
       "candidate_prepare_ms": 0,
       "native": {
-        "iqr_ms": 0.10475500000000015,
-        "median_ms": 1.157895,
-        "min_ms": 1.129453,
-        "p95_ms": 1.2342080000000002,
+        "iqr_ms": 0.028564000000000034,
+        "median_ms": 1.188852,
+        "min_ms": 1.163433,
+        "p95_ms": 1.191997,
         "samples_ms": [
-          1.129453,
-          1.157895,
-          1.2342080000000002
+          1.163433,
+          1.188852,
+          1.191997
         ]
       },
       "note": "byte-exact match",
@@ -767,27 +767,27 @@
     },
     {
       "candidate": {
-        "iqr_ms": 0.07844699999999971,
-        "median_ms": 6.530583,
-        "min_ms": 6.50216,
-        "p95_ms": 6.580607,
+        "iqr_ms": 0.05010399999999926,
+        "median_ms": 6.457484,
+        "min_ms": 6.438138,
+        "p95_ms": 6.488242,
         "samples_ms": [
-          6.50216,
-          6.530583,
-          6.580607
+          6.438138,
+          6.457484,
+          6.488242
         ]
       },
       "candidate_output_sha256": "8abc95d4408a0515ebda500fbf5b1f6b74b1d559baaff07ba56dc190a0b54e78",
       "candidate_prepare_ms": 0,
       "native": {
-        "iqr_ms": 0.09129099999999979,
-        "median_ms": 1.306303,
-        "min_ms": 1.2646350000000002,
-        "p95_ms": 1.355926,
+        "iqr_ms": 0.02767300000000006,
+        "median_ms": 1.30582,
+        "min_ms": 1.299377,
+        "p95_ms": 1.32705,
         "samples_ms": [
-          1.2646350000000002,
-          1.306303,
-          1.355926
+          1.299377,
+          1.30582,
+          1.32705
         ]
       },
       "note": "byte-exact match",
@@ -799,27 +799,27 @@
     },
     {
       "candidate": {
-        "iqr_ms": 0.1267769999999997,
-        "median_ms": 4.904172,
-        "min_ms": 4.899042000000001,
-        "p95_ms": 5.025819,
+        "iqr_ms": 0.06585399999999986,
+        "median_ms": 5.011382,
+        "min_ms": 4.970085,
+        "p95_ms": 5.035939,
         "samples_ms": [
-          4.899042000000001,
-          4.904172,
-          5.025819
+          4.970085,
+          5.011382,
+          5.035939
         ]
       },
       "candidate_output_sha256": "ca03e7574398eedb0c4dfcb89a94ffd7840c644420303514db67301b41e527d9",
       "candidate_prepare_ms": 0,
       "native": {
-        "iqr_ms": 0.058389000000000024,
-        "median_ms": 1.0859100000000002,
-        "min_ms": 1.037921,
-        "p95_ms": 1.0963100000000001,
+        "iqr_ms": 0.0653729999999999,
+        "median_ms": 1.104334,
+        "min_ms": 1.044631,
+        "p95_ms": 1.110004,
         "samples_ms": [
-          1.037921,
-          1.0859100000000002,
-          1.0963100000000001
+          1.044631,
+          1.104334,
+          1.110004
         ]
       },
       "note": "byte-exact match",
@@ -831,27 +831,27 @@
     },
     {
       "candidate": {
-        "iqr_ms": 0.03734000000000037,
-        "median_ms": 17.407084,
-        "min_ms": 17.381556,
-        "p95_ms": 17.418896,
+        "iqr_ms": 0.062327999999997274,
+        "median_ms": 17.094648,
+        "min_ms": 17.085741000000002,
+        "p95_ms": 17.148069,
         "samples_ms": [
-          17.381556,
-          17.407084,
-          17.418896
+          17.085741000000002,
+          17.094648,
+          17.148069
         ]
       },
       "candidate_output_sha256": "ea40320e9ee9d3a55be041bbb3e6c938964bdc055da60c2e291e7a9a463b3b3f",
       "candidate_prepare_ms": 0,
       "native": {
-        "iqr_ms": 0.11056600000000016,
-        "median_ms": 1.618506,
-        "min_ms": 1.546513,
-        "p95_ms": 1.6570790000000002,
+        "iqr_ms": 0.10422500000000023,
+        "median_ms": 1.637759,
+        "min_ms": 1.5576999999999999,
+        "p95_ms": 1.661925,
         "samples_ms": [
-          1.546513,
-          1.618506,
-          1.6570790000000002
+          1.5576999999999999,
+          1.637759,
+          1.661925
         ]
       },
       "note": "byte-exact match",
@@ -863,27 +863,27 @@
     },
     {
       "candidate": {
-        "iqr_ms": 0.04265000000000008,
-        "median_ms": 9.228118,
-        "min_ms": 9.189987,
-        "p95_ms": 9.232637,
+        "iqr_ms": 0.05325000000000024,
+        "median_ms": 9.152309,
+        "min_ms": 9.125138,
+        "p95_ms": 9.178388,
         "samples_ms": [
-          9.189987,
-          9.228118,
-          9.232637
+          9.125138,
+          9.152309,
+          9.178388
         ]
       },
       "candidate_output_sha256": "99e31a8a815c4e28e4a2d4a590ade90847b15709ca658164f4bcaa208eb42e19",
       "candidate_prepare_ms": 0,
       "native": {
-        "iqr_ms": 0.1109469999999999,
-        "median_ms": 1.150231,
-        "min_ms": 1.090049,
-        "p95_ms": 1.200996,
+        "iqr_ms": 0.13096399999999986,
+        "median_ms": 1.115274,
+        "min_ms": 1.1059970000000001,
+        "p95_ms": 1.236961,
         "samples_ms": [
-          1.090049,
-          1.150231,
-          1.200996
+          1.1059970000000001,
+          1.115274,
+          1.236961
         ]
       },
       "note": "byte-exact match",
@@ -895,27 +895,27 @@
     },
     {
       "candidate": {
-        "iqr_ms": 0.14676499999999848,
-        "median_ms": 15.739816,
-        "min_ms": 15.616856,
-        "p95_ms": 15.763620999999999,
+        "iqr_ms": 0.059740999999998934,
+        "median_ms": 15.672682,
+        "min_ms": 15.653856000000001,
+        "p95_ms": 15.713597,
         "samples_ms": [
-          15.616856,
-          15.739816,
-          15.763620999999999
+          15.653856000000001,
+          15.672682,
+          15.713597
         ]
       },
       "candidate_output_sha256": "47b7a1d59211f6345a574db9cec1218c65513f38e12233f9ab26b93f28fe98d0",
       "candidate_prepare_ms": 0,
       "native": {
-        "iqr_ms": 0.07484999999999986,
-        "median_ms": 1.409045,
-        "min_ms": 1.365804,
-        "p95_ms": 1.4406539999999999,
+        "iqr_ms": 0.14539100000000005,
+        "median_ms": 1.35446,
+        "min_ms": 1.303145,
+        "p95_ms": 1.448536,
         "samples_ms": [
-          1.365804,
-          1.409045,
-          1.4406539999999999
+          1.303145,
+          1.35446,
+          1.448536
         ]
       },
       "note": "byte-exact match",
@@ -929,14 +929,14 @@
   "view_d": [
     {
       "candidate": {
-        "iqr_ms": 0.06900999999999158,
-        "median_ms": 78.08791599999999,
-        "min_ms": 78.04494600000001,
-        "p95_ms": 78.113956,
+        "iqr_ms": 0.9738690000000076,
+        "median_ms": 80.091426,
+        "min_ms": 79.40090599999999,
+        "p95_ms": 80.374775,
         "samples_ms": [
-          78.04494600000001,
-          78.08791599999999,
-          78.113956
+          79.40090599999999,
+          80.091426,
+          80.374775
         ]
       },
       "candidate_output_sha256": "5d7c7edfc91aaf3d10bbd6f5fc2b41db79efc59e08c780ad8195b49a3c154faf",
@@ -946,14 +946,14 @@
       "iters": 50000,
       "name": "move",
       "native": {
-        "iqr_ms": 0.12525399999999998,
-        "median_ms": 3.187481,
-        "min_ms": 3.123532,
-        "p95_ms": 3.248786,
+        "iqr_ms": 0.06678499999999987,
+        "median_ms": 3.167328,
+        "min_ms": 3.154042,
+        "p95_ms": 3.220827,
         "samples_ms": [
-          3.123532,
-          3.187481,
-          3.248786
+          3.154042,
+          3.167328,
+          3.220827
         ]
       },
       "native_output_sha256": "5d7c7edfc91aaf3d10bbd6f5fc2b41db79efc59e08c780ad8195b49a3c154faf",
@@ -962,14 +962,14 @@
     },
     {
       "candidate": {
-        "iqr_ms": 0.431477000000001,
-        "median_ms": 95.31611500000001,
-        "min_ms": 95.18647299999999,
-        "p95_ms": 95.61795,
+        "iqr_ms": 0.3154689999999931,
+        "median_ms": 94.371835,
+        "min_ms": 94.21386,
+        "p95_ms": 94.52932899999999,
         "samples_ms": [
-          95.18647299999999,
-          95.31611500000001,
-          95.61795
+          94.21386,
+          94.371835,
+          94.52932899999999
         ]
       },
       "candidate_output_sha256": "cc1621a137a30f9c59b1a7d2a90446871db2516271b434dce7ef5e97fad90e63",
@@ -979,14 +979,14 @@
       "iters": 50000,
       "name": "packed_add",
       "native": {
-        "iqr_ms": 0.8301209999999997,
-        "median_ms": 3.33122,
-        "min_ms": 3.273202,
-        "p95_ms": 4.103323,
+        "iqr_ms": 0.13559299999999963,
+        "median_ms": 3.335521,
+        "min_ms": 3.2314380000000003,
+        "p95_ms": 3.367031,
         "samples_ms": [
-          3.273202,
-          3.33122,
-          4.103323
+          3.2314380000000003,
+          3.335521,
+          3.367031
         ]
       },
       "native_output_sha256": "cc1621a137a30f9c59b1a7d2a90446871db2516271b434dce7ef5e97fad90e63",
@@ -995,14 +995,14 @@
     },
     {
       "candidate": {
-        "iqr_ms": 0.1270980000000037,
-        "median_ms": 87.183777,
-        "min_ms": 87.139534,
-        "p95_ms": 87.266632,
+        "iqr_ms": 0.5781499999999937,
+        "median_ms": 87.62634299999999,
+        "min_ms": 87.54644400000001,
+        "p95_ms": 88.124594,
         "samples_ms": [
-          87.139534,
-          87.183777,
-          87.266632
+          87.54644400000001,
+          87.62634299999999,
+          88.124594
         ]
       },
       "candidate_output_sha256": "e87e2eb6dead652e3a89779ebcc679aa70f11bfde7d47fd811dfc92d46ee46ee",
@@ -1012,14 +1012,14 @@
       "iters": 50000,
       "name": "binary_add",
       "native": {
-        "iqr_ms": 0.08111200000000007,
-        "median_ms": 3.508241,
-        "min_ms": 3.438991,
-        "p95_ms": 3.520103,
+        "iqr_ms": 0.06029300000000015,
+        "median_ms": 3.613902,
+        "min_ms": 3.561314,
+        "p95_ms": 3.621607,
         "samples_ms": [
-          3.438991,
-          3.508241,
-          3.520103
+          3.561314,
+          3.613902,
+          3.621607
         ]
       },
       "native_output_sha256": "e87e2eb6dead652e3a89779ebcc679aa70f11bfde7d47fd811dfc92d46ee46ee",
@@ -1028,14 +1028,14 @@
     },
     {
       "candidate": {
-        "iqr_ms": 16.9453910000002,
-        "median_ms": 1708.26297,
-        "min_ms": 1694.1982289999999,
-        "p95_ms": 1711.14362,
+        "iqr_ms": 7.4830950000000485,
+        "median_ms": 1712.4067790000001,
+        "min_ms": 1705.32185,
+        "p95_ms": 1712.804945,
         "samples_ms": [
-          1694.1982289999999,
-          1708.26297,
-          1711.14362
+          1705.32185,
+          1712.4067790000001,
+          1712.804945
         ]
       },
       "candidate_output_sha256": "548352c17d9c8d5def266889d14ea496c712c4d4399d32b212201e1fe4d89350",
@@ -1045,14 +1045,14 @@
       "iters": 50000,
       "name": "float_add",
       "native": {
-        "iqr_ms": 0.49809100000000583,
-        "median_ms": 21.910616,
-        "min_ms": 21.481192999999998,
-        "p95_ms": 21.979284000000003,
+        "iqr_ms": 1.1086820000000017,
+        "median_ms": 21.499487000000002,
+        "min_ms": 21.312378,
+        "p95_ms": 22.42106,
         "samples_ms": [
-          21.481192999999998,
-          21.910616,
-          21.979284000000003
+          21.312378,
+          21.499487000000002,
+          22.42106
         ]
       },
       "native_output_sha256": "548352c17d9c8d5def266889d14ea496c712c4d4399d32b212201e1fe4d89350",
@@ -1061,14 +1061,14 @@
     },
     {
       "candidate": {
-        "iqr_ms": 1.5332369999999855,
-        "median_ms": 171.876581,
-        "min_ms": 170.36844100000002,
-        "p95_ms": 171.901678,
+        "iqr_ms": 0.3771940000000029,
+        "median_ms": 166.974231,
+        "min_ms": 166.835813,
+        "p95_ms": 167.213007,
         "samples_ms": [
-          170.36844100000002,
-          171.876581,
-          171.901678
+          166.835813,
+          166.974231,
+          167.213007
         ]
       },
       "candidate_output_sha256": "69cf8aa13b34130b89ccbbba75414cace50798d90a35961dc109aec8973446a3",
@@ -1078,14 +1078,14 @@
       "iters": 50000,
       "name": "compare",
       "native": {
-        "iqr_ms": 0.13402000000000047,
-        "median_ms": 3.672428,
-        "min_ms": 3.5581139999999998,
-        "p95_ms": 3.6921340000000002,
+        "iqr_ms": 0.023263000000000478,
+        "median_ms": 3.584516,
+        "min_ms": 3.5675149999999998,
+        "p95_ms": 3.5907780000000002,
         "samples_ms": [
-          3.5581139999999998,
-          3.672428,
-          3.6921340000000002
+          3.5675149999999998,
+          3.584516,
+          3.5907780000000002
         ]
       },
       "native_output_sha256": "69cf8aa13b34130b89ccbbba75414cace50798d90a35961dc109aec8973446a3",
@@ -1094,14 +1094,14 @@
     },
     {
       "candidate": {
-        "iqr_ms": 0.4983029999999644,
-        "median_ms": 295.615548,
-        "min_ms": 295.17357100000004,
-        "p95_ms": 295.671874,
+        "iqr_ms": 0.7249249999999847,
+        "median_ms": 301.60856,
+        "min_ms": 301.551984,
+        "p95_ms": 302.276909,
         "samples_ms": [
-          295.17357100000004,
-          295.615548,
-          295.671874
+          301.551984,
+          301.60856,
+          302.276909
         ]
       },
       "candidate_output_sha256": "58b35f24dc2cc5fffcb790534eca104bbad5114afb7220b2d3582fe14851627d",
@@ -1111,14 +1111,14 @@
       "iters": 50000,
       "name": "intrinsic",
       "native": {
-        "iqr_ms": 0.22067299999999967,
-        "median_ms": 12.708285,
-        "min_ms": 12.655476,
-        "p95_ms": 12.876149,
+        "iqr_ms": 0.14834699999999934,
+        "median_ms": 12.494954000000002,
+        "min_ms": 12.364861,
+        "p95_ms": 12.513207999999999,
         "samples_ms": [
-          12.655476,
-          12.708285,
-          12.876149
+          12.364861,
+          12.494954000000002,
+          12.513207999999999
         ]
       },
       "native_output_sha256": "58b35f24dc2cc5fffcb790534eca104bbad5114afb7220b2d3582fe14851627d",
@@ -1127,14 +1127,14 @@
     },
     {
       "candidate": {
-        "iqr_ms": 1.4566340000000082,
-        "median_ms": 195.286014,
-        "min_ms": 194.53778499999999,
-        "p95_ms": 195.994419,
+        "iqr_ms": 0.06534299999998439,
+        "median_ms": 198.549088,
+        "min_ms": 198.494355,
+        "p95_ms": 198.559698,
         "samples_ms": [
-          194.53778499999999,
-          195.286014,
-          195.994419
+          198.494355,
+          198.549088,
+          198.559698
         ]
       },
       "candidate_output_sha256": "abbc3a23884ffdf0758d886b7a63339fedb5fe2f286834c7da18316ec7661d04",
@@ -1144,14 +1144,14 @@
       "iters": 50000,
       "name": "call",
       "native": {
-        "iqr_ms": 0.1600590000000004,
-        "median_ms": 7.048672,
-        "min_ms": 6.958002,
-        "p95_ms": 7.118061,
+        "iqr_ms": 0.03790099999999974,
+        "median_ms": 7.05492,
+        "min_ms": 7.021628000000001,
+        "p95_ms": 7.059529,
         "samples_ms": [
-          6.958002,
-          7.048672,
-          7.118061
+          7.021628000000001,
+          7.05492,
+          7.059529
         ]
       },
       "native_output_sha256": "abbc3a23884ffdf0758d886b7a63339fedb5fe2f286834c7da18316ec7661d04",
@@ -1160,14 +1160,14 @@
     },
     {
       "candidate": {
-        "iqr_ms": 0.6221919999999841,
-        "median_ms": 266.078126,
-        "min_ms": 265.858275,
-        "p95_ms": 266.480467,
+        "iqr_ms": 2.0609199999999532,
+        "median_ms": 265.673541,
+        "min_ms": 264.626866,
+        "p95_ms": 266.68778599999996,
         "samples_ms": [
-          265.858275,
-          266.078126,
-          266.480467
+          264.626866,
+          265.673541,
+          266.68778599999996
         ]
       },
       "candidate_output_sha256": "8df7666328e4a9ae8d68efbbe6209efcdf5cb6010209671ec3ec90f1da959e9a",
@@ -1177,14 +1177,14 @@
       "iters": 50000,
       "name": "seqfile",
       "native": {
-        "iqr_ms": 0.3942960000000042,
-        "median_ms": 20.242204,
-        "min_ms": 19.938385999999998,
-        "p95_ms": 20.332682000000002,
+        "iqr_ms": 0.5048330000000014,
+        "median_ms": 20.527950999999998,
+        "min_ms": 20.146268,
+        "p95_ms": 20.651101,
         "samples_ms": [
-          19.938385999999998,
-          20.242204,
-          20.332682000000002
+          20.146268,
+          20.527950999999998,
+          20.651101
         ]
       },
       "native_output_sha256": "8df7666328e4a9ae8d68efbbe6209efcdf5cb6010209671ec3ec90f1da959e9a",
@@ -1194,295 +1194,295 @@
   ],
   "view_e": {
     "candidate_per_workload_ms": {
-      "float": 7248.827869000001,
-      "invoice": 8787.704656,
-      "mixed": 17318.441281,
-      "modules": 10537.511073,
-      "payroll": 10821.422970000001,
-      "relative": 19928.322049000002,
-      "report": 5493.254161,
-      "seqfile": 4802.464612000001,
-      "strings": 7189.881412,
-      "tables": 687856.6180739999
+      "float": 7244.620692,
+      "invoice": 8861.802075,
+      "mixed": 16957.616442,
+      "modules": 10397.231458999999,
+      "payroll": 11041.895033,
+      "relative": 19706.512436999998,
+      "report": 5458.888634999999,
+      "seqfile": 4865.7093669999995,
+      "strings": 7110.922739000001,
+      "tables": 663518.928976
     },
-    "candidate_total_ms": 779984.4481569998,
+    "candidate_total_ms": 755164.127855,
     "entries": [
       {
-        "candidate_ms": 10.606173,
-        "oracle_ms": 78.134769,
+        "candidate_ms": 10.289643,
+        "oracle_ms": 81.260429,
         "records": 500,
         "scale": "small",
         "workload": "payroll"
       },
       {
-        "candidate_ms": 96.845285,
-        "oracle_ms": 79.127685,
+        "candidate_ms": 99.362067,
+        "oracle_ms": 81.934839,
         "records": 5000,
         "scale": "medium",
         "workload": "payroll"
       },
       {
-        "candidate_ms": 970.26423,
-        "oracle_ms": 119.21197,
+        "candidate_ms": 983.766283,
+        "oracle_ms": 120.474549,
         "records": 50000,
         "scale": "large",
         "workload": "payroll"
       },
       {
-        "candidate_ms": 9743.707282000001,
-        "oracle_ms": 493.187431,
+        "candidate_ms": 9948.47704,
+        "oracle_ms": 493.548015,
         "records": 500000,
         "scale": "stress",
         "workload": "payroll"
       },
       {
-        "candidate_ms": 8.481679000000002,
-        "oracle_ms": 67.698254,
+        "candidate_ms": 8.545103,
+        "oracle_ms": 66.252517,
         "records": 500,
         "scale": "small",
         "workload": "invoice"
       },
       {
-        "candidate_ms": 80.064667,
-        "oracle_ms": 67.92074,
+        "candidate_ms": 81.331166,
+        "oracle_ms": 66.932938,
         "records": 5000,
         "scale": "medium",
         "workload": "invoice"
       },
       {
-        "candidate_ms": 801.412748,
-        "oracle_ms": 101.03552,
+        "candidate_ms": 805.4560299999999,
+        "oracle_ms": 99.463699,
         "records": 50000,
         "scale": "large",
         "workload": "invoice"
       },
       {
-        "candidate_ms": 7897.745562,
-        "oracle_ms": 426.841389,
+        "candidate_ms": 7966.469776,
+        "oracle_ms": 418.84139999999996,
         "records": 500000,
         "scale": "stress",
         "workload": "invoice"
       },
       {
-        "candidate_ms": 4.791018,
-        "oracle_ms": 65.807764,
+        "candidate_ms": 4.815847,
+        "oracle_ms": 64.10507199999999,
         "records": 500,
         "scale": "small",
         "workload": "seqfile"
       },
       {
-        "candidate_ms": 44.024124,
-        "oracle_ms": 65.822682,
+        "candidate_ms": 44.243919999999996,
+        "oracle_ms": 63.712378,
         "records": 5000,
         "scale": "medium",
         "workload": "seqfile"
       },
       {
-        "candidate_ms": 442.73023099999995,
-        "oracle_ms": 79.132949,
+        "candidate_ms": 436.4545,
+        "oracle_ms": 75.27079,
         "records": 50000,
         "scale": "large",
         "workload": "seqfile"
       },
       {
-        "candidate_ms": 4310.919239000001,
-        "oracle_ms": 204.90013000000002,
+        "candidate_ms": 4380.1951,
+        "oracle_ms": 207.100705,
         "records": 500000,
         "scale": "stress",
         "workload": "seqfile"
       },
       {
-        "candidate_ms": 642.905587,
-        "oracle_ms": 85.360518,
+        "candidate_ms": 602.752426,
+        "oracle_ms": 82.93566600000001,
         "records": 500,
         "scale": "small",
         "workload": "tables"
       },
       {
-        "candidate_ms": 6132.920499,
-        "oracle_ms": 87.302138,
+        "candidate_ms": 6134.933688,
+        "oracle_ms": 84.002118,
         "records": 5000,
         "scale": "medium",
         "workload": "tables"
       },
       {
-        "candidate_ms": 61276.039993,
-        "oracle_ms": 114.189923,
+        "candidate_ms": 61137.830645,
+        "oracle_ms": 111.673704,
         "records": 50000,
         "scale": "large",
         "workload": "tables"
       },
       {
-        "candidate_ms": 619804.7519949999,
-        "oracle_ms": 422.82881100000003,
+        "candidate_ms": 595643.412217,
+        "oracle_ms": 431.038071,
         "records": 500000,
         "scale": "stress",
         "workload": "tables"
       },
       {
-        "candidate_ms": 6.663385,
-        "oracle_ms": 66.069349,
+        "candidate_ms": 6.605595,
+        "oracle_ms": 61.418228,
         "records": 500,
         "scale": "small",
         "workload": "strings"
       },
       {
-        "candidate_ms": 64.51168200000001,
-        "oracle_ms": 69.036445,
+        "candidate_ms": 63.070693,
+        "oracle_ms": 60.381374,
         "records": 5000,
         "scale": "medium",
         "workload": "strings"
       },
       {
-        "candidate_ms": 654.3365660000001,
-        "oracle_ms": 83.90304,
+        "candidate_ms": 639.021454,
+        "oracle_ms": 77.908918,
         "records": 50000,
         "scale": "large",
         "workload": "strings"
       },
       {
-        "candidate_ms": 6464.369779,
-        "oracle_ms": 265.994927,
+        "candidate_ms": 6402.224997,
+        "oracle_ms": 251.72530799999998,
         "records": 500000,
         "scale": "stress",
         "workload": "strings"
       },
       {
-        "candidate_ms": 7.250279999999999,
-        "oracle_ms": 66.553561,
+        "candidate_ms": 6.736018,
+        "oracle_ms": 64.433043,
         "records": 500,
         "scale": "small",
         "workload": "float"
       },
       {
-        "candidate_ms": 66.050782,
-        "oracle_ms": 69.158592,
+        "candidate_ms": 64.799958,
+        "oracle_ms": 65.12788,
         "records": 5000,
         "scale": "medium",
         "workload": "float"
       },
       {
-        "candidate_ms": 652.5545390000001,
-        "oracle_ms": 100.782568,
+        "candidate_ms": 654.985343,
+        "oracle_ms": 97.480175,
         "records": 50000,
         "scale": "large",
         "workload": "float"
       },
       {
-        "candidate_ms": 6522.972268,
-        "oracle_ms": 421.047156,
+        "candidate_ms": 6518.099373,
+        "oracle_ms": 414.11942899999997,
         "records": 500000,
         "scale": "stress",
         "workload": "float"
       },
       {
-        "candidate_ms": 5.372364999999999,
-        "oracle_ms": 68.941436,
+        "candidate_ms": 5.349572,
+        "oracle_ms": 65.31767199999999,
         "records": 500,
         "scale": "small",
         "workload": "report"
       },
       {
-        "candidate_ms": 51.746016,
-        "oracle_ms": 69.68614600000001,
+        "candidate_ms": 50.017906,
+        "oracle_ms": 65.768934,
         "records": 5000,
         "scale": "medium",
         "workload": "report"
       },
       {
-        "candidate_ms": 493.98915900000003,
-        "oracle_ms": 81.61597900000001,
+        "candidate_ms": 484.183995,
+        "oracle_ms": 77.182211,
         "records": 50000,
         "scale": "large",
         "workload": "report"
       },
       {
-        "candidate_ms": 4942.146621,
-        "oracle_ms": 196.658104,
+        "candidate_ms": 4919.337162,
+        "oracle_ms": 194.25992,
         "records": 500000,
         "scale": "stress",
         "workload": "report"
       },
       {
-        "candidate_ms": 17.628988000000003,
-        "oracle_ms": 74.937744,
+        "candidate_ms": 17.715113000000002,
+        "oracle_ms": 74.118062,
         "records": 500,
         "scale": "small",
         "workload": "relative"
       },
       {
-        "candidate_ms": 175.910774,
-        "oracle_ms": 79.824383,
+        "candidate_ms": 176.28531999999998,
+        "oracle_ms": 78.636924,
         "records": 5000,
         "scale": "medium",
         "workload": "relative"
       },
       {
-        "candidate_ms": 1771.8383640000002,
-        "oracle_ms": 137.067256,
+        "candidate_ms": 1786.067645,
+        "oracle_ms": 134.265338,
         "records": 50000,
         "scale": "large",
         "workload": "relative"
       },
       {
-        "candidate_ms": 17962.943923000003,
-        "oracle_ms": 696.345915,
+        "candidate_ms": 17726.444358999997,
+        "oracle_ms": 681.203094,
         "records": 500000,
         "scale": "stress",
         "workload": "relative"
       },
       {
-        "candidate_ms": 9.512561,
-        "oracle_ms": 85.009496,
+        "candidate_ms": 9.629196,
+        "oracle_ms": 81.32302299999999,
         "records": 500,
         "scale": "small",
         "workload": "modules"
       },
       {
-        "candidate_ms": 95.550045,
-        "oracle_ms": 87.97545,
+        "candidate_ms": 93.13391999999999,
+        "oracle_ms": 82.574128,
         "records": 5000,
         "scale": "medium",
         "workload": "modules"
       },
       {
-        "candidate_ms": 962.966053,
-        "oracle_ms": 105.31478700000001,
+        "candidate_ms": 926.226452,
+        "oracle_ms": 99.011005,
         "records": 50000,
         "scale": "large",
         "workload": "modules"
       },
       {
-        "candidate_ms": 9469.482414,
-        "oracle_ms": 269.852689,
+        "candidate_ms": 9368.241891,
+        "oracle_ms": 270.67344399999996,
         "records": 500000,
         "scale": "stress",
         "workload": "modules"
       },
       {
-        "candidate_ms": 16.193398000000002,
-        "oracle_ms": 104.52467,
+        "candidate_ms": 15.981387999999999,
+        "oracle_ms": 95.593688,
         "records": 500,
         "scale": "small",
         "workload": "mixed"
       },
       {
-        "candidate_ms": 152.579834,
-        "oracle_ms": 104.914358,
+        "candidate_ms": 155.400966,
+        "oracle_ms": 96.177147,
         "records": 5000,
         "scale": "medium",
         "workload": "mixed"
       },
       {
-        "candidate_ms": 1559.5102590000001,
-        "oracle_ms": 151.705593,
+        "candidate_ms": 1539.8940240000002,
+        "oracle_ms": 134.15079799999998,
         "records": 50000,
         "scale": "large",
         "workload": "mixed"
       },
       {
-        "candidate_ms": 15590.15779,
-        "oracle_ms": 481.603413,
+        "candidate_ms": 15246.340064,
+        "oracle_ms": 474.759422,
         "records": 500000,
         "scale": "stress",
         "workload": "mixed"
@@ -1491,19 +1491,19 @@
     "memory_note": "VmHWM of the bench process (candidate runs in-process; oracle cobc/run are child processes, not included)",
     "note": "one full pass over the corpus: 10 workloads x 4 scales, compile+run (oracle) vs prepare+run (candidate), correctness-gated",
     "oracle_per_workload_ms": {
-      "float": 657.541877,
-      "invoice": 663.495903,
-      "mixed": 842.748034,
-      "modules": 548.152422,
-      "payroll": 769.6618550000001,
-      "relative": 988.175298,
-      "report": 416.90166500000004,
-      "seqfile": 415.66352500000005,
-      "strings": 485.00376100000005,
-      "tables": 709.68139
+      "float": 641.160527,
+      "invoice": 651.490554,
+      "mixed": 800.681055,
+      "modules": 533.5816,
+      "payroll": 777.217832,
+      "relative": 968.2234179999999,
+      "report": 402.528737,
+      "seqfile": 410.188945,
+      "strings": 451.43382799999995,
+      "tables": 709.649559
     },
-    "oracle_total_ms": 6497.02573,
+    "oracle_total_ms": 6346.156055000001,
     "passes": 1,
-    "peak_memory_kb": 195488
+    "peak_memory_kb": 194656
   }
 }
