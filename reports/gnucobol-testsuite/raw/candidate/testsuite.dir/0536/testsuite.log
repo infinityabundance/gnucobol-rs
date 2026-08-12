@@ -3,12 +3,12 @@
 ./run_fundamental.at:1525: $COMPILE prog.cob
 ./run_fundamental.at:1526: $COMPILE_MODULE module.cob
 ./run_fundamental.at:1527: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/536/stderr	2026-08-05 21:57:01.830309587 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/536/stderr	2026-08-12 01:52:47.195724008 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: CALL "modulepart": not a contained program (external CALL is a boundary)
---- -	2026-08-05 21:57:01.832962570 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/536/stdout	2026-08-05 21:57:01.831309580 +0000
+--- -	2026-08-12 01:52:47.197224819 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/536/stdout	2026-08-12 01:52:47.196508232 +0000
 @@ -1 +1 @@
 -AB
 +

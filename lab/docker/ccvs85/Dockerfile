@@ -20,7 +20,11 @@ ENV LC_ALL=C.UTF-8 \
     DEBIAN_FRONTEND=noninteractive
 
 # Native build/runtime dependencies, installed EXPLICITLY (no distro gnucobol anywhere).
-RUN apt-get update -qq \
+# APT_PACKAGES=0 is used on machines whose rootless daemon cannot reach a package mirror
+# (no tap devices / no NAT): there the court image is based on a package-complete base
+# (e.g. a previously built court image) and this step is skipped.
+ARG APT_PACKAGES=1
+RUN if [ "$APT_PACKAGES" != "0" ]; then apt-get update -qq \
  && apt-get install -y -qq --no-install-recommends \
       build-essential \
       make \
@@ -43,7 +47,7 @@ RUN apt-get update -qq \
       xz-utils \
       procps \
       time \
- && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/*; fi
 
 # A non-root benchmark user (the container runs as the rootless userns-mapped user; the run.sh
 # harness drops to `bench` for the actual unit executions where practical).

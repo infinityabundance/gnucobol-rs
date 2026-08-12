@@ -1,6 +1,6 @@
 # GnuCOBOL manual examples (Phase 4)
 
-source: /run/media/one/1tb_kingston1/gnucobol-rs/lab/admit/gnucobol-3.2/doc/gnucobol.texi
+source: /repo/lab/admit/gnucobol-3.2/doc/gnucobol.texi
 
 | classification | count |
 |---|---|

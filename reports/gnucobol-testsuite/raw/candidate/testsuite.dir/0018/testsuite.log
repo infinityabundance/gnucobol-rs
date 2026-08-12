@@ -2,8 +2,8 @@
 18. used_binaries.at:762: testing cobcrun error messages ...
 ./used_binaries.at:765: $COBCRUN -q
 ./used_binaries.at:769: $COBCRUN -q -prog
---- -	2026-08-05 21:57:01.364055069 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/18/stderr	2026-08-05 21:57:01.362732317 +0000
+--- -	2026-08-12 01:52:46.906741720 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/18/stderr	2026-08-12 01:52:46.906026695 +0000
 @@ -1,2 +1,2 @@
 -cobcrun: unrecognized option '-prog'
 +cobcrun: invalid option -- 'p'

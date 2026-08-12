@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 319. syn_misc.at:3789: testing STRING / UNSTRING POINTER clause ...
 ./syn_misc.at:3847: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.608957983 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/319/stderr	2026-08-05 21:57:01.608282070 +0000
+--- -	2026-08-12 01:52:47.065658930 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/319/stderr	2026-08-12 01:52:47.064903621 +0000
 @@ -1,13 +1,2 @@
 -prog.cob:31: error: POINTER item 'invalid-ptr-2' must be an integer
 -prog.cob:32: error: POINTER item 'invalid-ptr-3' must be an integer

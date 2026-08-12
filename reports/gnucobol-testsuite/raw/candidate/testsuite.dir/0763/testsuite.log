@@ -2,12 +2,12 @@
 763. run_misc.at:4182: testing Lookup ENTRY from main executable ...
 ./run_misc.at:4217: $COMPILE prog.cob
 ./run_misc.at:4218: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/763/stderr	2026-08-05 21:57:02.181163619 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/763/stderr	2026-08-12 01:52:47.357026059 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: SET PROGRAM-LINK TO <value>: target is not a numeric/index item
---- -	2026-08-05 21:57:02.182221114 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/763/stdout	2026-08-05 21:57:02.181789298 +0000
+--- -	2026-08-12 01:52:47.358371541 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/763/stdout	2026-08-12 01:52:47.357026059 +0000
 @@ -1 +1 @@
 -subprogram+000000042
 +

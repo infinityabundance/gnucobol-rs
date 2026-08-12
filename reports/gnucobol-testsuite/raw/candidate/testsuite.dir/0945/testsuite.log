@@ -3,14 +3,18 @@
 ./run_file.at:13190: $COMPILE prog.cob
 ./run_file.at:13191: $COBCRUN_DIRECT ./prog
 ./run_file.at:13192: cat test.txt
---- -	2026-08-05 21:57:02.535071689 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/945/stdout	2026-08-05 21:57:02.534650683 +0000
-@@ -1,7 +1 @@
+--- -	2026-08-12 01:52:47.506798972 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/945/stdout	2026-08-12 01:52:47.505585426 +0000
+@@ -1,7 +1,7 @@
  
 -
--bla
+ bla
 -blubb
 -hello
 -world
--
++wblubb
++ello
+ 
++orld
++h
 945. run_file.at:13156: 945. File SORT, LINE SEQUENTIAL same file (run_file.at:13156): FAILED (run_file.at:13192)

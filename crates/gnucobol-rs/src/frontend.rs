@@ -1464,7 +1464,12 @@ pub fn probe_phases(source: &str, dialect: crate::dialect::Dialect, run: bool) -
     // Phase 6: semantic check (skip-mode body walk, exactly as check_program).
     CHECK_MODE.with(|c| c.set(true));
     let body_check: Result<(), RunError> = (|| {
-        let names: Vec<String> = ctx.programs.keys().cloned().collect();
+        // Deterministic program iteration: `programs` is a HashMap whose iteration order is
+        // randomized per process, and the FIRST failing program determines the reported
+        // first-failure diagnostic. Sorting the keys makes the probe result reproducible
+        // across processes, threads, and machines.
+        let mut names: Vec<String> = ctx.programs.keys().cloned().collect();
+        names.sort();
         for name in names {
             let prog = &ctx.programs[&name];
             let mut fields = if name == main_name {

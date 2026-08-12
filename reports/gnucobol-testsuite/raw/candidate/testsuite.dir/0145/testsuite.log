@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 145. syn_occurs.at:103: testing OCCURS with level 78 ...
 ./syn_occurs.at:114: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.445206985 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/145/stderr	2026-08-05 21:57:01.444741977 +0000
+--- -	2026-08-12 01:52:46.976624457 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/145/stderr	2026-08-12 01:52:46.975495580 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:6: error: syntax error, unexpected OCCURS
 +cobc-rs: unsupported: no PROCEDURE DIVISION

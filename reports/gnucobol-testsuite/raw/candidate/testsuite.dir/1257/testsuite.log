@@ -2,8 +2,8 @@
 1257. data_display.at:533: testing DISPLAY: ADD and SUBTRACT w/o SIZE ERROR ...
 ./data_display.at:8730: $COMPILE prog.cob
 ./data_display.at:8731: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1257/stderr	2026-08-05 21:57:02.985468702 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1257/stderr	2026-08-12 01:52:47.908416213 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number REPLACE
 ./data_display.at:8731: exit code was 2, expected 0

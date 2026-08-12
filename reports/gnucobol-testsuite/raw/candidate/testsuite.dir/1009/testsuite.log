@@ -2,8 +2,8 @@
 1009. run_functions.at:969: testing FUNCTION EXCEPTION-LOCATION ...
 ./run_functions.at:1003: $COMPILE prog.cob
 ./run_functions.at:1004: $COBCRUN_DIRECT ./prog
---- -	2026-08-05 21:57:02.619545342 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1009/stdout	2026-08-05 21:57:02.617303985 +0000
+--- -	2026-08-12 01:52:47.584219197 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1009/stdout	2026-08-12 01:52:47.583711690 +0000
 @@ -1 +1 @@
 - |prog; A00 OF A00-MAIN; 21
 + | 

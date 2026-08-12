@@ -3,8 +3,8 @@
 ./run_functions.at:2344: $COMPILE prog.cob
 ./run_functions.at:2345: $COMPILE_MODULE prog2.cob
 ./run_functions.at:2346: $COBCRUN_DIRECT ./prog
---- -	2026-08-05 21:57:02.702299021 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1047/stdout	2026-08-05 21:57:02.700303394 +0000
+--- -	2026-08-12 01:52:47.636502214 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1047/stdout	2026-08-12 01:52:47.635832493 +0000
 @@ -1 +1 @@
 -prog
 +PROG

@@ -2,8 +2,8 @@
 662. run_initialize.at:298: testing INITIALIZE group item ...
 ./run_initialize.at:405: $COMPILE prog.cob
 ./run_initialize.at:406: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/662/stdout	2026-08-05 21:57:01.992479296 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/662/stdout	2026-08-12 01:52:47.283462102 +0000
 @@ -0,0 +1,4 @@
 +Test 1 failed: AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCC.
 +    should be: AAAAAAAAAAAAB0 0 0 0 0 BCCCCCCCCCCCC.

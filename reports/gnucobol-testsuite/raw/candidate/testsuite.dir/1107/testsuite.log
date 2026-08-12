@@ -2,8 +2,8 @@
 1107. run_functions.at:4457: testing User-Defined FUNCTION with/without parameter ...
 ./run_functions.at:4502: $COMPILE prog.cob
 ./run_functions.at:4503: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1107/stderr	2026-08-05 21:57:02.797923087 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1107/stderr	2026-08-12 01:52:47.725205659 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: WITHPAR(1)
 ./run_functions.at:4503: exit code was 2, expected 0

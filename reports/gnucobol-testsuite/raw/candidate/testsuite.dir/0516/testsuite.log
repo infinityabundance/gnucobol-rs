@@ -2,12 +2,12 @@
 516. run_fundamental.at:247: testing MOVE to edited item (1) ...
 ./run_fundamental.at:284: $COMPILE prog.cob
 ./run_fundamental.at:285: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/516/stderr	2026-08-05 21:57:01.807127800 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/516/stderr	2026-08-12 01:52:47.179940318 +0000
 @@ -0,0 +1 @@
 +cobrun: runtime error: UnsupportedSymbol('(')
---- -	2026-08-05 21:57:01.809155799 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/516/stdout	2026-08-05 21:57:01.807663801 +0000
+--- -	2026-08-12 01:52:47.181317909 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/516/stdout	2026-08-12 01:52:47.180741803 +0000
 @@ -1,6 +1 @@
 ->    1<
 ->    0<

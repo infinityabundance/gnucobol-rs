@@ -3881,7 +3881,7 @@
     },
     {
       "candidate_status": "-",
-      "diagnostic_shape_parity": "N/A",
+      "diagnostic_shape_parity": "DIFFERS",
       "group": "syn_misc.at:4115",
       "number": 324,
       "oracle_status": "ORACLE_PASS",
@@ -4397,7 +4397,7 @@
     },
     {
       "candidate_status": "-",
-      "diagnostic_shape_parity": "N/A",
+      "diagnostic_shape_parity": "DIFFERS",
       "group": "syn_misc.at:6499",
       "number": 367,
       "oracle_status": "ORACLE_PASS",
@@ -6526,7 +6526,7 @@
       "number": 544,
       "oracle_status": "ORACLE_PASS",
       "primary_classification": "CANDIDATE_CHECK_REJECT",
-      "reason_code": "unsupported: unsupported: not a numeric literal: X ($COBCRUN_DIRECT ./prog)",
+      "reason_code": "unsupported: unsupported: not a numeric literal: NULL ($COBCRUN_DIRECT ./prog)",
       "semantic_diagnostic_verdict": "REJECT",
       "test_id": "0544",
       "title": "run_fundamental.at:1968: 544. CALL/CANCEL/SET ADDRESS program-prototype-name"
@@ -9357,23 +9357,23 @@
       "group": "run_misc.at:5157",
       "number": 780,
       "oracle_status": "ORACLE_PASS",
-      "primary_classification": "CANDIDATE_CHECK_REJECT",
-      "reason_code": "unsupported: unsupported: not a numeric literal: ALL ($COBCRUN_DIRECT ./prog)",
+      "primary_classification": "CANDIDATE_PARSE_REJECT",
+      "reason_code": "undefined data name at run ($COBCRUN_DIRECT ./prog)",
       "semantic_diagnostic_verdict": "REJECT",
       "test_id": "0780",
       "title": "run_misc.at:5157: 780. ANY LENGTH (3)"
     },
     {
-      "candidate_status": "-",
-      "diagnostic_shape_parity": "DIFFERS",
+      "candidate_status": "ok",
+      "diagnostic_shape_parity": "N/A",
       "group": "run_misc.at:5200",
       "number": 781,
       "oracle_status": "ORACLE_PASS",
-      "primary_classification": "CANDIDATE_CHECK_REJECT",
-      "reason_code": "unsupported: unsupported: not a numeric literal: ALL ($COBCRUN_DIRECT ./prog)",
-      "semantic_diagnostic_verdict": "REJECT",
+      "primary_classification": "OBSERVABLE_MATCH",
+      "reason_code": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "semantic_diagnostic_verdict": "N/A",
       "test_id": "0781",
-      "title": "run_misc.at:5200: 781. ANY LENGTH (4)"
+      "title": "ANY LENGTH (4)"
     },
     {
       "candidate_status": "ok",
@@ -10762,7 +10762,7 @@
       "number": 897,
       "oracle_status": "ORACLE_PASS",
       "primary_classification": "CANDIDATE_CHECK_REJECT",
-      "reason_code": "unsupported: unsupported: not a numeric literal: ALL (COB_CURRENT_DATE=\"2015/02/06 16:40:52\" $COBCRUN_DIRECT ./prog)",
+      "reason_code": "unsupported: unsupported: OPEN: `DATA-FILE` is not a declared file (COB_CURRENT_DATE=\"2015/02/06 16:40:52\" $COBCRUN_DIRECT ./prog)",
       "semantic_diagnostic_verdict": "REJECT",
       "test_id": "0897",
       "title": "run_file.at:4729: 897. LINAGE and LINAGE-COUNTER sample"
@@ -11344,16 +11344,16 @@
       "title": "run_file.at:13156: 945. File SORT, LINE SEQUENTIAL same file"
     },
     {
-      "candidate_status": "-",
+      "candidate_status": "ok",
       "diagnostic_shape_parity": "N/A",
       "group": "run_file.at:13203",
       "number": 946,
       "oracle_status": "ORACLE_PASS",
-      "primary_classification": "CANDIDATE_UNSUPPORTED",
-      "reason_code": "candidate failed at an unclassified boundary: cat file2",
-      "semantic_diagnostic_verdict": "REJECT",
+      "primary_classification": "OBSERVABLE_MATCH",
+      "reason_code": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "semantic_diagnostic_verdict": "N/A",
       "test_id": "0946",
-      "title": "run_file.at:13203: 946. File SORT, LINE SEQUENTIAL variable records"
+      "title": "File SORT, LINE SEQUENTIAL variable records"
     },
     {
       "candidate_status": "-",
@@ -11368,28 +11368,28 @@
       "title": "run_file.at:13267: 947. EXTFH: File SORT, LINE SEQUENTIAL variable records"
     },
     {
-      "candidate_status": "-",
+      "candidate_status": "ok",
       "diagnostic_shape_parity": "N/A",
       "group": "run_file.at:13334",
       "number": 948,
       "oracle_status": "ORACLE_PASS",
-      "primary_classification": "CANDIDATE_UNSUPPORTED",
-      "reason_code": "candidate failed at an unclassified boundary: cat file3",
-      "semantic_diagnostic_verdict": "REJECT",
-      "test_id": "0948",
-      "title": "run_file.at:13334: 948. File MERGE, LINE SEQUENTIAL variable records"
-    },
-    {
-      "candidate_status": "ok",
-      "diagnostic_shape_parity": "N/A",
-      "group": "run_file.at:13425",
-      "number": 949,
-      "oracle_status": "ORACLE_PASS",
       "primary_classification": "OBSERVABLE_MATCH",
       "reason_code": "oracle and candidate both satisfy the test's AT_CHECK assertions",
       "semantic_diagnostic_verdict": "N/A",
+      "test_id": "0948",
+      "title": "File MERGE, LINE SEQUENTIAL variable records"
+    },
+    {
+      "candidate_status": "-",
+      "diagnostic_shape_parity": "DIFFERS",
+      "group": "run_file.at:13425",
+      "number": 949,
+      "oracle_status": "ORACLE_PASS",
+      "primary_classification": "CANDIDATE_RUNTIME_FAIL",
+      "reason_code": "runtime error during execution ($COBCRUN_DIRECT ./prog)",
+      "semantic_diagnostic_verdict": "EXEC",
       "test_id": "0949",
-      "title": "SORT nonexistent file"
+      "title": "run_file.at:13425: 949. SORT nonexistent file"
     },
     {
       "candidate_status": "-",
@@ -11404,16 +11404,16 @@
       "title": "run_file.at:13460: 950. SORT with INPUT/OUTPUT PROCEDUREs"
     },
     {
-      "candidate_status": "-",
+      "candidate_status": "ok",
       "diagnostic_shape_parity": "N/A",
       "group": "run_file.at:13550",
       "number": 951,
       "oracle_status": "ORACLE_PASS",
-      "primary_classification": "CANDIDATE_UNSUPPORTED",
-      "reason_code": "candidate failed at an unclassified boundary: cat file2",
-      "semantic_diagnostic_verdict": "REJECT",
+      "primary_classification": "OBSERVABLE_MATCH",
+      "reason_code": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "semantic_diagnostic_verdict": "N/A",
       "test_id": "0951",
-      "title": "run_file.at:13550: 951. SORT with key1 ASCENDING, key2 DESCENDING"
+      "title": "SORT with key1 ASCENDING, key2 DESCENDING"
     },
     {
       "candidate_status": "-",
@@ -12441,8 +12441,8 @@
       "group": "run_functions.at:2039",
       "number": 1037,
       "oracle_status": "ORACLE_PASS",
-      "primary_classification": "CANDIDATE_CHECK_REJECT",
-      "reason_code": "unsupported: unsupported: not a numeric literal: ALL ($COBCRUN_DIRECT ./prog)",
+      "primary_classification": "CANDIDATE_PARSE_REJECT",
+      "reason_code": "undefined data name at run ($COBCRUN_DIRECT ./prog)",
       "semantic_diagnostic_verdict": "REJECT",
       "test_id": "1037",
       "title": "run_functions.at:2039: 1037. FUNCTION LOWER-CASE"
@@ -12957,8 +12957,8 @@
       "group": "run_functions.at:3238",
       "number": 1080,
       "oracle_status": "ORACLE_PASS",
-      "primary_classification": "CANDIDATE_CHECK_REJECT",
-      "reason_code": "unsupported: unsupported: not a numeric literal: ALL ($COBCRUN_DIRECT ./prog)",
+      "primary_classification": "CANDIDATE_PARSE_REJECT",
+      "reason_code": "undefined data name at run ($COBCRUN_DIRECT ./prog)",
       "semantic_diagnostic_verdict": "REJECT",
       "test_id": "1080",
       "title": "run_functions.at:3238: 1080. FUNCTION SUBSTITUTE"
@@ -14698,7 +14698,7 @@
       "number": 1225,
       "oracle_status": "ORACLE_PASS",
       "primary_classification": "CANDIDATE_CHECK_REJECT",
-      "reason_code": "unsupported: unsupported: not a numeric literal: ALL ($COBCRUN_DIRECT ./prog)",
+      "reason_code": "unsupported: unsupported: JSON/XML GENERATE NAME: expected `data-name IS \"key\"` ($COBCRUN_DIRECT ./prog)",
       "semantic_diagnostic_verdict": "REJECT",
       "test_id": "1225",
       "title": "run_ml.at:532: 1225. JSON GENERATE general"

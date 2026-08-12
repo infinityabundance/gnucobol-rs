@@ -1,0 +1,9 @@
+{
+  "crate_version": "0.8.56",
+  "git_commit": "8980273cf6e75d7efaefaf32627586ce6d16fe78",
+  "oracle": "cobc (GnuCOBOL) 3.2.0",
+  "held_out_totals": {"candidate_ok": 24, "check_ok": 24, "crashed": 0, "files": 101, "parse_ok": 43, "run_attempted": 24, "run_ok": 16, "timed_out": 0},
+  "held_out_first_failure": {"check": 19, "none": 16, "parse": 55, "preprocess": 3, "run": 8},
+  "overfit_gate": true,
+  "generalization_held_out_files": 101
+}

@@ -2,8 +2,8 @@
 553. run_fundamental.at:2403: testing Separate sign positions (2) ...
 ./run_fundamental.at:2428: $COMPILE prog.cob
 ./run_fundamental.at:2429: $COMPILE_MODULE -fpretty-display prog.cob
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/553/stderr	2026-08-05 21:57:01.870309303 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/553/stderr	2026-08-12 01:52:47.204306918 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fpretty-display: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
 ./run_fundamental.at:2429: exit code was 1, expected 0

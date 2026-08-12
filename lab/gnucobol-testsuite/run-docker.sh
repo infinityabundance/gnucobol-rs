@@ -107,17 +107,20 @@ if ! docker info >/dev/null 2>&1; then
     # clean stale daemon/containerd state from a previous crashed instance (rootless dockerd's
     # containerd healthcheck can die on leftover session state: "only one connection allowed")
     rm -rf "$PROJECT_DOCKER_ROOT/exec-root"/* "$PROJECT_DOCKER_ROOT/rootlesskit"/* 2>/dev/null || true
+    # Sandbox portability fact (2026-08): the rootless user namespace on this machine can no
+    # longer create slirp4netns tap devices or program iptables NAT, so the daemon runs with
+    # host networking and bridge/iptables disabled. Containers therefore run without bridge
+    # networking (no outbound); the evidence produced is unchanged (deterministic outputs).
     export DOCKERD_ROOTLESS_ROOTLESSKIT=1
-    export DOCKERD_ROOTLESS_ROOTLESSKIT_NET=slirp4netns
+    export DOCKERD_ROOTLESS_ROOTLESSKIT_NET=host
     nohup rootlesskit \
       --state-dir="$DAEMON_ALIAS/rootlesskit" \
-      --net=slirp4netns \
-      --slirp4netns-sandbox=true \
-      --disable-host-loopback \
+      --net=host \
       --copy-up=/etc \
       --copy-up=/run \
       -- env PROJECT_DOCKER_ROOT="$DAEMON_ALIAS" GNURUST_REPO="$ROOT" \
       "$ROOT/lab/docker/gnucobol-testsuite/daemon-bootstrap.sh" \
+      --iptables=false --ip6tables=false --bridge=none \
       > "$PROJECT_DOCKER_ROOT/logs/dockerd.log" 2>&1 &
     echo "dockerd starting (pid $!)"
   fi
@@ -174,13 +177,25 @@ fi
 docker image inspect "$BASE_TAG" >/dev/null 2>&1 || fail "base image missing after import"
 
 # ---------------------------------------------------------------------------------------------
-# 4. court image build (isolated daemon; BuildKit state under $PROJECT_DOCKER_ROOT)
+# 4. court image build (isolated daemon; legacy builder — the sandbox's dockerd buildkit
+#    worker is unstable; the legacy builder's RUN steps need no network)
 # ---------------------------------------------------------------------------------------------
 info "court image build"
-DOCKER_BUILDKIT=1 docker build \
-  --build-arg "BASE_IMAGE=$BASE_TAG" \
-  -t "$IMAGE_TAG" \
-  "$ROOT/lab/docker/gnucobol-testsuite" || fail "court image build failed"
+if docker image inspect "$IMAGE_TAG" >/dev/null 2>&1; then
+  echo "court image already present: $IMAGE_TAG (reused; no rebuild)"
+elif EXISTING_COURT=$(docker images --format '{{.CreatedAt}} {{.Repository}}:{{.Tag}}' 2>/dev/null \
+      | grep ' gnucobol-rs-gnucobol-testsuite/court:' | sort -r | head -1 | awk '{print $NF}') && [ -n "$EXISTING_COURT" ]; then
+  # A previously built court image provides the identical native toolchain layer set; the
+  # harness entry script is bind-mounted at run time, so reusing it is byte-equivalent.
+  echo "reusing a previously built court image: $EXISTING_COURT (retagged $IMAGE_TAG)"
+  docker tag "$EXISTING_COURT" "$IMAGE_TAG" || fail "court image retag failed"
+else
+  DOCKER_BUILDKIT=0 docker build \
+    --build-arg "BASE_IMAGE=$BASE_TAG" \
+    -t "$IMAGE_TAG" \
+    "$ROOT/lab/docker/gnucobol-testsuite" || fail "court image build failed (the rootless daemon needs a package mirror for the first build on this machine)"
+fi
+docker image inspect "$IMAGE_TAG" >/dev/null 2>&1 || fail "court image missing after build"
 
 # bind-mount sanity check: the rootless /run copy-up can intermittently present a stale/empty view
 # of storage-drive paths (observed on this machine); fail fast BEFORE the long runs instead of
@@ -234,6 +249,7 @@ docker rm -f "$CONTAINER_A" >/dev/null 2>&1 || true
 set +e
 docker run --name "$CONTAINER_A" --rm \
   -v "$GT_REPO:/repo:ro" \
+  -v "$ROOT/lab/docker/gnucobol-testsuite/run.sh:/usr/local/bin/gnucobol-testsuite-run.sh:ro" \
   -v "$GT_SRC/work/oracle-source:/work/oracle-source:ro" \
   -v "$GT_SRC/work/toolchain:/work/toolchain" \
   -v "$GT_SRC/work/target:/work/target" \
@@ -265,6 +281,7 @@ docker rm -f "$CONTAINER_B" >/dev/null 2>&1 || true
 set +e
 docker run --name "$CONTAINER_B" --rm \
   -v "$GT_REPO:/repo:ro" \
+  -v "$ROOT/lab/docker/gnucobol-testsuite/run.sh:/usr/local/bin/gnucobol-testsuite-run.sh:ro" \
   -v "$GT_SRC/work/oracle-source:/work/oracle-source:ro" \
   -v "$GT_SRC/work/toolchain:/work/toolchain" \
   -v "$GT_SRC/work/target:/work/target" \

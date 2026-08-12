@@ -1,11 +1,11 @@
 diagnostic,phase,count,example_test_id
-,checker,234,0002
+,checker,232,0002
 cannot read prog.cob: No such file or directory (os error 2),checker,3,0007
-cannot read sub/prog.c: stream did not contain valid UTF-8,checker,1,0005
 cobc-rs: -fformat=unknown: only fixed/free/auto are supported by the candidate (fail closed),checker,1,0048
 cobc-rs: COPY expansion failed (fail closed): copybook 'A' not found,checker,1,0308
 cobc-rs: COPY expansion failed (fail closed): copybook 'COPY1' not found,checker,1,0055
 cobc-rs: unsupported: 66 level without RENAMES,checker,1,0159
+cobc-rs: unsupported: INSPECT REPLACING operands incompatible (operands differ in size),checker,1,0324
 cobc-rs: unsupported: OCCURS count UNBOUNDED is not an integer,data-layout,1,0148
 cobc-rs: unsupported: PERFORM VARYING: expected BY,checker,1,0729
 cobc-rs: unsupported: PIC 0N: UnsupportedSymbol('N'),data-layout,1,0410
@@ -21,6 +21,7 @@ cobc-rs: unsupported: PIC X(CONST1): BadRepeat,data-layout,1,0345
 cobc-rs: unsupported: PIC X(VAR-LEN): BadRepeat,data-layout,1,0245
 cobc-rs: unsupported: PROG-3: no PROCEDURE DIVISION,checker,1,0119
 cobc-rs: unsupported: PROG: no PROCEDURE DIVISION,checker,1,0098
+cobc-rs: unsupported: SORT: `TBL` is not a declared file,semantic-check,1,0367
 cobc-rs: unsupported: expected data name after a level number,checker,1,0260
 cobc-rs: unsupported: no PROCEDURE DIVISION,checker,63,0073
 cobc-rs: unsupported: no PROGRAM-ID,checker,4,0096
@@ -53,14 +54,15 @@ cobc-rs: unsupported: verb THREAD,grammar,1,0291
 cobc-rs: unsupported: verb USE,grammar,8,0136
 cobc-rs: unsupported: verb |,grammar,1,0286
 "cobc-rs: warning: cannot read dialect config ""cobol2014.conf""; using -std/default",checker,1,0029
-cobrun: undefined data name:,name-resolution,1,0842
+cobc: sub/prog.c: binary file,checker,1,0005
+cobrun: undefined data name:,name-resolution,2,0780
 cobrun: undefined data name: 4,name-resolution,1,1139
 cobrun: undefined data name: ADDRESS,name-resolution,1,0767
 "cobrun: undefined data name: CMP1,",name-resolution,1,0835
 cobrun: undefined data name: DEFAULT,name-resolution,1,1133
 cobrun: undefined data name: ENVIRONMENT,name-resolution,2,0596
 cobrun: undefined data name: FILLER,name-resolution,1,0581
-cobrun: undefined data name: FUNCTION,name-resolution,4,0991
+cobrun: undefined data name: FUNCTION,name-resolution,6,0991
 "cobrun: undefined data name: L1-3-2(1,",name-resolution,1,1132
 cobrun: undefined data name: LCL-X,name-resolution,1,0678
 cobrun: undefined data name: MY-ASCII,name-resolution,1,0713
@@ -131,9 +133,11 @@ cobrun: unsupported: INSPECT REPLACING: unrecognized mode `TRAILING` (expected C
 cobrun: unsupported: INSPECT TALLYING FOR: unrecognized mode `TRAILING` (expected ALL/LEADING/CHARACTERS),checker,1,1212
 cobrun: unsupported: INSPECT region clause near Str([50]),checker,1,0719
 cobrun: unsupported: INSPECT region clause near Str([66]),checker,1,1214
+"cobrun: unsupported: JSON/XML GENERATE NAME: expected `data-name IS ""key""`",checker,1,1225
 cobrun: unsupported: MOVE ALL: expected a non-empty literal or figurative,checker,1,0995
 cobrun: unsupported: OCCURS count MAX-SUB is not an integer,data-layout,6,0872
 cobrun: unsupported: OCCURS max UNBOUNDED is not an integer,data-layout,3,1127
+cobrun: unsupported: OPEN: `DATA-FILE` is not a declared file,semantic-check,1,0897
 cobrun: unsupported: OPEN: `FILE-EXT` is not a declared file,semantic-check,1,0952
 cobrun: unsupported: OPEN: `FILE-OPT` is not a declared file,semantic-check,4,0848
 cobrun: unsupported: OPEN: `INFILE` is not a declared file,semantic-check,1,0880
@@ -179,7 +183,7 @@ cobrun: unsupported: not a numeric literal: /,grammar,1,1025
 "cobrun: unsupported: not a numeric literal: 1,1,1",grammar,1,0669
 "cobrun: unsupported: not a numeric literal: 1,23E0",grammar,1,0512
 cobrun: unsupported: not a numeric literal: 17:5,grammar,1,1101
-cobrun: unsupported: not a numeric literal: ALL,grammar,7,0667
+cobrun: unsupported: not a numeric literal: ALL,grammar,1,0667
 cobrun: unsupported: not a numeric literal: AT,grammar,1,0797
 cobrun: unsupported: not a numeric literal: B,grammar,1,1112
 cobrun: unsupported: not a numeric literal: DOGGY,grammar,1,0831
@@ -192,7 +196,7 @@ cobrun: unsupported: not a numeric literal: H,grammar,1,1115
 cobrun: unsupported: not a numeric literal: INVALID-LINE,grammar,1,0798
 cobrun: unsupported: not a numeric literal: JSON-CODE,grammar,1,1227
 cobrun: unsupported: not a numeric literal: LENGTH,grammar,1,1118
-cobrun: unsupported: not a numeric literal: NULL,grammar,3,1117
+cobrun: unsupported: not a numeric literal: NULL,grammar,4,0544
 cobrun: unsupported: not a numeric literal: ORT,grammar,1,0524
 cobrun: unsupported: not a numeric literal: PARM-STR,grammar,1,0637
 cobrun: unsupported: not a numeric literal: SIZE,grammar,1,1119
@@ -200,7 +204,7 @@ cobrun: unsupported: not a numeric literal: SPACE,grammar,2,1089
 cobrun: unsupported: not a numeric literal: SYSTEM-OFFSET,grammar,1,1104
 cobrun: unsupported: not a numeric literal: WHEN-COMPILED,grammar,1,1120
 cobrun: unsupported: not a numeric literal: WITHPAR(1),grammar,1,1107
-cobrun: unsupported: not a numeric literal: X,grammar,14,0530
+cobrun: unsupported: not a numeric literal: X,grammar,13,0530
 cobrun: unsupported: not a numeric literal: X-ALL,grammar,1,0695
 cobrun: unsupported: not a numeric literal: Z,grammar,3,0689
 cobrun: unsupported: not a numeric literal: Z-ASC,grammar,1,0788

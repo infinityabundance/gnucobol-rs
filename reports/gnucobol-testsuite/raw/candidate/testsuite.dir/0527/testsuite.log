@@ -2,8 +2,8 @@
 527. run_fundamental.at:1039: testing ALPHABETIC test ...
 ./run_fundamental.at:1065: $COMPILE prog.cob
 ./run_fundamental.at:1066: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/527/stdout	2026-08-05 21:57:01.819942804 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/527/stdout	2026-08-12 01:52:47.188531633 +0000
 @@ -0,0 +1 @@
 +Fail - Alphabetic
 527. run_fundamental.at:1039: 527. ALPHABETIC test (run_fundamental.at:1039): FAILED (run_fundamental.at:1066)

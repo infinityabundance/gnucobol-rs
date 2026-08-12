@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 256. syn_misc.at:773: testing one line program ...
 ./syn_misc.at:779: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.539456414 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/256/stderr	2026-08-05 21:57:01.538444914 +0000
+--- -	2026-08-12 01:52:47.030485770 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/256/stderr	2026-08-12 01:52:47.029795101 +0000
 @@ -1,3 +1,2 @@
 -prog.cob:1: error: PROGRAM-ID header missing
 -prog.cob:1: error: PROCEDURE DIVISION header missing

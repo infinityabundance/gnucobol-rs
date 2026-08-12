@@ -2,12 +2,12 @@
 828. run_misc.at:12763: testing SET CONSTANT directive ...
 ./run_misc.at:12832: $COMPILE -std=mf prog.cob
 ./run_misc.at:12836: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/828/stderr	2026-08-05 21:57:02.355305850 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/828/stderr	2026-08-12 01:52:47.406793551 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number $SET
---- -	2026-08-05 21:57:02.358008390 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/828/stdout	2026-08-05 21:57:02.356305843 +0000
+--- -	2026-08-12 01:52:47.408144322 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/828/stdout	2026-08-12 01:52:47.407579387 +0000
 @@ -1,5 +1 @@
 -Your Dog's name is Barky;
 -The Dog's name is Barky ;

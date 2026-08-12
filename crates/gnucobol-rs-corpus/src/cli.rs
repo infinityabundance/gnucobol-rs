@@ -1120,14 +1120,28 @@ pub fn cmd_report(ms: &ManifestStore, root: &Path, dedup: &DedupIndex) -> Result
 }
 
 /// `gate`: the Phase-1 integrity gates. Returns a list of failures (empty = green).
+///
+/// The gate verifies BOTH evidence surfaces the pipeline can produce:
+///  1. the manifest store (`discover`/`admit` CLI flow records), when records exist;
+///  2. the unified corpus reports under `reports/valid-corpus/` (the family extraction +
+///     `unify` pipeline): every aggregated row must carry exactly one typed classification
+///     (no `UNKNOWN` may remain), the totals must reconcile, and the licence/determinism/
+///     no-delegation evidence must be present.
 pub fn cmd_gate(ms: &ManifestStore) -> Result<Vec<String>, String> {
     let mut fails = Vec::new();
     let recs = ms.list()?;
-    if recs.is_empty() {
-        fails.push("no records; nothing to gate".to_string());
-        return Ok(fails);
+    let root = crate::extract::workspace_root()?;
+    let vc = root.join("reports").join("valid-corpus");
+    let reports_present = vc.join("summary.json").is_file();
+
+    if recs.is_empty() && !reports_present {
+        fails.push(
+            "no evidence to gate: manifest store empty AND reports/valid-corpus/summary.json missing"
+                .to_string(),
+        );
     }
-    // schema validates
+
+    // 1. manifest-store records (the discover/admit CLI flow)
     for r in &recs {
         for e in r.validate() {
             fails.push(format!("{}: {e}", r.program_id));
@@ -1158,6 +1172,124 @@ pub fn cmd_gate(ms: &ManifestStore) -> Result<Vec<String>, String> {
                     "{}: admitted without reviewed licence",
                     r.program_id
                 ));
+            }
+        }
+    }
+
+    // 2. unified corpus reports (the family-extraction + unify pipeline)
+    if reports_present {
+        // every aggregated row has exactly one typed classification (never UNKNOWN/empty)
+        let mut rows = 0usize;
+        let mut unknown = Vec::new();
+        for (family, file, class_field) in [
+            (
+                "gnucobol-testsuite",
+                "valid-programs.json",
+                "classification",
+            ),
+            ("ccvs85", "programs.json", "final_classification"),
+            (
+                "gnucobol-manual",
+                "stable-3.2/examples.json",
+                "classification",
+            ),
+            ("gnucobol-manual", "current/examples.json", "classification"),
+            ("extras", "programs.json", "classification"),
+            ("omp", "programs.json", "classification"),
+            ("xcobol", "programs.json", "structural_class"),
+        ] {
+            let p = vc.join(family).join(file);
+            let Ok(text) = std::fs::read_to_string(&p) else {
+                continue;
+            };
+            let Ok(v) = serde_json::from_str::<serde_json::Value>(&text) else {
+                fails.push(format!("gate: unparseable report {family}/{file}"));
+                continue;
+            };
+            let arr = match v {
+                serde_json::Value::Array(a) => a,
+                other => other
+                    .get("programs")
+                    .and_then(|x| x.as_array())
+                    .cloned()
+                    .unwrap_or_default(),
+            };
+            for r in arr {
+                rows += 1;
+                let c = r
+                    .get(class_field)
+                    .or_else(|| r.get("classification"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or("")
+                    .split('|')
+                    .next()
+                    .unwrap_or("")
+                    .trim();
+                if c.is_empty() || c.eq_ignore_ascii_case("unknown") {
+                    let id = r
+                        .get("program_id")
+                        .or_else(|| r.get("identity"))
+                        .or_else(|| r.get("file_id"))
+                        .and_then(|v| v.as_str())
+                        .unwrap_or("?");
+                    unknown.push(format!("{family}:{id}"));
+                }
+            }
+        }
+        if rows == 0 {
+            fails.push("gate: no rows aggregated from the family reports".to_string());
+        }
+        if !unknown.is_empty() {
+            fails.push(format!(
+                "gate: {} row(s) without a typed classification: {}",
+                unknown.len(),
+                unknown[..unknown.len().min(5)].join(", ")
+            ));
+        }
+
+        // totals reconcile: summary.json total_units == the summed family rows
+        if let Ok(summary_text) = std::fs::read_to_string(vc.join("summary.json")) {
+            if let Ok(summary) = serde_json::from_str::<serde_json::Value>(&summary_text) {
+                let total = summary
+                    .get("total_units")
+                    .and_then(|v| v.as_u64())
+                    .unwrap_or(0);
+                if total as usize != rows {
+                    fails.push(format!(
+                        "gate: summary total_units ({total}) != summed family rows ({rows})"
+                    ));
+                }
+            }
+        }
+
+        // licences.json covers every family with an aggregated report
+        if let Ok(l_text) = std::fs::read_to_string(vc.join("licences.json")) {
+            if let Ok(l) = serde_json::from_str::<serde_json::Value>(&l_text) {
+                let by_family = l.get("by_family").and_then(|v| v.as_object());
+                for family in [
+                    "gnucobol-testsuite",
+                    "ccvs85",
+                    "gnucobol-manual",
+                    "extras",
+                    "omp",
+                    "xcobol",
+                ] {
+                    let present = vc.join(family).is_dir();
+                    let decided = by_family.map(|m| m.contains_key(family)).unwrap_or(false);
+                    if present && !decided {
+                        fails.push(format!(
+                            "gate: family {family} has reports but no licence decision in licences.json"
+                        ));
+                    }
+                }
+            }
+        } else {
+            fails.push("gate: licences.json missing".to_string());
+        }
+
+        for needed in ["determinism.json", "no-delegation.json"] {
+            if !vc.join(needed).is_file() {
+                fails.push(format!("gate: {needed} missing"));
             }
         }
     }

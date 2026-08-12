@@ -2,12 +2,12 @@
 1108. run_functions.at:4508: testing UDF in COMPUTE ...
 ./run_functions.at:4543: $COMPILE prog.cob
 ./run_functions.at:4544: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1108/stderr	2026-08-05 21:57:02.799057397 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1108/stderr	2026-08-12 01:52:47.727744037 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: FUNCTION FUNC: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim
---- -	2026-08-05 21:57:02.800476759 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1108/stdout	2026-08-05 21:57:02.799521774 +0000
+--- -	2026-08-12 01:52:47.730199961 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1108/stdout	2026-08-12 01:52:47.727894356 +0000
 @@ -1,2 +1 @@
 -201
  

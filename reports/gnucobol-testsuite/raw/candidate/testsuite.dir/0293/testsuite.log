@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 293. syn_misc.at:2603: testing ACUCOBOL GRAPHICAL controls ...
 ./syn_misc.at:2668: $COMPILE_ONLY -std=acu-strict prog.cob
---- -	2026-08-05 21:57:01.582364455 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/293/stderr	2026-08-05 21:57:01.580493960 +0000
+--- -	2026-08-12 01:52:47.051104925 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/293/stderr	2026-08-12 01:52:47.050277110 +0000
 @@ -1,8 +1,2 @@
 -prog.cob:16: warning: GRAPHICAL CONTROL is not implemented
 -prog.cob:21: warning: COLOR clause (SCREEN) is not implemented

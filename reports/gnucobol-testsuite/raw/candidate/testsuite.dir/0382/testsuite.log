@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 382. syn_misc.at:7118: testing conditional directives with lvl 78 (2) ...
 ./syn_misc.at:7160: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.669208206 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/382/stdout	2026-08-05 21:57:01.668108912 +0000
+--- -	2026-08-12 01:52:47.099760622 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/382/stdout	2026-08-12 01:52:47.099051468 +0000
 @@ -1,4 +1 @@
 -correct Y = Y2
 -correct Y < X

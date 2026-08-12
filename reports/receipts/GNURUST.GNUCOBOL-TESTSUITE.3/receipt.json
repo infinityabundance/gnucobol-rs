@@ -6,15 +6,15 @@
   },
   "conformance_claim": "NONE — differential observation over the admitted GnuCOBOL 3.2 native Autotest suite in this environment; no GnuCOBOL test-suite parity claim, no COBOL conformance certification, no compiler-replacement claim.",
   "court": "GnuCOBOL testsuite differential comparison + per-test classification",
-  "crate_version": "0.8.55",
+  "crate_version": "0.8.56",
   "current_authority": "STATUS.md",
   "docker": {
     "base_image": "gnucobol-rs-gnucobol-testsuite/ubuntu-base:18a42173dc0c9a02c8230212c978b14cc3bbcff173f95dfa954cdaaa04f4a172",
     "containers": {
-      "pass_a": "gnucobol-testsuite-20260805T215552Z-c35d6c2b-a",
-      "pass_b": "gnucobol-testsuite-20260805T215552Z-c35d6c2b-b"
+      "pass_a": "gnucobol-testsuite-20260812T015206Z-8980273c-a",
+      "pass_b": "gnucobol-testsuite-20260812T015206Z-8980273c-b"
     },
-    "court_image": "gnucobol-rs-gnucobol-testsuite/court:c35d6c2b93577013e5257c4bf60e23975d34640e",
+    "court_image": "gnucobol-rs-gnucobol-testsuite/court:8980273cf6e75d7efaefaf32627586ce6d16fe78",
     "daemon_root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/daemon-data",
     "docker_storage": {
       "configured_root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT",
@@ -27,12 +27,12 @@
     "host_storage_root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT",
     "isolated_daemon": true,
     "production_daemon_untouched": true,
-    "run_id": "20260805T215552Z-c35d6c2b",
+    "run_id": "20260812T015206Z-8980273c",
     "socket": "unix://$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/run/docker.sock",
     "storage_driver": "overlay2",
     "storage_filesystem": {
-      "available_bytes_at_start": 427277844480,
-      "device_identity_sha256": "e42aacca4fb09e08e32a44a0b0ccc9d4867b5015261f4c25c4c8bd7ac12082f7",
+      "available_bytes_at_start": 158909255680,
+      "device_identity_sha256": "e04a485e543ed37f4964472825ad1ff15fdb40a6c26604daf39fc5e585fd63bc",
       "different_from_root": true,
       "filesystem_type": "ext4"
     }
@@ -46,14 +46,14 @@
     "arch": "x86_64",
     "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
     "jobs": "12",
-    "kernel": "7.1.4-1-cachyos",
+    "kernel": "7.1.6-1-cachyos",
     "libc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.7) 2.39",
     "nproc": "16",
     "os": "?",
     "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)"
   },
-  "generated_at": "2026-08-05T21:58:29Z",
-  "git_commit": "c35d6c2b93577013e5257c4bf60e23975d34640e",
+  "generated_at": "2026-08-12T01:54:13Z",
+  "git_commit": "8980273cf6e75d7efaefaf32627586ce6d16fe78",
   "non_claims": [
     "no full GnuCOBOL test-suite parity claim",
     "no native-code-generation comparison (cobrun interprets; cobc emits C/native)",
@@ -87,7 +87,7 @@
       "2_images_dir_readonly_source": true,
       "3_base_artifact_verified": true,
       "4_project_layout_present": true,
-      "5_free_space_ok_gb": 398,
+      "5_free_space_ok_gb": 148,
       "6_isolated_socket_used": true,
       "7_docker_root_beneath_project": true,
       "8_no_primary_drive_state": true,
@@ -108,28 +108,28 @@
     },
     "schema": "gnurust-gnucobol-testsuite-preflight-v1",
     "storage": {
-      "free_gb": 398,
+      "free_gb": 148,
       "root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT"
     },
     "storage_filesystem": {
-      "available_bytes_at_start": 427277844480,
-      "device_identity_sha256": "e42aacca4fb09e08e32a44a0b0ccc9d4867b5015261f4c25c4c8bd7ac12082f7",
+      "available_bytes_at_start": 158909255680,
+      "device_identity_sha256": "e04a485e543ed37f4964472825ad1ff15fdb40a6c26604daf39fc5e585fd63bc",
       "different_from_root": true,
       "filesystem_type": "ext4"
     }
   },
   "receipt_status": "current",
   "results": {
-    "comparison_results_sha256": "e453affae32beec793babadbb55715c6a24eb7cf50cef3234d6761313c937ca9",
+    "comparison_results_sha256": "9294cfed44e3c893203f07f994ffb2186ec083ea48e7615967b6844923519320",
     "determinism": {
       "note": "stable summary counts + per-test classifications must be identical across two fresh full runs (timestamps deliberately excluded)",
       "pass_a": {
-        "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260805T215552Z-c35d6c2b/pass-a/summary.json",
-        "summary_sha256": "d93791ee242ac48407e158ff36cdc099c7a31ff96bc22a568b804c5ad85cb7f7"
+        "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260812T015206Z-8980273c/pass-a/summary.json",
+        "summary_sha256": "008679ca0cda63b1a24e302e75985208ebd8a4d899312a81f708270e290e5a8a"
       },
       "pass_b": {
-        "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260805T215552Z-c35d6c2b/pass-b/summary.json",
-        "summary_sha256": "4731bbf539fbf53de7b7426bae1143bc880fc3ae85ff05811e6fc8611e865286"
+        "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260812T015206Z-8980273c/pass-b/summary.json",
+        "summary_sha256": "10eef9a01c80ce5676766333ac94a7042355474116d7a8d86b1e7d983b39d152"
       },
       "path_notation": "paths are symbolic: $GNURUST_GNUCOBOL_TEST_DOCKER_ROOT is the configured docker root at run time; the raw unsanitized record is preserved outside git under $GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/run-evidence/",
       "per_test_classifications_identical": true,
@@ -138,22 +138,22 @@
     },
     "exit_status_mismatch": 0,
     "first_failure": {
-      "CANDIDATE_CHECK_REJECT": 652,
+      "CANDIDATE_CHECK_REJECT": 648,
       "CANDIDATE_MODULE_MODEL_UNSUPPORTED": 4,
-      "CANDIDATE_PARSE_REJECT": 31,
-      "CANDIDATE_RUNTIME_FAIL": 136,
-      "CANDIDATE_UNSUPPORTED": 21,
-      "OBSERVABLE_MATCH": 193,
+      "CANDIDATE_PARSE_REJECT": 34,
+      "CANDIDATE_RUNTIME_FAIL": 137,
+      "CANDIDATE_UNSUPPORTED": 18,
+      "OBSERVABLE_MATCH": 196,
       "ORACLE_SKIP": 9,
       "ORACLE_XFAIL": 31,
       "WRAPPER_INVOCATION_MALFORMED": 25,
       "WRAPPER_OPTION_UNSUPPORTED": 180
     },
     "generated_file_mismatch": 0,
-    "observable_match": 193,
+    "observable_match": 196,
     "stderr_mismatch": 0,
     "stdout_mismatch": 0,
-    "summary_json_sha256": "d93791ee242ac48407e158ff36cdc099c7a31ff96bc22a568b804c5ad85cb7f7",
+    "summary_json_sha256": "008679ca0cda63b1a24e302e75985208ebd8a4d899312a81f708270e290e5a8a",
     "tests_accounted": 1282
   },
   "schema": "gnurust-replay-receipt-v1",

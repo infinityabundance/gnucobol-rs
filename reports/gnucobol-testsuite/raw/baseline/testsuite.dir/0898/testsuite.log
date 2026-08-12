@@ -3,8 +3,8 @@
 ./run_file.at:5291: $COMPILE -fcallfh=EXTFH prog.cob
 ./run_file.at:5298: $COBCRUN_DIRECT ./prog
 ./run_file.at:5301: diff mini-report reference-report
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/898/stdout	2026-08-05 21:56:27.047155830 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/898/stdout	2026-08-12 01:52:24.940444428 +0000
 @@ -0,0 +1,205 @@
 +37,38d36
 +< 000015 01  data-record.

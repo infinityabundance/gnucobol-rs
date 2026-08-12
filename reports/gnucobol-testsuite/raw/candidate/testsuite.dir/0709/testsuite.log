@@ -3,12 +3,12 @@
 ./run_misc.at:1606: $COMPILE caller.cob
 ./run_misc.at:1607: $COMPILE_MODULE callee.cob
 ./run_misc.at:1608: $COBCRUN_DIRECT ./caller
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/709/stderr	2026-08-05 21:57:02.072307866 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/709/stderr	2026-08-12 01:52:47.318184451 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: CALL "C$PARAMSIZE": not a contained program (external CALL is a boundary)
---- -	2026-08-05 21:57:02.075332221 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/709/stdout	2026-08-05 21:57:02.073307858 +0000
+--- -	2026-08-12 01:52:47.319513883 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/709/stdout	2026-08-12 01:52:47.318184451 +0000
 @@ -1,12 +1 @@
 -COUNTER = 001 LPARAM1 = 00000008 PARAM1 =  PARAM 1
 -COUNTER = 001 LPARAM1 = 00000008 PARAM1 =  PARAM 1

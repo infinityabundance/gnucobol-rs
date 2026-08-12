@@ -6398,7 +6398,7 @@
     "step_index": 11,
     "command": "$COBCRUN_DIRECT ./caller X ABCD",
     "status_expected": 1,
-    "replay_exit": null,
+    "replay_exit": 139,
     "classification": "INVALID_EXPECTED_REJECT"
   },
   {
@@ -9203,7 +9203,7 @@
     "step_index": 1,
     "command": "$COMPILE_ONLY prog.cob",
     "status_expected": 1,
-    "replay_exit": null,
+    "replay_exit": 139,
     "classification": "INVALID_EXPECTED_REJECT"
   },
   {
@@ -13504,7 +13504,7 @@
     "step_index": 11,
     "command": "$COBCRUN_DIRECT ./caller X ABCD",
     "status_expected": 1,
-    "replay_exit": null,
+    "replay_exit": 139,
     "classification": "INVALID_EXPECTED_REJECT"
   },
   {

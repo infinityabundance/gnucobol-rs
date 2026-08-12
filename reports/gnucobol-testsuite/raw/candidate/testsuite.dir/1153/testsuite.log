@@ -2,8 +2,12 @@
 1153. run_extensions.at:2712: testing SORT ASSIGN KEYBOARD to ASSIGN DISPLAY ...
 ./run_extensions.at:2760: $COMPILE prog.cob
 ./run_extensions.at:2761: cat TEST-FILE | $COBCRUN_DIRECT ./prog
---- -	2026-08-05 21:57:02.850818188 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1153/stdout	2026-08-05 21:57:02.848302340 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1153/stderr	2026-08-12 01:52:47.776811863 +0000
+@@ -0,0 +1 @@
++cobrun: runtime error: SORT/MERGE USING: file does not exist (status = 35) for file `TEST-FILE`
+--- -	2026-08-12 01:52:47.778039354 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1153/stdout	2026-08-12 01:52:47.777570659 +0000
 @@ -1,8 +1 @@
 -0
 -00
@@ -13,4 +17,5 @@
 -8
 -9
  
+./run_extensions.at:2761: exit code was 2, expected 0
 1153. run_extensions.at:2712: 1153. SORT ASSIGN KEYBOARD to ASSIGN DISPLAY (run_extensions.at:2712): expected failure (run_extensions.at:2761)

@@ -2,12 +2,12 @@
 834. run_misc.at:13248: testing FLOAT-DECIMAL w/o SIZE ERROR ...
 ./run_misc.at:13389: $COMPILE prog.cob
 ./run_misc.at:13391: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/834/stderr	2026-08-05 21:57:02.397305551 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/834/stderr	2026-08-12 01:52:47.411016052 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unrecognized USAGE FLOAT-DECIMAL-16
---- -	2026-08-05 21:57:02.399919187 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/834/stdout	2026-08-05 21:57:02.398706200 +0000
+--- -	2026-08-12 01:52:47.412201845 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/834/stdout	2026-08-12 01:52:47.411016052 +0000
 @@ -1,26 +1 @@
 ---- FLOAT-DECIMAL-34 ---
 -A: 9216586.861751152073732718894009216

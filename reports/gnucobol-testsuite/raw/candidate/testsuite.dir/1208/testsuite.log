@@ -2,8 +2,8 @@
 1208. run_extensions.at:5740: testing PICTURE L (under/over shoot) ...
 ./run_extensions.at:5757: $COMPILE under.cob
 ./run_extensions.at:5758: $COBCRUN_DIRECT ./under
---- -	2026-08-05 21:57:02.907472051 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1208/stderr	2026-08-05 21:57:02.906631000 +0000
+--- -	2026-08-12 01:52:47.837994751 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1208/stderr	2026-08-12 01:52:47.836772790 +0000
 @@ -1,3 +1,2 @@
 -libcob: under.cob:11: error: OCCURS DEPENDING ON 'LGX' out of bounds: 0
 -note: minimum subscript for 'FILLER 1': 1

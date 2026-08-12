@@ -3,8 +3,8 @@
 ./run_file.at:4340: $COMPILE prog.cob
 ./run_file.at:4341: $COBCRUN_DIRECT ./prog
 ./run_file.at:4342: cat TEST-FILE
---- -	2026-08-05 21:57:02.450741485 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/893/stdout	2026-08-05 21:57:02.450064309 +0000
+--- -	2026-08-12 01:52:47.458982111 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/893/stdout	2026-08-12 01:52:47.458234075 +0000
 @@ -1,6 +1,5 @@
  a
 -

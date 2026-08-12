@@ -6,15 +6,15 @@
   },
   "conformance_claim": "NONE — differential observation over the admitted NIST CCVS85 corpus; no NIST certification, no full COBOL-85 conformance, no compiler-replacement claim.",
   "court": "CCVS85 materialization + real-GnuCOBOL oracle baseline",
-  "crate_version": "0.8.55",
+  "crate_version": "0.8.56",
   "current_authority": "STATUS.md",
   "docker": {
     "base_image": "gnucobol-rs-ccvs85/ubuntu-base:18a42173dc0c9a02c8230212c978b14cc3bbcff173f95dfa954cdaaa04f4a172",
     "containers": {
-      "pass_a": "ccvs85-20260805T220903Z-c35d6c2b-a",
-      "pass_b": "ccvs85-20260805T220903Z-c35d6c2b-b"
+      "pass_a": "ccvs85-20260812T012034Z-8980273c-a",
+      "pass_b": "ccvs85-20260812T012034Z-8980273c-b"
     },
-    "court_image": "gnucobol-rs-ccvs85/court:c35d6c2b93577013e5257c4bf60e23975d34640e",
+    "court_image": "gnucobol-rs-ccvs85/court:8980273cf6e75d7efaefaf32627586ce6d16fe78",
     "daemon_root": "$GNURUST_CCVS85_DOCKER_ROOT/daemon-data",
     "docker_storage": {
       "configured_root": "$GNURUST_CCVS85_DOCKER_ROOT",
@@ -27,12 +27,12 @@
     "host_storage_root": "$GNURUST_CCVS85_DOCKER_ROOT",
     "isolated_daemon": true,
     "production_daemon_untouched": true,
-    "run_id": "20260805T220903Z-c35d6c2b",
+    "run_id": "20260812T012034Z-8980273c",
     "socket": "unix://$GNURUST_CCVS85_DOCKER_ROOT/run/docker.sock",
     "storage_driver": "overlay2",
     "storage_filesystem": {
-      "available_bytes_at_start": 426597494784,
-      "device_identity_sha256": "403c944e0c3b03bcabde10d0aebaf5f77fc1ec2659160dfc603a81f7151b55a7",
+      "available_bytes_at_start": 123650068480,
+      "device_identity_sha256": "f4fdb471197ac3c18c4842eb3c70a9966c279faa7c2040a04a7f3ba5e62a7ed8",
       "different_from_root": true,
       "filesystem_type": "ext4"
     }
@@ -43,10 +43,10 @@
     "SOURCE_DATE_EPOCH": "725846400",
     "TZ": "UTC0",
     "libc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.7) 2.39",
-    "uname": "Linux 7.1.4-1-cachyos x86_64"
+    "uname": "Linux 7.1.6-1-cachyos x86_64"
   },
-  "generated_at": "2026-08-05T22:11:34Z",
-  "git_commit": "c35d6c2b93577013e5257c4bf60e23975d34640e",
+  "generated_at": "2026-08-12T01:22:43Z",
+  "git_commit": "8980273cf6e75d7efaefaf32627586ce6d16fe78",
   "non_claims": [
     "no claim about gnucobol-rs is made by this gate",
     "oracle acceptance/rejection is specific to the pinned GnuCOBOL 3.2 build and its dialect",
@@ -75,7 +75,7 @@
       "2_images_dir_readonly_source": true,
       "3_base_artifact_verified": true,
       "4_project_layout_present": true,
-      "5_free_space_ok_gb": 397,
+      "5_free_space_ok_gb": 116,
       "6_isolated_socket_used": true,
       "7_docker_root_beneath_project": true,
       "8_no_primary_drive_state": true,
@@ -96,12 +96,12 @@
     },
     "schema": "gnurust-ccvs85-preflight-v1",
     "storage": {
-      "free_gb": 397,
+      "free_gb": 116,
       "root": "$GNURUST_CCVS85_DOCKER_ROOT"
     },
     "storage_filesystem": {
-      "available_bytes_at_start": 426597494784,
-      "device_identity_sha256": "403c944e0c3b03bcabde10d0aebaf5f77fc1ec2659160dfc603a81f7151b55a7",
+      "available_bytes_at_start": 123650068480,
+      "device_identity_sha256": "f4fdb471197ac3c18c4842eb3c70a9966c279faa7c2040a04a7f3ba5e62a7ed8",
       "different_from_root": true,
       "filesystem_type": "ext4"
     }
@@ -115,7 +115,7 @@
     "oracle_compile_error": 3,
     "oracle_compile_pass": 370,
     "oracle_compile_reject": 18,
-    "oracle_results_sha256": "120fbd91476ec0ea2e698716de7bd1008c9a34cf56dbe945a173d401c8f07008",
+    "oracle_results_sha256": "0eff1ad36783994502849466805371dbca10dbc04bf2e892a2b2df944e0fde72",
     "oracle_run_fail": 64,
     "oracle_run_pass": 304,
     "oracle_timeout": 1,

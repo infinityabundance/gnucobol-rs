@@ -3,8 +3,8 @@
 ./run_file.at:6515: $COMPILE prog1.cob
 ./run_file.at:6516: $COMPILE prog2.cob
 ./run_file.at:6517: $COBCRUN_DIRECT ./prog1
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/915/stderr	2026-08-05 21:57:02.476304989 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/915/stderr	2026-08-12 01:52:47.480449009 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: CALL "SYSTEM": not a contained program (external CALL is a boundary)
 ./run_file.at:6517: exit code was 2, expected 0

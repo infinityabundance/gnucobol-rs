@@ -1,6 +1,6 @@
 # Valid-COBOL corpus — unified summary (Phase 12)
 
-_generated_at_utc: 2026-08-11T16:48:28Z · schema: `gnurust-valid-corpus-unified-v1`_
+_generated_at_utc: 2026-08-11T23:10:00Z · schema: `gnurust-valid-corpus-unified-v1`_
 
 **total units:** 6442
 
@@ -36,12 +36,12 @@ _generated_at_utc: 2026-08-11T16:48:28Z · schema: `gnurust-valid-corpus-unified
 - VALID_COMPILE_ONLY_PROGRAM|CANDIDATE_PREPROCESS_REJECT: 160
 - VALID_COPYBOOK: 51
 - VALID_EXECUTABLE_PROGRAM: 431
-- VALID_EXECUTABLE_PROGRAM|CANDIDATE_ALL_PHASES_OK: 654
+- VALID_EXECUTABLE_PROGRAM|CANDIDATE_ALL_PHASES_OK: 660
 - VALID_EXECUTABLE_PROGRAM|CANDIDATE_CHECK_REJECT: 147
 - VALID_EXECUTABLE_PROGRAM|CANDIDATE_LAYOUT_REJECT: 103
 - VALID_EXECUTABLE_PROGRAM|CANDIDATE_PARSE_REJECT: 130
 - VALID_EXECUTABLE_PROGRAM|CANDIDATE_PREPROCESS_REJECT: 33
-- VALID_EXECUTABLE_PROGRAM|CANDIDATE_RUN_REJECT: 412
+- VALID_EXECUTABLE_PROGRAM|CANDIDATE_RUN_REJECT: 406
 - VALID_MODULE_PROGRAM: 70
 
 ## by first-failure phase
@@ -69,3 +69,9 @@ _generated_at_utc: 2026-08-11T16:48:28Z · schema: `gnurust-valid-corpus-unified
 
 > Doctrine: every number above is aggregated from the committed per-family reports;
 > no value is re-measured or invented by this report.
+
+## Phase 10 — generalization & overfitting
+See `held-out-results.json` (pure held-out measurement), `mutation-results.json` (metamorphic
+variant equivalence), `overfitting.json` (automated overfitting-indicator checks) and
+`generalization.json` (development/validation/held-out + overfitting summary). Run the
+`held-out`, `mutation`, `overfit` and `generalize` commands to (re)generate them.

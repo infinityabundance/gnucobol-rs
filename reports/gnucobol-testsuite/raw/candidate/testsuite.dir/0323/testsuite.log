@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 323. syn_misc.at:3978: testing checking prototypes and definitions match ...
 ./syn_misc.at:4100: $COMPILE_ONLY -Wno-unfinished -Wno-pending prog.cob
---- -	2026-08-05 21:57:01.610067786 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/323/stderr	2026-08-05 21:57:01.608820696 +0000
+--- -	2026-08-12 01:52:47.068803319 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/323/stderr	2026-08-12 01:52:47.068047589 +0000
 @@ -1,11 +1,2 @@
 -prog.cob:60: warning: prototype and definition of 'invalid-1' do not match
 -prog.cob:60: note: definition is a program but the prototype is a function

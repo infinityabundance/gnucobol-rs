@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 1113. run_extensions.at:101: testing ACUCOBOL literals ...
 ./run_extensions.at:116: $COMPILE -facu-literals=ok prog.cob
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1113/stderr	2026-08-05 21:57:02.804576218 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1113/stderr	2026-08-12 01:52:47.730335785 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -facu-literals=ok: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ok
 ./run_extensions.at:116: exit code was 1, expected 0

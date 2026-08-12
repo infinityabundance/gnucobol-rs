@@ -2,12 +2,12 @@
 675. run_misc.at:190: testing CURRENCY SIGN ...
 ./run_misc.at:214: $COMPILE prog.cob
 ./run_misc.at:215: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/675/stderr	2026-08-05 21:57:02.002643708 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/675/stderr	2026-08-12 01:52:47.290630011 +0000
 @@ -0,0 +1 @@
 +cobrun: runtime error: UnsupportedSymbol('(')
---- -	2026-08-05 21:57:02.003839051 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/675/stdout	2026-08-05 21:57:02.003160904 +0000
+--- -	2026-08-12 01:52:47.292168142 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/675/stdout	2026-08-12 01:52:47.291528257 +0000
 @@ -1 +1 @@
 -Amount is #  Y1512.34#
 +

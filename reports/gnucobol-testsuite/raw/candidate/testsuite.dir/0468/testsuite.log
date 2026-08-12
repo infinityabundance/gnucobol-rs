@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 468. syn_literals.at:1281: testing HP COBOL octal literals ...
 ./syn_literals.at:1298: $COMPILE_ONLY -Wno-unfinished -fhp-octal-literals=ok prog.cob
---- -	2026-08-05 21:57:01.760886902 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/468/stderr	2026-08-05 21:57:01.760351170 +0000
+--- -	2026-08-12 01:52:47.147523932 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/468/stderr	2026-08-12 01:52:47.146685157 +0000
 @@ -1,6 +1,2 @@
 -prog.cob:9: error: invalid % literal: '11111111111111111111111'
 -prog.cob:9: note: literal length 23 exceeds 22 characters

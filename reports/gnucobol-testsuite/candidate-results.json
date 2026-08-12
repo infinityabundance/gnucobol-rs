@@ -4350,7 +4350,7 @@
     {
       "number": 544,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: not a numeric literal: X ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: not a numeric literal: NULL ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0544",
       "title": "run_fundamental.at:1968: 544. CALL/CANCEL/SET ADDRESS program-prototype-name"
@@ -6237,19 +6237,19 @@
     },
     {
       "number": 780,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: not a numeric literal: ALL ($COBCRUN_DIRECT ./prog)",
+      "primary": "CANDIDATE_PARSE_REJECT",
+      "reason": "undefined data name at run ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0780",
       "title": "run_misc.at:5157: 780. ANY LENGTH (3)"
     },
     {
       "number": 781,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: not a numeric literal: ALL ($COBCRUN_DIRECT ./prog)",
-      "status": "-",
+      "primary": "OBSERVABLE_MATCH",
+      "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "status": "ok",
       "test_id": "0781",
-      "title": "run_misc.at:5200: 781. ANY LENGTH (4)"
+      "title": "ANY LENGTH (4)"
     },
     {
       "number": 782,
@@ -7174,7 +7174,7 @@
     {
       "number": 897,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: not a numeric literal: ALL (COB_CURRENT_DATE=\"2015/02/06 16:40:52\" $COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: OPEN: `DATA-FILE` is not a declared file (COB_CURRENT_DATE=\"2015/02/06 16:40:52\" $COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0897",
       "title": "run_file.at:4729: 897. LINAGE and LINAGE-COUNTER sample"
@@ -7565,11 +7565,11 @@
     },
     {
       "number": 946,
-      "primary": "CANDIDATE_UNSUPPORTED",
-      "reason": "candidate failed at an unclassified boundary: cat file2",
-      "status": "-",
+      "primary": "OBSERVABLE_MATCH",
+      "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "status": "ok",
       "test_id": "0946",
-      "title": "run_file.at:13203: 946. File SORT, LINE SEQUENTIAL variable records"
+      "title": "File SORT, LINE SEQUENTIAL variable records"
     },
     {
       "number": 947,
@@ -7581,19 +7581,19 @@
     },
     {
       "number": 948,
-      "primary": "CANDIDATE_UNSUPPORTED",
-      "reason": "candidate failed at an unclassified boundary: cat file3",
-      "status": "-",
-      "test_id": "0948",
-      "title": "run_file.at:13334: 948. File MERGE, LINE SEQUENTIAL variable records"
-    },
-    {
-      "number": 949,
       "primary": "OBSERVABLE_MATCH",
       "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
       "status": "ok",
+      "test_id": "0948",
+      "title": "File MERGE, LINE SEQUENTIAL variable records"
+    },
+    {
+      "number": 949,
+      "primary": "CANDIDATE_RUNTIME_FAIL",
+      "reason": "runtime error during execution ($COBCRUN_DIRECT ./prog)",
+      "status": "-",
       "test_id": "0949",
-      "title": "SORT nonexistent file"
+      "title": "run_file.at:13425: 949. SORT nonexistent file"
     },
     {
       "number": 950,
@@ -7605,11 +7605,11 @@
     },
     {
       "number": 951,
-      "primary": "CANDIDATE_UNSUPPORTED",
-      "reason": "candidate failed at an unclassified boundary: cat file2",
-      "status": "-",
+      "primary": "OBSERVABLE_MATCH",
+      "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "status": "ok",
       "test_id": "0951",
-      "title": "run_file.at:13550: 951. SORT with key1 ASCENDING, key2 DESCENDING"
+      "title": "SORT with key1 ASCENDING, key2 DESCENDING"
     },
     {
       "number": 952,
@@ -8293,8 +8293,8 @@
     },
     {
       "number": 1037,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: not a numeric literal: ALL ($COBCRUN_DIRECT ./prog)",
+      "primary": "CANDIDATE_PARSE_REJECT",
+      "reason": "undefined data name at run ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1037",
       "title": "run_functions.at:2039: 1037. FUNCTION LOWER-CASE"
@@ -8637,8 +8637,8 @@
     },
     {
       "number": 1080,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: not a numeric literal: ALL ($COBCRUN_DIRECT ./prog)",
+      "primary": "CANDIDATE_PARSE_REJECT",
+      "reason": "undefined data name at run ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1080",
       "title": "run_functions.at:3238: 1080. FUNCTION SUBSTITUTE"
@@ -9798,7 +9798,7 @@
     {
       "number": 1225,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: not a numeric literal: ALL ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: JSON/XML GENERATE NAME: expected `data-name IS \"key\"` ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1225",
       "title": "run_ml.at:532: 1225. JSON GENERATE general"

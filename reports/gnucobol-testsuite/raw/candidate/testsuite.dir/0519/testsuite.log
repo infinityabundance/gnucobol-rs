@@ -2,12 +2,12 @@
 519. run_fundamental.at:450: testing MOVE to item with simple and floating insertion ...
 ./run_fundamental.at:475: $COMPILE prog.cob
 ./run_fundamental.at:476: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/519/stderr	2026-08-05 21:57:01.808263732 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/519/stderr	2026-08-12 01:52:47.181088982 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number --
---- -	2026-08-05 21:57:01.809501785 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/519/stdout	2026-08-05 21:57:01.808704516 +0000
+--- -	2026-08-12 01:52:47.182706090 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/519/stdout	2026-08-12 01:52:47.181963734 +0000
 @@ -1,4 +1 @@
 ->-**123<
 ->$  *1,234.56<

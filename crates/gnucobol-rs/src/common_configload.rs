@@ -1172,7 +1172,7 @@ mod tests {
     fn env_string_expansion() {
         let env = |k: &str| -> Option<String> {
             if k == "HOME" {
-                Some("/home/u".to_string())
+                Some("/u".to_string())
             } else {
                 None
             }
@@ -1180,7 +1180,7 @@ mod tests {
         // ${HOME}/x
         assert_eq!(
             cob_expand_env_string(b"${HOME}/x", &env, 7, "/cfg", "/copy"),
-            b"/home/u/x".to_vec()
+            b"/u/x".to_vec()
         );
         // ${MISSING:-def}
         assert_eq!(

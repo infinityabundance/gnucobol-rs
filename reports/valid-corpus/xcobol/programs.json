@@ -182,7 +182,7 @@
     "oracle_compile_note": "rejected by all dialects: ReadBG.CBL:132: error: syntax error, unexpected Word or Literal, expecting .",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/debinix_pbs/ReadBG.CBL: stream did not contain valid UTF-8"
+      "cannot read ReadBG.CBL: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -206,7 +206,7 @@
     "oracle_compile_note": "rejected by all dialects: Readfile.CBL:126: error: syntax error, unexpected Word or Literal, expecting .",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/debinix_pbs/Readfile.CBL: stream did not contain valid UTF-8"
+      "cannot read Readfile.CBL: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -254,7 +254,7 @@
     "oracle_compile_note": "rejected by all dialects: Z0900-error-routine.cpy:33: warning: PROGRAM-ID header missing [-Wothers]",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/debinix_pbs/Z0900-error-routine.cpy: stream did not contain valid UTF-8"
+      "cannot read Z0900-error-routine.cpy: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -308,7 +308,7 @@
     "oracle_compile_note": "rejected by all dialects: customermenu.cbl:25: error: syntax error, unexpected Word or Literal, expecting .",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/debinix_pbs/customermenu.cbl: stream did not contain valid UTF-8"
+      "cannot read customermenu.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -336,7 +336,7 @@
     "oracle_compile_note": "",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/debinix_pbs/pbs.cbl: stream did not contain valid UTF-8"
+      "cannot read pbs.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -366,7 +366,7 @@
     "oracle_compile_note": "rejected by all dialects: servicemenu.cbl:25: error: syntax error, unexpected Word or Literal, expecting .",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/debinix_pbs/servicemenu.cbl: stream did not contain valid UTF-8"
+      "cannot read servicemenu.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -414,7 +414,7 @@
     "oracle_compile_note": "rejected by all dialects: subinv.CBL:35: error: syntax error, unexpected Word or Literal, expecting .",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/debinix_pbs/subinv.CBL: stream did not contain valid UTF-8"
+      "cannot read subinv.CBL: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -446,7 +446,7 @@
     "oracle_compile_note": "rejected by all dialects: subinv2.CBL:36: error: sql-codes: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/debinix_pbs/subinv2.CBL: stream did not contain valid UTF-8"
+      "cannot read subinv2.CBL: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -470,7 +470,7 @@
     "oracle_compile_note": "rejected by all dialects: submit-invoices.cbl:35: error: syntax error, unexpected Word or Literal, expecting .",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/debinix_pbs/submit-invoices.cbl: stream did not contain valid UTF-8"
+      "cannot read submit-invoices.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -10789,7 +10789,7 @@
     "oracle_compile_note": "",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/DoHITB_CryptoCobol/AESGEN.cbl: stream did not contain valid UTF-8"
+      "cannot read AESGEN.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -14374,7 +14374,7 @@
     "oracle_compile_note": "rejected by all dialects: CS00000F.cbl:21: error: CSC00900.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS00000F.cbl: stream did not contain valid UTF-8"
+      "cannot read CS00000F.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -14422,7 +14422,7 @@
     "oracle_compile_note": "rejected by all dialects: CS00000M.cbl:12: error: CSS00100.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS00000M.cbl: stream did not contain valid UTF-8"
+      "cannot read CS00000M.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -14458,7 +14458,7 @@
     "oracle_compile_note": "rejected by all dialects: CS00000S.cbl:23: error: CSC00900.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS00000S.cbl: stream did not contain valid UTF-8"
+      "cannot read CS00000S.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -14506,7 +14506,7 @@
     "oracle_compile_note": "rejected by all dialects: CS00001M.cbl:12: error: CSS00100.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS00001M.cbl: stream did not contain valid UTF-8"
+      "cannot read CS00001M.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -14582,7 +14582,7 @@
     "oracle_compile_note": "rejected by all dialects: CS00002M.cbl:12: error: CSS00100.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS00002M.cbl: stream did not contain valid UTF-8"
+      "cannot read CS00002M.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -14660,7 +14660,7 @@
     "oracle_compile_note": "rejected by all dialects: CS00003M.cbl:12: error: CSS00100.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS00003M.cbl: stream did not contain valid UTF-8"
+      "cannot read CS00003M.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -14688,7 +14688,7 @@
     "oracle_compile_note": "rejected by all dialects: CS00003S.cbl:61: error: CSL00900.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS00003S.cbl: stream did not contain valid UTF-8"
+      "cannot read CS00003S.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -14716,7 +14716,7 @@
     "oracle_compile_note": "rejected by all dialects: CS00004S.cbl:25: error: CSL00900.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS00004S.cbl: stream did not contain valid UTF-8"
+      "cannot read CS00004S.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -14832,7 +14832,7 @@
     "oracle_compile_note": "rejected by all dialects: CS00005S.cbl:12: error: CSS00000.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS00005S.cbl: stream did not contain valid UTF-8"
+      "cannot read CS00005S.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -14891,7 +14891,7 @@
     "oracle_compile_note": "rejected by all dialects: CS00100S.cbl:12: error: CSS00800.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS00100S.cbl: stream did not contain valid UTF-8"
+      "cannot read CS00100S.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -14915,7 +14915,7 @@
     "oracle_compile_note": "",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS00101S.cbl: stream did not contain valid UTF-8"
+      "cannot read CS00101S.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -14963,7 +14963,7 @@
     "oracle_compile_note": "rejected by all dialects: CS00103S.cbl:12: error: CSS00700.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS00103S.cbl: stream did not contain valid UTF-8"
+      "cannot read CS00103S.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -14997,7 +14997,7 @@
     "oracle_compile_note": "rejected by all dialects: CS00104S.cbl:12: error: CSS00700.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS00104S.cbl: stream did not contain valid UTF-8"
+      "cannot read CS00104S.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15035,7 +15035,7 @@
     "oracle_compile_note": "rejected by all dialects: CS00105S.cbl:12: error: CSS02200.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS00105S.cbl: stream did not contain valid UTF-8"
+      "cannot read CS00105S.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15097,7 +15097,7 @@
     "oracle_compile_note": "rejected by all dialects: CS00106S.cbl:12: error: CSS00700.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS00106S.cbl: stream did not contain valid UTF-8"
+      "cannot read CS00106S.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15139,7 +15139,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10001C.cbl:12: error: CSS00700.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10001C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10001C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15205,7 +15205,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10001P.cbl:12: error: CSS00200.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10001P.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10001P.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15253,7 +15253,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10002C.cbl:12: error: CSS00200.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10002C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10002C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15301,7 +15301,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10003C.cbl:12: error: CSS00200.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10003C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10003C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15355,7 +15355,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10004C.cbl:12: error: CSS00200.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10004C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10004C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15415,7 +15415,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10005C.cbl:12: error: CSS00200.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10005C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10005C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15481,7 +15481,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10006C.cbl:12: error: CSS00200.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10006C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10006C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15523,7 +15523,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10007C.cbl:12: error: CSS00800.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10007C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10007C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15577,7 +15577,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10008C.cbl:12: error: CSS00700.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10008C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10008C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15619,7 +15619,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10009C.cbl:12: error: CSS01000.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10009C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10009C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15673,7 +15673,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10010C.cbl:12: error: CSS00000.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10010C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10010C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15739,7 +15739,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10011C.cbl:12: error: CSS00800.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10011C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10011C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15781,7 +15781,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10012C.cbl:12: error: CSS01400.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10012C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10012C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15817,7 +15817,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10013C.cbl:23: error: CSC00900.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10013C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10013C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15853,7 +15853,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10014C.cbl:23: error: CSC00900.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10014C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10014C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15895,7 +15895,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10015C.cbl:12: error: CSS01800.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10015C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10015C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15931,7 +15931,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10016C.cbl:23: error: CSC00900.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10016C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10016C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -15967,7 +15967,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10017C.cbl:23: error: CSC00900.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10017C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10017C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -16015,7 +16015,7 @@
     "oracle_compile_note": "rejected by all dialects: CS10018C.cbl:12: error: CSS01800.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS10018C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS10018C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -16043,7 +16043,7 @@
     "oracle_compile_note": "rejected by all dialects: CS20001C.cbl:26: error: CSL00900.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS20001C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS20001C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -16071,7 +16071,7 @@
     "oracle_compile_note": "rejected by all dialects: CS20002C.cbl:26: error: CSL00900.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS20002C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS20002C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -16119,7 +16119,7 @@
     "oracle_compile_note": "rejected by all dialects: CS20003C.cbl:12: error: CSS01800.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS20003C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS20003C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -16161,7 +16161,7 @@
     "oracle_compile_note": "rejected by all dialects: CS30001C.cbl:12: error: CSS02200.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS30001C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS30001C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -16189,7 +16189,7 @@
     "oracle_compile_note": "rejected by all dialects: CS30002C.cbl:25: error: CSL00900.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS30002C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS30002C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -16269,7 +16269,7 @@
     "oracle_compile_note": "rejected by all dialects: CS30003C.cbl:12: error: CSS01400.CPY: No such file or directory",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CS30003C.cbl: stream did not contain valid UTF-8"
+      "cannot read CS30003C.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -16845,7 +16845,7 @@
     "oracle_compile_note": "rejected by all dialects: CSL00900.cpy:7: warning: PROGRAM-ID header missing [-Wothers]",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CSL00900.cpy: stream did not contain valid UTF-8"
+      "cannot read CSL00900.cpy: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -17949,7 +17949,7 @@
     "oracle_compile_note": "rejected by all dialects: CSW00900.cpy:9: error: continuation character expected",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/abrignoli_COBSOFT/CSW00900.cpy: stream did not contain valid UTF-8"
+      "cannot read CSW00900.cpy: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -23629,7 +23629,7 @@
     "oracle_compile_note": "rejected by all dialects: EXCLUINDOREGISTROS.cbl:45: error: syntax error, unexpected MENU",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/lucasrmagalhaes_learning-COBOL/EXCLUINDOREGISTROS.cbl: stream did not contain valid UTF-8"
+      "cannot read EXCLUINDOREGISTROS.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -23881,7 +23881,7 @@
     "oracle_compile_note": "",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/lucasrmagalhaes_learning-COBOL/PROGCOB04.cob: stream did not contain valid UTF-8"
+      "cannot read PROGCOB04.cob: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -24253,7 +24253,7 @@
     "oracle_compile_note": "",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/lucasrmagalhaes_learning-COBOL/PROGCOBHELLOCOBOL.cob: stream did not contain valid UTF-8"
+      "cannot read PROGCOBHELLOCOBOL.cob: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -24340,7 +24340,7 @@
     "oracle_compile_note": "rejected by all dialects: RELATORIOEMDISCO.cbl:55: error: syntax error, unexpected MENU",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/lucasrmagalhaes_learning-COBOL/RELATORIOEMDISCO.cbl: stream did not contain valid UTF-8"
+      "cannot read RELATORIOEMDISCO.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -26599,7 +26599,7 @@
     "oracle_compile_note": "",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/etalab_taxe-fonciere/EFITAUX2.cob: stream did not contain valid UTF-8"
+      "cannot read EFITAUX2.cob: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -27598,7 +27598,7 @@
     "oracle_compile_note": "rejected by all dialects: cgi-remove-user.cbl:70: error: syntax error, unexpected Word or Literal, expecting .",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/debinix_openjensen/cgi-remove-user.cbl: stream did not contain valid UTF-8"
+      "cannot read cgi-remove-user.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -28109,7 +28109,7 @@
     "oracle_compile_note": "",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/MarcoDSilva_Learning_Cobol/Car_Rental.cbl: stream did not contain valid UTF-8"
+      "cannot read Car_Rental.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -28157,7 +28157,7 @@
     "oracle_compile_note": "",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/MarcoDSilva_Learning_Cobol/ISBN.cbl: stream did not contain valid UTF-8"
+      "cannot read ISBN.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -28181,7 +28181,7 @@
     "oracle_compile_note": "",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/MarcoDSilva_Learning_Cobol/Salary_Sheet.cbl: stream did not contain valid UTF-8"
+      "cannot read Salary_Sheet.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -28226,7 +28226,7 @@
     "oracle_compile_note": "",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/MarcoDSilva_Learning_Cobol/Variaveis2.cbl: stream did not contain valid UTF-8"
+      "cannot read Variaveis2.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -28271,7 +28271,7 @@
     "oracle_compile_note": "rejected by all dialects: calculator.COB: in paragraph 'inicio':",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/MarcoDSilva_Learning_Cobol/calculator.COB: stream did not contain valid UTF-8"
+      "cannot read calculator.COB: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -28295,7 +28295,7 @@
     "oracle_compile_note": "",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/MarcoDSilva_Learning_Cobol/gradeStudentFinalGrade.COB: stream did not contain valid UTF-8"
+      "cannot read gradeStudentFinalGrade.COB: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",
@@ -28319,7 +28319,7 @@
     "oracle_compile_note": "",
     "candidate_first_failure": [
       "preprocess",
-      "cannot read /tmp/corpus-p7/packages/xcobol/MarcoDSilva_Learning_Cobol/modelo.cbl: stream did not contain valid UTF-8"
+      "cannot read modelo.cbl: stream did not contain valid UTF-8"
     ],
     "candidate_phases_ok": false,
     "partition": "DEVELOPMENT",

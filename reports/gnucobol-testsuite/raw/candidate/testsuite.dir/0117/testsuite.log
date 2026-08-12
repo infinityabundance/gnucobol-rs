@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 117. syn_definition.at:1405: testing Invalid ENVIRONMENT DIVISION order ...
 ./syn_definition.at:1423: $COMPILE_ONLY -fincorrect-conf-sec-order=error prog.cob
---- -	2026-08-05 21:57:01.428181134 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/117/stderr	2026-08-05 21:57:01.427592805 +0000
+--- -	2026-08-12 01:52:46.960342647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/117/stderr	2026-08-12 01:52:46.959895021 +0000
 @@ -1,3 +1,2 @@
 -prog.cob:10: error: duplicate SPECIAL-NAMES
 -prog.cob:13: error: SOURCE-COMPUTER incorrectly after SPECIAL-NAMES used

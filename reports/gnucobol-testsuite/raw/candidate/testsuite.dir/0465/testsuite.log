@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 465. syn_literals.at:1178: testing NX literals ...
 ./syn_literals.at:1194: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.757067355 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/465/stderr	2026-08-05 21:57:01.756516496 +0000
+--- -	2026-08-12 01:52:47.146304486 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/465/stderr	2026-08-12 01:52:47.145661125 +0000
 @@ -1,10 +1 @@
 -prog.cob:6: warning: handling of national literal is unfinished; implementation is likely to be changed
 -prog.cob:7: warning: handling of national literal is unfinished; implementation is likely to be changed

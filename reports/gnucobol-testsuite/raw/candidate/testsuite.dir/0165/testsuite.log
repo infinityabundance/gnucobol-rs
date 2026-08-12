@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 165. syn_redefines.at:254: testing REDEFINES: with qualification ...
 ./syn_redefines.at:271: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.457518378 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/165/stderr	2026-08-05 21:57:01.455639257 +0000
+--- -	2026-08-12 01:52:46.985001052 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/165/stderr	2026-08-12 01:52:46.984379392 +0000
 @@ -1,2 +1 @@
 -prog.cob:10: error: 'X' cannot be qualified here
  

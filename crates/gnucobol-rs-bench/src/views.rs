@@ -338,7 +338,7 @@ fn oracle_prove_transformed(
         artifact,
         &transformed_file,
     ];
-    let (code, _out, err) = crate::run_cmd(oracle, &dir, &argv);
+    let (code, _out, _err) = crate::run_cmd(oracle, &dir, &argv);
     let compile_exit = code;
     if code != Some(0) {
         // the transformed copy is not oracle-valid: record that honestly (never a fabricated

@@ -2,14 +2,14 @@
 1186. run_extensions.at:4608: testing System routine CBL_ERROR_PROC (1) ...
 ./run_extensions.at:4672: $COMPILE prog.cob
 ./run_extensions.at:4673: $COBCRUN_DIRECT ./prog
---- -	2026-08-05 21:57:02.883554583 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1186/stderr	2026-08-05 21:57:02.881834229 +0000
+--- -	2026-08-12 01:52:47.814531376 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1186/stderr	2026-08-12 01:52:47.813611068 +0000
 @@ -1,2 +1,2 @@
 -libcob: prog.cob:25: error: module 'Tilt' not found
 +cobrun: unsupported: SET ERR-PROC-ADDRESS TO <value>: target is not a numeric/index item
  
---- -	2026-08-05 21:57:02.884261845 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1186/stdout	2026-08-05 21:57:02.883170075 +0000
+--- -	2026-08-12 01:52:47.815123301 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1186/stdout	2026-08-12 01:52:47.813611068 +0000
 @@ -1,11 +1 @@
 -Program is starting
 -Error (internal): DemoErrProc; S1; 25-

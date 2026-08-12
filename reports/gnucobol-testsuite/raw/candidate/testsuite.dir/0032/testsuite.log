@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 32. configuration.at:214: testing cobc with -std and -conf ...
 ./configuration.at:234: $COMPILE_ONLY -std=default -conf=test.conf prog.cob
---- -	2026-08-05 21:57:01.374878582 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/32/stderr	2026-08-05 21:57:01.374233316 +0000
+--- -	2026-08-12 01:52:46.917602322 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/32/stderr	2026-08-12 01:52:46.916908356 +0000
 @@ -1,2 +1 @@
 -configuration warning: test.conf: The previous loaded configuration 'GnuCOBOL' will be discarded.
  

@@ -2,8 +2,8 @@
 23. used_binaries.at:872: testing compile from stdin ...
 ./used_binaries.at:882: cat prog.cob | $COMPILE_MODULE -
 ./used_binaries.at:887: $COBCRUN a
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/23/stderr	2026-08-05 21:57:01.371480823 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/23/stderr	2026-08-12 01:52:46.913192661 +0000
 @@ -0,0 +1 @@
 +cobcrun: cannot find module a
 ./used_binaries.at:887: exit code was 1, expected 0

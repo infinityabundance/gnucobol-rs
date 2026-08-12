@@ -2,8 +2,8 @@
 1221. run_ml.at:316: testing XML GENERATE record selection ...
 ./run_ml.at:355: $COMPILE prog.cob
 ./run_ml.at:356: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1221/stdout	2026-08-05 21:57:02.921107809 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1221/stdout	2026-08-12 01:52:47.849999147 +0000
 @@ -0,0 +1 @@
 +Failed 2: <D><E>abc000</E></D>
 1221. run_ml.at:316: 1221. XML GENERATE record selection (run_ml.at:316): FAILED (run_ml.at:356)

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 1217. run_extensions.at:6252: testing GCOS literals with EBCDIC symbols (run) ...
 ./run_extensions.at:6286: $COMPILE -febcdic-symbolic-characters -febcdic-table=ebcdic500_latin1 prog.cob
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1217/stderr	2026-08-05 21:57:02.916081528 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1217/stderr	2026-08-12 01:52:47.846978629 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -febcdic-symbolic-characters: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): 
 ./run_extensions.at:6286: exit code was 1, expected 0

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 406. syn_move.at:189: testing MOVE numeric (integer) TO x ...
 ./syn_move.at:215: $COMPILE_ONLY -Wno-unfinished prog.cob
---- -	2026-08-05 21:57:01.690769512 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/406/stderr	2026-08-05 21:57:01.690194297 +0000
+--- -	2026-08-12 01:52:47.112725641 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/406/stderr	2026-08-12 01:52:47.111938672 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:14: error: invalid MOVE statement
 +cobc-rs: unsupported: PIC BX: UnsupportedSymbol('X')

@@ -2,8 +2,8 @@
 35. configuration.at:293: testing cobc configuration: entries ...
 ./configuration.at:306: $COMPILE_ONLY -q \
 -fcomment-paragraphsok prog.cob
---- -	2026-08-05 21:57:01.378146838 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/35/stderr	2026-08-05 21:57:01.377638989 +0000
+--- -	2026-08-12 01:52:46.919577128 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/35/stderr	2026-08-12 01:52:46.918979402 +0000
 @@ -1,2 +1,2 @@
 -cobc: unrecognized option '-fcomment-paragraphsok'
 +cobc-rs: -fcomment-paragraphsok: unknown option (no explicit policy; failing closed — see --print-capabilities)

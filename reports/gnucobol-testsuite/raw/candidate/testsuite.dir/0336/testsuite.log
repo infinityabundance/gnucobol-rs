@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 336. syn_misc.at:4675: testing USE FOR DEBUGGING syntax-checks (2) ...
 ./syn_misc.at:4722: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.622016822 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/336/stderr	2026-08-05 21:57:01.621512690 +0000
+--- -	2026-08-12 01:52:47.074820881 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/336/stderr	2026-08-12 01:52:47.074387823 +0000
 @@ -1,10 +1,2 @@
 -prog.cob: in section 'test-DEBUG':
 -prog.cob:22: warning: 'MAIN' is not in DECLARATIVES

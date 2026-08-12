@@ -7,7 +7,8 @@
 //!   unique_test_groups   — distinct Autotest group IDs in the suite inventory, one final
 //!                          classification each (1282 in the stable-3.2 ledger).
 //!   first_failure_groups — groups whose primary classification is a candidate check/parse
-//!                          reject (683 in the stable-3.2 ledger).
+//!                          reject (682 in the stable-3.2 ledger; the v2 ledger was 683, the
+//!                          v3 ledger reports 682 after the 2026-08 determinism fixes).
 //!   phase_observations   — one census row per first-failure group, each with exactly one
 //!                          phase (== first_failure_groups; never more).
 //!   unique_test_steps    — step-level (AT_CHECK) identities. The group-level ledger does not
@@ -20,8 +21,12 @@
 //! intermediate pipeline pass; the final two-pass ledger (commit 2748a02d0) reports 683. The
 //! Markdown/CSV/dependency-graph artifacts were never regenerated after that pass and remained
 //! stale at the 700-era content. This module regenerates the whole family from the machine
-//! ledger (`test-inventory.json`) + the raw candidate group logs, reproduces the 683 v2 rows
-//! exactly (validated), and documents the 700 -> 683 delta.
+//! ledger (`test-inventory.json`) + the raw candidate group logs, reproduces the ledger rows
+//! exactly (validated), and documents the deltas. The v3 ledger (2026-08, after the
+//! deterministic program-iteration and diagnostic-path-normalization fixes) reports 682: a net
+//! of one group left the check/parse first-failure set (the sorted check-program iteration
+//! consolidated the previously order-dependent diagnostics; the `cannot read <file>`
+//! normalization removed the machine path from a group key).
 
 use serde_json::{json, Value};
 use std::collections::{BTreeMap, BTreeSet};
@@ -36,7 +41,7 @@ pub const V1_HISTORICAL: [(&str, &str); 4] = [
     ("commit", "8d8c499e8"),
     ("parser_or_check_rejects", "700"),
     ("phases", "checker 399 / data-layout 137 / grammar 102 / name-resolution 29 / semantic-check 33"),
-    ("delta", "700 - 683 = 17 groups left the check/parse first-failure set (12 -> OBSERVABLE_MATCH, 5 -> CANDIDATE_RUNTIME_FAIL); none entered"),
+    ("delta", "700 - 683 = 17 groups left the check/parse first-failure set (12 -> OBSERVABLE_MATCH, 5 -> CANDIDATE_RUNTIME_FAIL); none entered. The v2 -> v3 delta is 683 - 682 = 1 group (the 2026-08 deterministic program-iteration + diagnostic-path-normalization fixes consolidated the order-dependent diagnostics)."),
 ];
 
 /// Ordered phase rules. This table is validated against the committed v2 census rows in the
@@ -479,7 +484,7 @@ fn render_reconciliation_json(census: &Value, inv: &Invariants) -> Value {
     json!({
         "schema": "gnurust-gnucobol-testsuite-parser-census-reconciliation-v1",
         "question": "the parser-reject census headline said ~700 while the suite summary reports 652 check + 31 parse = 683 first-failure groups; resolve exactly",
-        "answer": "the census Markdown (and the feature-frequency CSV and dependency graph) were generated from the v1 census (commit 8d8c499e8, an intermediate pipeline pass, 700 rows) and never regenerated after the final two-pass ledger (commit 2748a02d0, 683 rows). The machine JSONs (summary.json, test-inventory.json, parser-reject-census.json) always agreed on 683; only the regenerated-document family was stale. 700 - 683 = 17 groups left the check/parse first-failure set (12 -> OBSERVABLE_MATCH, 5 -> CANDIDATE_RUNTIME_FAIL); none entered.",
+        "answer": "the census Markdown (and the feature-frequency CSV and dependency graph) were generated from the v1 census (commit 8d8c499e8, an intermediate pipeline pass, 700 rows) and never regenerated after the final two-pass ledger (commit 2748a02d0, 683 rows). The machine JSONs (summary.json, test-inventory.json, parser-reject-census.json) always agreed on 683; only the regenerated-document family was stale. 700 - 683 = 17 groups left the check/parse first-failure set (12 -> OBSERVABLE_MATCH, 5 -> CANDIDATE_RUNTIME_FAIL); none entered. The v3 ledger (2026-08, after the deterministic program-iteration and diagnostic-path-normalization fixes) reports 682: one group left the set (the sorted check-program iteration consolidated the previously order-dependent USE/IDENTIFICATION diagnostics).",
         "terminology": {
             "unique_test_groups": "distinct Autotest group IDs in the suite inventory",
             "first_failure_groups": "groups whose primary classification is a candidate check/parse reject",
@@ -521,7 +526,15 @@ fn render_reconciliation_md(census: &Value, inv: &Invariants) -> String {
          `2748a02d0` with **683** rows. The v1 -> v2 delta is **700 - 683 = 17**: \
          **12** groups moved to `OBSERVABLE_MATCH` (front-end DISPLAY-literal / ROUNDED fixes) and \
          **5** to `CANDIDATE_RUNTIME_FAIL`; **none** entered the set. The stale Markdown was the \
-         only source of the 700 figure.\n\n\
+         only source of the 700 figure.\n\
+         \
+         **v3 ledger (2026-08): 683 -> 682.** The deterministic program-iteration fix (the check \
+         phase examines contained programs in sorted order, never HashMap-random order) and the \
+         diagnostic path normalization (the `cannot read <file>` diagnostic no longer embeds the \
+         machine corpus path) consolidated the previously order-dependent diagnostics: a net of \
+         **one** group left the check/parse first-failure set. The counting-unit table below \
+         carries the v3 values; the v1/v2 narrative above is preserved as history.\n\
+         \
          ## Counting units (machine-enforced)\n\n\
          | term | meaning | current value |\n\
          |---|---|---|\n\
@@ -538,6 +551,9 @@ fn render_reconciliation_md(census: &Value, inv: &Invariants) -> String {
          - rows: {}\n\
          - phases: checker {} / data-layout {} / grammar {} / name-resolution {} / semantic-check {}\n\
          - exhibit: `reports/gnucobol-testsuite/parser-reject-census.v1.json` (preserved)\n\n\
+         ## Historical v2 (the two-pass ledger, commit 2748a02d0)\n\n\
+         - rows: 683\n\
+         - the 700 -> 683 delta above; superseded by the v3 counting units.\n\
          ## Delta (machine-computed from the preserved v1 exhibit)\n\n\
          ```json\n\
          {}\n\
@@ -818,9 +834,9 @@ mod tests {
             None,
         )
         .unwrap();
-        assert_eq!(inv_block.first_failure_groups, 683);
-        assert_eq!(inv_block.summary_check_plus_parse, Some(683));
+        assert_eq!(inv_block.first_failure_groups, 682);
+        assert_eq!(inv_block.summary_check_plus_parse, Some(682));
         assert_eq!(inv_block.unique_test_groups, 1282);
-        assert_eq!(inv_block.phase_observations, 683);
+        assert_eq!(inv_block.phase_observations, 682);
     }
 }

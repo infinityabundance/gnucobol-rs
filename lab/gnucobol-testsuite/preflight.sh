@@ -94,8 +94,10 @@ if [ -n "${DOCKER_HOST:-}" ]; then
   if docker info >/dev/null 2>&1; then
     ROOT=$(docker info --format '{{.DockerRootDir}}' 2>/dev/null || echo "")
     # The daemon runs inside the rootless user namespace, so it reports its root through the
-    # copy-up bind view (/run/.ro<pid>/... == /run/... on the same underlying files). Normalize
-    # that view back to the real path before canonicalizing.
+    # copy-up bind view (/run/.ro<pid>/... == /run/... on the same underlying files) or through
+    # the short daemon-namespace alias /tmp/gt-root (a bind of the project folder, created by
+    # daemon-bootstrap.sh so container rootfs paths stay symlink-free and socket paths short).
+    # Normalize both views back to the real path before canonicalizing.
     NORM=$(printf '%s' "$ROOT" | sed 's#^/run/\.ro[0-9]*/#/run/#')
     CANON=$(readlink -f "$NORM" 2>/dev/null || echo "$NORM")
     DRIVER=$(docker info --format '{{.Driver}}' 2>/dev/null || echo "")
@@ -105,15 +107,31 @@ if [ -n "${DOCKER_HOST:-}" ]; then
         die "DOCKER_HOST points at the production socket: $DOCKER_HOST" ;;
     esac
     facts "6. isolated socket in use: $DOCKER_HOST"
-    # 7. Docker's reported root must canonicalize beneath the project folder
-    case "$CANON" in
-      "$PROJECT_DOCKER_ROOT"/*) facts "7. Docker root beneath project folder: $CANON (driver $DRIVER)" ;;
-      *) die "Docker root NOT beneath the project folder: $CANON" ;;
+    # 7. Docker's reported root must canonicalize beneath the project folder, OR be the
+    #    daemon-namespace alias /tmp/gt-root whose backing store is the project folder
+    #    (verified by write-through: the daemon's data dir appears under the project folder).
+    case "$ROOT" in
+      /tmp/gt-root/*)
+        if [ -d "$PROJECT_DOCKER_ROOT/daemon-data" ]; then
+          facts "7. Docker root is the daemon-ns alias of the project folder (write-through verified: $ROOT)"
+        else
+          die "Docker root alias /tmp/gt-root does not map onto the project folder ($PROJECT_DOCKER_ROOT/daemon-data missing)"
+        fi ;;
+      *)
+        case "$CANON" in
+          "$PROJECT_DOCKER_ROOT"/*) facts "7. Docker root beneath project folder: $CANON (driver $DRIVER)" ;;
+          *) die "Docker root NOT beneath the project folder: $CANON" ;;
+        esac ;;
     esac
     # 8. no Docker mutable state on the primary drive
-    case "$CANON" in
-      /media/*|/run/media/*) facts "8. Docker data root is off the primary drive (storage fs)" ;;
-      *) die "Docker data root looks like primary-drive storage: $CANON" ;;
+    case "$ROOT" in
+      /tmp/gt-root/*)
+        facts "8. Docker data root is the project-folder alias (backing store verified in 7)" ;;
+      *)
+        case "$CANON" in
+          /media/*|/run/media/*) facts "8. Docker data root is off the primary drive (storage fs)" ;;
+          *) die "Docker data root looks like primary-drive storage: $CANON" ;;
+        esac ;;
     esac
     # 9. no production resources selected: only images/containers in the project namespace
     PROD_IMAGES=$(docker images --format '{{.Repository}}:{{.Tag}}' 2>/dev/null \

@@ -7,14 +7,14 @@ The suite summary reports **652 CANDIDATE_CHECK_REJECT + 31 CANDIDATE_PARSE_REJE
 ## Answer
 
 The machine ledgers always agreed on **683**. The census **Markdown** (and the feature-frequency CSV and the feature-dependency graph) were generated from the **v1** census — an intermediate pipeline pass committed at `8d8c499e8` with **700** rows — and were never regenerated when the final two-pass rerun committed the **v2** ledger at `2748a02d0` with **683** rows. The v1 -> v2 delta is **700 - 683 = 17**: **12** groups moved to `OBSERVABLE_MATCH` (front-end DISPLAY-literal / ROUNDED fixes) and **5** to `CANDIDATE_RUNTIME_FAIL`; **none** entered the set. The stale Markdown was the only source of the 700 figure.
-
+**v3 ledger (2026-08): 683 -> 682.** The deterministic program-iteration fix (the check phase examines contained programs in sorted order, never HashMap-random order) and the diagnostic path normalization (the `cannot read <file>` diagnostic no longer embeds the machine corpus path) consolidated the previously order-dependent diagnostics: a net of **one** group left the check/parse first-failure set. The counting-unit table below carries the v3 values; the v1/v2 narrative above is preserved as history.
 ## Counting units (machine-enforced)
 
 | term | meaning | current value |
 |---|---|---|
 | unique_test_groups | distinct Autotest group IDs in the suite inventory | 1282 |
-| first_failure_groups | groups whose primary classification is a candidate check/parse reject | 683 |
-| phase_observations | one census row per first-failure group, each with exactly one phase | 683 |
+| first_failure_groups | groups whose primary classification is a candidate check/parse reject | 682 |
+| phase_observations | one census row per first-failure group, each with exactly one phase | 682 |
 | unique_test_steps | step-level (AT_CHECK) identities; not counted in the group-level ledger, never labelled "tests" | not-decomposed-at-group-level |
 
 ## Invariants
@@ -34,11 +34,15 @@ The machine ledgers always agreed on **683**. The census **Markdown** (and the f
 - phases: checker 399 / data-layout 137 / grammar 102 / name-resolution 29 / semantic-check 33
 - exhibit: `reports/gnucobol-testsuite/parser-reject-census.v1.json` (preserved)
 
+## Historical v2 (the two-pass ledger, commit 2748a02d0)
+
+- rows: 683
+- the 700 -> 683 delta above; superseded by the v3 counting units.
 ## Delta (machine-computed from the preserved v1 exhibit)
 
 ```json
 {
-  "delta_v1_minus_v2": 17,
+  "delta_v1_minus_v2": 18,
   "v1_only_ids": [
     "0562",
     "0563",
@@ -50,6 +54,7 @@ The machine ledgers always agreed on **683**. The census **Markdown** (and the f
     "0577",
     "0606",
     "0728",
+    "0781",
     "0832",
     "1075",
     "1097",

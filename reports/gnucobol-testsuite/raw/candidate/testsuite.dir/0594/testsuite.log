@@ -2,8 +2,8 @@
 594. run_fundamental.at:5232: testing USE FOR DEBUGGING ON ALL PROCEDURES ...
 ./run_fundamental.at:5262: $COMPILE prog.cob
 ./run_fundamental.at:5263: COB_SET_DEBUG=1 $COBCRUN_DIRECT ./prog
---- -	2026-08-05 21:57:01.939296468 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/594/stdout	2026-08-05 21:57:01.938761698 +0000
+--- -	2026-08-12 01:52:47.234384989 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/594/stdout	2026-08-12 01:52:47.233922526 +0000
 @@ -1,15 +1,9 @@
 -       FIRST-PAR                                        START PROGRAM                 |
  OK1

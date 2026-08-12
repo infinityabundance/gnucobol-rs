@@ -65,3 +65,8 @@ lab/corpus/opencbs/
 /tf1
 /tf2
 /crates/*/cob-prof-*.csv
+
+# Valid-corpus + performance docker lanes: private per-machine replay overrides (docker root +
+# base-image artifact paths are HOST facts, never committed; only symbolic aliases in evidence)
+/lab/valid-corpus/.env.local
+/lab/performance/.env.local

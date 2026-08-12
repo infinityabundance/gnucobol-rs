@@ -1,12 +1,12 @@
 #                             -*- compilation -*-
 504. listings.at:3884: testing LISTING directive free-form reference-format ...
 ./listings.at:3921: $COMPILE_LISTING0 -t- -ftsymbols -free prog.cob
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/504/stderr	2026-08-05 21:57:01.800022243 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/504/stderr	2026-08-12 01:52:47.169796905 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
---- -	2026-08-05 21:57:01.801502709 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/504/stdout	2026-08-05 21:57:01.800400280 +0000
+--- -	2026-08-12 01:52:47.171095288 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/504/stdout	2026-08-12 01:52:47.170292640 +0000
 @@ -1,54 +1 @@
 -GnuCOBOL V.R.P               prog.cob
 -

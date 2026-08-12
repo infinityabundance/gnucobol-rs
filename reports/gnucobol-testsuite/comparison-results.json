@@ -9354,23 +9354,23 @@
       "files": "see raw group logs",
       "number": 780,
       "oracle": "ORACLE_PASS",
-      "primary_classification": "CANDIDATE_CHECK_REJECT",
+      "primary_classification": "CANDIDATE_PARSE_REJECT",
       "stderr": "see raw group logs",
       "stdout": "candidate failed with a group log; oracle has none",
       "test_id": "0780",
       "title": "run_misc.at:5157: 780. ANY LENGTH (3)"
     },
     {
-      "candidate": "-",
-      "exit_status": "see raw group logs",
-      "files": "see raw group logs",
+      "candidate": "ok",
+      "exit_status": "same",
+      "files": "same",
       "number": 781,
       "oracle": "ORACLE_PASS",
-      "primary_classification": "CANDIDATE_CHECK_REJECT",
-      "stderr": "see raw group logs",
-      "stdout": "candidate failed with a group log; oracle has none",
+      "primary_classification": "OBSERVABLE_MATCH",
+      "stderr": "same",
+      "stdout": "same",
       "test_id": "0781",
-      "title": "run_misc.at:5200: 781. ANY LENGTH (4)"
+      "title": "ANY LENGTH (4)"
     },
     {
       "candidate": "ok",
@@ -11341,16 +11341,16 @@
       "title": "run_file.at:13156: 945. File SORT, LINE SEQUENTIAL same file"
     },
     {
-      "candidate": "-",
-      "exit_status": "see raw group logs",
-      "files": "see raw group logs",
+      "candidate": "ok",
+      "exit_status": "same",
+      "files": "same",
       "number": 946,
       "oracle": "ORACLE_PASS",
-      "primary_classification": "CANDIDATE_UNSUPPORTED",
-      "stderr": "see raw group logs",
-      "stdout": "candidate failed with a group log; oracle has none",
+      "primary_classification": "OBSERVABLE_MATCH",
+      "stderr": "same",
+      "stdout": "same",
       "test_id": "0946",
-      "title": "run_file.at:13203: 946. File SORT, LINE SEQUENTIAL variable records"
+      "title": "File SORT, LINE SEQUENTIAL variable records"
     },
     {
       "candidate": "-",
@@ -11365,28 +11365,28 @@
       "title": "run_file.at:13267: 947. EXTFH: File SORT, LINE SEQUENTIAL variable records"
     },
     {
-      "candidate": "-",
-      "exit_status": "see raw group logs",
-      "files": "see raw group logs",
-      "number": 948,
-      "oracle": "ORACLE_PASS",
-      "primary_classification": "CANDIDATE_UNSUPPORTED",
-      "stderr": "see raw group logs",
-      "stdout": "candidate failed with a group log; oracle has none",
-      "test_id": "0948",
-      "title": "run_file.at:13334: 948. File MERGE, LINE SEQUENTIAL variable records"
-    },
-    {
       "candidate": "ok",
       "exit_status": "same",
       "files": "same",
-      "number": 949,
+      "number": 948,
       "oracle": "ORACLE_PASS",
       "primary_classification": "OBSERVABLE_MATCH",
       "stderr": "same",
       "stdout": "same",
+      "test_id": "0948",
+      "title": "File MERGE, LINE SEQUENTIAL variable records"
+    },
+    {
+      "candidate": "-",
+      "exit_status": "see raw group logs",
+      "files": "see raw group logs",
+      "number": 949,
+      "oracle": "ORACLE_PASS",
+      "primary_classification": "CANDIDATE_RUNTIME_FAIL",
+      "stderr": "see raw group logs",
+      "stdout": "candidate failed with a group log; oracle has none",
       "test_id": "0949",
-      "title": "SORT nonexistent file"
+      "title": "run_file.at:13425: 949. SORT nonexistent file"
     },
     {
       "candidate": "-",
@@ -11401,16 +11401,16 @@
       "title": "run_file.at:13460: 950. SORT with INPUT/OUTPUT PROCEDUREs"
     },
     {
-      "candidate": "-",
-      "exit_status": "see raw group logs",
-      "files": "see raw group logs",
+      "candidate": "ok",
+      "exit_status": "same",
+      "files": "same",
       "number": 951,
       "oracle": "ORACLE_PASS",
-      "primary_classification": "CANDIDATE_UNSUPPORTED",
-      "stderr": "see raw group logs",
-      "stdout": "candidate failed with a group log; oracle has none",
+      "primary_classification": "OBSERVABLE_MATCH",
+      "stderr": "same",
+      "stdout": "same",
       "test_id": "0951",
-      "title": "run_file.at:13550: 951. SORT with key1 ASCENDING, key2 DESCENDING"
+      "title": "SORT with key1 ASCENDING, key2 DESCENDING"
     },
     {
       "candidate": "-",
@@ -12438,7 +12438,7 @@
       "files": "see raw group logs",
       "number": 1037,
       "oracle": "ORACLE_PASS",
-      "primary_classification": "CANDIDATE_CHECK_REJECT",
+      "primary_classification": "CANDIDATE_PARSE_REJECT",
       "stderr": "see raw group logs",
       "stdout": "candidate failed with a group log; oracle has none",
       "test_id": "1037",
@@ -12954,7 +12954,7 @@
       "files": "see raw group logs",
       "number": 1080,
       "oracle": "ORACLE_PASS",
-      "primary_classification": "CANDIDATE_CHECK_REJECT",
+      "primary_classification": "CANDIDATE_PARSE_REJECT",
       "stderr": "see raw group logs",
       "stdout": "candidate failed with a group log; oracle has none",
       "test_id": "1080",

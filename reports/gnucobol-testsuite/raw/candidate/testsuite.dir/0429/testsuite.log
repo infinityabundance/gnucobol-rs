@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 429. syn_screen.at:315: testing Screen clauses ...
 ./syn_screen.at:334: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.725595041 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/429/stderr	2026-08-05 21:57:01.724887138 +0000
+--- -	2026-08-12 01:52:47.125236733 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/429/stderr	2026-08-12 01:52:47.124437000 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:11: warning: GRID is not implemented
 +cobc-rs: unsupported: unsupported level number SCREEN

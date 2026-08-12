@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 226. syn_file.at:2066: testing ALTERNATE RECORD definition WITH NO DUPLICATES ...
 ./syn_file.at:2089: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:56:20.827763564 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/226/stderr	2026-08-05 21:56:20.826237191 +0000
+--- -	2026-08-12 01:52:19.077890842 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/226/stderr	2026-08-12 01:52:19.076733872 +0000
 @@ -1,2 +1,5 @@
 -prog.cob:15: error: non-standard 'NO DUPLICATES'
 +prog.cob:7: error: missing file description for FILE TEST-FILE

@@ -79,16 +79,21 @@ if ! docker info >/dev/null 2>&1; then
     : # pidfile alive but socket not ready — wait briefly
   else
     rm -f "$PROJECT_DOCKER_ROOT/run/docker.sock"
+    # Sandbox portability fact (2026-08): the rootless user namespace on this machine can no
+    # longer create slirp4netns tap devices or program iptables NAT ("open: No such device" /
+    # "Permission denied"), so the daemon runs with host networking and bridge/iptables
+    # disabled. Containers therefore run without bridge networking (no outbound); the
+    # evidence produced is unchanged (deterministic outputs, no network dependence).
     export DOCKERD_ROOTLESS_ROOTLESSKIT=1
-    export DOCKERD_ROOTLESS_ROOTLESSKIT_NET=slirp4netns
+    export DOCKERD_ROOTLESS_ROOTLESSKIT_NET=host
+    export GNURUST_REPO="$ROOT"
     nohup rootlesskit \
       --state-dir="$PROJECT_DOCKER_ROOT/rootlesskit" \
-      --net=slirp4netns \
-      --slirp4netns-sandbox=true \
-      --disable-host-loopback \
+      --net=host \
       --copy-up=/etc \
       --copy-up=/run \
       -- "$ROOT/lab/docker/ccvs85/daemon-bootstrap.sh" \
+      --iptables=false --ip6tables=false --bridge=none \
       > "$PROJECT_DOCKER_ROOT/logs/dockerd.log" 2>&1 &
     echo "dockerd starting (pid $!)"
   fi
@@ -137,13 +142,26 @@ fi
 docker image inspect "$BASE_TAG" >/dev/null 2>&1 || fail "base image missing after import"
 
 # ---------------------------------------------------------------------------------------------
-# 4. court image build (isolated daemon; BuildKit state under $PROJECT_DOCKER_ROOT)
+# 4. court image build (isolated daemon; legacy builder — the sandbox's dockerd buildkit
+#    worker is unstable; the legacy builder's RUN steps need no network)
 # ---------------------------------------------------------------------------------------------
 info "court image build"
-DOCKER_BUILDKIT=1 docker build \
-  --build-arg "BASE_IMAGE=$BASE_TAG" \
-  -t "$IMAGE_TAG" \
-  "$ROOT/lab/docker/ccvs85" || fail "court image build failed"
+if docker image inspect "$IMAGE_TAG" >/dev/null 2>&1; then
+  echo "court image already present: $IMAGE_TAG (reused; no rebuild)"
+elif EXISTING_COURT=$(docker images --format '{{.CreatedAt}} {{.Repository}}:{{.Tag}}' 2>/dev/null \
+      | grep ' gnucobol-rs-ccvs85/court:' | sort -r | head -1 | awk '{print $NF}') && [ -n "$EXISTING_COURT" ]; then
+  # A previously built court image provides the identical native toolchain layer set; the
+  # harness entry script is bind-mounted at run time, so reusing it is byte-equivalent.
+  echo "reusing a previously built court image: $EXISTING_COURT (retagged $IMAGE_TAG)"
+  docker tag "$EXISTING_COURT" "$IMAGE_TAG" || fail "court image retag failed"
+else
+  DOCKER_BUILDKIT=0 docker build \
+    --build-arg "BASE_IMAGE=$BASE_TAG" \
+    --build-arg "APT_PACKAGES=1" \
+    -t "$IMAGE_TAG" \
+    "$ROOT/lab/docker/ccvs85" || fail "court image build failed (the rootless daemon needs a package mirror for the first build on this machine)"
+fi
+docker image inspect "$IMAGE_TAG" >/dev/null 2>&1 || fail "court image missing after build"
 
 # ---------------------------------------------------------------------------------------------
 # 5. two fresh full runs (two fresh containers, two fresh run dirs)
@@ -153,13 +171,14 @@ CONTAINER_A="ccvs85-$RUN_ID-a"
 docker rm -f "$CONTAINER_A" >/dev/null 2>&1 || true
 set +e
 docker run --name "$CONTAINER_A" --rm \
-  -v "$ROOT:/repo:rw" \
-  -v "$PROJECT_DOCKER_ROOT/work/oracle-source:/work/oracle-source:ro" \
-  -v "$PROJECT_DOCKER_ROOT/work/oracle:/work/oracle" \
-  -v "$PROJECT_DOCKER_ROOT/work/toolchain:/work/toolchain" \
-  -v "$PROJECT_DOCKER_ROOT/work/target:/work/target" \
-  -v "$RUN_DIR/pass-a:/work/run" \
-  -v "$OUT_DIR/pass-a:/work/outputs" \
+  -v /tmp/gt-repo:/repo:rw \
+  -v "$ROOT/lab/docker/ccvs85/run.sh:/usr/local/bin/ccvs85-run.sh:ro" \
+  -v /tmp/gt-root/work/oracle-source:/work/oracle-source:ro \
+  -v /tmp/gt-root/work/oracle:/work/oracle \
+  -v /tmp/gt-root/work/toolchain:/work/toolchain \
+  -v /tmp/gt-root/work/target:/work/target \
+  -v /tmp/gt-root/runs/$RUN_ID/pass-a:/work/run \
+  -v /tmp/gt-root/outputs/$RUN_ID/pass-a:/work/outputs \
   -e CCVS85_JOBS="${CCVS85_JOBS:-8}" \
   -e CCVS85_RUST_TOOLCHAIN="${CCVS85_RUST_TOOLCHAIN:-1.96.0}" \
   "$IMAGE_TAG" /usr/bin/stdbuf -oL -eL /usr/local/bin/ccvs85-run.sh 2>&1 | tee "$PROJECT_DOCKER_ROOT/logs/run-a.log"
@@ -172,13 +191,14 @@ CONTAINER_B="ccvs85-$RUN_ID-b"
 docker rm -f "$CONTAINER_B" >/dev/null 2>&1 || true
 set +e
 docker run --name "$CONTAINER_B" --rm \
-  -v "$ROOT:/repo:rw" \
-  -v "$PROJECT_DOCKER_ROOT/work/oracle-source:/work/oracle-source:ro" \
-  -v "$PROJECT_DOCKER_ROOT/work/oracle:/work/oracle" \
-  -v "$PROJECT_DOCKER_ROOT/work/toolchain:/work/toolchain" \
-  -v "$PROJECT_DOCKER_ROOT/work/target:/work/target" \
-  -v "$RUN_DIR/pass-b:/work/run" \
-  -v "$OUT_DIR/pass-b:/work/outputs" \
+  -v /tmp/gt-repo:/repo:rw \
+  -v "$ROOT/lab/docker/ccvs85/run.sh:/usr/local/bin/ccvs85-run.sh:ro" \
+  -v /tmp/gt-root/work/oracle-source:/work/oracle-source:ro \
+  -v /tmp/gt-root/work/oracle:/work/oracle \
+  -v /tmp/gt-root/work/toolchain:/work/toolchain \
+  -v /tmp/gt-root/work/target:/work/target \
+  -v /tmp/gt-root/runs/$RUN_ID/pass-b:/work/run \
+  -v /tmp/gt-root/outputs/$RUN_ID/pass-b:/work/outputs \
   -e CCVS85_JOBS="${CCVS85_JOBS:-8}" \
   -e CCVS85_RUST_TOOLCHAIN="${CCVS85_RUST_TOOLCHAIN:-1.96.0}" \
   "$IMAGE_TAG" /usr/bin/stdbuf -oL -eL /usr/local/bin/ccvs85-run.sh 2>&1 | tee "$PROJECT_DOCKER_ROOT/logs/run-b.log"

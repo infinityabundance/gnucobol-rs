@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 54. syn_copy.at:286: testing COPY: file not found ...
 ./syn_copy.at:303: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.392270086 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/54/stderr	2026-08-05 21:57:01.391186322 +0000
+--- -	2026-08-12 01:52:46.931025196 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/54/stderr	2026-08-12 01:52:46.930301024 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:6: error: copy.inc: No such file or directory
 +cobc-rs: COPY expansion failed (fail closed): malformed COPY statement

@@ -2,8 +2,8 @@
 713. run_misc.at:1726: testing TRANSFORM statement ...
 ./run_misc.at:1753: $COMPILE prog.cob
 ./run_misc.at:1754: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/713/stderr	2026-08-05 21:57:02.040157089 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/713/stderr	2026-08-12 01:52:47.318184451 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: MY-ASCII
 ./run_misc.at:1754: exit code was 2, expected 0

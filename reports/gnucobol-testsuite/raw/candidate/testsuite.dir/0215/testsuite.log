@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 215. syn_file.at:1603: testing INDEXED file PASSWORD clause ...
 ./syn_file.at:1644: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.502382293 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/215/stderr	2026-08-05 21:57:01.501571919 +0000
+--- -	2026-08-12 01:52:47.012230416 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/215/stderr	2026-08-12 01:52:47.011234998 +0000
 @@ -1,5 +1 @@
 -prog.cob:10: warning: PASSWORD clause is not implemented
 -prog.cob:15: warning: PASSWORD clause is not implemented

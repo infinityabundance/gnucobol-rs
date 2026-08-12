@@ -49,10 +49,10 @@ rm -f /run/docker /run/containerd
 mkdir -p /run/docker/plugins /run/containerd/s
 
 exec dockerd \
-  --data-root="$PROJECT_DOCKER_ROOT/daemon-data" \
-  --exec-root="$PROJECT_DOCKER_ROOT/exec-root" \
-  --pidfile="$PROJECT_DOCKER_ROOT/run/docker.pid" \
-  --host="unix://$PROJECT_DOCKER_ROOT/run/docker.sock" \
+  --data-root=/tmp/gt-root/daemon-data \
+  --exec-root=/tmp/gt-root/exec-root \
+  --pidfile=/tmp/gt-root/run/docker.pid \
+  --host="unix:///tmp/gt-root/run/docker.sock" \
   --storage-driver=overlay2 \
   --userland-proxy=false \
   "$@"

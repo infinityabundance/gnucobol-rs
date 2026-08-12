@@ -1,12 +1,12 @@
 #                             -*- compilation -*-
 476. listings.at:85: testing COPY within comment ...
 ./listings.at:98: $COMPILE_LISTING0 -t- prog.cob
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/476/stderr	2026-08-05 21:57:01.763654372 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/476/stderr	2026-08-12 01:52:47.151399225 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
---- -	2026-08-05 21:57:01.765621197 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/476/stdout	2026-08-05 21:57:01.764640094 +0000
+--- -	2026-08-12 01:52:47.153089029 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/476/stdout	2026-08-12 01:52:47.151399225 +0000
 @@ -1,17 +1 @@
 -GnuCOBOL V.R.P               prog.cob
 -

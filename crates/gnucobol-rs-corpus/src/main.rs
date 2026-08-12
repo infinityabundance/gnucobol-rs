@@ -13,6 +13,14 @@ use std::path::PathBuf;
 use std::process::ExitCode;
 
 fn main() -> ExitCode {
+    // Deterministic probe environment: the candidate's WHEN-COMPILED / MODULE-DATE / MODULE-TIME
+    // support requires a pinned SOURCE_DATE_EPOCH (the reproducible-builds standard) and must
+    // never depend on the ambient shell (the lane containers pin it; a bare host shell does
+    // not). Pin the canonical corpus epoch when the caller did not choose one -- the probe
+    // subprocesses inherit it, so probe results are environment-independent.
+    if std::env::var_os("SOURCE_DATE_EPOCH").is_none() {
+        std::env::set_var("SOURCE_DATE_EPOCH", "725846400");
+    }
     let args: Vec<String> = std::env::args().skip(1).collect();
     let cmd = match cli::parse(&args) {
         Ok(c) => c,

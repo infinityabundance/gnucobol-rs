@@ -84,7 +84,7 @@ pub fn probe_dir(group_dir: &Path, main_file: &str, run: bool) -> Vec<PhaseOutco
             return vec![PhaseOutcome {
                 phase: "preprocess".to_string(),
                 ok: false,
-                diagnostic: format!("cannot read {}: {e}", path.display()),
+                diagnostic: format!("cannot read {main_file}: {e}"),
             }]
         }
     };

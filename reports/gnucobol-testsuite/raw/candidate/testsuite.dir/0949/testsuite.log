@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+949. run_file.at:13425: testing SORT nonexistent file ...
+./run_file.at:13453: $COMPILE prog.cob
+./run_file.at:13454: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/949/stderr	2026-08-12 01:52:47.513929100 +0000
+@@ -0,0 +1 @@
++cobrun: runtime error: SORT/MERGE USING: file does not exist (status = 35) for file `SORT-IN`
+./run_file.at:13454: exit code was 2, expected 0
+949. run_file.at:13425: 949. SORT nonexistent file (run_file.at:13425): FAILED (run_file.at:13454)

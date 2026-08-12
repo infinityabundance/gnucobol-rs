@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 282. syn_misc.at:1812: testing source text after program-text area ...
 ./syn_misc.at:1826: $COMPILE_ONLY -Wextra prog.cob
---- -	2026-08-05 21:57:01.563388610 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/282/stderr	2026-08-05 21:57:01.562830938 +0000
+--- -	2026-08-12 01:52:47.045899359 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/282/stderr	2026-08-12 01:52:47.045096290 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:8: warning: source text after program-text area (column 72)
 +cobc-rs: unsupported: verb COMMENT

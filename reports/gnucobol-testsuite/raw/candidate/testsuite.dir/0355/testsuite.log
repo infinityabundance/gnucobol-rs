@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 355. syn_misc.at:5776: testing WHEN-COMPILED register in dialect ...
 ./syn_misc.at:5788: $COMPILE_ONLY -std=cobol2014 prog.cob
---- -	2026-08-05 21:57:01.632422114 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/355/stderr	2026-08-05 21:57:01.631050501 +0000
+--- -	2026-08-12 01:52:47.084710200 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/355/stderr	2026-08-12 01:52:47.084256303 +0000
 @@ -1,2 +1 @@
 -prog.cob:6: error: 'WHEN-COMPILED' is not defined
  

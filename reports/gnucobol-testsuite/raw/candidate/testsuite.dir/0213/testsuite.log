@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 213. syn_file.at:1460: testing FILE STATUS ...
 ./syn_file.at:1539: $COMPILE_ONLY -fodoslide prog.cob
---- -	2026-08-05 21:57:01.503884691 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/213/stderr	2026-08-05 21:57:01.502610750 +0000
+--- -	2026-08-12 01:52:47.009766277 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/213/stderr	2026-08-12 01:52:47.009228863 +0000
 @@ -1,14 +1,2 @@
 -prog.cob:57: warning: handling of USAGE NATIONAL is unfinished; implementation is likely to be changed
 -prog.cob:18: error: 'non-existent' is not defined

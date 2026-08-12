@@ -52,10 +52,10 @@ if [ ! -x "$ORACLE_PREFIX/bin/cobc" ]; then
     || fail "oracle source sha256 mismatch: $GOT"
   mkdir -p /work/oracle/build
   cd /work/oracle/build
-  tar --lzip -xf "$SRC" --strip-components=1
+  tar --lzip --no-same-owner -xf "$SRC" --strip-components=1
   ./configure --prefix="$ORACLE_PREFIX" --with-db \
       BDB_CFLAGS="-I/usr/include/db5.3" BDB_LIBS="-ldb-5.3" \
-      CFLAGS="-O2 -std=gnu17 -fsigned-char -fpermissive \
+      CFLAGS="-O2 -std=gnu17 -fsigned-char \
               -Wno-incompatible-pointer-types -Wno-int-conversion \
               -Wno-implicit-function-declaration" \
       > /work/oracle/configure.log 2>&1 || { tail -30 /work/oracle/configure.log; fail "configure failed"; }

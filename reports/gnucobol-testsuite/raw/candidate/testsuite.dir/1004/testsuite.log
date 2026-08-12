@@ -2,8 +2,8 @@
 1004. run_functions.at:835: testing FUNCTION DATE-TO-YYYYMMDD ...
 ./run_functions.at:854: $COMPILE prog.cob
 ./run_functions.at:855: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1004/stderr	2026-08-05 21:57:02.617303985 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1004/stderr	2026-08-12 01:52:47.575177400 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: FUNCTION DATE-TO-YYYYMMDD requires a pinned COB_CURRENT_DATE
 ./run_functions.at:855: exit code was 2, expected 0

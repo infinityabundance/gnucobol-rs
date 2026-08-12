@@ -2,12 +2,12 @@
 609. run_fundamental.at:6318: testing DISPLAY with P fields ...
 ./run_fundamental.at:6348: $COMPILE prog.cob
 ./run_fundamental.at:6349: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/609/stderr	2026-08-05 21:57:01.950764815 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/609/stderr	2026-08-12 01:52:47.243355673 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: PIC VP9: ScalingPDeferred
---- -	2026-08-05 21:57:01.951984394 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/609/stdout	2026-08-05 21:57:01.951474702 +0000
+--- -	2026-08-12 01:52:47.244400423 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/609/stdout	2026-08-12 01:52:47.243833344 +0000
 @@ -1,5 +1 @@
 -00=00; 001=001; 00=00;
 -.00=.00; .000=.000; .123=.123; .00=.00; .000=.000;

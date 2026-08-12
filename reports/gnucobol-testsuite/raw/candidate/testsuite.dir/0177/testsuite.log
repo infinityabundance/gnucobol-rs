@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 177. syn_value.at:213: testing Numeric item with picture P ...
 ./syn_value.at:233: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.464684528 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/177/stderr	2026-08-05 21:57:01.463713814 +0000
+--- -	2026-08-12 01:52:46.990688878 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/177/stderr	2026-08-12 01:52:46.989710061 +0000
 @@ -1,5 +1 @@
 -prog.cob:8: warning: value does not fit the picture string
 -prog.cob:9: warning: value size exceeds data size

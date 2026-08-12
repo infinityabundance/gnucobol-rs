@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 239. syn_reportwriter.at:556: testing Report FD without period ...
 ./syn_reportwriter.at:589: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.531635411 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/239/stderr	2026-08-05 21:57:01.530519756 +0000
+--- -	2026-08-12 01:52:47.024367750 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/239/stderr	2026-08-12 01:52:47.023856847 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:13: error: syntax error, unexpected end of file, expecting Identifier
 +cobc-rs: unsupported: no PROCEDURE DIVISION

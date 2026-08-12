@@ -3,12 +3,12 @@
 ./run_file.at:2774: $COMPILE prog.cob
 ./run_file.at:2775: rm -f "indexed-file.*"
 ./run_file.at:2776: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/875/stderr	2026-08-05 21:57:02.450064309 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/875/stderr	2026-08-12 01:52:47.445707664 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: PIC 99X99: UnsupportedSymbol('X')
---- -	2026-08-05 21:57:02.451853102 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/875/stdout	2026-08-05 21:57:02.450064309 +0000
+--- -	2026-08-12 01:52:47.446992873 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/875/stdout	2026-08-12 01:52:47.446418241 +0000
 @@ -1,29 +1 @@
 -Read all 00b02 keys sequentially
 -Reading: 00b02

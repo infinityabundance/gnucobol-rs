@@ -2,12 +2,12 @@
 637. run_subscripts.at:542: testing CALL with OCCURS DEPENDING ON ...
 ./run_subscripts.at:581: $COMPILE prog.cob
 ./run_subscripts.at:582: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/637/stderr	2026-08-05 21:57:01.972217418 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/637/stderr	2026-08-12 01:52:47.264390184 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: PARM-STR
---- -	2026-08-05 21:57:01.974761351 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/637/stdout	2026-08-05 21:57:01.974087703 +0000
+--- -	2026-08-12 01:52:47.265981654 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/637/stdout	2026-08-12 01:52:47.265106391 +0000
 @@ -1 +1 @@
 -Hi, there!
 +

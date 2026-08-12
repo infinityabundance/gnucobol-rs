@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 292. syn_misc.at:2518: testing ACUCOBOL WINDOW statements ...
 ./syn_misc.at:2572: $COMPILE_ONLY -std=acu-strict prog.cob
---- -	2026-08-05 21:57:01.582403928 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/292/stderr	2026-08-05 21:57:01.581822372 +0000
+--- -	2026-08-12 01:52:47.050430527 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/292/stderr	2026-08-12 01:52:47.049742122 +0000
 @@ -1,12 +1 @@
 -prog.cob: in paragraph 'MAIN':
 -prog.cob:11: warning: GRAPHICAL WINDOW is not implemented

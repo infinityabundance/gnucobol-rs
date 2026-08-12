@@ -2,12 +2,12 @@
 1261. data_packed.at:221: testing PACKED-DECIMAL used with MOVE ...
 ./data_packed.at:432: $COMPILE prog.cob
 ./data_packed.at:433: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1261/stderr	2026-08-05 21:57:02.966445739 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1261/stderr	2026-08-12 01:52:47.892099828 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: FENCE
---- -	2026-08-05 21:57:02.967741260 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1261/stdout	2026-08-05 21:57:02.967230786 +0000
+--- -	2026-08-12 01:52:47.894602399 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1261/stdout	2026-08-12 01:52:47.893630435 +0000
 @@ -1,21 +1 @@
 -34
 -+34

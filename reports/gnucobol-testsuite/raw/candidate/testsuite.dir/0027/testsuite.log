@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 27. configuration.at:43: testing cobc dialect features for all -std ...
 ./configuration.at:56: $COMPILE_ONLY -std=default prog.cob
---- -	2026-08-05 21:57:01.371495000 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/27/stderr	2026-08-05 21:57:01.370420161 +0000
+--- -	2026-08-12 01:52:46.914571665 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/27/stderr	2026-08-12 01:52:46.913684419 +0000
 @@ -1,2 +1 @@
 -prog.cob:4: warning: AUTHOR is obsolete in GnuCOBOL
  

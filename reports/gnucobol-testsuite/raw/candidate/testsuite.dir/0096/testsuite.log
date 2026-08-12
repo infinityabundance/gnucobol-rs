@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 96. syn_definition.at:711: testing PROCEDURE DIVISION RETURNING OMITTED: FUNCTION ...
 ./syn_definition.at:723: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.417488095 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/96/stderr	2026-08-05 21:57:01.416824986 +0000
+--- -	2026-08-12 01:52:46.952247958 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/96/stderr	2026-08-12 01:52:46.951620667 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:4: error: RETURNING clause cannot be OMITTED for a FUNCTION
 +cobc-rs: unsupported: no PROGRAM-ID

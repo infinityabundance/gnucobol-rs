@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 970. run_reportwriter.at:3792: testing Sample Inventory Report ...
 ./run_reportwriter.at:3896: $COMPILE prog.cob
---- -	2026-08-05 21:57:02.557472343 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/970/stderr	2026-08-05 21:57:02.556407113 +0000
+--- -	2026-08-12 01:52:47.535120043 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/970/stderr	2026-08-12 01:52:47.533861945 +0000
 @@ -1,2 +1 @@
 -prog.cob:40: warning: duplicate LINE 2 ignored
  

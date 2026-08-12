@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.GNUCOBOL-TESTSUITE.1 (court-casefile)
 
-**Verdict: PASS** · gnucobol-3.2.tar.lz (admitted, sha256-pinned) + lab/gnucobol-testsuite/run-docker.sh (one-command replay) + lab/docker/gnucobol-testsuite · crate `gnucobol-rs` 0.8.55
+**Verdict: PASS** · gnucobol-3.2.tar.lz (admitted, sha256-pinned) + lab/gnucobol-testsuite/run-docker.sh (one-command replay) + lab/docker/gnucobol-testsuite · crate `gnucobol-rs` 0.8.56
 
 - **Oracle:** the ADMITTED GnuCOBOL 3.2 in-tree build (never a distribution package), configured identically in every tree
 - **Byte domain(s):** admitted source identity + fresh in-tree build + the generated testsuite.log + per-group logs + the invocation census (argv preserved)

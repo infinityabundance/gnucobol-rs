@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 81. syn_definition.at:217: testing Reference not a group name ...
 ./syn_definition.at:232: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.408249453 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/81/stderr	2026-08-05 21:57:01.407323002 +0000
+--- -	2026-08-12 01:52:46.944120358 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/81/stderr	2026-08-12 01:52:46.943147492 +0000
 @@ -1,2 +1 @@
 -prog.cob:8: error: 'X IN X' is not defined
  

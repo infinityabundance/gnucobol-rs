@@ -3,8 +3,8 @@
 ./listings.at:1295: $COMPILE_LISTING -Wimplicit-define -t- prog.cob
 stderr:
 cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
---- -	2026-08-05 21:57:01.784140179 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/488/stdout	2026-08-05 21:57:01.783564523 +0000
+--- -	2026-08-12 01:52:47.160192528 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/488/stdout	2026-08-12 01:52:47.159459400 +0000
 @@ -1,42 +1 @@
 -GnuCOBOL V.R.P          prog.cob                                        Page 0001
 -

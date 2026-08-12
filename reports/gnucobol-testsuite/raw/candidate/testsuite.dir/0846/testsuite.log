@@ -2,12 +2,12 @@
 846. run_misc.at:14397: testing assorted math ...
 ./run_misc.at:14426: $COMPILE prog.cob
 ./run_misc.at:14427: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/846/stderr	2026-08-05 21:57:02.404372898 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/846/stderr	2026-08-12 01:52:47.419740015 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unrecognized USAGE SIGNED-INT
---- -	2026-08-05 21:57:02.406034363 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/846/stdout	2026-08-05 21:57:02.404372898 +0000
+--- -	2026-08-12 01:52:47.421835877 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/846/stdout	2026-08-12 01:52:47.420971394 +0000
 @@ -1,2 +1 @@
 -9-9succeeded
  

@@ -148,16 +148,29 @@ pub struct Oracle {
 }
 
 impl Oracle {
+    /// Resolve the oracle prefix: `GNURUST_ORACLE_PREFIX` when set (the isolated court
+    /// containers point it at the bind-mounted oracle built in the toolchain image), else the
+    /// workspace's `lab/oracle/prefix`.
+    pub fn resolve_prefix(root: &Path) -> PathBuf {
+        match std::env::var("GNURUST_ORACLE_PREFIX") {
+            Ok(p) if !p.trim().is_empty() => PathBuf::from(p),
+            _ => root.join("lab/oracle/prefix"),
+        }
+    }
+
     pub fn host_default() -> Result<Oracle, String> {
         let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
         let root = manifest
             .ancestors()
             .nth(2)
             .ok_or_else(|| "workspace root".to_string())?;
-        let prefix = root.join("lab/oracle/prefix");
+        let prefix = Self::resolve_prefix(&root);
         let cobc = prefix.join("bin/cobc");
         if !cobc.exists() {
-            return Err(format!("host oracle not built: {}", cobc.display()));
+            return Err(format!(
+                "oracle not built: {} (set GNURUST_ORACLE_PREFIX or run the oracle build first)",
+                cobc.display()
+            ));
         }
         Ok(Oracle { prefix, cobc })
     }

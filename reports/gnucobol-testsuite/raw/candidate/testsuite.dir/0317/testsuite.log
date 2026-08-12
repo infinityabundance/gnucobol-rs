@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 317. syn_misc.at:3691: testing TURN directive ...
 ./syn_misc.at:3715: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.609273462 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/317/stderr	2026-08-05 21:57:01.608820696 +0000
+--- -	2026-08-12 01:52:47.064147970 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/317/stderr	2026-08-12 01:52:47.063435941 +0000
 @@ -1,4 +1 @@
 -prog.cob:6: error: invalid exception-name: DD
 -prog.cob:7: error: invalid exception-name: F

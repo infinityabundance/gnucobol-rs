@@ -3,8 +3,8 @@
 ./run_fundamental.at:6280: $COMPILE caller.cob
 ./run_fundamental.at:6281: $COMPILE_MODULE callee.cob
 ./run_fundamental.at:6282: $COBCRUN_DIRECT ./caller
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/607/stderr	2026-08-05 21:57:01.950764815 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/607/stderr	2026-08-12 01:52:47.244572324 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unrecognized USAGE INT
 ./run_fundamental.at:6282: exit code was 2, expected 0

@@ -1,28 +1,28 @@
 # GnuCOBOL testsuite — parser/checker rejection census
 
-**683 first-failure groups** whose primary classification is a candidate check/parse reject, decomposed by PHASE (checker/data-layout/grammar/name-resolution/semantic-check) and by diagnostic. A construct rejected at run (the launcher ran) is attributed the same way as at syntax-only (first-failure consistency). Counting unit: **first_failure_group** (one row per unique group; step-level AT_CHECK identities are not counted here and are never labelled "tests").
+**682 first-failure groups** whose primary classification is a candidate check/parse reject, decomposed by PHASE (checker/data-layout/grammar/name-resolution/semantic-check) and by diagnostic. A construct rejected at run (the launcher ran) is attributed the same way as at syntax-only (first-failure consistency). Counting unit: **first_failure_group** (one row per unique group; step-level AT_CHECK identities are not counted here and are never labelled "tests").
 
 ## Phases
 
 - checker: 406
 - data-layout: 98
-- grammar: 115
-- name-resolution: 31
-- semantic-check: 33
+- grammar: 109
+- name-resolution: 34
+- semantic-check: 35
 
 ## Top diagnostics
 
-- 234: ``
+- 232: ``
 - 63: `cobc-rs: unsupported: no PROCEDURE DIVISION`
 - 22: `cobrun: unsupported: unsupported level number REPLACE`
-- 14: `cobrun: unsupported: not a numeric literal: X`
+- 13: `cobrun: unsupported: not a numeric literal: X`
 - 9: `cobrun: unsupported: no PROCEDURE DIVISION`
 - 8: `cobc-rs: unsupported: unsupported level number SCREEN`
 - 8: `cobc-rs: unsupported: verb USE`
 - 8: `cobrun: unsupported: DELETE: `FILE` is not a declared file`
-- 7: `cobrun: unsupported: not a numeric literal: ALL`
 - 7: `cobrun: unsupported: not a numeric literal: FUNCTION`
 - 6: `cobc-rs: unsupported: PIC BX: UnsupportedSymbol('X')`
+- 6: `cobrun: undefined data name: FUNCTION`
 - 6: `"cobrun: unsupported: CALL ""dump"": not a contained program (external CALL is a boundary)"`
 - 6: `cobrun: unsupported: OCCURS count MAX-SUB is not an integer`
 - 6: `cobrun: unsupported: expected program name after PROGRAM-ID`
@@ -31,9 +31,9 @@
 - 5: `cobrun: unsupported: unsupported level number LOCAL-STORAGE`
 - 5: `cobrun: unsupported: verb CHAINING`
 - 4: `cobc-rs: unsupported: no PROGRAM-ID`
-- 4: `cobrun: undefined data name: FUNCTION`
 - 4: `cobrun: unsupported: OPEN: `FILE-OPT` is not a declared file`
 - 4: `"cobrun: unsupported: OPEN: `TRANSACTION-DATA,` is not a declared file"`
+- 4: `cobrun: unsupported: not a numeric literal: NULL`
 - 3: `cannot read prog.cob: No such file or directory (os error 2)`
 - 3: `cobc-rs: unsupported: verb IDENTIFICATION`
 - 3: `cobrun: unsupported: OCCURS max UNBOUNDED is not an integer`
@@ -41,13 +41,13 @@
 - 3: `cobrun: unsupported: SORT: `TBL` is not a declared file`
 - 3: `cobrun: unsupported: condition: unrecognized relational operator (expected = > < >= <= <> GREATER LESS EQUAL)`
 - 3: `"cobrun: unsupported: not a numeric literal: FOO,"`
-- 3: `cobrun: unsupported: not a numeric literal: NULL`
 - 3: `cobrun: unsupported: not a numeric literal: Z`
 - 2: `cobc-rs: unsupported: PIC N: UnsupportedSymbol('N')`
 - 2: `cobc-rs: unsupported: PIC VPP99: ScalingPDeferred`
 - 2: `cobc-rs: unsupported: unrecognized USAGE BIT`
 - 2: `cobc-rs: unsupported: unsupported level number $SET`
 - 2: `cobc-rs: unsupported: verb END-OF-FILE-SWITCH`
+- 2: `cobrun: undefined data name:`
 - 2: `cobrun: undefined data name: ENVIRONMENT`
 - 2: `cobrun: undefined data name: NULL`
 - 2: `cobrun: unsupported: ACCEPT FROM terminal/console: interactive input is a runtime non-claim (no deterministic oracle); the wired sources are DATE/DAY/TIME/DAY-OF-WEEK/ENVIRONMENT`
@@ -58,7 +58,7 @@
 | id | title | phase | diagnostic | classification |
 |---|---|---|---|---|
 | 0002 | used_binaries.at:51: 2. compiler warnings | checker |  | CANDIDATE_CHECK_REJECT |
-| 0005 | used_binaries.at:300: 5. compiler outputs (path specified) | checker | cannot read sub/prog.c: stream did not contain valid UTF-8 | CANDIDATE_CHECK_REJECT |
+| 0005 | used_binaries.at:300: 5. compiler outputs (path specified) | checker | cobc: sub/prog.c: binary file | CANDIDATE_CHECK_REJECT |
 | 0007 | used_binaries.at:364: 7. source file not found | checker | cannot read prog.cob: No such file or directory (os error 2) | CANDIDATE_CHECK_REJECT |
 | 0008 | used_binaries.at:374: 8. temporary path invalid | checker |  | CANDIDATE_CHECK_REJECT |
 | 0019 | used_binaries.at:796: 19. run job with unsuccessful compilation | checker |  | CANDIDATE_CHECK_REJECT |
@@ -279,7 +279,7 @@
 | 0319 | syn_misc.at:3789: 319. STRING / UNSTRING POINTER clause | data-layout | cobc-rs: unsupported: PIC VPP99: ScalingPDeferred | CANDIDATE_CHECK_REJECT |
 | 0320 | syn_misc.at:3864: 320. STRING with non-DISPLAY | checker |  | CANDIDATE_CHECK_REJECT |
 | 0321 | syn_misc.at:3903: 321. UNSTRING COUNT clause | data-layout | cobc-rs: unsupported: PIC VPP99: ScalingPDeferred | CANDIDATE_CHECK_REJECT |
-| 0324 | syn_misc.at:4115: 324. invalid INSPECT/TRANSFORM operands | checker |  | CANDIDATE_CHECK_REJECT |
+| 0324 | syn_misc.at:4115: 324. invalid INSPECT/TRANSFORM operands | checker | cobc-rs: unsupported: INSPECT REPLACING operands incompatible (operands differ in size) | CANDIDATE_CHECK_REJECT |
 | 0325 | syn_misc.at:4167: 325. SIGN clause checks | checker | cobc-rs: unsupported: no PROCEDURE DIVISION | CANDIDATE_CHECK_REJECT |
 | 0326 | syn_misc.at:4192: 326. conflicting entry conventions | checker |  | CANDIDATE_CHECK_REJECT |
 | 0327 | syn_misc.at:4261: 327. conflicting call conventions | checker |  | CANDIDATE_CHECK_REJECT |
@@ -316,7 +316,7 @@
 | 0364 | "syn_misc.at:6315: 364. BASED clause, ALLOCATE / FREE statements" | data-layout | cobc-rs: unsupported: unsupported level number SCREEN-STORAGE | CANDIDATE_CHECK_REJECT |
 | 0365 | syn_misc.at:6396: 365. CONTINUE statement | grammar | cobc-rs: unsupported: verb AFTER | CANDIDATE_CHECK_REJECT |
 | 0366 | syn_misc.at:6440: 366. conflict markers | data-layout | cobc-rs: unsupported: unsupported level number HEAD | CANDIDATE_CHECK_REJECT |
-| 0367 | syn_misc.at:6499: 367. SORT syntax | checker |  | CANDIDATE_CHECK_REJECT |
+| 0367 | syn_misc.at:6499: 367. SORT syntax | semantic-check | cobc-rs: unsupported: SORT: `TBL` is not a declared file | CANDIDATE_CHECK_REJECT |
 | 0368 | syn_misc.at:6553: 368. OSVS I/O extensions | checker |  | CANDIDATE_CHECK_REJECT |
 | 0370 | syn_misc.at:6646: 370. SEARCH ALL checks | checker |  | CANDIDATE_CHECK_REJECT |
 | 0371 | syn_misc.at:6766: 371. Invalid parentheses around condition | checker |  | CANDIDATE_CHECK_REJECT |
@@ -421,7 +421,7 @@
 | 0539 | run_fundamental.at:1625: 539. Contained program visibility (2) | grammar | cobrun: unsupported: not a numeric literal: X | CANDIDATE_CHECK_REJECT |
 | 0540 | run_fundamental.at:1678: 540. Contained program visibility (3) | grammar | cobrun: unsupported: not a numeric literal: X | CANDIDATE_CHECK_REJECT |
 | 0543 | run_fundamental.at:1872: 543. CALL program-pointer | checker | "cobrun: unsupported: CALL ""PROG-PTR"": not a contained program (external CALL is a boundary)" | CANDIDATE_CHECK_REJECT |
-| 0544 | run_fundamental.at:1968: 544. CALL/CANCEL/SET ADDRESS program-prototype-name | grammar | cobrun: unsupported: not a numeric literal: X | CANDIDATE_CHECK_REJECT |
+| 0544 | run_fundamental.at:1968: 544. CALL/CANCEL/SET ADDRESS program-prototype-name | grammar | cobrun: unsupported: not a numeric literal: NULL | CANDIDATE_CHECK_REJECT |
 | 0555 | run_fundamental.at:2459: 555. Context sensitive words (2) | checker | cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim) | CANDIDATE_CHECK_REJECT |
 | 0556 | run_fundamental.at:2483: 556. Context sensitive words (3) | checker | cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim) | CANDIDATE_CHECK_REJECT |
 | 0570 | run_fundamental.at:3108: 570. Numeric operations (2) DISPLAY | data-layout | cobrun: unsupported: unsupported level number REPLACE | CANDIDATE_CHECK_REJECT |
@@ -505,8 +505,7 @@
 | 0775 | "run_misc.at:4823: 775. CALL C with callback, ENTRY-CONVENTION EXTERN" | checker | cobrun: unsupported: SET CB TO <value>: target is not a numeric/index item | CANDIDATE_CHECK_REJECT |
 | 0776 | run_misc.at:4974: 776. CALL in from C with init missing / implicit | checker | cobrun: unsupported: no PROCEDURE DIVISION | CANDIDATE_CHECK_REJECT |
 | 0777 | run_misc.at:5022: 777. CALL STATIC C from COBOL | checker | "cobrun: unsupported: CALL ""STATIC"": not a contained program (external CALL is a boundary)" | CANDIDATE_CHECK_REJECT |
-| 0780 | run_misc.at:5157: 780. ANY LENGTH (3) | grammar | cobrun: unsupported: not a numeric literal: ALL | CANDIDATE_CHECK_REJECT |
-| 0781 | run_misc.at:5200: 781. ANY LENGTH (4) | grammar | cobrun: unsupported: not a numeric literal: ALL | CANDIDATE_CHECK_REJECT |
+| 0780 | run_misc.at:5157: 780. ANY LENGTH (3) | name-resolution | cobrun: undefined data name: | CANDIDATE_PARSE_REJECT |
 | 0784 | run_misc.at:5307: 784. access to OPTIONAL LINKAGE item not passed | checker | "cobrun: unsupported: CALL ""callee"": fewer USING args than the 2 parameters" | CANDIDATE_CHECK_REJECT |
 | 0788 | run_misc.at:5406: 788. SYMBOLIC clause | grammar | cobrun: unsupported: not a numeric literal: Z-ASC | CANDIDATE_CHECK_REJECT |
 | 0790 | run_misc.at:5480: 790. Computing of different USAGEs w/o decimal point | grammar | cobrun: unsupported: expected program name after PROGRAM-ID | CANDIDATE_CHECK_REJECT |
@@ -572,7 +571,7 @@
 | 0891 | run_file.at:4192: 891. SEQUENTIAL basic I/O | semantic-check | cobrun: unsupported: DELETE: `FILE` is not a declared file | CANDIDATE_CHECK_REJECT |
 | 0892 | run_file.at:4241: 892. LINE SEQUENTIAL basic I/O | semantic-check | cobrun: unsupported: DELETE: `FILE` is not a declared file | CANDIDATE_CHECK_REJECT |
 | 0894 | run_file.at:4353: 894. LINE SEQUENTIAL record truncation (1) | semantic-check | cobrun: unsupported: condition: missing left operand | CANDIDATE_CHECK_REJECT |
-| 0897 | run_file.at:4729: 897. LINAGE and LINAGE-COUNTER sample | grammar | cobrun: unsupported: not a numeric literal: ALL | CANDIDATE_CHECK_REJECT |
+| 0897 | run_file.at:4729: 897. LINAGE and LINAGE-COUNTER sample | semantic-check | cobrun: unsupported: OPEN: `DATA-FILE` is not a declared file | CANDIDATE_CHECK_REJECT |
 | 0901 | run_file.at:5455: 901. SEQUENTIAL file REWRITE | checker | cobrun: unsupported: SET EOF TO FALSE: the 88 has no `WHEN SET TO FALSE` value | CANDIDATE_CHECK_REJECT |
 | 0905 | run_file.at:5775: 905. SEQUENTIAL file with SHARING READ ONLY | checker | "cobrun: unsupported: CALL ""SYSTEM"": not a contained program (external CALL is a boundary)" | CANDIDATE_CHECK_REJECT |
 | 0907 | run_file.at:5923: 907. RELATIVE SEQUENTIAL basic I/O | semantic-check | cobrun: unsupported: DELETE: `FILE` is not a declared file | CANDIDATE_CHECK_REJECT |
@@ -622,7 +621,7 @@
 | 1025 | run_functions.at:1642: 1025. FUNCTION INTEGER | grammar | cobrun: unsupported: not a numeric literal: / | CANDIDATE_CHECK_REJECT |
 | 1030 | run_functions.at:1801: 1030. FUNCTION LENGTH | data-layout | cobrun: unsupported: PIC N(9): UnsupportedSymbol('N') | CANDIDATE_CHECK_REJECT |
 | 1034 | run_functions.at:1965: 1034. FUNCTION LOCALE-TIME-FROM-SECONDS | checker | cobrun: unsupported: FUNCTION LOCALE-TIME-FROM-SECONDS: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim | CANDIDATE_CHECK_REJECT |
-| 1037 | run_functions.at:2039: 1037. FUNCTION LOWER-CASE | grammar | cobrun: unsupported: not a numeric literal: ALL | CANDIDATE_CHECK_REJECT |
+| 1037 | run_functions.at:2039: 1037. FUNCTION LOWER-CASE | name-resolution | cobrun: undefined data name: FUNCTION | CANDIDATE_PARSE_REJECT |
 | 1046 | run_functions.at:2286: 1046. FUNCTION MOD (invalid) | grammar | cobrun: unsupported: not a numeric literal: FUNCTION | CANDIDATE_CHECK_REJECT |
 | 1051 | run_functions.at:2422: 1051. FUNCTION MODULE-PATH | checker | cobrun: unsupported: FUNCTION MODULE-PATH: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim | CANDIDATE_CHECK_REJECT |
 | 1054 | run_functions.at:2493: 1054. FUNCTION MONETARY-DECIMAL-POINT | checker | cobrun: unsupported: FUNCTION MONETARY-DECIMAL-POINT: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim | CANDIDATE_CHECK_REJECT |
@@ -631,7 +630,7 @@
 | 1057 | run_functions.at:2562: 1057. FUNCTION NUMERIC-THOUSANDS-SEPARATOR | checker | cobrun: unsupported: FUNCTION NUMERIC-THOUSANDS-SEPARATOR: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim | CANDIDATE_CHECK_REJECT |
 | 1067 | run_functions.at:2888: 1067. FUNCTION RANDOM | checker | cobrun: unsupported: FUNCTION RANDOM: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim | CANDIDATE_CHECK_REJECT |
 | 1070 | run_functions.at:2954: 1070. FUNCTION REM (invalid) | grammar | cobrun: unsupported: not a numeric literal: FUNCTION | CANDIDATE_CHECK_REJECT |
-| 1080 | run_functions.at:3238: 1080. FUNCTION SUBSTITUTE | grammar | cobrun: unsupported: not a numeric literal: ALL | CANDIDATE_CHECK_REJECT |
+| 1080 | run_functions.at:3238: 1080. FUNCTION SUBSTITUTE | name-resolution | cobrun: undefined data name: FUNCTION | CANDIDATE_PARSE_REJECT |
 | 1089 | run_functions.at:3531: 1089. FUNCTION TEST-FORMATTED-DATETIME with times | grammar | cobrun: unsupported: not a numeric literal: SPACE | CANDIDATE_CHECK_REJECT |
 | 1090 | run_functions.at:3612: 1090. FUNCTION TEST-FORMATTED-DATETIME with datetimes | grammar | cobrun: unsupported: not a numeric literal: SPACE | CANDIDATE_CHECK_REJECT |
 | 1096 | run_functions.at:4083: 1096. FUNCTION TRIM with reference modding | grammar | cobrun: unsupported: not a numeric literal: (2 | CANDIDATE_CHECK_REJECT |
@@ -707,7 +706,7 @@
 | 1214 | run_extensions.at:6122: 1214. INSPECT REPLACING complex | checker | cobrun: unsupported: INSPECT region clause near Str([66]) | CANDIDATE_CHECK_REJECT |
 | 1220 | run_ml.at:204: 1220. XML GENERATE exceptions | grammar | cobrun: unsupported: not a numeric literal: X | CANDIDATE_CHECK_REJECT |
 | 1222 | run_ml.at:360: 1222. XML GENERATE trimming | data-layout | cobrun: unsupported: PIC VPP99: ScalingPDeferred | CANDIDATE_CHECK_REJECT |
-| 1225 | run_ml.at:532: 1225. JSON GENERATE general | grammar | cobrun: unsupported: not a numeric literal: ALL | CANDIDATE_CHECK_REJECT |
+| 1225 | run_ml.at:532: 1225. JSON GENERATE general | checker | "cobrun: unsupported: JSON/XML GENERATE NAME: expected `data-name IS ""key""`" | CANDIDATE_CHECK_REJECT |
 | 1227 | run_ml.at:628: 1227. JSON GENERATE exceptions | grammar | cobrun: unsupported: not a numeric literal: JSON-CODE | CANDIDATE_CHECK_REJECT |
 | 1229 | run_ml.at:737: 1229. JSON GENERATE trimming | data-layout | cobrun: unsupported: PIC VPP99: ScalingPDeferred | CANDIDATE_CHECK_REJECT |
 | 1244 | data_binary.at:1409: 1244. MOVE DISPLAY to BINARY | data-layout | cobrun: unsupported: unsupported level number REPLACE | CANDIDATE_CHECK_REJECT |
@@ -741,4 +740,4 @@
 | 1281 | "data_packed.at:28746: 1281. BCD ADD and SUBTRACT, all ROUNDED MODEs" | data-layout | cobrun: unsupported: unsupported level number REPLACE | CANDIDATE_CHECK_REJECT |
 | 1282 | data_pointer.at:21: 1282. POINTER: display | grammar | cobrun: unsupported: not a numeric literal: NULL | CANDIDATE_CHECK_REJECT |
 
-683 rows; generated by `gnucobol-rs-testsuite reject-census generate` — do not edit by hand.
+682 rows; generated by `gnucobol-rs-testsuite reject-census generate` — do not edit by hand.

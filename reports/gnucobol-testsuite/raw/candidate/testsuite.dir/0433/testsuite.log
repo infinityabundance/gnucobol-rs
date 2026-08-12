@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 433. syn_screen.at:473: testing Redundant screen clauses ...
 ./syn_screen.at:496: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.736131918 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/433/stderr	2026-08-05 21:57:01.735402506 +0000
+--- -	2026-08-12 01:52:47.129261766 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/433/stderr	2026-08-12 01:52:47.128564304 +0000
 @@ -1,5 +1,2 @@
 -prog.cob:13: error: duplicate FULL clause
 -prog.cob:16: error: duplicate BACKGROUND-COLOR clause

@@ -1,0 +1,93 @@
+{
+ "adaptations": [
+  {
+   "oracle_proved_preserving": true,
+   "rewrites": [
+    "open-split-per-mode",
+    "perform-until-exit->1=2"
+   ],
+   "workload": "payroll"
+  },
+  {
+   "oracle_proved_preserving": true,
+   "rewrites": [
+    "open-split-per-mode",
+    "perform-until-exit->1=2"
+   ],
+   "workload": "invoice"
+  },
+  {
+   "oracle_proved_preserving": true,
+   "rewrites": [
+    "open-split-per-mode",
+    "perform-until-exit->1=2"
+   ],
+   "workload": "seqfile"
+  },
+  {
+   "oracle_proved_preserving": true,
+   "rewrites": [
+    "open-split-per-mode",
+    "perform-until-exit->1=2"
+   ],
+   "workload": "tables"
+  },
+  {
+   "oracle_proved_preserving": true,
+   "rewrites": [
+    "open-split-per-mode",
+    "perform-until-exit->1=2",
+    "inspect-split-per-pattern"
+   ],
+   "workload": "strings"
+  },
+  {
+   "oracle_proved_preserving": true,
+   "rewrites": [
+    "open-split-per-mode",
+    "perform-until-exit->1=2"
+   ],
+   "workload": "float"
+  },
+  {
+   "oracle_proved_preserving": true,
+   "rewrites": [
+    "open-split-per-mode",
+    "perform-until-exit->1=2"
+   ],
+   "workload": "report"
+  },
+  {
+   "oracle_proved_preserving": true,
+   "rewrites": [
+    "open-split-per-mode",
+    "perform-until-exit->1=2"
+   ],
+   "workload": "relative"
+  },
+  {
+   "oracle_proved_preserving": false,
+   "rewrites": [
+    "open-split-per-mode",
+    "perform-until-exit->1=2"
+   ],
+   "workload": "modules"
+  },
+  {
+   "oracle_proved_preserving": false,
+   "rewrites": [
+    "open-split-per-mode",
+    "perform-until-exit->1=2"
+   ],
+   "workload": "mixed"
+  }
+ ],
+ "crate_version": "0.8.56",
+ "git_commit": "8980273cf6e75d7efaefaf32627586ce6d16fe78",
+ "oracle": "cobc (GnuCOBOL) 3.2.0",
+ "view_c_entries": 10,
+ "view_d_entries": 8,
+ "view_e_candidate_total_ms": 768697.423518,
+ "view_e_entries": 40,
+ "view_e_oracle_total_ms": 6479.861074999999
+}

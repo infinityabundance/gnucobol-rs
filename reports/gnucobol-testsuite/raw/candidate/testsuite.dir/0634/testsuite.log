@@ -2,8 +2,8 @@
 634. run_subscripts.at:396: testing enable / disable subscript check with ODO ...
 ./run_subscripts.at:416: $COMPILE prog.cob -o badprog1
 ./run_subscripts.at:417: $COBCRUN_DIRECT ./badprog1
---- -	2026-08-05 21:57:01.970969677 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/634/stderr	2026-08-05 21:57:01.969308599 +0000
+--- -	2026-08-12 01:52:47.262732810 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/634/stderr	2026-08-12 01:52:47.262287659 +0000
 @@ -1,3 +1,2 @@
 -libcob: prog.cob:11: error: subscript of 'X' out of bounds: 6
 -note: current maximum subscript for 'X': 5

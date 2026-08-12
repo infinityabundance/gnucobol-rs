@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 278. syn_misc.at:1711: testing ACCEPT WITH AUTO / TAB ...
 ./syn_misc.at:1731: $COMPILE_ONLY -faccept-auto prog.cob
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/278/stderr	2026-08-05 21:57:01.562316526 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/278/stderr	2026-08-12 01:52:47.041729807 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -faccept-auto: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
 ./syn_misc.at:1731: exit code was 1, expected 0

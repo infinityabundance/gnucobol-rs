@@ -757,7 +757,7 @@
       "number": 544,
       "oracle": "ORACLE_PASS",
       "primary_classification": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: not a numeric literal: X ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: not a numeric literal: NULL ($COBCRUN_DIRECT ./prog)",
       "test_id": "0544",
       "title": "run_fundamental.at:1968: 544. CALL/CANCEL/SET ADDRESS program-prototype-name"
     },
@@ -2219,8 +2219,8 @@
       "group": "run_functions.at:2039",
       "number": 1037,
       "oracle": "ORACLE_PASS",
-      "primary_classification": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: not a numeric literal: ALL ($COBCRUN_DIRECT ./prog)",
+      "primary_classification": "CANDIDATE_PARSE_REJECT",
+      "reason": "undefined data name at run ($COBCRUN_DIRECT ./prog)",
       "test_id": "1037",
       "title": "run_functions.at:2039: 1037. FUNCTION LOWER-CASE"
     },
@@ -2692,8 +2692,8 @@
       "group": "run_functions.at:3238",
       "number": 1080,
       "oracle": "ORACLE_PASS",
-      "primary_classification": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: not a numeric literal: ALL ($COBCRUN_DIRECT ./prog)",
+      "primary_classification": "CANDIDATE_PARSE_REJECT",
+      "reason": "undefined data name at run ($COBCRUN_DIRECT ./prog)",
       "test_id": "1080",
       "title": "run_functions.at:3238: 1080. FUNCTION SUBSTITUTE"
     },
@@ -3590,8 +3590,8 @@
     }
   ],
   "primary_classification_totals": {
-    "CANDIDATE_CHECK_REJECT": 126,
-    "CANDIDATE_PARSE_REJECT": 7,
+    "CANDIDATE_CHECK_REJECT": 124,
+    "CANDIDATE_PARSE_REJECT": 9,
     "CANDIDATE_RUNTIME_FAIL": 56,
     "CANDIDATE_UNSUPPORTED": 1,
     "OBSERVABLE_MATCH": 101,

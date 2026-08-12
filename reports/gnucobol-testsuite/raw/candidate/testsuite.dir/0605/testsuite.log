@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 605. run_fundamental.at:6080: testing Abbreviated Expressions ...
 ./run_fundamental.at:6161: $COMPILE prog.cob
---- -	2026-08-05 21:57:01.946574797 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/605/stderr	2026-08-05 21:57:01.945663494 +0000
+--- -	2026-08-12 01:52:47.241821910 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/605/stderr	2026-08-12 01:52:47.240511815 +0000
 @@ -1,18 +1 @@
 -prog.cob: in paragraph 'MAIN-LINE':
 -prog.cob:47: warning: suggest parentheses around AND within OR

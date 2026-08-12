@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 371. syn_misc.at:6766: testing Invalid parentheses around condition ...
 ./syn_misc.at:6783: $COMPILE prog.cob
---- -	2026-08-05 21:57:01.660124945 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/371/stderr	2026-08-05 21:57:01.658310811 +0000
+--- -	2026-08-12 01:52:47.093813651 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/371/stderr	2026-08-12 01:52:47.093033125 +0000
 @@ -1,2 +1 @@
 -prog.cob:9: error: invalid expression: unfinished expression
  

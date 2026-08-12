@@ -1,12 +1,12 @@
 #                             -*- compilation -*-
 510. listings.at:6928: testing Long concatenated literal ...
 ./listings.at:6955: $COMPILE_LISTING0 -t- prog.cob
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/510/stderr	2026-08-05 21:57:01.799118374 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/510/stderr	2026-08-12 01:52:47.176023707 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
---- -	2026-08-05 21:57:01.800808222 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/510/stdout	2026-08-05 21:57:01.799425689 +0000
+--- -	2026-08-12 01:52:47.177800463 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/510/stdout	2026-08-12 01:52:47.176322064 +0000
 @@ -1,43 +1 @@
 -GnuCOBOL V.R.P               prog.cob
 -

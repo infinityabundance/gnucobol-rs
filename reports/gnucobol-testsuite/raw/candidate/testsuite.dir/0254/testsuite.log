@@ -2,8 +2,8 @@
 254. syn_misc.at:683: testing Valid conditional expression ...
 ./syn_misc.at:710: $COMPILE_ONLY prog.cob
 ./syn_misc.at:711: $COMPILE_ONLY -fno-constant-folding prog.cob
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/254/stderr	2026-08-05 21:57:01.538444914 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/254/stderr	2026-08-12 01:52:47.031069579 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fno-constant-folding: unsupported option (rejected-unsupported; constant folding: reject honestly): 
 ./syn_misc.at:711: exit code was 1, expected 0

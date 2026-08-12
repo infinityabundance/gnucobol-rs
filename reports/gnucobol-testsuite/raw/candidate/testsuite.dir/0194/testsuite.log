@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 194. syn_file.at:431: testing SELECT without ASSIGN ...
 ./syn_file.at:452: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.483542723 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/194/stderr	2026-08-05 21:57:01.482404867 +0000
+--- -	2026-08-12 01:52:47.000284198 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/194/stderr	2026-08-12 01:52:46.999842403 +0000
 @@ -1,2 +1 @@
 -prog.cob:7: error: ASSIGN clause is required for file 'TEST-FILE'
  

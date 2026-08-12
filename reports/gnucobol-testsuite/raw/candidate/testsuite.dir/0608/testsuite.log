@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 608. run_fundamental.at:6286: testing Alphanumeric VALUE longer than PIC ...
 ./run_fundamental.at:6308: $COMPILE prog.cob
---- -	2026-08-05 21:57:01.949953459 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/608/stderr	2026-08-05 21:57:01.949234787 +0000
+--- -	2026-08-12 01:52:47.243184824 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/608/stderr	2026-08-12 01:52:47.242287920 +0000
 @@ -1,4 +1 @@
 -prog.cob:6: warning: value does not fit the picture string
 -prog.cob:7: warning: value size exceeds data size

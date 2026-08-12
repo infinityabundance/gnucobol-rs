@@ -11,8 +11,8 @@
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | admitted gnucobol-3.2 source (hash-verified), fresh in-tree build per pass, the generated Autotest testsuite run with the REAL admitted cobc, full invocation census (argv boundaries preserved), raw testsuite.log + per-group logs preserved |
 | replay command | `bash lab/gnucobol-testsuite/run-docker.sh` |
-| generated_at | 2026-08-05T21:58:29Z |
-| git_commit | `c35d6c2b93577013e5257c4bf60e23975d34640e` |
+| generated_at | 2026-08-12T01:54:13Z |
+| git_commit | `8980273cf6e75d7efaefaf32627586ce6d16fe78` |
 | receipt_status | current |
 
 **Conformance claim:** NONE — differential observation over the admitted GnuCOBOL 3.2 native Autotest suite in this environment; no GnuCOBOL test-suite parity claim, no COBOL conformance certification, no compiler-replacement claim.
@@ -21,12 +21,12 @@
 
 ```json
 {
-  "invocation_census_sha256": "7ec5afabb36ff2cb18f50f6d9ff1be6040ace3cdaa9b7c7ff1abb70cafb15bd2",
+  "invocation_census_sha256": "b58437f31be5e4fd6649e91fda2ffc790b9428b633fc864b4b6ba7a7ebfc455a",
   "invocation_census_total": 2111,
   "oracle_fail": 0,
   "oracle_not_reached": 0,
   "oracle_pass": 1242,
-  "oracle_results_sha256": "81c9ca04e33f1d53914d35cb4fe83a73293dd226d63a4c638f12a158cc1137d1",
+  "oracle_results_sha256": "f070608a43fd7e61e01f871ef7ba85c6ce75b896841d9076f3a817cec2bad23c",
   "oracle_skip": 9,
   "oracle_xfail": 31,
   "oracle_xpass": 0,

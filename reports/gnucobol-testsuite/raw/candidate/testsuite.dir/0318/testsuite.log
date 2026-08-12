@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 318. syn_misc.at:3724: testing STRING / UNSTRING with invalid syntax ...
 ./syn_misc.at:3774: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.610585233 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/318/stderr	2026-08-05 21:57:01.610021891 +0000
+--- -	2026-08-12 01:52:47.064267393 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/318/stderr	2026-08-12 01:52:47.063435941 +0000
 @@ -1,11 +1 @@
 -prog.cob:12: error: syntax error, unexpected DELIMITED
 -prog.cob:15: error: syntax error, unexpected END-STRING, expecting INTO

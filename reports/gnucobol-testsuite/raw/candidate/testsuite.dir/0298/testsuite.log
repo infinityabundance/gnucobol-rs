@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 298. syn_misc.at:2830: testing adding aliases ...
 ./syn_misc.at:2852: $COMPILE_ONLY -freserved=FOO=DISPLAY* -freserved=BARS:FOO prog.cob
---- -	2026-08-05 21:57:01.583553336 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/298/stderr	2026-08-05 21:57:01.581822372 +0000
+--- -	2026-08-12 01:52:47.055236868 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/298/stderr	2026-08-12 01:52:47.054314416 +0000
 @@ -1,4 +1,2 @@
 -configuration warning: -freserved=FOO=DISPLAY*: ignored asterisk at end of alias target
 -configuration error:

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 1199. run_extensions.at:5162: testing TERMINAL format ...
 ./run_extensions.at:5188: $COMPILE -fformat=terminal -fcomment-paragraphs=ok prog.cob
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1199/stderr	2026-08-05 21:57:02.894091150 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1199/stderr	2026-08-12 01:52:47.824259053 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fcomment-paragraphs=ok: unsupported option (rejected-unsupported; comment paragraphs: reject honestly): ok
 ./run_extensions.at:5188: exit code was 1, expected 0

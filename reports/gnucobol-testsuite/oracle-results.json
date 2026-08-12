@@ -5472,7 +5472,7 @@
       "number": 781,
       "status": "ORACLE_PASS",
       "test_id": "0781",
-      "title": "run_misc.at:5200: 781. ANY LENGTH (4)"
+      "title": "ANY LENGTH (4)"
     },
     {
       "detail": "ORACLE_OK",
@@ -6627,7 +6627,7 @@
       "number": 946,
       "status": "ORACLE_PASS",
       "test_id": "0946",
-      "title": "run_file.at:13203: 946. File SORT, LINE SEQUENTIAL variable records"
+      "title": "File SORT, LINE SEQUENTIAL variable records"
     },
     {
       "detail": "ORACLE_OK",
@@ -6641,14 +6641,14 @@
       "number": 948,
       "status": "ORACLE_PASS",
       "test_id": "0948",
-      "title": "run_file.at:13334: 948. File MERGE, LINE SEQUENTIAL variable records"
+      "title": "File MERGE, LINE SEQUENTIAL variable records"
     },
     {
       "detail": "ORACLE_OK",
       "number": 949,
       "status": "ORACLE_PASS",
       "test_id": "0949",
-      "title": "SORT nonexistent file"
+      "title": "run_file.at:13425: 949. SORT nonexistent file"
     },
     {
       "detail": "ORACLE_OK",
@@ -6662,7 +6662,7 @@
       "number": 951,
       "status": "ORACLE_PASS",
       "test_id": "0951",
-      "title": "run_file.at:13550: 951. SORT with key1 ASCENDING, key2 DESCENDING"
+      "title": "SORT with key1 ASCENDING, key2 DESCENDING"
     },
     {
       "detail": "ORACLE_OK",

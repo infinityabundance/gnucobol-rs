@@ -8,8 +8,8 @@ Reconciliation invariant (Phase-1, machine-enforced): sum of the classification 
 
 ## Totals by classification
 
-- CANDIDATE_CHECK_REJECT: 126
-- CANDIDATE_PARSE_REJECT: 7
+- CANDIDATE_CHECK_REJECT: 124
+- CANDIDATE_PARSE_REJECT: 9
 - CANDIDATE_RUNTIME_FAIL: 56
 - CANDIDATE_UNSUPPORTED: 1
 - OBSERVABLE_MATCH: 101
@@ -233,7 +233,7 @@ Reconciliation invariant (Phase-1, machine-enforced): sum of the classification 
 | 1034 | run_functions.at:1965: 1034. FUNCTION LOCALE-TIME-FROM-SECONDS | run_functions | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
 | 1035 | FUNCTION LOG | run_functions | ORACLE_PASS | ok | OBSERVABLE_MATCH |
 | 1036 | FUNCTION LOG10 | run_functions | ORACLE_PASS | ok | OBSERVABLE_MATCH |
-| 1037 | run_functions.at:2039: 1037. FUNCTION LOWER-CASE | run_functions | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
+| 1037 | run_functions.at:2039: 1037. FUNCTION LOWER-CASE | run_functions | ORACLE_PASS | - | CANDIDATE_PARSE_REJECT |
 | 1038 | FUNCTION LOWER-CASE with reference modding | run_functions | ORACLE_PASS | ok | OBSERVABLE_MATCH |
 | 1039 | run_functions.at:2093: 1039. FUNCTION LOWEST-ALGEBRAIC | run_functions | ORACLE_PASS | - | CANDIDATE_RUNTIME_FAIL |
 | 1040 | FUNCTION MAX | run_functions | ORACLE_PASS | ok | OBSERVABLE_MATCH |
@@ -276,7 +276,7 @@ Reconciliation invariant (Phase-1, machine-enforced): sum of the classification 
 | 1077 | FUNCTION SQRT | run_functions | ORACLE_PASS | ok | OBSERVABLE_MATCH |
 | 1078 | FUNCTION STANDARD-DEVIATION | run_functions | ORACLE_PASS | ok | OBSERVABLE_MATCH |
 | 1079 | FUNCTION STORED-CHAR-LENGTH | run_functions | ORACLE_PASS | ok | OBSERVABLE_MATCH |
-| 1080 | run_functions.at:3238: 1080. FUNCTION SUBSTITUTE | run_functions | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
+| 1080 | run_functions.at:3238: 1080. FUNCTION SUBSTITUTE | run_functions | ORACLE_PASS | - | CANDIDATE_PARSE_REJECT |
 | 1081 | run_functions.at:3265: 1081. FUNCTION SUBSTITUTE with reference modding | run_functions | ORACLE_PASS | - | CANDIDATE_RUNTIME_FAIL |
 | 1082 | FUNCTION SUBSTITUTE-CASE | run_functions | ORACLE_PASS | ok | OBSERVABLE_MATCH |
 | 1083 | run_functions.at:3316: 1083. FUNCTION SUBSTITUTE-CASE with reference mod | run_functions | ORACLE_PASS | - | CANDIDATE_RUNTIME_FAIL |

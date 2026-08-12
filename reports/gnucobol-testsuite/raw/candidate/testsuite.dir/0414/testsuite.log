@@ -2,8 +2,8 @@
 414. syn_move.at:453: testing Overlapping MOVE ...
 ./syn_move.at:508: $COMPILE -w prog.cob
 ./syn_move.at:510: $COMPILE -fdiagnostics-show-option prog.cob
---- -	2026-08-05 21:57:01.712543435 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/414/stderr	2026-08-05 21:57:01.710310441 +0000
+--- -	2026-08-12 01:52:47.118551084 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/414/stderr	2026-08-12 01:52:47.117597103 +0000
 @@ -1,14 +1 @@
 -prog.cob:20: warning: overlapping MOVE may produce unpredictable results [-Woverlap]
 -prog.cob:23: warning: overlapping MOVE may produce unpredictable results [-Woverlap]

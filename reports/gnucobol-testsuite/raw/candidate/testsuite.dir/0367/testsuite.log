@@ -1,14 +1,14 @@
 #                             -*- compilation -*-
 367. syn_misc.at:6499: testing SORT syntax ...
 ./syn_misc.at:6543: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.648546952 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/367/stderr	2026-08-05 21:57:01.647007005 +0000
-@@ -1,6 +1 @@
+--- -	2026-08-12 01:52:47.091129131 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/367/stderr	2026-08-12 01:52:47.090143361 +0000
+@@ -1,6 +1,2 @@
 -prog.cob:32: error: table SORT requires KEY phrase
 -prog.cob:35: error: file SORT requires USING or INPUT PROCEDURE
 -prog.cob:35: error: file SORT requires GIVING or OUTPUT PROCEDURE
 -prog.cob:37: error: file SORT requires KEY phrase
 -prog.cob:38: error: file SORT requires KEY phrase
++cobc-rs: unsupported: SORT: `TBL` is not a declared file
  
-./syn_misc.at:6543: exit code was 0, expected 1
 367. syn_misc.at:6499: 367. SORT syntax (syn_misc.at:6499): FAILED (syn_misc.at:6543)

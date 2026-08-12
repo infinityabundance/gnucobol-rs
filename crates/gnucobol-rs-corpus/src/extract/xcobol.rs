@@ -217,6 +217,18 @@ pub fn extract_xcobol(
         }
         cobol_files.sort();
         let n_files = cobol_files.len();
+        // Copy EVERY file into the repo work dir BEFORE probing any of them: the oracle
+        // admission probes and candidate probes must resolve sibling copybooks regardless of
+        // processing order (per-file copy+probe made the result depend on the sort order and
+        // on whether a previous run had already materialized the work dir).
+        for p in &cobol_files {
+            let bytes = std::fs::read(p).unwrap_or_default();
+            let fname = p.file_name().unwrap().to_string_lossy().to_string();
+            let dst = repo_work.join(&fname);
+            if !dst.exists() {
+                let _ = std::fs::write(&dst, &bytes);
+            }
+        }
         for p in cobol_files {
             let bytes = std::fs::read(&p).unwrap_or_default();
             let text = String::from_utf8_lossy(&bytes).into_owned();
@@ -226,11 +238,6 @@ pub fn extract_xcobol(
                 .to_string_lossy()
                 .to_string();
             let fname = p.file_name().unwrap().to_string_lossy().to_string();
-            // copy to the repo work dir for probing
-            let dst = repo_work.join(&fname);
-            if !dst.exists() {
-                let _ = std::fs::write(&dst, &bytes);
-            }
             let exact = exact_hash(&bytes);
             let norm = normalized_hash(&bytes);
             let struct_h = structural_hash(&bytes);

@@ -3,8 +3,8 @@
 ./run_file.at:4183: $COMPILE_MODULE fexists_signed.c
 ./run_file.at:4184: $COMPILE prog.cob
 ./run_file.at:4185: unset COB_FILE_PATH ; ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/890/stderr	2026-08-05 21:57:02.448807541 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/890/stderr	2026-08-12 01:52:47.456522380 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim)
 ./run_file.at:4185: exit code was 2, expected 0

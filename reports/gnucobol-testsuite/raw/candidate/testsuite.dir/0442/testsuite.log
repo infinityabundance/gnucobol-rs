@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 442. syn_set.at:53: testing SET item TO 88-level ...
 ./syn_set.at:73: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.739841500 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/442/stderr	2026-08-05 21:57:01.738587797 +0000
+--- -	2026-08-12 01:52:47.132559311 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/442/stderr	2026-08-12 01:52:47.132113809 +0000
 @@ -1,3 +1 @@
 -prog.cob:8: error: literal type does not match numeric data type
 -prog.cob:13: error: invalid SET statement

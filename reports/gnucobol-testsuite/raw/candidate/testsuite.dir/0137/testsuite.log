@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 137. syn_subscripts.at:23: testing Non-numeric subscript ...
 ./syn_subscripts.at:42: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.439969610 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/137/stderr	2026-08-05 21:57:01.439342769 +0000
+--- -	2026-08-12 01:52:46.970727931 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/137/stderr	2026-08-12 01:52:46.969989523 +0000
 @@ -1,3 +1 @@
 -prog.cob:10: error: 'I' is not an integer
 -prog.cob:12: error: 'I' is not numeric

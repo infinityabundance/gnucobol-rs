@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 453. syn_functions.at:364: testing Intrinsic functions: reference modification ...
 ./syn_functions.at:382: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.748036091 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/453/stderr	2026-08-05 21:57:01.746999905 +0000
+--- -	2026-08-12 01:52:47.139467044 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/453/stderr	2026-08-12 01:52:47.138641243 +0000
 @@ -1,5 +1 @@
 -prog.cob:8: error: FUNCTION 'CHAR' cannot have reference modification
 -prog.cob:9: error: FUNCTION 'NUMVAL-C' cannot have reference modification

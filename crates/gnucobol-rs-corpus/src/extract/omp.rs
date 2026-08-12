@@ -272,9 +272,13 @@ pub fn extract_omp(
                     compile_out = a;
                     adaptation = format!(
                         "program-id period appended (original sha {}, adapted sha {a_sha}); \
-                         purely syntactic, semantics unchanged -- original preserved at {}",
+                         purely syntactic, semantics unchanged -- original preserved at \
+                         $GNURUST_COBOL_CORPUS_ROOT/packages/{}/{}",
                         sha,
-                        dst.display()
+                        work.file_name()
+                            .map(|n| n.to_string_lossy().into_owned())
+                            .unwrap_or_else(|| "omp-course".to_string()),
+                        fname
                     );
                     adapted_text = Some((adapted, "program-id period (z/OS omits it)".to_string()));
                 }

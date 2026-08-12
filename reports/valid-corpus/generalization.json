@@ -2140,11 +2140,9 @@
       },
       {
         "name": "absolute_host_paths",
-        "result": "INFO",
+        "result": "PASS",
         "details": [
-          "2 host-path token(s) found, all inside #[cfg(test)] modules (test fixtures with synthetic values, not source-path-dependent production behavior)",
-          "crates/gnucobol-rs/src/common_configload.rs:1175: contains host path prefix /home/",
-          "crates/gnucobol-rs/src/common_configload.rs:1183: contains host path prefix /home/"
+          "no absolute host paths (/home/, /run/media/, /media/, /mnt/) in 84 candidate file(s)"
         ]
       },
       {

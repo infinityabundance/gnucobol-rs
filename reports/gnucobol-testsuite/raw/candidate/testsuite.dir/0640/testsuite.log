@@ -2,13 +2,13 @@
 640. run_refmod.at:94: testing Offset underflow ...
 ./run_refmod.at:110: $COMPILE prog.cob
 ./run_refmod.at:111: $COBCRUN_DIRECT ./prog
---- -	2026-08-05 21:57:01.974276265 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/640/stderr	2026-08-05 21:57:01.973387354 +0000
+--- -	2026-08-12 01:52:47.267159453 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/640/stderr	2026-08-12 01:52:47.266334924 +0000
 @@ -1,2 +1 @@
 -libcob: prog.cob:9: error: offset of 'X' out of bounds: 0
  
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/640/stdout	2026-08-05 21:57:01.973387354 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/640/stdout	2026-08-12 01:52:47.266334924 +0000
 @@ -0,0 +1 @@
 +a
 \ No newline at end of file

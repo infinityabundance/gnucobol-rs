@@ -2,8 +2,8 @@
 1030. run_functions.at:1801: testing FUNCTION LENGTH ...
 ./run_functions.at:1877: $COMPILE -Wno-unfinished prog.cob
 ./run_functions.at:1878: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1030/stderr	2026-08-05 21:57:02.666303636 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1030/stderr	2026-08-12 01:52:47.611731759 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: PIC N(9): UnsupportedSymbol('N')
 ./run_functions.at:1878: exit code was 2, expected 0

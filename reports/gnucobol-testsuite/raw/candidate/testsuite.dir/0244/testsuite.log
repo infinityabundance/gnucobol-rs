@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 244. syn_refmod.at:79: testing Static out of bounds ...
 ./syn_refmod.at:109: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.531004522 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/244/stderr	2026-08-05 21:57:01.530519756 +0000
+--- -	2026-08-12 01:52:47.024690122 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/244/stderr	2026-08-12 01:52:47.023856847 +0000
 @@ -1,9 +1 @@
 -prog.cob:9: error: offset of 'X' out of bounds: 0
 -prog.cob:11: error: offset of 'X' out of bounds: 0

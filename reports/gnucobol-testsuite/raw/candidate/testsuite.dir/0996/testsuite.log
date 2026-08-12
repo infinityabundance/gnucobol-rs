@@ -2,8 +2,8 @@
 996. run_functions.at:416: testing FUNCTION HEX-OF and HEX-TO-CHAR ...
 ./run_functions.at:541: $COMPILE -Wno-unfinished prog.cob
 ./run_functions.at:542: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/996/stderr	2026-08-05 21:57:02.584304219 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/996/stderr	2026-08-12 01:52:47.565087307 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: USAGE NATIONAL: cobc 3.2 leaves NATIONAL unfinished (-Wunfinished) -- a non-claim, not a buildable front-end gap
 ./run_functions.at:542: exit code was 2, expected 0

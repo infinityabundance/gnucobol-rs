@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 33. configuration.at:241: testing cobc compiler flag on command line ...
 ./configuration.at:254: $COMPILE_ONLY -fcomment-paragraphs=ok prog.cob
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/33/stderr	2026-08-05 21:57:01.374595783 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/33/stderr	2026-08-12 01:52:46.916471000 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fcomment-paragraphs=ok: unsupported option (rejected-unsupported; comment paragraphs: reject honestly): ok
 ./configuration.at:254: exit code was 1, expected 0

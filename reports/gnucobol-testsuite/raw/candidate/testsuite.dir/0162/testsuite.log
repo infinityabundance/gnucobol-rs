@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 162. syn_redefines.at:172: testing REDEFINES: with OCCURS ...
 ./syn_redefines.at:189: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.455344316 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/162/stderr	2026-08-05 21:57:01.454793046 +0000
+--- -	2026-08-12 01:52:46.983714290 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/162/stderr	2026-08-12 01:52:46.982856619 +0000
 @@ -1,2 +1 @@
 -prog.cob:8: warning: the original definition 'X' should not have an OCCURS clause
  

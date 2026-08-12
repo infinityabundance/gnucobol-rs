@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 407. syn_move.at:222: testing MOVE numeric (non-integer) TO x ...
 ./syn_move.at:248: $COMPILE_ONLY -Wno-unfinished prog.cob
---- -	2026-08-05 21:57:01.691482164 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/407/stderr	2026-08-05 21:57:01.690896169 +0000
+--- -	2026-08-12 01:52:47.114212636 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/407/stderr	2026-08-12 01:52:47.113437460 +0000
 @@ -1,5 +1,2 @@
 -prog.cob:14: error: invalid MOVE statement
 -prog.cob:15: error: invalid MOVE statement

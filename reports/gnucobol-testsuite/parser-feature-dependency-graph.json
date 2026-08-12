@@ -10,10 +10,6 @@
       "target": "checker"
     },
     {
-      "source": "feature::cannot read sub/prog.c: stream did not contain valid UTF-8",
-      "target": "checker"
-    },
-    {
       "source": "feature::cobc-rs: -fformat=unknown: only fixed/free/auto are supported by the candidate (fail closed)",
       "target": "checker"
     },
@@ -27,6 +23,10 @@
     },
     {
       "source": "feature::cobc-rs: unsupported: 66 level without RENAMES",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: INSPECT REPLACING operands incompatible (operands differ in size)",
       "target": "checker"
     },
     {
@@ -88,6 +88,10 @@
     {
       "source": "feature::cobc-rs: unsupported: PROG: no PROCEDURE DIVISION",
       "target": "checker"
+    },
+    {
+      "source": "feature::cobc-rs: unsupported: SORT: `TBL` is not a declared file",
+      "target": "semantic-check"
     },
     {
       "source": "feature::cobc-rs: unsupported: expected data name after a level number",
@@ -215,6 +219,10 @@
     },
     {
       "source": "feature::cobc-rs: warning: cannot read dialect config \"cobol2014.conf\"; using -std/default",
+      "target": "checker"
+    },
+    {
+      "source": "feature::cobc: sub/prog.c: binary file",
       "target": "checker"
     },
     {
@@ -530,6 +538,10 @@
       "target": "checker"
     },
     {
+      "source": "feature::cobrun: unsupported: JSON/XML GENERATE NAME: expected `data-name IS \"key\"`",
+      "target": "checker"
+    },
+    {
       "source": "feature::cobrun: unsupported: MOVE ALL: expected a non-empty literal or figurative",
       "target": "checker"
     },
@@ -540,6 +552,10 @@
     {
       "source": "feature::cobrun: unsupported: OCCURS max UNBOUNDED is not an integer",
       "target": "data-layout"
+    },
+    {
+      "source": "feature::cobrun: unsupported: OPEN: `DATA-FILE` is not a declared file",
+      "target": "semantic-check"
     },
     {
       "source": "feature::cobrun: unsupported: OPEN: `FILE-EXT` is not a declared file",
@@ -922,11 +938,6 @@
       "label": "cannot read prog.cob: No such file or directory (os error 2)"
     },
     {
-      "id": "feature::cannot read sub/prog.c: stream did not contain valid UTF-8",
-      "kind": "feature",
-      "label": "cannot read sub/prog.c: stream did not contain valid UTF-8"
-    },
-    {
       "id": "feature::cobc-rs: -fformat=unknown: only fixed/free/auto are supported by the candidate (fail closed)",
       "kind": "feature",
       "label": "cobc-rs: -fformat=unknown: only fixed/free/auto are supported by the candidate (fail closed)"
@@ -945,6 +956,11 @@
       "id": "feature::cobc-rs: unsupported: 66 level without RENAMES",
       "kind": "feature",
       "label": "cobc-rs: unsupported: 66 level without RENAMES"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: INSPECT REPLACING operands incompatible (operands differ in size)",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: INSPECT REPLACING operands incompatible (operands differ in size)"
     },
     {
       "id": "feature::cobc-rs: unsupported: OCCURS count UNBOUNDED is not an integer",
@@ -1020,6 +1036,11 @@
       "id": "feature::cobc-rs: unsupported: PROG: no PROCEDURE DIVISION",
       "kind": "feature",
       "label": "cobc-rs: unsupported: PROG: no PROCEDURE DIVISION"
+    },
+    {
+      "id": "feature::cobc-rs: unsupported: SORT: `TBL` is not a declared file",
+      "kind": "feature",
+      "label": "cobc-rs: unsupported: SORT: `TBL` is not a declared file"
     },
     {
       "id": "feature::cobc-rs: unsupported: expected data name after a level number",
@@ -1180,6 +1201,11 @@
       "id": "feature::cobc-rs: warning: cannot read dialect config \"cobol2014.conf\"; using -std/default",
       "kind": "feature",
       "label": "cobc-rs: warning: cannot read dialect config \"cobol2014.conf\"; using -std/default"
+    },
+    {
+      "id": "feature::cobc: sub/prog.c: binary file",
+      "kind": "feature",
+      "label": "cobc: sub/prog.c: binary file"
     },
     {
       "id": "feature::cobrun: undefined data name:",
@@ -1572,6 +1598,11 @@
       "label": "cobrun: unsupported: INSPECT region clause near Str([66])"
     },
     {
+      "id": "feature::cobrun: unsupported: JSON/XML GENERATE NAME: expected `data-name IS \"key\"`",
+      "kind": "feature",
+      "label": "cobrun: unsupported: JSON/XML GENERATE NAME: expected `data-name IS \"key\"`"
+    },
+    {
       "id": "feature::cobrun: unsupported: MOVE ALL: expected a non-empty literal or figurative",
       "kind": "feature",
       "label": "cobrun: unsupported: MOVE ALL: expected a non-empty literal or figurative"
@@ -1585,6 +1616,11 @@
       "id": "feature::cobrun: unsupported: OCCURS max UNBOUNDED is not an integer",
       "kind": "feature",
       "label": "cobrun: unsupported: OCCURS max UNBOUNDED is not an integer"
+    },
+    {
+      "id": "feature::cobrun: unsupported: OPEN: `DATA-FILE` is not a declared file",
+      "kind": "feature",
+      "label": "cobrun: unsupported: OPEN: `DATA-FILE` is not a declared file"
     },
     {
       "id": "feature::cobrun: unsupported: OPEN: `FILE-EXT` is not a declared file",

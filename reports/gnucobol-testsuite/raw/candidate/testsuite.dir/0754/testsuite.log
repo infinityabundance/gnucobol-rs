@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 754. run_misc.at:3609: testing Alphanum comparison with default COLLATING SEQUENCE ...
 ./run_misc.at:3626: $COMPILE -fdefault-colseq=ascii -DEXPECT-ORDER=ASCII -o ascii prog.cob
---- -	2026-08-05 21:57:02.172322971 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/754/stderr	2026-08-05 21:57:02.170845871 +0000
+--- -	2026-08-12 01:52:47.350967801 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/754/stderr	2026-08-12 01:52:47.349577116 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:6: warning: expression '1' GREATER OR EQUAL 'a' is always FALSE
 +cobc-rs: -fdefault-colseq=ascii: unsupported option (rejected-unsupported; default collating sequence: reject honestly): ascii

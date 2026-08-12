@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 362. syn_misc.at:6033: testing invalid use of condition-name ...
 ./syn_misc.at:6077: $COMPILE_ONLY prog.cob
---- -	2026-08-05 21:57:01.648317844 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/362/stderr	2026-08-05 21:57:01.647007005 +0000
+--- -	2026-08-12 01:52:47.088524599 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/362/stderr	2026-08-12 01:52:47.087960747 +0000
 @@ -1,16 +1 @@
 -prog.cob:17: error: condition-name not allowed here: 'vnum-1'
 -prog.cob:19: error: condition-name not allowed here: 'val-i1'

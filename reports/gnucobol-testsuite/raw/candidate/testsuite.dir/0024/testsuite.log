@@ -1,14 +1,14 @@
 #                             -*- compilation -*-
 24. used_binaries.at:900: testing run job after compilation from stdin ...
 ./used_binaries.at:911: cat prog.cob | $COMPILE -j -
---- -	2026-08-05 21:57:01.370960691 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/24/stdout	2026-08-05 21:57:01.370420161 +0000
+--- -	2026-08-12 01:52:46.913794785 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/24/stdout	2026-08-12 01:52:46.913192661 +0000
 @@ -1 +1 @@
 -job
 +
 ./used_binaries.at:911: cat prog.cob | $COMPILE -vv -j -
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/24/stderr	2026-08-05 21:57:01.371480823 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/24/stderr	2026-08-12 01:52:46.914283517 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -vv: unknown option (no explicit policy; failing closed — see --print-capabilities)
 ./used_binaries.at:911: exit code was 1, expected 0

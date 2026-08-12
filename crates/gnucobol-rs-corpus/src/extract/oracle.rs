@@ -2,8 +2,10 @@
 //!
 //! Runs a step's expanded command under `sh -c` in a scratch directory containing the group's
 //! source files, with the pinned host-oracle environment (PATH, LD_LIBRARY_PATH,
-//! COB_CONFIG_DIR, locale, TZ). The oracle is the admitted host GnuCOBOL 3.2.0 build under
-//! `lab/oracle/prefix`; its identity and hash are recorded in every report.
+//! COB_CONFIG_DIR, locale, TZ). The oracle is the admitted GnuCOBOL 3.2.0 build; its identity
+//! and hash are recorded in every report. The prefix resolves from `GNURUST_ORACLE_PREFIX`
+//! (used by the isolated court containers, where the oracle lives on a bind mount built in the
+//! container's toolchain image) and falls back to `lab/oracle/prefix` (the host-side build).
 
 use crate::extract::package::StepPackage;
 use std::path::{Path, PathBuf};
@@ -21,6 +23,15 @@ pub struct OracleEnv {
 }
 
 impl OracleEnv {
+    /// Resolve the oracle prefix: `GNURUST_ORACLE_PREFIX` when set, else the workspace's
+    /// `lab/oracle/prefix`.
+    pub fn resolve_prefix(root: &Path) -> PathBuf {
+        match std::env::var("GNURUST_ORACLE_PREFIX") {
+            Ok(p) if !p.trim().is_empty() => PathBuf::from(p),
+            _ => root.join("lab").join("oracle").join("prefix"),
+        }
+    }
+
     /// Resolve the host oracle relative to the workspace root (two levels above this crate).
     pub fn host_default() -> Result<OracleEnv, String> {
         let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
@@ -28,16 +39,18 @@ impl OracleEnv {
             .ancestors()
             .nth(2)
             .ok_or_else(|| "cannot resolve workspace root".to_string())?;
-        let prefix = root.join("lab").join("oracle").join("prefix");
+        let prefix = Self::resolve_prefix(&root);
         let cobc = prefix.join("bin").join("cobc");
         if !cobc.exists() {
             return Err(format!(
-                "host oracle not built ({}); run the oracle build first",
+                "oracle not built ({}); set GNURUST_ORACLE_PREFIX or run the oracle build first",
                 cobc.display()
             ));
         }
         Ok(OracleEnv {
-            label: "GnuCOBOL 3.2.0 (host lab/oracle/prefix)".to_string(),
+            // The label is a stable identity (never the machine-specific prefix path: the
+            // reports carry it in every row and must be reproducible across machines).
+            label: "GnuCOBOL 3.2.0".to_string(),
             prefix: prefix.clone(),
             cobc,
             cobcrun: prefix.join("bin").join("cobcrun"),
@@ -131,7 +144,13 @@ pub fn run_step(
             wrapped.env(k, v);
         }
     }
-    let out = wrapped.output();
+    // Bounded capture: a runaway step may otherwise balloon into gigabytes of RAM and, worse,
+    // make the recorded mismatch bytes nondeterministic (the TOTAL volume of a runaway loop
+    // depends on kill timing while its LEADING bytes are stable). Capturing the first 16 MiB of
+    // each stream bounds memory AND makes the recorded evidence reproducible: the child is left
+    // to block on the full pipe, so the 120s timeout still kills it and the exit status is
+    // unchanged.
+    let out = run_bounded(&mut wrapped, 16 * 1024 * 1024);
     match out {
         Ok(o) => StepOutcome {
             exit: o.status.code(),
@@ -150,6 +169,53 @@ pub fn run_step(
             skip_reason: String::new(),
         },
     }
+}
+
+/// Spawn `cmd`, capture at most `cap` bytes of stdout + stderr each, then wait. One reader
+/// thread per pipe (like `std::process::output`, avoiding lockstep throttling); each reader
+/// keeps the child's pipe drained after its cap so the child runs at full speed and is killed
+/// by the wrapper `timeout` exactly as an unbounded capture would (same exit status). The
+/// leading `cap` bytes of a deterministic program are stable, so the captured evidence is
+/// reproducible even for runaway steps whose TOTAL output volume is timing-dependent.
+fn run_bounded(cmd: &mut Command, cap: usize) -> std::io::Result<std::process::Output> {
+    use std::process::Stdio;
+    let mut child = cmd.stdout(Stdio::piped()).stderr(Stdio::piped()).spawn()?;
+    let so = child.stdout.take().expect("stdout piped");
+    let se = child.stderr.take().expect("stderr piped");
+    let h1 = std::thread::spawn(move || read_capped(so, cap));
+    let h2 = std::thread::spawn(move || read_capped(se, cap));
+    let status = child.wait()?;
+    let stdout = h1
+        .join()
+        .unwrap_or_else(|_| Ok(Vec::new()))
+        .unwrap_or_default();
+    let stderr = h2
+        .join()
+        .unwrap_or_else(|_| Ok(Vec::new()))
+        .unwrap_or_default();
+    Ok(std::process::Output {
+        status,
+        stdout,
+        stderr,
+    })
+}
+
+/// Read up to `cap` bytes, then keep draining (discarding) until EOF so a runaway writer is
+/// never blocked by our capture and the wrapper timeout's kill semantics are preserved.
+fn read_capped(mut r: impl std::io::Read, cap: usize) -> std::io::Result<Vec<u8>> {
+    let mut out = Vec::with_capacity(cap.min(1 << 20));
+    let mut buf = [0u8; 65536];
+    loop {
+        let n = r.read(&mut buf)?;
+        if n == 0 {
+            break;
+        }
+        if out.len() < cap {
+            let take = (cap - out.len()).min(n);
+            out.extend_from_slice(&buf[..take]);
+        }
+    }
+    Ok(out)
 }
 
 /// Evaluate a skip/xfail condition (`test "$COB_HAS_CURSES" != "yes"`) against the oracle env.
@@ -194,17 +260,37 @@ pub fn compare_contract(pkg: &StepPackage, outcome: &StepOutcome) -> Vec<String>
         // runtime skip (Autotest convention): not a failure, not a mismatch
         return mismatches;
     }
+    // A timeout kill (coreutils `timeout` -> 124) is a timing-dependent replay: the stderr the
+    // killed program manages to flush before the pipe closes is a RACE (captured or not, byte
+    // count varies), so the mismatch text must not embed it -- it would make the report
+    // unreproducible. Record the deterministic facts (exit value, capped capture size) only.
+    let killed_by_timeout = outcome.exit == Some(124);
     if let Some(expected) = pkg.status_expected {
         let actual = outcome.exit.unwrap_or(-1);
         if actual != expected {
-            mismatches.push(format!(
-                "exit: expected {expected}, got {actual} (stderr: {})",
-                String::from_utf8_lossy(&outcome.stderr).trim_end()
-            ));
+            if killed_by_timeout {
+                mismatches.push(format!(
+                    "exit: expected {expected}, got 124 (killed by the 120s replay timeout)"
+                ));
+            } else {
+                mismatches.push(format!(
+                    "exit: expected {expected}, got {actual} (stderr: {})",
+                    String::from_utf8_lossy(&outcome.stderr).trim_end()
+                ));
+            }
         }
     }
     if let crate::extract::package::Expected::Text(expected) = &pkg.stdout_expected {
-        if outcome.stdout != expected.as_bytes() {
+        if killed_by_timeout {
+            // a killed program's captured prefix is timing-dependent; the byte comparison
+            // itself (even a transient match) is unreliable, so record the contract fact
+            // deterministically and never a racy count.
+            mismatches.push(format!(
+                "stdout mismatch: expected {} bytes (the program ran until the replay timeout; \
+                 the captured prefix is timing-dependent)",
+                expected.len()
+            ));
+        } else if outcome.stdout != expected.as_bytes() {
             mismatches.push(format!(
                 "stdout mismatch: expected {} bytes, got {} bytes",
                 expected.len(),
@@ -213,7 +299,14 @@ pub fn compare_contract(pkg: &StepPackage, outcome: &StepOutcome) -> Vec<String>
         }
     }
     if let crate::extract::package::Expected::Text(expected) = &pkg.stderr_expected {
-        if outcome.stderr != expected.as_bytes() {
+        if killed_by_timeout {
+            // the stderr a killed program flushes before the pipe closes is a race; never emit
+            // a count for it (the exit note already records the kill).
+            mismatches.push(format!(
+                "stderr mismatch: expected {} bytes (capture unreliable after a timeout kill)",
+                expected.len()
+            ));
+        } else if outcome.stderr != expected.as_bytes() {
             mismatches.push(format!(
                 "stderr mismatch: expected {} bytes, got {} bytes",
                 expected.len(),

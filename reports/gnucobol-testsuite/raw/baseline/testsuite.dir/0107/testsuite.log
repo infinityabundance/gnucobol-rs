@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 107. syn_definition.at:1069: testing Redefinition of label and variable names ...
 ./syn_definition.at:1095: $COMPILE_ONLY -std=cobol2014 prog.cob
---- -	2026-08-05 21:56:20.307651060 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/107/stderr	2026-08-05 21:56:20.305599524 +0000
+--- -	2026-08-12 01:52:18.571500346 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/107/stderr	2026-08-12 01:52:18.570137820 +0000
 @@ -1,5 +1,9 @@
 +prog.cob:7: warning: redefinition of 'WORD'
 +prog.cob:3: note: 'WORD' previously defined here

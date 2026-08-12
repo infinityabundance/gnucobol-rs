@@ -26028,7 +26028,7 @@
     "replay_mismatches": [],
     "first_failure": [
       "check",
-      "unsupported: verb USE"
+      "unsupported: verb IDENTIFICATION"
     ],
     "source_format": "free",
     "dialect": "default",
@@ -26064,7 +26064,7 @@
     "replay_mismatches": [],
     "first_failure": [
       "check",
-      "unsupported: verb USE"
+      "unsupported: verb IDENTIFICATION"
     ],
     "source_format": "free",
     "dialect": "default",
@@ -30067,13 +30067,10 @@
     "group_title": "FUNCTION MODULE-DATE",
     "step_index": 2,
     "command": "$COBCRUN_DIRECT ./prog",
-    "classification": "VALID_EXECUTABLE_PROGRAM|CANDIDATE_RUN_REJECT",
+    "classification": "VALID_EXECUTABLE_PROGRAM|CANDIDATE_ALL_PHASES_OK",
     "replay_exit": 0,
     "replay_mismatches": [],
-    "first_failure": [
-      "run",
-      "unsupported: FUNCTION WHEN-COMPILED / MODULE-DATE / MODULE-TIME / MODULE-FORMATTED-DATE requires a pinned SOURCE_DATE_EPOCH (the live compile clock is a non-claim)"
-    ],
+    "first_failure": null,
     "source_format": "free",
     "dialect": "default",
     "captured_files": []
@@ -30100,13 +30097,10 @@
     "group_title": "FUNCTION MODULE-FORMATTED-DATE",
     "step_index": 2,
     "command": "$COBCRUN_DIRECT ./prog",
-    "classification": "VALID_EXECUTABLE_PROGRAM|CANDIDATE_RUN_REJECT",
+    "classification": "VALID_EXECUTABLE_PROGRAM|CANDIDATE_ALL_PHASES_OK",
     "replay_exit": 0,
     "replay_mismatches": [],
-    "first_failure": [
-      "run",
-      "unsupported: FUNCTION WHEN-COMPILED / MODULE-DATE / MODULE-TIME / MODULE-FORMATTED-DATE requires a pinned SOURCE_DATE_EPOCH (the live compile clock is a non-claim)"
-    ],
+    "first_failure": null,
     "source_format": "free",
     "dialect": "default",
     "captured_files": []
@@ -30226,13 +30220,10 @@
     "group_title": "FUNCTION MODULE-TIME",
     "step_index": 2,
     "command": "$COBCRUN_DIRECT ./prog",
-    "classification": "VALID_EXECUTABLE_PROGRAM|CANDIDATE_RUN_REJECT",
+    "classification": "VALID_EXECUTABLE_PROGRAM|CANDIDATE_ALL_PHASES_OK",
     "replay_exit": 0,
     "replay_mismatches": [],
-    "first_failure": [
-      "run",
-      "unsupported: FUNCTION WHEN-COMPILED / MODULE-DATE / MODULE-TIME / MODULE-FORMATTED-DATE requires a pinned SOURCE_DATE_EPOCH (the live compile clock is a non-claim)"
-    ],
+    "first_failure": null,
     "source_format": "free",
     "dialect": "default",
     "captured_files": []
@@ -31704,7 +31695,7 @@
     "replay_mismatches": [],
     "first_failure": [
       "run",
-      "unsupported: FUNCTION WHEN-COMPILED / MODULE-DATE / MODULE-TIME / MODULE-FORMATTED-DATE requires a pinned SOURCE_DATE_EPOCH (the live compile clock is a non-claim)"
+      "unsupported: not a numeric literal: 17:5"
     ],
     "source_format": "free",
     "dialect": "default",
@@ -66033,7 +66024,7 @@
     "replay_mismatches": [],
     "first_failure": [
       "check",
-      "unsupported: verb USE"
+      "unsupported: verb IDENTIFICATION"
     ],
     "source_format": "free",
     "dialect": "default",
@@ -66051,7 +66042,7 @@
     "replay_mismatches": [],
     "first_failure": [
       "check",
-      "unsupported: verb USE"
+      "unsupported: verb IDENTIFICATION"
     ],
     "source_format": "free",
     "dialect": "default",
@@ -69464,13 +69455,10 @@
     "group_title": "FUNCTION MODULE-DATE",
     "step_index": 2,
     "command": "$COBCRUN_DIRECT ./prog",
-    "classification": "VALID_EXECUTABLE_PROGRAM|CANDIDATE_RUN_REJECT",
+    "classification": "VALID_EXECUTABLE_PROGRAM|CANDIDATE_ALL_PHASES_OK",
     "replay_exit": 0,
     "replay_mismatches": [],
-    "first_failure": [
-      "run",
-      "unsupported: FUNCTION WHEN-COMPILED / MODULE-DATE / MODULE-TIME / MODULE-FORMATTED-DATE requires a pinned SOURCE_DATE_EPOCH (the live compile clock is a non-claim)"
-    ],
+    "first_failure": null,
     "source_format": "free",
     "dialect": "default",
     "captured_files": []
@@ -69497,13 +69485,10 @@
     "group_title": "FUNCTION MODULE-FORMATTED-DATE",
     "step_index": 2,
     "command": "$COBCRUN_DIRECT ./prog",
-    "classification": "VALID_EXECUTABLE_PROGRAM|CANDIDATE_RUN_REJECT",
+    "classification": "VALID_EXECUTABLE_PROGRAM|CANDIDATE_ALL_PHASES_OK",
     "replay_exit": 0,
     "replay_mismatches": [],
-    "first_failure": [
-      "run",
-      "unsupported: FUNCTION WHEN-COMPILED / MODULE-DATE / MODULE-TIME / MODULE-FORMATTED-DATE requires a pinned SOURCE_DATE_EPOCH (the live compile clock is a non-claim)"
-    ],
+    "first_failure": null,
     "source_format": "free",
     "dialect": "default",
     "captured_files": []
@@ -69623,13 +69608,10 @@
     "group_title": "FUNCTION MODULE-TIME",
     "step_index": 2,
     "command": "$COBCRUN_DIRECT ./prog",
-    "classification": "VALID_EXECUTABLE_PROGRAM|CANDIDATE_RUN_REJECT",
+    "classification": "VALID_EXECUTABLE_PROGRAM|CANDIDATE_ALL_PHASES_OK",
     "replay_exit": 0,
     "replay_mismatches": [],
-    "first_failure": [
-      "run",
-      "unsupported: FUNCTION WHEN-COMPILED / MODULE-DATE / MODULE-TIME / MODULE-FORMATTED-DATE requires a pinned SOURCE_DATE_EPOCH (the live compile clock is a non-claim)"
-    ],
+    "first_failure": null,
     "source_format": "free",
     "dialect": "default",
     "captured_files": []
@@ -71101,7 +71083,7 @@
     "replay_mismatches": [],
     "first_failure": [
       "run",
-      "unsupported: FUNCTION WHEN-COMPILED / MODULE-DATE / MODULE-TIME / MODULE-FORMATTED-DATE requires a pinned SOURCE_DATE_EPOCH (the live compile clock is a non-claim)"
+      "unsupported: not a numeric literal: 17:5"
     ],
     "source_format": "free",
     "dialect": "default",

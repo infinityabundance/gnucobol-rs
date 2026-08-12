@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 676. run_misc.at:221: testing CURRENCY SIGN WITH PICTURE SYMBOL ...
 ./run_misc.at:258: $COMPILE prog.cob
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/676/stderr	2026-08-05 21:56:24.136573252 +0000
+--- /dev/null	2026-08-10 23:42:27.635770647 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/676/stderr	2026-08-12 01:52:22.162228765 +0000
 @@ -0,0 +1,13 @@
 +prog.cob:8: warning: separate currency symbol and currency string is not implemented
 +prog.cob:9: error: duplicate CURRENCY clause

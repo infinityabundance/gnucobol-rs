@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 245. syn_refmod.at:123: testing constant-folding out of bounds ...
 ./syn_refmod.at:147: $COMPILE_ONLY -fdiagnostics-show-option -Wno-constant-numlit-expression prog.cob
---- -	2026-08-05 21:57:01.531026463 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/245/stderr	2026-08-05 21:57:01.530519756 +0000
+--- -	2026-08-12 01:52:47.024811779 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/245/stderr	2026-08-12 01:52:47.023856847 +0000
 @@ -1,6 +1,2 @@
 -prog.cob:10: warning: offset of 'X' out of bounds: 0 [-Wignored-error]
 -prog.cob:11: warning: length of 'X' out of bounds: 0 [-Wignored-error]

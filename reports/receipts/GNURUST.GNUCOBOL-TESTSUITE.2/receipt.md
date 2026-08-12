@@ -11,8 +11,8 @@
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | cobc-rs adapter + cobrun interpreter outcomes per test, raw candidate testsuite.log + group logs, mechanical no-delegation proof (linkage scans + PATH isolation) |
 | replay command | `bash lab/gnucobol-testsuite/run-docker.sh` |
-| generated_at | 2026-08-05T21:58:29Z |
-| git_commit | `c35d6c2b93577013e5257c4bf60e23975d34640e` |
+| generated_at | 2026-08-12T01:54:13Z |
+| git_commit | `8980273cf6e75d7efaefaf32627586ce6d16fe78` |
 | receipt_status | current |
 
 **Conformance claim:** NONE — differential observation over the admitted GnuCOBOL 3.2 native Autotest suite in this environment; no GnuCOBOL test-suite parity claim, no COBOL conformance certification, no compiler-replacement claim.
@@ -23,30 +23,30 @@
 {
   "candidate_module_model_unsupported": 4,
   "candidate_not_reached": 0,
-  "candidate_parse_check_reject": 683,
-  "candidate_results_sha256": "f37a1563e9ab9691a758ea691d470c19171d3c109bb98cd09bcc105479eca173",
-  "candidate_runtime_fail": 136,
+  "candidate_parse_check_reject": 682,
+  "candidate_results_sha256": "dcfef11610808f3accfbd4ce3331c516d33281bdab8d57364397583e96b0f051",
+  "candidate_runtime_fail": 137,
   "candidate_skipped": 0,
   "candidate_timeout": 0,
-  "candidate_unsupported": 21,
+  "candidate_unsupported": 18,
   "no_delegation": {
     "candidate_bin": {
       "cobc": {
         "resolves_to": "/work/target/release/cobc-rs",
         "symlink_target": "cobc-rs"
       },
-      "cobc_rs_sha256": "b90eba7909ff7953e6e113a1c9f63c1a7523d3e17fad41cc7bd157373a71b94e",
+      "cobc_rs_sha256": "fb149b2b91e2239cdfd2b33a369a6484c791b60b8cd8140c5a3d372b57375ef7",
       "cobcrun": {
         "resolves_to": "/work/target/release/cobc-rs",
         "symlink_target": "cobcrun-rs"
       },
-      "cobrun_sha256": "2cab6054ac4c65c7436afa2fef6a81cba953d8a4f7f0ac2f6255db2f98f92bf9"
+      "cobrun_sha256": "b1795495406abe277008f682cbe8cebb6dcbb889d15a0d28cdcafd5e24caca4e"
     },
-    "candidate_binary_sha256": "2cab6054ac4c65c7436afa2fef6a81cba953d8a4f7f0ac2f6255db2f98f92bf9",
+    "candidate_binary_sha256": "b1795495406abe277008f682cbe8cebb6dcbb889d15a0d28cdcafd5e24caca4e",
     "candidate_phase_isolated": true,
     "candidate_phase_note": "candidate phase isolated from the oracle (only /work/run/candidate-bin/cobc + /work/run/candidate-bin/cobcrun on PATH)",
     "cobc_resolves_to_candidate_during_candidate_phase": true,
-    "cobc_rs_binary_sha256": "b90eba7909ff7953e6e113a1c9f63c1a7523d3e17fad41cc7bd157373a71b94e",
+    "cobc_rs_binary_sha256": "fb149b2b91e2239cdfd2b33a369a6484c791b60b8cd8140c5a3d372b57375ef7",
     "cobc_rs_ldd_libcob_hits": 0,
     "cobc_rs_links_no_libcob": true,
     "cobc_rs_readelf_libcob_hits": 0,

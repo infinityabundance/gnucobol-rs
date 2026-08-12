@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 243. syn_refmod.at:55: testing invalid reference-modification ...
 ./syn_refmod.at:71: $COMPILE prog.cob
---- -	2026-08-05 21:57:01.531161025 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/243/stderr	2026-08-05 21:57:01.530519756 +0000
+--- -	2026-08-12 01:52:47.024626373 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/243/stderr	2026-08-12 01:52:47.023856847 +0000
 @@ -1,3 +1 @@
 -prog.cob:9: error: 'X-AB' cannot be reference modified
 -prog.cob:9: error: condition-name not allowed here: 'X-AB'
