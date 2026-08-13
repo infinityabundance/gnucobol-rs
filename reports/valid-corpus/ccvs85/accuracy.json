@@ -28,7 +28,7 @@
     "final_classification": "HARNESS_BLOCKED",
     "reason_code": "EXEC85_DRIVER_REQUIRES_MODULE_LIBRARY",
     "nondeterministic": false,
-    "compile_ms": 120,
+    "compile_ms": 97,
     "run_ms": 0
   },
   {
@@ -124,7 +124,7 @@
     "final_classification": "ORACLE_COMPILE_REJECT",
     "reason_code": "WORK_RUN_MATERIALIZED_ADAPTED_CM101M_COB_231_ERROR",
     "nondeterministic": false,
-    "compile_ms": 11,
+    "compile_ms": 9,
     "run_ms": 0
   },
   {
@@ -156,7 +156,7 @@
     "final_classification": "ORACLE_COMPILE_REJECT",
     "reason_code": "WORK_RUN_MATERIALIZED_ADAPTED_CM102M_COB_279_ERROR",
     "nondeterministic": false,
-    "compile_ms": 10,
+    "compile_ms": 9,
     "run_ms": 0
   },
   {
@@ -188,7 +188,7 @@
     "final_classification": "ORACLE_COMPILE_REJECT",
     "reason_code": "WORK_RUN_MATERIALIZED_ADAPTED_CM103M_COB_182_ERROR",
     "nondeterministic": false,
-    "compile_ms": 9,
+    "compile_ms": 7,
     "run_ms": 0
   },
   {
@@ -220,7 +220,7 @@
     "final_classification": "ORACLE_COMPILE_ERROR",
     "reason_code": "COBC_CRASHED",
     "nondeterministic": false,
-    "compile_ms": 96,
+    "compile_ms": 56,
     "run_ms": 0
   },
   {
@@ -252,7 +252,7 @@
     "final_classification": "ORACLE_COMPILE_REJECT",
     "reason_code": "WORK_RUN_MATERIALIZED_ADAPTED_CM105M_COB_176_ERROR",
     "nondeterministic": false,
-    "compile_ms": 10,
+    "compile_ms": 8,
     "run_ms": 0
   },
   {
@@ -284,7 +284,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_COMMUNICATION",
     "nondeterministic": false,
-    "compile_ms": 56,
+    "compile_ms": 47,
     "run_ms": 2
   },
   {
@@ -316,7 +316,7 @@
     "final_classification": "ORACLE_COMPILE_ERROR",
     "reason_code": "COBC_CRASHED",
     "nondeterministic": false,
-    "compile_ms": 96,
+    "compile_ms": 56,
     "run_ms": 0
   },
   {
@@ -348,8 +348,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_DISABLE_GNUCOBOL_DOES_NOT_IMPLEMENT_THE",
     "nondeterministic": false,
-    "compile_ms": 63,
-    "run_ms": 2
+    "compile_ms": 43,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/CM401M",
@@ -380,7 +380,7 @@
     "final_classification": "ORACLE_COMPILE_REJECT",
     "reason_code": "WORK_RUN_MATERIALIZED_ADAPTED_CM401M_COB_ERROR_NOT",
     "nondeterministic": false,
-    "compile_ms": 8,
+    "compile_ms": 6,
     "run_ms": 0
   },
   {
@@ -418,7 +418,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 129,
+    "compile_ms": 101,
     "run_ms": 2
   },
   {
@@ -456,8 +456,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 113,
-    "run_ms": 2
+    "compile_ms": 83,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/DB103M",
@@ -494,7 +494,7 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 71,
+    "compile_ms": 72,
     "run_ms": 2
   },
   {
@@ -532,8 +532,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_XRECORD_NUMBER",
     "nondeterministic": false,
-    "compile_ms": 136,
-    "run_ms": 3
+    "compile_ms": 99,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/DB105A",
@@ -570,8 +570,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_FEATURE",
     "nondeterministic": false,
-    "compile_ms": 245,
-    "run_ms": 2
+    "compile_ms": 155,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/DB201A",
@@ -608,7 +608,7 @@
     "final_classification": "RUST_REJECT_RUNTIME_BOUNDARY",
     "reason_code": "COBRUN_RUNTIME_ERROR_PERFORM_VARYING_EXCEEDED_1E6_ITERATIONS",
     "nondeterministic": false,
-    "compile_ms": 233,
+    "compile_ms": 191,
     "run_ms": 2
   },
   {
@@ -646,8 +646,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_XRECORD_NUMBER",
     "nondeterministic": false,
-    "compile_ms": 170,
-    "run_ms": 2
+    "compile_ms": 113,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/DB203A",
@@ -684,8 +684,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_BORTED",
     "nondeterministic": false,
-    "compile_ms": 135,
-    "run_ms": 6
+    "compile_ms": 107,
+    "run_ms": 5
   },
   {
     "program_id": "ccvs85/DB204A",
@@ -722,8 +722,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_XRECORD_NUMBER",
     "nondeterministic": false,
-    "compile_ms": 93,
-    "run_ms": 2
+    "compile_ms": 77,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/DB205A",
@@ -754,7 +754,7 @@
     "final_classification": "ORACLE_TIMEOUT",
     "reason_code": "ORACLE_RUN_TIMEOUT",
     "nondeterministic": false,
-    "compile_ms": 119,
+    "compile_ms": 89,
     "run_ms": 30001
   },
   {
@@ -786,7 +786,7 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 69,
+    "compile_ms": 52,
     "run_ms": 2
   },
   {
@@ -818,7 +818,7 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 74,
+    "compile_ms": 46,
     "run_ms": 1
   },
   {
@@ -850,7 +850,7 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 56,
+    "compile_ms": 49,
     "run_ms": 1
   },
   {
@@ -882,8 +882,8 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 52,
-    "run_ms": 2
+    "compile_ms": 46,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/DB305M",
@@ -914,8 +914,8 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 55,
-    "run_ms": 2
+    "compile_ms": 45,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IC101A",
@@ -952,8 +952,8 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 90,
-    "run_ms": 1
+    "compile_ms": 68,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/IC102A",
@@ -1022,8 +1022,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_FIELD",
     "nondeterministic": false,
-    "compile_ms": 113,
-    "run_ms": 2
+    "compile_ms": 86,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IC104A",
@@ -1124,8 +1124,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_IN3",
     "nondeterministic": false,
-    "compile_ms": 84,
-    "run_ms": 2
+    "compile_ms": 74,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IC107A",
@@ -1194,8 +1194,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_DN1",
     "nondeterministic": false,
-    "compile_ms": 124,
-    "run_ms": 2
+    "compile_ms": 94,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IC109A",
@@ -1328,8 +1328,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_FILE_RECORD_INFO_120",
     "nondeterministic": false,
-    "compile_ms": 89,
-    "run_ms": 3
+    "compile_ms": 74,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/IC113A",
@@ -1392,7 +1392,7 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 94,
+    "compile_ms": 79,
     "run_ms": 1
   },
   {
@@ -1462,7 +1462,7 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 90,
+    "compile_ms": 75,
     "run_ms": 2
   },
   {
@@ -1564,8 +1564,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNRECOGNIZED_USAGE_COMPUTATIONAL",
     "nondeterministic": false,
-    "compile_ms": 95,
-    "run_ms": 2
+    "compile_ms": 76,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IC202A",
@@ -1634,8 +1634,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_DN2",
     "nondeterministic": false,
-    "compile_ms": 130,
-    "run_ms": 2
+    "compile_ms": 100,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IC204A",
@@ -1768,8 +1768,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_CALL_ID1_NOT_CONTAINED_PROGRAM_EXTERNAL",
     "nondeterministic": false,
-    "compile_ms": 98,
-    "run_ms": 2
+    "compile_ms": 71,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IC208A",
@@ -1838,7 +1838,7 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_TEST1",
     "nondeterministic": false,
-    "compile_ms": 104,
+    "compile_ms": 85,
     "run_ms": 1
   },
   {
@@ -1972,7 +1972,7 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_DN2",
     "nondeterministic": false,
-    "compile_ms": 112,
+    "compile_ms": 77,
     "run_ms": 1
   },
   {
@@ -2074,7 +2074,7 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_DN1",
     "nondeterministic": false,
-    "compile_ms": 93,
+    "compile_ms": 64,
     "run_ms": 1
   },
   {
@@ -2144,7 +2144,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNRECOGNIZED_USAGE_COMPUTATIONAL",
     "nondeterministic": false,
-    "compile_ms": 91,
+    "compile_ms": 72,
     "run_ms": 2
   },
   {
@@ -2182,8 +2182,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNRECOGNIZED_USAGE_COMPUTATIONAL",
     "nondeterministic": false,
-    "compile_ms": 95,
-    "run_ms": 2
+    "compile_ms": 67,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IC224A",
@@ -2220,8 +2220,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNRECOGNIZED_USAGE_COMPUTATIONAL",
     "nondeterministic": false,
-    "compile_ms": 90,
-    "run_ms": 2
+    "compile_ms": 74,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IC225A",
@@ -2258,7 +2258,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNRECOGNIZED_USAGE_COMPUTATIONAL",
     "nondeterministic": false,
-    "compile_ms": 103,
+    "compile_ms": 76,
     "run_ms": 2
   },
   {
@@ -2296,8 +2296,8 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 79,
-    "run_ms": 2
+    "compile_ms": 57,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IC227A",
@@ -2334,8 +2334,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_CALL_ID1_NOT_CONTAINED_PROGRAM_EXTERNAL",
     "nondeterministic": false,
-    "compile_ms": 87,
-    "run_ms": 2
+    "compile_ms": 70,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IC228A",
@@ -2372,8 +2372,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_GLO_DATA",
     "nondeterministic": false,
-    "compile_ms": 81,
-    "run_ms": 2
+    "compile_ms": 57,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IC233A",
@@ -2410,7 +2410,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_OPEN_TEST_FILE_NOT_DECLARED_FILE",
     "nondeterministic": false,
-    "compile_ms": 90,
+    "compile_ms": 57,
     "run_ms": 1
   },
   {
@@ -2448,7 +2448,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 87,
+    "compile_ms": 62,
     "run_ms": 2
   },
   {
@@ -2486,8 +2486,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_SUBSCRIPTED_DATA",
     "nondeterministic": false,
-    "compile_ms": 87,
-    "run_ms": 2
+    "compile_ms": 65,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IC237A",
@@ -2524,7 +2524,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL",
     "nondeterministic": false,
-    "compile_ms": 72,
+    "compile_ms": 58,
     "run_ms": 1
   },
   {
@@ -2556,7 +2556,7 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 56,
+    "compile_ms": 46,
     "run_ms": 1
   },
   {
@@ -2594,7 +2594,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_CONDITION_UNRECOGNIZED_RELATIONAL_OPERATOR_EXPECTED_GREATER",
     "nondeterministic": false,
-    "compile_ms": 106,
+    "compile_ms": 69,
     "run_ms": 5
   },
   {
@@ -2632,8 +2632,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_CONDITION_UNRECOGNIZED_RELATIONAL_OPERATOR_EXPECTED_GREATER",
     "nondeterministic": false,
-    "compile_ms": 73,
-    "run_ms": 2
+    "compile_ms": 67,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IF103A",
@@ -2670,8 +2670,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_CONDITION_UNRECOGNIZED_RELATIONAL_OPERATOR_EXPECTED_GREATER",
     "nondeterministic": false,
-    "compile_ms": 79,
-    "run_ms": 6
+    "compile_ms": 68,
+    "run_ms": 5
   },
   {
     "program_id": "ccvs85/IF104A",
@@ -2708,8 +2708,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_CONDITION_UNRECOGNIZED_RELATIONAL_OPERATOR_EXPECTED_GREATER",
     "nondeterministic": false,
-    "compile_ms": 92,
-    "run_ms": 8
+    "compile_ms": 82,
+    "run_ms": 6
   },
   {
     "program_id": "ccvs85/IF105A",
@@ -2746,8 +2746,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FUNCTION",
     "nondeterministic": false,
-    "compile_ms": 82,
-    "run_ms": 2
+    "compile_ms": 58,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IF106A",
@@ -2784,8 +2784,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL",
     "nondeterministic": false,
-    "compile_ms": 88,
-    "run_ms": 5
+    "compile_ms": 78,
+    "run_ms": 4
   },
   {
     "program_id": "ccvs85/IF107A",
@@ -2814,7 +2814,7 @@
     "candidate_prepare": "accepted",
     "candidate_run": "pass",
     "candidate_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "candidate_report_sha256": "39db3aeef9a0db125b58c880828938186c85a1152d8263649a994b63685cd83f",
+    "candidate_report_sha256": "289ba1ce4a836ff91dab5cae268d278d3465aa6f8fd25e7361051df87c5a6307",
     "raw_stdout_match": "mismatch",
     "generated_files_match": "match",
     "exit_status_match": "match",
@@ -2822,8 +2822,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 70,
-    "run_ms": 2
+    "compile_ms": 56,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IF108A",
@@ -2860,8 +2860,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 83,
-    "run_ms": 2
+    "compile_ms": 63,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IF109A",
@@ -2898,8 +2898,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 79,
-    "run_ms": 2
+    "compile_ms": 64,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IF110A",
@@ -2936,8 +2936,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FUNCTION",
     "nondeterministic": false,
-    "compile_ms": 83,
-    "run_ms": 2
+    "compile_ms": 59,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IF111A",
@@ -2974,7 +2974,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL",
     "nondeterministic": false,
-    "compile_ms": 88,
+    "compile_ms": 64,
     "run_ms": 1
   },
   {
@@ -3012,8 +3012,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 84,
-    "run_ms": 1
+    "compile_ms": 60,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/IF113A",
@@ -3050,8 +3050,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 72,
-    "run_ms": 2
+    "compile_ms": 59,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IF114A",
@@ -3088,7 +3088,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL",
     "nondeterministic": false,
-    "compile_ms": 79,
+    "compile_ms": 78,
     "run_ms": 1
   },
   {
@@ -3126,8 +3126,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 86,
-    "run_ms": 2
+    "compile_ms": 60,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IF116A",
@@ -3164,8 +3164,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL",
     "nondeterministic": false,
-    "compile_ms": 92,
-    "run_ms": 12
+    "compile_ms": 71,
+    "run_ms": 8
   },
   {
     "program_id": "ccvs85/IF117A",
@@ -3202,8 +3202,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_CONDITION_UNRECOGNIZED_RELATIONAL_OPERATOR_EXPECTED_GREATER",
     "nondeterministic": false,
-    "compile_ms": 115,
-    "run_ms": 9
+    "compile_ms": 72,
+    "run_ms": 8
   },
   {
     "program_id": "ccvs85/IF118A",
@@ -3240,8 +3240,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FUNCTION",
     "nondeterministic": false,
-    "compile_ms": 91,
-    "run_ms": 2
+    "compile_ms": 60,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IF119A",
@@ -3272,7 +3272,7 @@
     "final_classification": "ORACLE_COMPILE_REJECT",
     "reason_code": "WORK_RUN_MATERIALIZED_ADAPTED_IF119A_COB_599_ERROR",
     "nondeterministic": false,
-    "compile_ms": 9,
+    "compile_ms": 8,
     "run_ms": 0
   },
   {
@@ -3368,7 +3368,7 @@
     "final_classification": "ORACLE_COMPILE_REJECT",
     "reason_code": "WORK_RUN_MATERIALIZED_ADAPTED_IF122A_COB_509_ERROR",
     "nondeterministic": false,
-    "compile_ms": 9,
+    "compile_ms": 8,
     "run_ms": 0
   },
   {
@@ -3400,7 +3400,7 @@
     "final_classification": "ORACLE_COMPILE_REJECT",
     "reason_code": "WORK_RUN_MATERIALIZED_ADAPTED_IF123A_COB_602_ERROR",
     "nondeterministic": false,
-    "compile_ms": 10,
+    "compile_ms": 8,
     "run_ms": 0
   },
   {
@@ -3438,7 +3438,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FUNCTION",
     "nondeterministic": false,
-    "compile_ms": 82,
+    "compile_ms": 67,
     "run_ms": 1
   },
   {
@@ -3476,8 +3476,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_CONDITION_UNRECOGNIZED_RELATIONAL_OPERATOR_EXPECTED_GREATER",
     "nondeterministic": false,
-    "compile_ms": 86,
-    "run_ms": 2
+    "compile_ms": 68,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IF126A",
@@ -3514,7 +3514,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 93,
+    "compile_ms": 66,
     "run_ms": 1
   },
   {
@@ -3552,7 +3552,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 80,
+    "compile_ms": 57,
     "run_ms": 1
   },
   {
@@ -3584,7 +3584,7 @@
     "final_classification": "ORACLE_COMPILE_REJECT",
     "reason_code": "WORK_RUN_MATERIALIZED_ADAPTED_IF128A_COB_536_ERROR",
     "nondeterministic": false,
-    "compile_ms": 11,
+    "compile_ms": 8,
     "run_ms": 0
   },
   {
@@ -3616,7 +3616,7 @@
     "final_classification": "ORACLE_COMPILE_REJECT",
     "reason_code": "WORK_RUN_MATERIALIZED_ADAPTED_IF129A_COB_539_ERROR",
     "nondeterministic": false,
-    "compile_ms": 10,
+    "compile_ms": 8,
     "run_ms": 0
   },
   {
@@ -3654,8 +3654,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_CONDITION_UNRECOGNIZED_RELATIONAL_OPERATOR_EXPECTED_GREATER",
     "nondeterministic": false,
-    "compile_ms": 91,
-    "run_ms": 2
+    "compile_ms": 76,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IF131A",
@@ -3692,8 +3692,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_FUNCTION_RANDOM_COBC_DOES_NOT_IMPLEMENT",
     "nondeterministic": false,
-    "compile_ms": 75,
-    "run_ms": 4
+    "compile_ms": 59,
+    "run_ms": 3
   },
   {
     "program_id": "ccvs85/IF132A",
@@ -3762,7 +3762,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_CONDITION_UNRECOGNIZED_RELATIONAL_OPERATOR_EXPECTED_GREATER",
     "nondeterministic": false,
-    "compile_ms": 93,
+    "compile_ms": 66,
     "run_ms": 2
   },
   {
@@ -3800,8 +3800,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FUNCTION",
     "nondeterministic": false,
-    "compile_ms": 83,
-    "run_ms": 2
+    "compile_ms": 61,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IF135A",
@@ -3838,8 +3838,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_CONDITION_UNRECOGNIZED_RELATIONAL_OPERATOR_EXPECTED_GREATER",
     "nondeterministic": false,
-    "compile_ms": 88,
-    "run_ms": 5
+    "compile_ms": 72,
+    "run_ms": 3
   },
   {
     "program_id": "ccvs85/IF136A",
@@ -3876,8 +3876,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_CONDITION_UNRECOGNIZED_RELATIONAL_OPERATOR_EXPECTED_GREATER",
     "nondeterministic": false,
-    "compile_ms": 85,
-    "run_ms": 2
+    "compile_ms": 70,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IF137A",
@@ -3978,7 +3978,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_CONDITION_UNRECOGNIZED_RELATIONAL_OPERATOR_EXPECTED_GREATER",
     "nondeterministic": false,
-    "compile_ms": 87,
+    "compile_ms": 72,
     "run_ms": 8
   },
   {
@@ -4016,8 +4016,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FUNCTION",
     "nondeterministic": false,
-    "compile_ms": 71,
-    "run_ms": 2
+    "compile_ms": 65,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IF141A",
@@ -4048,7 +4048,7 @@
     "final_classification": "ORACLE_COMPILE_REJECT",
     "reason_code": "WORK_RUN_MATERIALIZED_ADAPTED_IF141A_COB_512_ERROR",
     "nondeterministic": false,
-    "compile_ms": 10,
+    "compile_ms": 9,
     "run_ms": 0
   },
   {
@@ -4086,7 +4086,7 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 68,
+    "compile_ms": 55,
     "run_ms": 1
   },
   {
@@ -4118,7 +4118,7 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 61,
+    "compile_ms": 44,
     "run_ms": 2
   },
   {
@@ -4150,7 +4150,7 @@
     "final_classification": "ORACLE_COMPILE_REJECT",
     "reason_code": "WORK_RUN_MATERIALIZED_ADAPTED_IF402M_COB_ERROR_SYNTAX",
     "nondeterministic": false,
-    "compile_ms": 8,
+    "compile_ms": 7,
     "run_ms": 0
   },
   {
@@ -4182,8 +4182,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_FUNCTION_RANDOM_COBC_DOES_NOT_IMPLEMENT",
     "nondeterministic": false,
-    "compile_ms": 48,
-    "run_ms": 3
+    "compile_ms": 45,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/IX101A",
@@ -4214,8 +4214,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 149,
-    "run_ms": 8
+    "compile_ms": 126,
+    "run_ms": 6
   },
   {
     "program_id": "ccvs85/IX102A",
@@ -4310,8 +4310,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 95,
-    "run_ms": 9
+    "compile_ms": 66,
+    "run_ms": 8
   },
   {
     "program_id": "ccvs85/IX105A",
@@ -4348,7 +4348,7 @@
     "final_classification": "GENERATED_FILE_MISMATCH",
     "reason_code": "GENERATED_FILES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 82,
+    "compile_ms": 74,
     "run_ms": 12
   },
   {
@@ -4380,8 +4380,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 103,
-    "run_ms": 9
+    "compile_ms": 86,
+    "run_ms": 7
   },
   {
     "program_id": "ccvs85/IX107A",
@@ -4412,8 +4412,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 101,
-    "run_ms": 15
+    "compile_ms": 76,
+    "run_ms": 14
   },
   {
     "program_id": "ccvs85/IX108A",
@@ -4444,8 +4444,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 115,
-    "run_ms": 12
+    "compile_ms": 85,
+    "run_ms": 11
   },
   {
     "program_id": "ccvs85/IX109A",
@@ -4476,7 +4476,7 @@
     "final_classification": "ORACLE_COMPILE_REJECT",
     "reason_code": "WORK_RUN_MATERIALIZED_ADAPTED_IX110A_COB_121_ERROR",
     "nondeterministic": false,
-    "compile_ms": 54,
+    "compile_ms": 52,
     "run_ms": 0
   },
   {
@@ -4572,8 +4572,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 86,
-    "run_ms": 6
+    "compile_ms": 70,
+    "run_ms": 8
   },
   {
     "program_id": "ccvs85/IX113A",
@@ -4604,8 +4604,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 384,
-    "run_ms": 8
+    "compile_ms": 296,
+    "run_ms": 13
   },
   {
     "program_id": "ccvs85/IX114A",
@@ -4860,8 +4860,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 90,
-    "run_ms": 7
+    "compile_ms": 68,
+    "run_ms": 8
   },
   {
     "program_id": "ccvs85/IX201A",
@@ -4892,8 +4892,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 163,
-    "run_ms": 7
+    "compile_ms": 128,
+    "run_ms": 6
   },
   {
     "program_id": "ccvs85/IX202A",
@@ -4988,8 +4988,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 77,
-    "run_ms": 9
+    "compile_ms": 66,
+    "run_ms": 7
   },
   {
     "program_id": "ccvs85/IX205A",
@@ -5020,8 +5020,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 90,
-    "run_ms": 16
+    "compile_ms": 77,
+    "run_ms": 23
   },
   {
     "program_id": "ccvs85/IX206A",
@@ -5052,8 +5052,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 99,
-    "run_ms": 16
+    "compile_ms": 70,
+    "run_ms": 23
   },
   {
     "program_id": "ccvs85/IX207A",
@@ -5084,8 +5084,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 112,
-    "run_ms": 23
+    "compile_ms": 73,
+    "run_ms": 16
   },
   {
     "program_id": "ccvs85/IX208A",
@@ -5116,8 +5116,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 113,
-    "run_ms": 16
+    "compile_ms": 88,
+    "run_ms": 15
   },
   {
     "program_id": "ccvs85/IX209A",
@@ -5148,8 +5148,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 152,
-    "run_ms": 17
+    "compile_ms": 113,
+    "run_ms": 14
   },
   {
     "program_id": "ccvs85/IX210A",
@@ -5180,8 +5180,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 122,
-    "run_ms": 17
+    "compile_ms": 103,
+    "run_ms": 22
   },
   {
     "program_id": "ccvs85/IX211A",
@@ -5212,8 +5212,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 88,
-    "run_ms": 15
+    "compile_ms": 78,
+    "run_ms": 17
   },
   {
     "program_id": "ccvs85/IX212A",
@@ -5250,8 +5250,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 101,
-    "run_ms": 70
+    "compile_ms": 75,
+    "run_ms": 73
   },
   {
     "program_id": "ccvs85/IX213A",
@@ -5288,8 +5288,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 82,
-    "run_ms": 67
+    "compile_ms": 74,
+    "run_ms": 78
   },
   {
     "program_id": "ccvs85/IX214A",
@@ -5320,8 +5320,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 153,
-    "run_ms": 12
+    "compile_ms": 100,
+    "run_ms": 26
   },
   {
     "program_id": "ccvs85/IX215A",
@@ -5352,8 +5352,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 156,
-    "run_ms": 48
+    "compile_ms": 133,
+    "run_ms": 42
   },
   {
     "program_id": "ccvs85/IX216A",
@@ -5384,8 +5384,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 77,
-    "run_ms": 14
+    "compile_ms": 64,
+    "run_ms": 22
   },
   {
     "program_id": "ccvs85/IX217A",
@@ -5422,8 +5422,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_OPEN_FS1_NOT_DECLARED_FILE",
     "nondeterministic": false,
-    "compile_ms": 81,
-    "run_ms": 11
+    "compile_ms": 61,
+    "run_ms": 7
   },
   {
     "program_id": "ccvs85/IX218A",
@@ -5460,8 +5460,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 67,
-    "run_ms": 2
+    "compile_ms": 59,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IX301M",
@@ -5492,8 +5492,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 58,
-    "run_ms": 1
+    "compile_ms": 47,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/IX302M",
@@ -5524,8 +5524,8 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 62,
-    "run_ms": 2
+    "compile_ms": 48,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/IX401M",
@@ -5556,8 +5556,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 62,
-    "run_ms": 2
+    "compile_ms": 50,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/K101A",
@@ -7162,8 +7162,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 115,
-    "run_ms": 3
+    "compile_ms": 96,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC102A",
@@ -7200,7 +7200,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 105,
+    "compile_ms": 84,
     "run_ms": 2
   },
   {
@@ -7238,7 +7238,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_PIC_ABABX0A_UNSUPPORTEDSYMBOL",
     "nondeterministic": false,
-    "compile_ms": 127,
+    "compile_ms": 93,
     "run_ms": 2
   },
   {
@@ -7276,8 +7276,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_PIC_XBX0XBX0X_UNSUPPORTEDSYMBOL",
     "nondeterministic": false,
-    "compile_ms": 161,
-    "run_ms": 2
+    "compile_ms": 109,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC105A",
@@ -7314,7 +7314,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_PIC_UNSUPPORTEDSYMBOL",
     "nondeterministic": false,
-    "compile_ms": 128,
+    "compile_ms": 121,
     "run_ms": 1
   },
   {
@@ -7352,7 +7352,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 153,
+    "compile_ms": 128,
     "run_ms": 2
   },
   {
@@ -7390,8 +7390,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_PIC_000000000000000020_BADREPEAT",
     "nondeterministic": false,
-    "compile_ms": 106,
-    "run_ms": 2
+    "compile_ms": 92,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC108M",
@@ -7428,8 +7428,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 85,
-    "run_ms": 2
+    "compile_ms": 63,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC109M",
@@ -7468,7 +7468,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_ACCEPT_FROM_TERMINAL_CONSOLE_INTERACTIVE_INPUT",
     "nondeterministic": false,
-    "compile_ms": 84,
+    "compile_ms": 75,
     "run_ms": 1
   },
   {
@@ -7534,8 +7534,8 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 48,
-    "run_ms": 2
+    "compile_ms": 45,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC111A",
@@ -7572,8 +7572,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 77,
-    "run_ms": 3
+    "compile_ms": 59,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/NC112A",
@@ -7610,8 +7610,8 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 85,
-    "run_ms": 2
+    "compile_ms": 76,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC113M",
@@ -7648,7 +7648,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 72,
+    "compile_ms": 55,
     "run_ms": 2
   },
   {
@@ -7686,8 +7686,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_PIC_ABA_UNSUPPORTEDSYMBOL",
     "nondeterministic": false,
-    "compile_ms": 78,
-    "run_ms": 2
+    "compile_ms": 60,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC115A",
@@ -7724,7 +7724,7 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 96,
+    "compile_ms": 76,
     "run_ms": 2
   },
   {
@@ -7762,8 +7762,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 114,
-    "run_ms": 2
+    "compile_ms": 77,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC117A",
@@ -7800,8 +7800,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 108,
-    "run_ms": 2
+    "compile_ms": 72,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC118A",
@@ -7838,7 +7838,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_ZERO",
     "nondeterministic": false,
-    "compile_ms": 82,
+    "compile_ms": 79,
     "run_ms": 2
   },
   {
@@ -7876,7 +7876,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_ZERO",
     "nondeterministic": false,
-    "compile_ms": 107,
+    "compile_ms": 87,
     "run_ms": 1
   },
   {
@@ -7914,7 +7914,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 98,
+    "compile_ms": 83,
     "run_ms": 1
   },
   {
@@ -7952,8 +7952,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_TABLE2_NUM_INDEX2",
     "nondeterministic": false,
-    "compile_ms": 90,
-    "run_ms": 3
+    "compile_ms": 86,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC122A",
@@ -7990,7 +7990,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_SUBSCRIPT_INDEX2_NOT_INTEGER",
     "nondeterministic": false,
-    "compile_ms": 106,
+    "compile_ms": 79,
     "run_ms": 2
   },
   {
@@ -8028,8 +8028,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_TABLE2_NUM_INDEX2",
     "nondeterministic": false,
-    "compile_ms": 105,
-    "run_ms": 2
+    "compile_ms": 78,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC124A",
@@ -8066,8 +8066,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER",
     "nondeterministic": false,
-    "compile_ms": 168,
-    "run_ms": 3
+    "compile_ms": 117,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/NC125A",
@@ -8104,8 +8104,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 106,
-    "run_ms": 2
+    "compile_ms": 90,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC126A",
@@ -8142,7 +8142,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_PIC_XBXBXBX_UNSUPPORTEDSYMBOL",
     "nondeterministic": false,
-    "compile_ms": 139,
+    "compile_ms": 103,
     "run_ms": 2
   },
   {
@@ -8180,8 +8180,8 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 61,
-    "run_ms": 3
+    "compile_ms": 57,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC131A",
@@ -8218,8 +8218,8 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 81,
-    "run_ms": 2
+    "compile_ms": 58,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC132A",
@@ -8256,8 +8256,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_ENTRY",
     "nondeterministic": false,
-    "compile_ms": 106,
-    "run_ms": 2
+    "compile_ms": 77,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC133A",
@@ -8294,8 +8294,8 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 74,
-    "run_ms": 2
+    "compile_ms": 65,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC134A",
@@ -8332,8 +8332,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_YEAR",
     "nondeterministic": false,
-    "compile_ms": 91,
-    "run_ms": 3
+    "compile_ms": 80,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC135A",
@@ -8370,7 +8370,7 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_INXEX2",
     "nondeterministic": false,
-    "compile_ms": 90,
+    "compile_ms": 65,
     "run_ms": 2
   },
   {
@@ -8408,7 +8408,7 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 71,
+    "compile_ms": 62,
     "run_ms": 1
   },
   {
@@ -8446,8 +8446,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_IDX",
     "nondeterministic": false,
-    "compile_ms": 81,
-    "run_ms": 2
+    "compile_ms": 62,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC138A",
@@ -8484,8 +8484,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_SUBSCRIPT_NOT_INTEGER",
     "nondeterministic": false,
-    "compile_ms": 96,
-    "run_ms": 4
+    "compile_ms": 78,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC139A",
@@ -8522,8 +8522,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_SUBSCRIPT_IN1_NOT_INTEGER",
     "nondeterministic": false,
-    "compile_ms": 110,
-    "run_ms": 3
+    "compile_ms": 67,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/NC140A",
@@ -8560,8 +8560,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 115,
-    "run_ms": 2
+    "compile_ms": 67,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC141A",
@@ -8598,8 +8598,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_SET_TABLE2_REC_INDEX2_NOT_INTEGER",
     "nondeterministic": false,
-    "compile_ms": 79,
-    "run_ms": 3
+    "compile_ms": 59,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/NC170A",
@@ -8636,8 +8636,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 157,
-    "run_ms": 2
+    "compile_ms": 106,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC171A",
@@ -8674,7 +8674,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 149,
+    "compile_ms": 98,
     "run_ms": 2
   },
   {
@@ -8712,8 +8712,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 158,
-    "run_ms": 3
+    "compile_ms": 100,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/NC173A",
@@ -8750,8 +8750,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 174,
-    "run_ms": 3
+    "compile_ms": 115,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/NC174A",
@@ -8788,8 +8788,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_PIC_ABABX0A_UNSUPPORTEDSYMBOL",
     "nondeterministic": false,
-    "compile_ms": 141,
-    "run_ms": 2
+    "compile_ms": 90,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC175A",
@@ -8826,8 +8826,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_ZERO",
     "nondeterministic": false,
-    "compile_ms": 176,
-    "run_ms": 3
+    "compile_ms": 109,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/NC176A",
@@ -8864,8 +8864,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_WRK_2V1",
     "nondeterministic": false,
-    "compile_ms": 200,
-    "run_ms": 3
+    "compile_ms": 126,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/NC177A",
@@ -8902,8 +8902,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_ZERO",
     "nondeterministic": false,
-    "compile_ms": 155,
-    "run_ms": 2
+    "compile_ms": 109,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC201A",
@@ -8940,8 +8940,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_ALL",
     "nondeterministic": false,
-    "compile_ms": 182,
-    "run_ms": 3
+    "compile_ms": 127,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/NC202A",
@@ -8978,8 +8978,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_GRP_FOR_ADD_CORR",
     "nondeterministic": false,
-    "compile_ms": 144,
-    "run_ms": 2
+    "compile_ms": 105,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC203A",
@@ -9016,7 +9016,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_DIVIDE_REMAINDER_RECEIVER_0009_MUST_NUMERIC",
     "nondeterministic": false,
-    "compile_ms": 123,
+    "compile_ms": 83,
     "run_ms": 2
   },
   {
@@ -9056,8 +9056,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_XTAB",
     "nondeterministic": false,
-    "compile_ms": 100,
-    "run_ms": 2
+    "compile_ms": 81,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC204M",
@@ -9128,8 +9128,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_PIC_BADREPEAT",
     "nondeterministic": false,
-    "compile_ms": 87,
-    "run_ms": 2
+    "compile_ms": 64,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC206A",
@@ -9166,8 +9166,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_SUBSCRIPT_SUB_NOT_INTEGER",
     "nondeterministic": false,
-    "compile_ms": 122,
-    "run_ms": 3
+    "compile_ms": 78,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/NC207A",
@@ -9204,7 +9204,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 133,
+    "compile_ms": 103,
     "run_ms": 2
   },
   {
@@ -9240,9 +9240,9 @@
     "exit_status_match": "not_comparable",
     "verdict_counts_match": "not_comparable",
     "final_classification": "RUST_REJECT_UNSUPPORTED",
-    "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_ALL",
+    "reason_code": "COBRUN_UNSUPPORTED_VERB",
     "nondeterministic": false,
-    "compile_ms": 94,
+    "compile_ms": 74,
     "run_ms": 1
   },
   {
@@ -9280,7 +9280,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER",
     "nondeterministic": false,
-    "compile_ms": 94,
+    "compile_ms": 70,
     "run_ms": 1
   },
   {
@@ -9318,7 +9318,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 78,
+    "compile_ms": 66,
     "run_ms": 2
   },
   {
@@ -9350,7 +9350,7 @@
     "final_classification": "ORACLE_COMPILE_ERROR",
     "reason_code": "COBC_CRASHED",
     "nondeterministic": false,
-    "compile_ms": 73,
+    "compile_ms": 64,
     "run_ms": 0
   },
   {
@@ -9369,7 +9369,7 @@
     "oracle_compile": "pass",
     "oracle_run": "pass",
     "oracle_run_exit": 0,
-    "oracle_report_sha256": "bc9c0a5b1b54758ad52357636fec8dc746c94daab737d55ba1f059724356eefb",
+    "oracle_report_sha256": "1480afd00adcb22ec92e3894ea7e070b989ebd07a66de04798fcb0c2f9ccff82",
     "oracle_verdict_counts": {
       "passed": 0,
       "failed": 0,
@@ -9388,7 +9388,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": true,
-    "compile_ms": 73,
+    "compile_ms": 55,
     "run_ms": 1
   },
   {
@@ -9426,8 +9426,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_OPEN_PRINT_FILE_NOT_DECLARED_FILE",
     "nondeterministic": false,
-    "compile_ms": 64,
-    "run_ms": 2
+    "compile_ms": 57,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC216A",
@@ -9464,8 +9464,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_INSPECT_REGION_CLAUSE_NEAR_WORD_WRK",
     "nondeterministic": false,
-    "compile_ms": 129,
-    "run_ms": 2
+    "compile_ms": 103,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC217A",
@@ -9502,7 +9502,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 114,
+    "compile_ms": 85,
     "run_ms": 1
   },
   {
@@ -9540,8 +9540,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_OVERFLOW",
     "nondeterministic": false,
-    "compile_ms": 154,
-    "run_ms": 2
+    "compile_ms": 102,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC219A",
@@ -9578,7 +9578,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 64,
+    "compile_ms": 60,
     "run_ms": 2
   },
   {
@@ -9616,8 +9616,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_SUBSCRIPT_INDEX1_NOT_INTEGER",
     "nondeterministic": false,
-    "compile_ms": 97,
-    "run_ms": 3
+    "compile_ms": 74,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC221A",
@@ -9654,8 +9654,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_SUBSCRIPT_INDEX1_NOT_INTEGER",
     "nondeterministic": false,
-    "compile_ms": 119,
-    "run_ms": 3
+    "compile_ms": 91,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/NC222A",
@@ -9692,7 +9692,7 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_RECORD2_INDEX2",
     "nondeterministic": false,
-    "compile_ms": 91,
+    "compile_ms": 62,
     "run_ms": 2
   },
   {
@@ -9730,8 +9730,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_PIC_XXBXX_UNSUPPORTEDSYMBOL",
     "nondeterministic": false,
-    "compile_ms": 106,
-    "run_ms": 2
+    "compile_ms": 92,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC224A",
@@ -9768,7 +9768,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_PIC_XXBXXBXX_UNSUPPORTEDSYMBOL",
     "nondeterministic": false,
-    "compile_ms": 93,
+    "compile_ms": 65,
     "run_ms": 2
   },
   {
@@ -9806,8 +9806,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_PIC_XXBXXBXX_UNSUPPORTEDSYMBOL",
     "nondeterministic": false,
-    "compile_ms": 111,
-    "run_ms": 3
+    "compile_ms": 85,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC231A",
@@ -9844,8 +9844,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_THE",
     "nondeterministic": false,
-    "compile_ms": 98,
-    "run_ms": 2
+    "compile_ms": 90,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC232A",
@@ -9882,8 +9882,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_TRAILING_TOKENS_CONDITION_NEXT",
     "nondeterministic": false,
-    "compile_ms": 98,
-    "run_ms": 2
+    "compile_ms": 78,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC233A",
@@ -9920,8 +9920,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_ENTRY",
     "nondeterministic": false,
-    "compile_ms": 132,
-    "run_ms": 2
+    "compile_ms": 84,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC234A",
@@ -9958,8 +9958,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_IDX",
     "nondeterministic": false,
-    "compile_ms": 97,
-    "run_ms": 2
+    "compile_ms": 84,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC235A",
@@ -9996,8 +9996,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_TRAILING_TOKENS_CONDITION",
     "nondeterministic": false,
-    "compile_ms": 93,
-    "run_ms": 3
+    "compile_ms": 66,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC236A",
@@ -10034,8 +10034,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 86,
-    "run_ms": 2
+    "compile_ms": 65,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC237A",
@@ -10072,7 +10072,7 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_IDX",
     "nondeterministic": false,
-    "compile_ms": 92,
+    "compile_ms": 69,
     "run_ms": 1
   },
   {
@@ -10110,8 +10110,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_IDX",
     "nondeterministic": false,
-    "compile_ms": 84,
-    "run_ms": 2
+    "compile_ms": 64,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC239A",
@@ -10148,7 +10148,7 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_IDX",
     "nondeterministic": false,
-    "compile_ms": 77,
+    "compile_ms": 61,
     "run_ms": 1
   },
   {
@@ -10186,7 +10186,7 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 96,
+    "compile_ms": 73,
     "run_ms": 2
   },
   {
@@ -10224,8 +10224,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_IDX",
     "nondeterministic": false,
-    "compile_ms": 79,
-    "run_ms": 2
+    "compile_ms": 64,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC242A",
@@ -10262,8 +10262,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_IDX",
     "nondeterministic": false,
-    "compile_ms": 99,
-    "run_ms": 2
+    "compile_ms": 67,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC243A",
@@ -10300,7 +10300,7 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_IDX",
     "nondeterministic": false,
-    "compile_ms": 77,
+    "compile_ms": 69,
     "run_ms": 2
   },
   {
@@ -10338,8 +10338,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_IDX",
     "nondeterministic": false,
-    "compile_ms": 72,
-    "run_ms": 2
+    "compile_ms": 61,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC245A",
@@ -10376,7 +10376,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_S22",
     "nondeterministic": false,
-    "compile_ms": 86,
+    "compile_ms": 64,
     "run_ms": 2
   },
   {
@@ -10414,8 +10414,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_MULTI_DIMENSION_LEAF_NEEDS_SUBSCRIPT_GOT",
     "nondeterministic": false,
-    "compile_ms": 99,
-    "run_ms": 3
+    "compile_ms": 75,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC247A",
@@ -10452,8 +10452,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_TRAILING_TOKENS_CONDITION",
     "nondeterministic": false,
-    "compile_ms": 94,
-    "run_ms": 3
+    "compile_ms": 70,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC248A",
@@ -10490,8 +10490,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_SET_TABLE2_REC_INDEX2_NOT_INTEGER",
     "nondeterministic": false,
-    "compile_ms": 80,
-    "run_ms": 3
+    "compile_ms": 62,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC250A",
@@ -10528,8 +10528,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_ALL",
     "nondeterministic": false,
-    "compile_ms": 152,
-    "run_ms": 2
+    "compile_ms": 99,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC251A",
@@ -10566,7 +10566,7 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_REM_25ANS",
     "nondeterministic": false,
-    "compile_ms": 109,
+    "compile_ms": 85,
     "run_ms": 2
   },
   {
@@ -10604,7 +10604,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER",
     "nondeterministic": false,
-    "compile_ms": 107,
+    "compile_ms": 91,
     "run_ms": 1
   },
   {
@@ -10642,7 +10642,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 113,
+    "compile_ms": 98,
     "run_ms": 2
   },
   {
@@ -10680,7 +10680,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_PIC_ABABX0A_UNSUPPORTEDSYMBOL",
     "nondeterministic": false,
-    "compile_ms": 81,
+    "compile_ms": 61,
     "run_ms": 1
   },
   {
@@ -10712,8 +10712,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 62,
-    "run_ms": 2
+    "compile_ms": 45,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC303M",
@@ -10744,8 +10744,8 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 63,
-    "run_ms": 2
+    "compile_ms": 46,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/NC401M",
@@ -10776,8 +10776,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 68,
-    "run_ms": 3
+    "compile_ms": 57,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/OBIC1A",
@@ -10814,7 +10814,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_VERB_SECT_IC219_0001",
     "nondeterministic": false,
-    "compile_ms": 107,
+    "compile_ms": 90,
     "run_ms": 2
   },
   {
@@ -10916,8 +10916,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 80,
-    "run_ms": 2
+    "compile_ms": 60,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/OBNC2M",
@@ -10954,8 +10954,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_ALL",
     "nondeterministic": false,
-    "compile_ms": 91,
-    "run_ms": 2
+    "compile_ms": 74,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/OBSQ1A",
@@ -10992,7 +10992,7 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 92,
+    "compile_ms": 65,
     "run_ms": 2
   },
   {
@@ -11030,8 +11030,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 182,
-    "run_ms": 5
+    "compile_ms": 139,
+    "run_ms": 3
   },
   {
     "program_id": "ccvs85/OBSQ4A",
@@ -11132,7 +11132,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 162,
+    "compile_ms": 129,
     "run_ms": 2
   },
   {
@@ -11234,8 +11234,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 78,
-    "run_ms": 3
+    "compile_ms": 66,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/RL105A",
@@ -11272,8 +11272,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 89,
-    "run_ms": 3
+    "compile_ms": 72,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/RL106A",
@@ -11310,7 +11310,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 85,
+    "compile_ms": 72,
     "run_ms": 2
   },
   {
@@ -11348,7 +11348,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 105,
+    "compile_ms": 79,
     "run_ms": 2
   },
   {
@@ -11386,7 +11386,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 166,
+    "compile_ms": 127,
     "run_ms": 2
   },
   {
@@ -11488,8 +11488,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 99,
-    "run_ms": 3
+    "compile_ms": 75,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/RL112A",
@@ -11526,7 +11526,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 74,
+    "compile_ms": 62,
     "run_ms": 2
   },
   {
@@ -11564,7 +11564,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 89,
+    "compile_ms": 72,
     "run_ms": 2
   },
   {
@@ -11602,8 +11602,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 78,
-    "run_ms": 3
+    "compile_ms": 79,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/RL115A",
@@ -11640,7 +11640,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 93,
+    "compile_ms": 64,
     "run_ms": 2
   },
   {
@@ -11678,7 +11678,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 67,
+    "compile_ms": 60,
     "run_ms": 1
   },
   {
@@ -11716,7 +11716,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 84,
+    "compile_ms": 63,
     "run_ms": 2
   },
   {
@@ -11754,8 +11754,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_XRECORD_NUMBER",
     "nondeterministic": false,
-    "compile_ms": 80,
-    "run_ms": 3
+    "compile_ms": 62,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/RL119A",
@@ -11792,7 +11792,7 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 83,
+    "compile_ms": 66,
     "run_ms": 2
   },
   {
@@ -11830,8 +11830,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 151,
-    "run_ms": 3
+    "compile_ms": 126,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/RL202A",
@@ -11932,8 +11932,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 85,
-    "run_ms": 3
+    "compile_ms": 64,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/RL205A",
@@ -11970,8 +11970,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_XRECORD_NUMBER",
     "nondeterministic": false,
-    "compile_ms": 142,
-    "run_ms": 4
+    "compile_ms": 113,
+    "run_ms": 3
   },
   {
     "program_id": "ccvs85/RL206A",
@@ -12008,8 +12008,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 168,
-    "run_ms": 3
+    "compile_ms": 136,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/RL207A",
@@ -12110,7 +12110,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 65,
+    "compile_ms": 60,
     "run_ms": 2
   },
   {
@@ -12148,7 +12148,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 72,
+    "compile_ms": 61,
     "run_ms": 2
   },
   {
@@ -12180,8 +12180,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 82,
-    "run_ms": 3
+    "compile_ms": 63,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/RL212A",
@@ -12218,7 +12218,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 122,
+    "compile_ms": 83,
     "run_ms": 2
   },
   {
@@ -12282,8 +12282,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 53,
-    "run_ms": 2
+    "compile_ms": 46,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/RL302M",
@@ -12314,8 +12314,8 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 74,
-    "run_ms": 2
+    "compile_ms": 48,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/RL401M",
@@ -12346,7 +12346,7 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 56,
+    "compile_ms": 51,
     "run_ms": 2
   },
   {
@@ -12384,8 +12384,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_LINE_COUNTER",
     "nondeterministic": false,
-    "compile_ms": 79,
-    "run_ms": 2
+    "compile_ms": 60,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/RW102A",
@@ -12422,8 +12422,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_LINE_COUNTER",
     "nondeterministic": false,
-    "compile_ms": 72,
-    "run_ms": 2
+    "compile_ms": 56,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/RW103A",
@@ -12460,8 +12460,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_LINE_COUNTER",
     "nondeterministic": false,
-    "compile_ms": 73,
-    "run_ms": 2
+    "compile_ms": 62,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/RW104A",
@@ -12498,8 +12498,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_LINE_COUNTER",
     "nondeterministic": false,
-    "compile_ms": 72,
-    "run_ms": 2
+    "compile_ms": 61,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/RW301M",
@@ -12530,8 +12530,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 59,
-    "run_ms": 1
+    "compile_ms": 49,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/RW302M",
@@ -12562,8 +12562,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 62,
-    "run_ms": 2
+    "compile_ms": 45,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SG101A",
@@ -12600,8 +12600,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_VERB_SECT_001",
     "nondeterministic": false,
-    "compile_ms": 138,
-    "run_ms": 2
+    "compile_ms": 111,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SG102A",
@@ -12638,8 +12638,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_VERB_SECT_001",
     "nondeterministic": false,
-    "compile_ms": 95,
-    "run_ms": 3
+    "compile_ms": 62,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SG103A",
@@ -12676,7 +12676,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_VERB_SEC20",
     "nondeterministic": false,
-    "compile_ms": 64,
+    "compile_ms": 60,
     "run_ms": 2
   },
   {
@@ -12714,7 +12714,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_VERB_SORT_PARA",
     "nondeterministic": false,
-    "compile_ms": 95,
+    "compile_ms": 77,
     "run_ms": 2
   },
   {
@@ -12752,7 +12752,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_VERB_SORT_PARA",
     "nondeterministic": false,
-    "compile_ms": 94,
+    "compile_ms": 62,
     "run_ms": 2
   },
   {
@@ -12790,8 +12790,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_VERB_SORT_PARA",
     "nondeterministic": false,
-    "compile_ms": 81,
-    "run_ms": 2
+    "compile_ms": 67,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SG201A",
@@ -12828,8 +12828,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_VERB_HOUSEKEEPING",
     "nondeterministic": false,
-    "compile_ms": 130,
-    "run_ms": 3
+    "compile_ms": 101,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SG202A",
@@ -12866,7 +12866,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_VERB_SEC40",
     "nondeterministic": false,
-    "compile_ms": 84,
+    "compile_ms": 56,
     "run_ms": 2
   },
   {
@@ -12904,7 +12904,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_VERB_SECT_001",
     "nondeterministic": false,
-    "compile_ms": 90,
+    "compile_ms": 68,
     "run_ms": 2
   },
   {
@@ -12942,8 +12942,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_SORT_MERGE_KEY_NOT_FIELD_THE",
     "nondeterministic": false,
-    "compile_ms": 105,
-    "run_ms": 3
+    "compile_ms": 70,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SG302M",
@@ -12974,7 +12974,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_VERB_BEANO",
     "nondeterministic": false,
-    "compile_ms": 61,
+    "compile_ms": 45,
     "run_ms": 1
   },
   {
@@ -13006,8 +13006,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_VERB_NUMBER1",
     "nondeterministic": false,
-    "compile_ms": 57,
-    "run_ms": 2
+    "compile_ms": 45,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SG401M",
@@ -13038,7 +13038,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_VERB_NUMBER1",
     "nondeterministic": false,
-    "compile_ms": 52,
+    "compile_ms": 44,
     "run_ms": 1
   },
   {
@@ -13087,8 +13087,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_14003",
     "nondeterministic": false,
-    "compile_ms": 125,
-    "run_ms": 2
+    "compile_ms": 86,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SM102A",
@@ -13165,7 +13165,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_12345678",
     "nondeterministic": false,
-    "compile_ms": 102,
+    "compile_ms": 90,
     "run_ms": 2
   },
   {
@@ -13238,7 +13238,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_COPY",
     "nondeterministic": false,
-    "compile_ms": 89,
+    "compile_ms": 64,
     "run_ms": 2
   },
   {
@@ -13278,8 +13278,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_PROCEDURE_DIVISION",
     "nondeterministic": false,
-    "compile_ms": 79,
-    "run_ms": 3
+    "compile_ms": 55,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SM107A",
@@ -13318,8 +13318,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_MOVE_WITHOUT",
     "nondeterministic": false,
-    "compile_ms": 133,
-    "run_ms": 3
+    "compile_ms": 96,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SM201A",
@@ -13362,8 +13362,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_COPY",
     "nondeterministic": false,
-    "compile_ms": 110,
-    "run_ms": 3
+    "compile_ms": 88,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SM202A",
@@ -13439,7 +13439,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_OPEN_PRINT_FILE_NOT_DECLARED_FILE",
     "nondeterministic": false,
-    "compile_ms": 121,
+    "compile_ms": 83,
     "run_ms": 1
   },
   {
@@ -13512,7 +13512,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_COPY",
     "nondeterministic": false,
-    "compile_ms": 92,
+    "compile_ms": 65,
     "run_ms": 2
   },
   {
@@ -13560,8 +13560,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_VERB_COPY",
     "nondeterministic": false,
-    "compile_ms": 73,
-    "run_ms": 2
+    "compile_ms": 68,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SM207A",
@@ -13600,8 +13600,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_VERB_COPY",
     "nondeterministic": false,
-    "compile_ms": 68,
-    "run_ms": 2
+    "compile_ms": 56,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SM208A",
@@ -13640,8 +13640,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_REPLACE",
     "nondeterministic": false,
-    "compile_ms": 86,
-    "run_ms": 2
+    "compile_ms": 62,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SM301M",
@@ -13674,8 +13674,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_VERB_COPY",
     "nondeterministic": false,
-    "compile_ms": 56,
-    "run_ms": 2
+    "compile_ms": 53,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SM401M",
@@ -13708,7 +13708,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_VERB_COPY",
     "nondeterministic": false,
-    "compile_ms": 57,
+    "compile_ms": 43,
     "run_ms": 1
   },
   {
@@ -13746,8 +13746,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER",
     "nondeterministic": false,
-    "compile_ms": 139,
-    "run_ms": 2
+    "compile_ms": 99,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ102A",
@@ -13784,8 +13784,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 93,
-    "run_ms": 4
+    "compile_ms": 68,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ103A",
@@ -13822,8 +13822,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 108,
-    "run_ms": 2
+    "compile_ms": 80,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ104A",
@@ -13860,8 +13860,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 94,
-    "run_ms": 3
+    "compile_ms": 68,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ105A",
@@ -13898,7 +13898,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 108,
+    "compile_ms": 74,
     "run_ms": 2
   },
   {
@@ -13936,7 +13936,7 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 116,
+    "compile_ms": 101,
     "run_ms": 2
   },
   {
@@ -13974,8 +13974,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 96,
-    "run_ms": 3
+    "compile_ms": 69,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ108A",
@@ -14012,8 +14012,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 101,
-    "run_ms": 3
+    "compile_ms": 68,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ109M",
@@ -14050,8 +14050,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 89,
-    "run_ms": 4
+    "compile_ms": 64,
+    "run_ms": 5
   },
   {
     "program_id": "ccvs85/SQ110M",
@@ -14088,8 +14088,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 79,
-    "run_ms": 8
+    "compile_ms": 71,
+    "run_ms": 3
   },
   {
     "program_id": "ccvs85/SQ111A",
@@ -14126,8 +14126,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 84,
-    "run_ms": 2
+    "compile_ms": 66,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ112A",
@@ -14164,8 +14164,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 94,
-    "run_ms": 3
+    "compile_ms": 69,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ113A",
@@ -14202,8 +14202,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 108,
-    "run_ms": 3
+    "compile_ms": 69,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ114A",
@@ -14240,8 +14240,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 107,
-    "run_ms": 3
+    "compile_ms": 86,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ115A",
@@ -14278,8 +14278,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 82,
-    "run_ms": 4
+    "compile_ms": 62,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ116A",
@@ -14316,8 +14316,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 97,
-    "run_ms": 3
+    "compile_ms": 74,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ117A",
@@ -14354,8 +14354,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 99,
-    "run_ms": 2
+    "compile_ms": 68,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ121A",
@@ -14392,8 +14392,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 78,
-    "run_ms": 3
+    "compile_ms": 68,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ122A",
@@ -14430,8 +14430,8 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_XRECORD_NUMBER",
     "nondeterministic": false,
-    "compile_ms": 93,
-    "run_ms": 2
+    "compile_ms": 69,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ123A",
@@ -14468,8 +14468,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 85,
-    "run_ms": 4
+    "compile_ms": 73,
+    "run_ms": 3
   },
   {
     "program_id": "ccvs85/SQ124A",
@@ -14506,8 +14506,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 100,
-    "run_ms": 4
+    "compile_ms": 71,
+    "run_ms": 3
   },
   {
     "program_id": "ccvs85/SQ125A",
@@ -14544,7 +14544,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 86,
+    "compile_ms": 63,
     "run_ms": 2
   },
   {
@@ -14582,7 +14582,7 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 85,
+    "compile_ms": 65,
     "run_ms": 2
   },
   {
@@ -14620,8 +14620,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 76,
-    "run_ms": 2
+    "compile_ms": 64,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ128A",
@@ -14658,8 +14658,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 90,
-    "run_ms": 4
+    "compile_ms": 63,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ129A",
@@ -14696,8 +14696,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 79,
-    "run_ms": 2
+    "compile_ms": 61,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ130A",
@@ -14734,8 +14734,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 76,
-    "run_ms": 2
+    "compile_ms": 63,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ131A",
@@ -14772,8 +14772,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 79,
-    "run_ms": 2
+    "compile_ms": 65,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ132A",
@@ -14810,7 +14810,7 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 76,
+    "compile_ms": 60,
     "run_ms": 2
   },
   {
@@ -14848,8 +14848,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 84,
-    "run_ms": 2
+    "compile_ms": 79,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ134A",
@@ -14886,7 +14886,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 102,
+    "compile_ms": 70,
     "run_ms": 1
   },
   {
@@ -14924,8 +14924,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 80,
-    "run_ms": 2
+    "compile_ms": 57,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ136A",
@@ -14962,8 +14962,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 86,
-    "run_ms": 3
+    "compile_ms": 73,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ137A",
@@ -15000,8 +15000,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 88,
-    "run_ms": 2
+    "compile_ms": 64,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ138A",
@@ -15038,8 +15038,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 81,
-    "run_ms": 3
+    "compile_ms": 72,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ139A",
@@ -15076,8 +15076,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 82,
-    "run_ms": 3
+    "compile_ms": 67,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ140A",
@@ -15114,8 +15114,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 81,
-    "run_ms": 1
+    "compile_ms": 61,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ141A",
@@ -15152,7 +15152,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 83,
+    "compile_ms": 62,
     "run_ms": 2
   },
   {
@@ -15190,8 +15190,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 77,
-    "run_ms": 3
+    "compile_ms": 60,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ143A",
@@ -15220,16 +15220,16 @@
     "candidate_prepare": "accepted",
     "candidate_run": "pass",
     "candidate_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "candidate_report_sha256": "d0d70f7dffedcf0f20daedac24de500a1ebcf97da13b7e61bb8291f8aa832a02",
-    "raw_stdout_match": "mismatch",
+    "candidate_report_sha256": "ee2adb371c629f65996bdfa07bab69caf25fb45a6d25e02270bf2d40203b57ac",
+    "raw_stdout_match": "match",
     "generated_files_match": "match",
     "exit_status_match": "match",
-    "verdict_counts_match": "mismatch",
-    "final_classification": "OUTPUT_MISMATCH",
-    "reason_code": "OUTPUT_BYTES_DIFFER",
+    "verdict_counts_match": "match",
+    "final_classification": "RAW_OUTPUT_MATCH",
+    "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 68,
-    "run_ms": 2
+    "compile_ms": 58,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ144A",
@@ -15266,8 +15266,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 88,
-    "run_ms": 3
+    "compile_ms": 65,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ146A",
@@ -15304,7 +15304,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 86,
+    "compile_ms": 59,
     "run_ms": 2
   },
   {
@@ -15342,8 +15342,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 89,
-    "run_ms": 2
+    "compile_ms": 59,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ148A",
@@ -15380,8 +15380,8 @@
     "final_classification": "OUTPUT_MISMATCH",
     "reason_code": "OUTPUT_BYTES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 81,
-    "run_ms": 2
+    "compile_ms": 65,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ149A",
@@ -15418,8 +15418,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 83,
-    "run_ms": 2
+    "compile_ms": 60,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ150A",
@@ -15456,7 +15456,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 72,
+    "compile_ms": 57,
     "run_ms": 1
   },
   {
@@ -15494,8 +15494,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 83,
-    "run_ms": 2
+    "compile_ms": 60,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ152A",
@@ -15532,8 +15532,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 81,
-    "run_ms": 2
+    "compile_ms": 60,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ153A",
@@ -15570,8 +15570,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 87,
-    "run_ms": 3
+    "compile_ms": 61,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ154A",
@@ -15608,8 +15608,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 81,
-    "run_ms": 4
+    "compile_ms": 65,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ155A",
@@ -15646,8 +15646,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 90,
-    "run_ms": 3
+    "compile_ms": 57,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ156A",
@@ -15684,8 +15684,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 97,
-    "run_ms": 3
+    "compile_ms": 61,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ201M",
@@ -15722,8 +15722,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 113,
-    "run_ms": 3
+    "compile_ms": 70,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ202A",
@@ -15760,7 +15760,7 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 132,
+    "compile_ms": 101,
     "run_ms": 2
   },
   {
@@ -15830,8 +15830,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 90,
-    "run_ms": 4
+    "compile_ms": 63,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ205A",
@@ -15868,7 +15868,7 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 85,
+    "compile_ms": 63,
     "run_ms": 2
   },
   {
@@ -15906,8 +15906,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 104,
-    "run_ms": 3
+    "compile_ms": 65,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ207M",
@@ -15944,8 +15944,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER",
     "nondeterministic": false,
-    "compile_ms": 92,
-    "run_ms": 3
+    "compile_ms": 62,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ208M",
@@ -15982,8 +15982,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_THIS",
     "nondeterministic": false,
-    "compile_ms": 108,
-    "run_ms": 3
+    "compile_ms": 74,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ209M",
@@ -16020,8 +16020,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 83,
-    "run_ms": 2
+    "compile_ms": 70,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ210M",
@@ -16058,8 +16058,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 82,
-    "run_ms": 3
+    "compile_ms": 56,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ211A",
@@ -16096,8 +16096,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 78,
-    "run_ms": 2
+    "compile_ms": 59,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ212A",
@@ -16134,7 +16134,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 112,
+    "compile_ms": 73,
     "run_ms": 2
   },
   {
@@ -16172,8 +16172,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 84,
-    "run_ms": 3
+    "compile_ms": 63,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ214A",
@@ -16210,8 +16210,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 86,
-    "run_ms": 3
+    "compile_ms": 68,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ215A",
@@ -16248,8 +16248,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 92,
-    "run_ms": 3
+    "compile_ms": 65,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ216A",
@@ -16286,8 +16286,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 94,
-    "run_ms": 3
+    "compile_ms": 68,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ217A",
@@ -16324,8 +16324,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 89,
-    "run_ms": 3
+    "compile_ms": 63,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ218A",
@@ -16362,7 +16362,7 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 82,
+    "compile_ms": 66,
     "run_ms": 2
   },
   {
@@ -16400,7 +16400,7 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 93,
+    "compile_ms": 70,
     "run_ms": 2
   },
   {
@@ -16438,7 +16438,7 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 94,
+    "compile_ms": 65,
     "run_ms": 2
   },
   {
@@ -16476,8 +16476,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 78,
-    "run_ms": 2
+    "compile_ms": 73,
+    "run_ms": 3
   },
   {
     "program_id": "ccvs85/SQ222A",
@@ -16514,7 +16514,7 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 86,
+    "compile_ms": 66,
     "run_ms": 2
   },
   {
@@ -16552,8 +16552,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 97,
-    "run_ms": 3
+    "compile_ms": 65,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/SQ224A",
@@ -16590,7 +16590,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 70,
+    "compile_ms": 60,
     "run_ms": 4
   },
   {
@@ -16628,7 +16628,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 90,
+    "compile_ms": 62,
     "run_ms": 2
   },
   {
@@ -16666,8 +16666,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 117,
-    "run_ms": 2
+    "compile_ms": 79,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ227A",
@@ -16704,8 +16704,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 99,
-    "run_ms": 3
+    "compile_ms": 70,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ228A",
@@ -16742,8 +16742,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_WITHOUT_TARGET_PARAGRAPH",
     "nondeterministic": false,
-    "compile_ms": 81,
-    "run_ms": 3
+    "compile_ms": 67,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ229A",
@@ -16780,7 +16780,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 80,
+    "compile_ms": 60,
     "run_ms": 1
   },
   {
@@ -16818,8 +16818,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 84,
-    "run_ms": 2
+    "compile_ms": 60,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ302M",
@@ -16850,8 +16850,8 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 67,
-    "run_ms": 2
+    "compile_ms": 46,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/SQ303M",
@@ -16882,7 +16882,7 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 58,
+    "compile_ms": 46,
     "run_ms": 1
   },
   {
@@ -16914,7 +16914,7 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 68,
+    "compile_ms": 54,
     "run_ms": 2
   },
   {
@@ -16952,8 +16952,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_SORT_MERGE_KEY_KEY_NOT_FIELD",
     "nondeterministic": false,
-    "compile_ms": 139,
-    "run_ms": 2
+    "compile_ms": 98,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/ST102A",
@@ -17054,7 +17054,7 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 106,
+    "compile_ms": 82,
     "run_ms": 2
   },
   {
@@ -17124,8 +17124,8 @@
     "final_classification": "GENERATED_FILE_MISMATCH",
     "reason_code": "GENERATED_FILES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 118,
-    "run_ms": 3
+    "compile_ms": 92,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/ST107A",
@@ -17194,7 +17194,7 @@
     "final_classification": "GENERATED_FILE_MISMATCH",
     "reason_code": "GENERATED_FILES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 75,
+    "compile_ms": 63,
     "run_ms": 2
   },
   {
@@ -17232,8 +17232,8 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 125,
-    "run_ms": 2
+    "compile_ms": 101,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/ST110A",
@@ -17334,8 +17334,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_CLOSE_REEL_NOT_DECLARED_FILE",
     "nondeterministic": false,
-    "compile_ms": 139,
-    "run_ms": 6
+    "compile_ms": 99,
+    "run_ms": 5
   },
   {
     "program_id": "ccvs85/ST113M",
@@ -17436,7 +17436,7 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_XRECORD_NUMBER",
     "nondeterministic": false,
-    "compile_ms": 146,
+    "compile_ms": 102,
     "run_ms": 2
   },
   {
@@ -17538,8 +17538,8 @@
     "final_classification": "GENERATED_FILE_MISMATCH",
     "reason_code": "GENERATED_FILES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 87,
-    "run_ms": 3
+    "compile_ms": 70,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/ST119A",
@@ -17576,8 +17576,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_SORT_MERGE_KEY_KEY_NOT_FIELD",
     "nondeterministic": false,
-    "compile_ms": 147,
-    "run_ms": 2
+    "compile_ms": 107,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/ST120A",
@@ -17678,8 +17678,8 @@
     "final_classification": "RAW_OUTPUT_MATCH",
     "reason_code": "RAW_OUTPUT_IDENTICAL",
     "nondeterministic": false,
-    "compile_ms": 127,
-    "run_ms": 3
+    "compile_ms": 91,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/ST123A",
@@ -17780,8 +17780,8 @@
     "final_classification": "GENERATED_FILE_MISMATCH",
     "reason_code": "GENERATED_FILES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 130,
-    "run_ms": 2
+    "compile_ms": 103,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/ST126A",
@@ -17850,8 +17850,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_SORT_MERGE_KEY_SORTKEY_NOT_FIELD",
     "nondeterministic": false,
-    "compile_ms": 99,
-    "run_ms": 3
+    "compile_ms": 74,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/ST131A",
@@ -17888,8 +17888,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_SORT_MERGE_KEY_NOT_FIELD_THE",
     "nondeterministic": false,
-    "compile_ms": 97,
-    "run_ms": 2
+    "compile_ms": 78,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/ST132A",
@@ -17926,8 +17926,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_SORT_MERGE_KEY_KEY1_NOT_FIELD",
     "nondeterministic": false,
-    "compile_ms": 98,
-    "run_ms": 4
+    "compile_ms": 69,
+    "run_ms": 3
   },
   {
     "program_id": "ccvs85/ST133A",
@@ -17964,8 +17964,8 @@
     "final_classification": "GENERATED_FILE_MISMATCH",
     "reason_code": "GENERATED_FILES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 104,
-    "run_ms": 3
+    "compile_ms": 76,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/ST134A",
@@ -18002,8 +18002,8 @@
     "final_classification": "GENERATED_FILE_MISMATCH",
     "reason_code": "GENERATED_FILES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 88,
-    "run_ms": 3
+    "compile_ms": 69,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/ST135A",
@@ -18040,8 +18040,8 @@
     "final_classification": "GENERATED_FILE_MISMATCH",
     "reason_code": "GENERATED_FILES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 102,
-    "run_ms": 3
+    "compile_ms": 62,
+    "run_ms": 2
   },
   {
     "program_id": "ccvs85/ST136A",
@@ -18067,19 +18067,19 @@
       "inspect": 0,
       "informational": 0
     },
-    "candidate_prepare": "reject-unsupported",
-    "candidate_run": "not-run",
+    "candidate_prepare": "accepted",
+    "candidate_run": "pass",
     "candidate_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "candidate_report_sha256": "",
-    "raw_stdout_match": "not_comparable",
-    "generated_files_match": "not_comparable",
-    "exit_status_match": "not_comparable",
-    "verdict_counts_match": "not_comparable",
-    "final_classification": "RUST_REJECT_UNSUPPORTED",
-    "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_ALL",
+    "candidate_report_sha256": "d1bdb2c0a7128a6a3da9188b37e9689cfe32735fd9860ae66dcb29c90db700f0",
+    "raw_stdout_match": "mismatch",
+    "generated_files_match": "mismatch",
+    "exit_status_match": "match",
+    "verdict_counts_match": "mismatch",
+    "final_classification": "GENERATED_FILE_MISMATCH",
+    "reason_code": "GENERATED_FILES_DIFFER",
     "nondeterministic": false,
-    "compile_ms": 98,
-    "run_ms": 2
+    "compile_ms": 64,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/ST137A",
@@ -18116,7 +18116,7 @@
     "final_classification": "RUST_REJECT_PARSE",
     "reason_code": "COBRUN_UNDEFINED_DATA_NAME_XRECORD_LENGTH",
     "nondeterministic": false,
-    "compile_ms": 107,
+    "compile_ms": 71,
     "run_ms": 2
   },
   {
@@ -18154,7 +18154,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 86,
+    "compile_ms": 74,
     "run_ms": 2
   },
   {
@@ -18192,7 +18192,7 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 102,
+    "compile_ms": 73,
     "run_ms": 2
   },
   {
@@ -18230,8 +18230,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 100,
-    "run_ms": 3
+    "compile_ms": 78,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/ST146A",
@@ -18262,8 +18262,8 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 88,
-    "run_ms": 2
+    "compile_ms": 70,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/ST147A",
@@ -18300,8 +18300,8 @@
     "final_classification": "RUST_REJECT_UNSUPPORTED",
     "reason_code": "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO",
     "nondeterministic": false,
-    "compile_ms": 89,
-    "run_ms": 3
+    "compile_ms": 85,
+    "run_ms": 1
   },
   {
     "program_id": "ccvs85/ST301M",
@@ -18321,9 +18321,9 @@
     "oracle_run_exit": 1,
     "oracle_report_sha256": "",
     "oracle_verdict_counts": null,
-    "candidate_prepare": "accepted",
-    "candidate_run": "pass",
-    "candidate_stdout_sha256": "a486782bad1d46b6756d08aff2e075b51c00b051663c6f00d0278e71e77203f1",
+    "candidate_prepare": "reject-runtime-boundary",
+    "candidate_run": "not-run",
+    "candidate_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "candidate_report_sha256": "",
     "raw_stdout_match": "",
     "generated_files_match": "",
@@ -18332,7 +18332,7 @@
     "final_classification": "ORACLE_RUN_FAIL",
     "reason_code": "ORACLE_RUN_NONZERO_EXIT",
     "nondeterministic": false,
-    "compile_ms": 51,
-    "run_ms": 1
+    "compile_ms": 46,
+    "run_ms": 2
   }
 ]

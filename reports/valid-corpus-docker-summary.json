@@ -1,9 +1,9 @@
 {
-  "crate_version": "0.8.56",
-  "git_commit": "8980273cf6e75d7efaefaf32627586ce6d16fe78",
+  "crate_version": "0.8.57",
+  "git_commit": "4229e54f74cab5732b4719da0914a724b0de0dda",
   "oracle": "cobc (GnuCOBOL) 3.2.0",
   "unified_total": 6442,
   "unified_by_family": {"ccvs85": 512, "extras": 55, "gnucobol-manual": 18, "gnucobol-testsuite": 4732, "omp": 30, "xcobol": 1095},
-  "first_failure": {"GENERATED_FILE_MISMATCH": 8, "HARNESS_BLOCKED": 1, "NON_EXECUTABLE_DATA": 2, "NON_EXECUTABLE_LIBRARY": 119, "ORACLE_COMPILE_ERROR": 3, "ORACLE_COMPILE_REJECT": 18, "ORACLE_RUN_FAIL": 64, "ORACLE_TIMEOUT": 1, "OUTPUT_MISMATCH": 42, "RAW_OUTPUT_MATCH": 27, "RUST_REJECT_PARSE": 36, "RUST_REJECT_RUNTIME_BOUNDARY": 1, "RUST_REJECT_UNSUPPORTED": 190, "check": 152, "layout": 25, "none": 4857, "parse": 553, "preprocess": 240},
+  "first_failure": {"GENERATED_FILE_MISMATCH": 9, "HARNESS_BLOCKED": 1, "NON_EXECUTABLE_DATA": 2, "NON_EXECUTABLE_LIBRARY": 119, "ORACLE_COMPILE_ERROR": 3, "ORACLE_COMPILE_REJECT": 18, "ORACLE_RUN_FAIL": 64, "ORACLE_TIMEOUT": 1, "OUTPUT_MISMATCH": 41, "RAW_OUTPUT_MATCH": 28, "RUST_REJECT_PARSE": 36, "RUST_REJECT_RUNTIME_BOUNDARY": 1, "RUST_REJECT_UNSUPPORTED": 189, "check": 152, "layout": 25, "none": 4857, "parse": 553, "preprocess": 240},
   "corpus_court_sweep": {"PASS": "1", "FAIL": "0"}
 }

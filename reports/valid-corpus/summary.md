@@ -1,6 +1,6 @@
 # Valid-COBOL corpus — unified summary (Phase 12)
 
-_generated_at_utc: 2026-08-12T14:48:19Z · schema: `gnurust-valid-corpus-unified-v1`_
+_generated_at_utc: 2026-08-13T00:59:23Z · schema: `gnurust-valid-corpus-unified-v1`_
 
 **total units:** 6442
 
