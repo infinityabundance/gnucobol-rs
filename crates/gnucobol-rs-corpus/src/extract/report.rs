@@ -24,6 +24,7 @@ struct DiscoveredStepView {
     command_shape: String,
     replay_exit: Option<i32>,
     replay_mismatches: Vec<String>,
+    replay_retried: bool,
     skip_reason: String,
 }
 
@@ -38,6 +39,7 @@ struct ValidProgramView {
     classification: String,
     replay_exit: Option<i32>,
     replay_mismatches: Vec<String>,
+    replay_retried: bool,
     first_failure: Option<(String, String)>,
     source_format: String,
     dialect: String,
@@ -111,6 +113,7 @@ pub fn write_reports(
             command_shape: r.command_shape.clone(),
             replay_exit: r.replay_exit,
             replay_mismatches: r.replay_mismatches.clone(),
+            replay_retried: r.replay_retried,
             skip_reason: r.skip_reason.clone(),
         });
     }
@@ -134,6 +137,7 @@ pub fn write_reports(
                 classification: r.classification.clone(),
                 replay_exit: r.replay_exit,
                 replay_mismatches: r.replay_mismatches.clone(),
+                replay_retried: r.replay_retried,
                 first_failure: r.first_failure.clone(),
                 source_format: r.source_format.clone(),
                 dialect: r.dialect.clone(),

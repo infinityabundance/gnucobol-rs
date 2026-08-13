@@ -184,14 +184,62 @@ DOCKER_BUILDKIT=0 docker build \
 docker image inspect "$IMAGE_TAG" >/dev/null 2>&1 || fail "court image missing after build"
 
 # ---------------------------------------------------------------------------------------------
-# 5. two fresh full runs
+# 5. private per-pass repository staging (atomic-promotion hardening)
+# ---------------------------------------------------------------------------------------------
+# Every pass runs against a PRIVATE copy of the repository (staging), so the containers NEVER
+# write into the committed evidence tree: pass A and pass B each produce their evidence only
+# inside their own staging copy. Nothing is promoted into reports/ until the determinism
+# comparison, the privacy gate and the corpus gate have ALL passed. If anything fails, the
+# committed evidence tree is untouched; the staging copies are kept for forensics.
+info "staging private per-pass repository copies"
+STAGE_ROOT="$PROJECT_DOCKER_ROOT/staging/$RUN_ID"
+STAGE_A="$STAGE_ROOT/pass-a"
+STAGE_B="$STAGE_ROOT/pass-b"
+rm -rf "$STAGE_A" "$STAGE_B"
+mkdir -p "$STAGE_ROOT"
+# Heavy gitignored dirs are excluded: lab/admit + lab/corpus/x-cobol + lab/corpus/opencbs are
+# re-bind-mounted read-only from the real repo into each container (the admitted sources and
+# corpus datasets must come from the live repo, not a copy); lab/corpus/gcobol, lab/oracle and
+# the doxygen output are unused by this lane and re-fetchable/rebuildable. The empty parent
+# dirs are re-created so the read-only overlay bind destinations always exist.
+rsync -a --delete \
+  --exclude 'target/' \
+  --exclude 'lab/admit/' \
+  --exclude 'lab/oracle/' \
+  --exclude 'lab/corpus/gcobol/' \
+  --exclude 'lab/corpus/x-cobol/' \
+  --exclude 'lab/corpus/opencbs/' \
+  --exclude 'lab/doxygen/out/' \
+  --exclude 'lab/doxygen/out-rust/' \
+  "$ROOT/" "$STAGE_A/" || fail "cannot stage the pass-A repository copy"
+rsync -a --delete \
+  --exclude 'target/' \
+  --exclude 'lab/admit/' \
+  --exclude 'lab/oracle/' \
+  --exclude 'lab/corpus/gcobol/' \
+  --exclude 'lab/corpus/x-cobol/' \
+  --exclude 'lab/corpus/opencbs/' \
+  --exclude 'lab/doxygen/out/' \
+  --exclude 'lab/doxygen/out-rust/' \
+  "$ROOT/" "$STAGE_B/" || fail "cannot stage the pass-B repository copy"
+mkdir -p "$STAGE_A/lab/admit" "$STAGE_A/lab/oracle" "$STAGE_A/lab/corpus/gcobol" \
+         "$STAGE_A/lab/corpus/x-cobol" "$STAGE_A/lab/corpus/opencbs" \
+         "$STAGE_A/lab/doxygen/out" "$STAGE_A/lab/doxygen/out-rust"
+mkdir -p "$STAGE_B/lab/admit" "$STAGE_B/lab/oracle" "$STAGE_B/lab/corpus/gcobol" \
+         "$STAGE_B/lab/corpus/x-cobol" "$STAGE_B/lab/corpus/opencbs" \
+         "$STAGE_B/lab/doxygen/out" "$STAGE_B/lab/doxygen/out-rust"
+echo "  pass A stage: $STAGE_A"
+echo "  pass B stage: $STAGE_B"
+
+# ---------------------------------------------------------------------------------------------
+# 6. two fresh full runs (each against its own staged repo copy)
 # ---------------------------------------------------------------------------------------------
 info "run 1/2 (fresh container)"
 CONTAINER_A="valid-corpus-$RUN_ID-a"
 docker rm -f "$CONTAINER_A" >/dev/null 2>&1 || true
 set +e
 docker run --name "$CONTAINER_A" --rm \
-  -v /tmp/gt-repo:/repo:rw \
+  -v /tmp/gt-root/staging/$RUN_ID/pass-a:/repo:rw \
   -v "$ROOT/lab/admit:/repo/lab/admit:ro" \
   -v "$ROOT/lab/corpus/x-cobol:/repo/lab/corpus/x-cobol:ro" \
   -v "$ROOT/lab/corpus/opencbs:/repo/lab/corpus/opencbs:ro" \
@@ -214,7 +262,7 @@ CONTAINER_B="valid-corpus-$RUN_ID-b"
 docker rm -f "$CONTAINER_B" >/dev/null 2>&1 || true
 set +e
 docker run --name "$CONTAINER_B" --rm \
-  -v /tmp/gt-repo:/repo:rw \
+  -v /tmp/gt-root/staging/$RUN_ID/pass-b:/repo:rw \
   -v "$ROOT/lab/admit:/repo/lab/admit:ro" \
   -v "$ROOT/lab/corpus/x-cobol:/repo/lab/corpus/x-cobol:ro" \
   -v "$ROOT/lab/corpus/opencbs:/repo/lab/corpus/opencbs:ro" \
@@ -233,24 +281,12 @@ set -e
 [ "$RC_B" = "0" ] || fail "run B failed (exit $RC_B)"
 
 # ---------------------------------------------------------------------------------------------
-# 6. copy evidence back into the repository
+# 7. host-side checks over the STAGED evidence (the committed tree is still untouched)
 # ---------------------------------------------------------------------------------------------
-info "copying evidence into the repository"
+info "host-side determinism compare + privacy + gate (staged evidence)"
 VC_REP="$ROOT/reports/valid-corpus"
-mkdir -p "$VC_REP"
-for f in summary.json; do
-  if [ -f "$OUT_DIR/pass-a/$f" ]; then
-    cp "$OUT_DIR/pass-a/$f" "$ROOT/reports/valid-corpus-docker-summary.json"
-  else
-    fail "missing evidence artifact $f in run A output"
-  fi
-done
-cp "$OUT_DIR/pass-a/corpus-court-sweep.txt" "$VC_REP/corpus-court-sweep.txt" 2>/dev/null || true
 
-# ---------------------------------------------------------------------------------------------
-# 7. host-side determinism compare + privacy sanitizer + corpus gate
-# ---------------------------------------------------------------------------------------------
-info "host-side determinism compare + privacy + gate"
+# 7a. two-pass determinism: pass A and pass B must agree on every stable field
 set +e
 python3 - "$OUT_DIR/pass-a/summary.json" "$OUT_DIR/pass-b/summary.json" <<'PYEOF'
 import json, sys
@@ -268,28 +304,81 @@ print("determinism: two fresh passes identical on", len(stable), "stable fields"
 PYEOF
 DET_RC=$?
 set -e
-[ "$DET_RC" = "0" ] || fail "determinism check failed"
+[ "$DET_RC" = "0" ] || fail "determinism check failed (nothing was promoted)"
 
-# privacy sanitizer: the committed evidence carries only symbolic aliases
+# 7b. privacy sanitizer over the evidence that WILL be promoted (the staged pass-A tree plus
+#     the pass-A summary/sweep artifacts that become the committed docker-summary)
 RAW_EVIDENCE="$PROJECT_DOCKER_ROOT/run-evidence"
 cp "$PROJECT_DOCKER_ROOT/logs/preflight.json" "$RAW_EVIDENCE/valid-corpus-preflight.raw.json"
 cp "$OUT_DIR/pass-a/summary.json" "$RAW_EVIDENCE/valid-corpus-summary-a.raw.json"
 cp "$OUT_DIR/pass-b/summary.json" "$RAW_EVIDENCE/valid-corpus-summary-b.raw.json"
-if grep -RInE '/home/|/run/media/|/mnt/|/media/' \
-    "$VC_REP/corpus-court-sweep.txt" "$ROOT/reports/valid-corpus-docker-summary.json" 2>/dev/null; then
-  fail "PRIVACY GATE: a host path leaked into the committed valid-corpus evidence"
+if grep -RInE '/home/[^ ,)"]|/run/media/[^ ,)"]|/mnt/[^ ,)"]|/media/[^ ,)"]' \
+    "$STAGE_A/reports/valid-corpus/" "$OUT_DIR/pass-a/summary.json" "$OUT_DIR/pass-a/corpus-court-sweep.txt" 2>/dev/null; then
+  fail "PRIVACY GATE: a host path leaked into the staged valid-corpus evidence (nothing was promoted)"
 fi
-echo "privacy gate: committed valid-corpus evidence carries only symbolic storage aliases"
+echo "privacy gate: staged valid-corpus evidence carries only symbolic storage aliases"
 
-# corpus gate (host-side invariants)
+# 7c. corpus gate against the STAGED pass-A workspace. The corpus CLI resolves its workspace
+#     root from the compile-time CARGO_MANIFEST_DIR, so the binary is built from the staged
+#     manifest (shared CARGO_TARGET_DIR reuses the dependency cache) and therefore checks the
+#     staged evidence, never the real repository.
+set +e
+( cd "$STAGE_A" && CARGO_TARGET_DIR="$ROOT/target" cargo run -q -p gnucobol-rs-corpus -- gate ) 2>&1 | tee "$PROJECT_DOCKER_ROOT/logs/gate-staged.log"
+GATE_RC=${PIPESTATUS[0]}
+set -e
+[ "$GATE_RC" = "0" ] || fail "corpus gate failed over the staged evidence (see gate-staged.log; nothing was promoted)"
+
+# ---------------------------------------------------------------------------------------------
+# 8. atomic promotion into the repository (only reached when every check above passed)
+# ---------------------------------------------------------------------------------------------
+info "promoting staged evidence into the repository (all checks passed)"
+
+# 8a. the staged tree may differ from the committed one ONLY in this lane's regeneration set
+#     (extractor family dirs + the unify outputs + the sweep file). A change to any other path
+#     (raw/, performance/, held-out evidence, preflight/before-state, unknown files) blocks
+#     promotion mechanically -- the containers must never clobber other lanes' evidence.
+python3 "$ROOT/lab/valid-corpus/check-promotion-scope.py" "$STAGE_A/reports/valid-corpus" "$VC_REP"
+PROM_RC=$?
+[ "$PROM_RC" = "0" ] || fail "staged tree touched protected evidence (see above); nothing was promoted"
+
+# 8b. swap reports/valid-corpus as a whole (per-directory atomic mv, with rollback on failure)
+#     Transient promote/summary/sweep temp files are cleaned on any exit path; the staged
+#     copies and the .prev backup are kept for forensics on failure.
+trap 'rm -rf "${TMP:-}" "${TMPF:-}" "${TMPF2:-}"' EXIT
+TMP="$(mktemp -d "$ROOT/reports/.valid-corpus-promote.XXXXXX")"
+rsync -a --delete "$STAGE_A/reports/valid-corpus/" "$TMP/" || fail "cannot materialize the promoted tree"
+if [ -d "$VC_REP" ]; then
+  mv "$VC_REP" "$ROOT/reports/.valid-corpus-prev.$RUN_ID" || fail "cannot move the current evidence aside"
+fi
+if ! mv "$TMP" "$VC_REP"; then
+  [ -d "$ROOT/reports/.valid-corpus-prev.$RUN_ID" ] && mv "$ROOT/reports/.valid-corpus-prev.$RUN_ID" "$VC_REP"
+  fail "promotion of reports/valid-corpus failed; previous evidence restored"
+fi
+
+# 8c. single-file promotions (temp + rename = atomic per file)
+TMPF="$ROOT/reports/.docker-summary.$RUN_ID.tmp"
+cp "$OUT_DIR/pass-a/summary.json" "$TMPF" && mv "$TMPF" "$ROOT/reports/valid-corpus-docker-summary.json" \
+  || fail "cannot promote valid-corpus-docker-summary.json"
+TMPF2="$VC_REP/.corpus-sweep.$RUN_ID.tmp"
+cp "$OUT_DIR/pass-a/corpus-court-sweep.txt" "$TMPF2" && mv "$TMPF2" "$VC_REP/corpus-court-sweep.txt" \
+  || fail "cannot promote corpus-court-sweep.txt"
+
+# ---------------------------------------------------------------------------------------------
+# 9. final corpus gate over the PROMOTED (committed) evidence + rollback on failure
+# ---------------------------------------------------------------------------------------------
 set +e
 ( cd "$ROOT" && cargo run -q -p gnucobol-rs-corpus -- gate ) 2>&1 | tee "$PROJECT_DOCKER_ROOT/logs/gate.log"
 GATE_RC=${PIPESTATUS[0]}
 set -e
-[ "$GATE_RC" = "0" ] || fail "corpus gate failed (see gate.log)"
+if [ "$GATE_RC" != "0" ]; then
+  [ -d "$ROOT/reports/.valid-corpus-prev.$RUN_ID" ] && { rm -rf "$VC_REP"; mv "$ROOT/reports/.valid-corpus-prev.$RUN_ID" "$VC_REP"; }
+  git -C "$ROOT" checkout -- reports/valid-corpus-docker-summary.json 2>/dev/null || true
+  fail "corpus gate failed over the promoted evidence (see gate.log); previous evidence restored"
+fi
+rm -rf "$ROOT/reports/.valid-corpus-prev.$RUN_ID"
 
 # ---------------------------------------------------------------------------------------------
-# 8. optional regression gate vs the committed baseline
+# 10. optional regression gate vs the committed baseline
 # ---------------------------------------------------------------------------------------------
 if [ "${1:-}" = "--require-no-regression" ]; then
   info "regression gate (--require-no-regression)"
@@ -317,3 +406,4 @@ info "DONE — GNURUST.VALID-PROGRAMS.* / GNURUST.CORPUS.* evidence run complete
 echo "  run-id:      $RUN_ID"
 echo "  outputs:     $OUT_DIR"
 echo "  summary:     $ROOT/reports/valid-corpus-docker-summary.json"
+echo "  staging:     $STAGE_ROOT (private per-pass copies; promoted only after all checks passed)"

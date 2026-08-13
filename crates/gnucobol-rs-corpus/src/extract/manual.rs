@@ -451,6 +451,7 @@ pub fn extract_manual(
                 exec_error: None,
                 skipped: false,
                 skip_reason: String::new(),
+                retried: false,
             }
         };
         let stdout_sha = crate::store::sha256_hex(&run_out.stdout);

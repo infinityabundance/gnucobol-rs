@@ -98,10 +98,19 @@ log "corpus CLI built"
 # ---------------------------------------------------------------------------------------------
 # 3. corpus re-extraction + unification (the valid-program courts)
 # ---------------------------------------------------------------------------------------------
-# The external corpus root inside the container (fresh per pass; the committed reports under
-# reports/valid-corpus/ are regenerated from it + the repo evidence).
-export GNURUST_COBOL_CORPUS_ROOT="$RUN_ROOT/corpus-root"
-mkdir -p "$GNURUST_COBOL_CORPUS_ROOT"
+# The external corpus root is a UNIQUE, freshly-created, verified-EMPTY directory per pass.
+# A pre-existing non-empty root would mean leftover materialization from an earlier pass or a
+# host-side extraction, which makes replay outcomes state-dependent (the contamination class:
+# leftover group dirs/files in the packages store change oracle replay and candidate probe
+# results between runs). `mktemp -d` guarantees a unique fresh directory; the emptiness check
+# fails closed on anything unexpected. The committed reports under reports/valid-corpus/ are
+# regenerated from this root + the repo evidence by the extractors below.
+export GNURUST_COBOL_CORPUS_ROOT="$(mktemp -d "$RUN_ROOT/corpus-root.XXXXXX")" \
+  || fail "cannot create a fresh unique corpus root under $RUN_ROOT"
+if [ -n "$(ls -A "$GNURUST_COBOL_CORPUS_ROOT")" ]; then
+  fail "corpus root not empty before start: $GNURUST_COBOL_CORPUS_ROOT (refusing contaminated state)"
+fi
+log "corpus root: $GNURUST_COBOL_CORPUS_ROOT (fresh, unique, empty)"
 
 log "extract testsuite (stable + current, candidate probes)"
 "$CORPUS_BIN" extract-testsuite both 2>&1 | tail -3 || fail "extract-testsuite failed"

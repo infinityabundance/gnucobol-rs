@@ -158,6 +158,10 @@ pub struct StepResult {
     /// Oracle replay verdict: empty = replayed exactly as the contract declares.
     pub replay_mismatches: Vec<String>,
     pub replay_exit: Option<i32>,
+    /// True when the recorded replay outcome is a retry after a timing-artifact first attempt
+    /// (replay-timeout kill or a compiler-driver signal abort such as the SIGPIPE pipe race);
+    /// deterministic outcomes are never retried.
+    pub replay_retried: bool,
     /// Candidate phase probes (empty when the step is not a valid-program candidate).
     pub candidate_phases: Vec<candidate::PhaseOutcome>,
     pub first_failure: Option<(String, String)>,
@@ -244,6 +248,7 @@ pub fn extract_lane(
                         exec_error: Some("command shape not replayable".to_string()),
                         skipped: false,
                         skip_reason: String::new(),
+                        retried: false,
                     });
                 }
             }
@@ -277,6 +282,7 @@ pub fn extract_lane(
                     },
                     skipped: !skip_reason.is_empty(),
                     skip_reason: skip_reason.clone(),
+                    retried: false,
                 });
             let mismatches = if outcome.skipped || !skip_reason.is_empty() {
                 vec![]
@@ -341,6 +347,7 @@ pub fn extract_lane(
                 skip_reason: skip_reason.clone(),
                 replay_mismatches: mismatches,
                 replay_exit: outcome.exit,
+                replay_retried: outcome.retried,
                 candidate_phases,
                 first_failure,
                 classification: class.clone(),

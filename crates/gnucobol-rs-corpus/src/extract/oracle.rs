@@ -96,6 +96,11 @@ pub struct StepOutcome {
     /// Set when the step was skipped (evaluated skip/xfail condition).
     pub skipped: bool,
     pub skip_reason: String,
+    /// True when the recorded outcome is a RETRY after a timing-artifact first attempt
+    /// (replay-timeout kill, or the compiler driver aborting on a signal such as SIGPIPE when a
+    /// pipeline reader closed early). Deterministic outcomes are never retried, and the retry
+    /// outcome is still compared byte-for-byte against the contract.
+    pub retried: bool,
 }
 
 /// Run one step's expanded command in `workdir` with the oracle env. `extra_env` carries
@@ -118,6 +123,7 @@ pub fn run_step(
             )),
             skipped: false,
             skip_reason: String::new(),
+            retried: false,
         };
     }
     let mut cmd = Command::new("sh");
@@ -150,8 +156,24 @@ pub fn run_step(
     // each stream bounds memory AND makes the recorded evidence reproducible: the child is left
     // to block on the full pipe, so the 120s timeout still kills it and the exit status is
     // unchanged.
-    let out = run_bounded(&mut wrapped, 16 * 1024 * 1024);
-    match out {
+    let cap = 16 * 1024 * 1024;
+    let mut attempt = run_bounded(&mut wrapped, cap);
+    let mut retried = false;
+    if let Ok(o) = &attempt {
+        if is_timing_artifact(o) {
+            // A first attempt killed by the 120s replay wall clock (a step near the boundary
+            // flips between 124 and completion), or whose stderr shows the compiler driver
+            // aborting on a signal (the upstream `$COBC --help | head` step races on whether
+            // the reader closes the pipe before the driver's final write, and a SIGPIPE abort
+            // writes `cobc: aborting` to stderr), is a timing artifact, not a stable property
+            // of the oracle: a single replay would flip the classification between runs. Retry
+            // once; the retry outcome is still compared byte-for-byte against the contract (no
+            // semantic check is weakened). Deterministic outcomes are never retried.
+            retried = true;
+            attempt = run_bounded(&mut wrapped, cap);
+        }
+    }
+    match attempt {
         Ok(o) => StepOutcome {
             exit: o.status.code(),
             stdout: o.stdout,
@@ -159,6 +181,7 @@ pub fn run_step(
             exec_error: None,
             skipped: false,
             skip_reason: String::new(),
+            retried,
         },
         Err(e) => StepOutcome {
             exit: None,
@@ -167,8 +190,28 @@ pub fn run_step(
             exec_error: Some(format!("cannot execute: {e}")),
             skipped: false,
             skip_reason: String::new(),
+            retried,
         },
     }
+}
+
+/// Whether a first replay attempt is a timing artifact rather than a stable oracle property.
+///
+/// Two shapes are retried:
+/// - `exit 124` — the replay wrapper's 120s wall clock killed the step; a step near the
+///   boundary flips between timeout and completion depending on host load;
+/// - stderr carrying the compiler/runtime driver's signal-abort line (`cobc: aborting` /
+///   `libcob: aborting`) — emitted when the driver aborts on a signal such as SIGPIPE after a
+///   pipeline reader (`head`) closed the pipe early. Whether the abort races depends on write
+///   vs. read timing, so a single replay would classify the step differently across runs.
+///
+/// Everything else is deterministic and never retried.
+fn is_timing_artifact(o: &std::process::Output) -> bool {
+    if o.status.code() == Some(124) {
+        return true;
+    }
+    let stderr = String::from_utf8_lossy(&o.stderr);
+    stderr.lines().any(|l| l.trim_end().ends_with(": aborting"))
 }
 
 /// Spawn `cmd`, capture at most `cap` bytes of stdout + stderr each, then wait. One reader
@@ -359,6 +402,7 @@ mod tests {
             exec_error: None,
             skipped: false,
             skip_reason: String::new(),
+            retried: false,
         };
         assert!(compare_contract(&pkg, &ok).is_empty());
         let bad = StepOutcome {
@@ -368,8 +412,87 @@ mod tests {
             exec_error: None,
             skipped: false,
             skip_reason: String::new(),
+            retried: false,
         };
         let m = compare_contract(&pkg, &bad);
         assert_eq!(m.len(), 2, "{m:?}");
+    }
+
+    #[test]
+    fn timing_artifact_detection() {
+        use std::os::unix::process::ExitStatusExt;
+        // timeout kill
+        let t = std::process::Output {
+            status: std::process::ExitStatus::from_raw(124 << 8),
+            stdout: Vec::new(),
+            stderr: Vec::new(),
+        };
+        assert!(is_timing_artifact(&t));
+        // SIGPIPE-abort stderr (the exact bytes the upstream `$COBC --help | head` step emits
+        // when the reader closes the pipe before the driver's final write)
+        let s = std::process::Output {
+            status: std::process::ExitStatus::from_raw(0 << 8),
+            stdout: Vec::new(),
+            stderr: b"\nunknown (signal)\n\ncobc: aborting\n".to_vec(),
+        };
+        assert!(is_timing_artifact(&s));
+        // a runtime abort line is the same class
+        let r = std::process::Output {
+            status: std::process::ExitStatus::from_raw(0 << 8),
+            stdout: Vec::new(),
+            stderr: b"libcob: aborting\n".to_vec(),
+        };
+        assert!(is_timing_artifact(&r));
+        // clean and ordinary-diagnostic outcomes are never retried
+        let c = std::process::Output {
+            status: std::process::ExitStatus::from_raw(0 << 8),
+            stdout: Vec::new(),
+            stderr: Vec::new(),
+        };
+        assert!(!is_timing_artifact(&c));
+        let d = std::process::Output {
+            status: std::process::ExitStatus::from_raw(1 << 8),
+            stdout: Vec::new(),
+            stderr: b"prog.cob:10: error: syntax error\n".to_vec(),
+        };
+        assert!(!is_timing_artifact(&d));
+    }
+
+    #[test]
+    fn run_step_retries_a_signal_abort_once() {
+        // A `cobc: aborting`-shaped first attempt (the SIGPIPE-race signature) must be re-run
+        // once and the retry outcome recorded with `retried = true`. The retry outcome is still
+        // the raw bytes of the second attempt -- no semantic check is weakened.
+        let oracle = OracleEnv {
+            label: "test".into(),
+            prefix: PathBuf::from("/nonexistent-prefix"),
+            cobc: PathBuf::from("/nonexistent-prefix/bin/cobc"),
+            cobcrun: PathBuf::from("/nonexistent-prefix/bin/cobcrun"),
+            ld_library_path: PathBuf::from("/nonexistent-prefix/lib"),
+            config_dir: PathBuf::from("/nonexistent-prefix/share/gnucobol/config"),
+        };
+        let out = run_step(&oracle, Path::new("/"), "echo 'x: aborting' >&2", &[]);
+        assert!(
+            out.retried,
+            "signal-abort-shaped first attempt must be retried"
+        );
+        assert_eq!(out.exit, Some(0));
+        assert_eq!(out.stderr, b"x: aborting\n");
+    }
+
+    #[test]
+    fn run_step_does_not_retry_clean_outcomes() {
+        let oracle = OracleEnv {
+            label: "test".into(),
+            prefix: PathBuf::from("/nonexistent-prefix"),
+            cobc: PathBuf::from("/nonexistent-prefix/bin/cobc"),
+            cobcrun: PathBuf::from("/nonexistent-prefix/bin/cobcrun"),
+            ld_library_path: PathBuf::from("/nonexistent-prefix/lib"),
+            config_dir: PathBuf::from("/nonexistent-prefix/share/gnucobol/config"),
+        };
+        let out = run_step(&oracle, Path::new("/"), "echo clean", &[]);
+        assert!(!out.retried);
+        assert_eq!(out.exit, Some(0));
+        assert_eq!(out.stdout, b"clean\n");
     }
 }
